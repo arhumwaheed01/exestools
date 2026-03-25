@@ -1,26 +1,336 @@
 @import "tailwindcss";
 
+/*
+  Global UI system — tools website
+  Colors: primary #f26522, hover #E05A1B, text #333e48, light backgrounds only.
+  Typography: Nunito (primary) → Inter → system UI stack. Single sans stack sitewide.
+  Breakpoints (mobile-first): md 768px, lg 1024px, xl 1280px — use Tailwind md/lg/xl.
+*/
+
 :root {
+  --spacing: 0.25rem;
   --background: #ffffff;
-  --foreground: #171717;
+  --surface: #fafafa;
+  --foreground: #333e48;
+  --primary: #f26522;
+  --primary-hover: #e05a1b;
+  --input-border: #e5e7eb;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-secondary-text: var(--foreground);
+  --color-input-border: var(--input-border);
+  --max-width-container: 1440px;
+  --font-sans: var(--font-nunito), var(--font-inter), system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    @apply bg-background text-base font-normal leading-relaxed text-secondary-text antialiased;
+    font-family: var(--font-sans);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-secondary-text leading-relaxed;
+    font-family: var(--font-sans);
+  }
+
+  h1 {
+    @apply text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl;
+  }
+
+  h2 {
+    @apply mt-10 text-2xl font-semibold md:text-3xl;
+  }
+
+  h3 {
+    @apply mt-8 text-xl font-semibold md:text-2xl;
+  }
+
+  h4 {
+    @apply mt-6 text-lg font-semibold md:text-xl;
+  }
+
+  h5 {
+    @apply mt-4 text-base font-semibold md:text-lg;
+  }
+
+  h6 {
+    @apply mt-4 text-base font-semibold;
+  }
+
+  p {
+    @apply text-base font-normal leading-relaxed text-secondary-text;
+  }
+
+  p + p {
+    @apply mt-4;
+  }
+
+  ul,
+  ol {
+    @apply text-base font-normal leading-relaxed text-secondary-text;
+  }
+
+  /* li + li {
+    @apply mt-2;
+  } */
+
+  a:not(.btn) {
+    @apply text-primary transition-colors duration-200 hover:text-primary-hover;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /*
+    Centered layout shell — use on every page/tool section.
+    Mobile 16px | tablet (md) 24px | laptop+ (lg) 32px horizontal padding.
+  */
+  .container {
+    @apply mx-auto w-full max-w-container px-4 md:px-6 lg:px-8;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-base font-medium leading-relaxed text-white;
+    @apply bg-primary shadow-md shadow-primary/25 transition-all duration-300 ease-out;
+    @apply hover:-translate-y-0.5 hover:bg-primary-hover hover:shadow-lg hover:shadow-primary/35;
+    @apply active:translate-y-0 active:scale-[0.99];
+    font-family: var(--font-sans);
+  }
+
+  .btn:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+
+  .input {
+    @apply w-full rounded-md border border-input-border bg-background p-3 text-base font-normal leading-relaxed text-secondary-text transition-colors duration-200;
+    @apply placeholder:text-secondary-text/50;
+    @apply focus:border-primary focus:outline-none;
+    font-family: var(--font-sans);
+  }
+
+  textarea.input {
+    @apply min-h-[120px] resize-y;
+  }
+}
+
+/* Minimal motion — keep subtle and performant */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(2%, -3%) scale(1.02);
+  }
+  66% {
+    transform: translate(-2%, 2%) scale(0.98);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.75;
+  }
+}
+
+/* Hero — subtle “live” motion (respect reduced-motion below) */
+@keyframes hero-sparkle {
+  0%,
+  100% {
+    transform: scale(1) rotate(-6deg);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.15) rotate(6deg);
+    opacity: 0.88;
+  }
+}
+
+@keyframes hero-ring-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(242 101 34 / 0.25),
+      0 0 24px 0 rgb(242 101 34 / 0.12);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgb(242 101 34 / 0.08),
+      0 0 32px 8px rgb(242 101 34 / 0.18);
+  }
+}
+
+@keyframes hero-shimmer {
+  0% {
+    transform: translateX(-120%) skewX(-12deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateX(120%) skewX(-12deg);
+    opacity: 0.45;
+  }
+  100% {
+    transform: translateX(120%) skewX(-12deg);
+    opacity: 0;
+  }
+}
+
+@keyframes hero-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.01);
+    filter: brightness(1.02);
+  }
+}
+
+@keyframes float-soft-alt {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-4%, 4%) scale(1.05);
+  }
+}
+
+@layer components {
+  .hero-live-badge {
+    @apply relative inline-flex overflow-hidden rounded-full border border-primary/25 bg-primary/5 px-4 py-1.5 text-sm font-semibold text-primary;
+    animation: hero-ring-glow 3.5s ease-in-out infinite;
+  }
+
+  .hero-live-badge-shimmer {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: 9999px;
+  }
+
+  .hero-live-badge-shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: 40%;
+    background: linear-gradient(
+      105deg,
+      transparent,
+      rgb(255 255 255 / 0.55),
+      transparent
+    );
+    animation: hero-shimmer 4.5s ease-in-out infinite;
+  }
+
+  .hero-grid-bg {
+    background-image: radial-gradient(
+      rgb(51 62 72 / 0.06) 1px,
+      transparent 1px
+    );
+    background-size: 24px 24px;
+  }
+}
+
+@layer utilities {
+  .animate-fade-in-up {
+    animation: fade-in-up 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    opacity: 0;
+  }
+
+  .animate-float-soft {
+    animation: float-soft 18s ease-in-out infinite;
+  }
+
+  .animate-float-soft-alt {
+    animation: float-soft-alt 14s ease-in-out infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 5s ease-in-out infinite;
+  }
+
+  .animate-hero-sparkle {
+    animation: hero-sparkle 2.8s ease-in-out infinite;
+  }
+
+  .animate-hero-breathe {
+    animation: hero-breathe 5s ease-in-out infinite;
+  }
+
+  .animation-delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animation-delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .animation-delay-500 {
+    animation-delay: 500ms;
+  }
+
+  .animation-delay-1000 {
+    animation-delay: 1s;
+  }
+
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up,
+  .animate-float-soft,
+  .animate-float-soft-alt,
+  .animate-pulse-glow,
+  .animate-hero-sparkle,
+  .animate-hero-breathe,
+  .hero-live-badge,
+  .hero-live-badge-shimmer::after {
+    animation: none !important;
+  }
+
+  .animate-fade-in-up {
+    opacity: 1;
+  }
+
+  .hero-live-badge {
+    box-shadow: none;
+  }
 }

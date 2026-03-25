@@ -1,0 +1,96 @@
+import type { Metadata } from "next";
+import { defaultSEO } from "./seoConfig";
+
+/** Absolute URL for a site path (leading slash). */
+export function absoluteUrl(path: string): string {
+  const base = defaultSEO.siteUrl.replace(/\/$/, "");
+  const p = path.startsWith("/") ? path : `/${path}`;
+  return `${base}${p}`;
+}
+
+export type BuildPageMetadataInput = {
+  title: string;
+  description: string;
+  /** Path only, e.g. `/text-tools` or `/tools/word-counter` */
+  path: string;
+  /** When true, title is emitted as absolute (no layout template suffix). */
+  absoluteTitle?: boolean;
+  /** Relative to site root, e.g. `/og/default.png` */
+  ogImagePath?: string;
+  noindex?: boolean;
+  keywords?: string[];
+};
+
+/**
+ * Full Next.js Metadata: canonical, Open Graph, Twitter, robots.
+ */
+export function buildPageMetadata(input: BuildPageMetadataInput): Metadata {
+  const canonical = absoluteUrl(input.path);
+  const ogImage = input.ogImagePath
+    ? absoluteUrl(input.ogImagePath)
+    : undefined;
+
+  const titleField: Metadata["title"] = input.absoluteTitle
+    ? { absolute: input.title }
+    : input.title;
+
+  const metadata: Metadata = {
+    title: titleField,
+    description: input.description,
+    metadataBase: new URL(defaultSEO.siteUrl),
+    alternates: {
+      canonical,
+    },
+    robots: input.noindex
+      ? { index: false, follow: true }
+      : { index: true, follow: true },
+    openGraph: {
+      type: "website",
+      locale: defaultSEO.locale,
+      url: canonical,
+      siteName: defaultSEO.siteName,
+      title: input.title,
+      description: input.description,
+      ...(ogImage
+        ? {
+            images: [
+              {
+                url: ogImage,
+                alt: input.title,
+              },
+            ],
+          }
+        : {}),
+    },
+    twitter: {
+      card: ogImage ? "summary_large_image" : "summary",
+      title: input.title,
+      description: input.description,
+      ...(defaultSEO.twitterSite
+        ? { site: `@${defaultSEO.twitterSite.replace(/^@/, "")}` }
+        : {}),
+      ...(ogImage ? { images: [ogImage] } : {}),
+    },
+  };
+
+  if (input.keywords?.length) {
+    metadata.keywords = input.keywords;
+  }
+
+  return metadata;
+}
+
+/** Metadata for a tool route under `/tools/[slug]`. */
+export function buildToolPageMetadata(
+  slug: string,
+  seo: { title: string; description: string },
+  options?: { keywords?: string[] },
+): Metadata {
+  return buildPageMetadata({
+    title: seo.title,
+    description: seo.description,
+    path: `/tools/${slug}`,
+    absoluteTitle: true,
+    keywords: options?.keywords,
+  });
+}
