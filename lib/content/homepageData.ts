@@ -48,7 +48,7 @@ export type SeoBlock =
 
 export const homepageData = {
   hero: {
-    badge: "Free · Fast · Browser-based",
+    badge: "Free Tools · Fast Tools · Browser-based Tools",
     title: "Free Online Tools for Everyday Tasks",
     subtitle:
       "Simple, fast, and powerful tools for text, images, and developers.",
