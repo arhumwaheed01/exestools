@@ -61,7 +61,7 @@ export function Footer() {
   return (
     <footer className="relative overflow-hidden border-t border-white/10 bg-secondary-text text-white">
       <div className="container relative py-14 md:py-16">
-        <div className="grid grid-cols-1 gap-6 text-center md:grid-cols-2 md:gap-6 md:text-left lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-6 sm:text-center text-left md:grid-cols-2 md:gap-6 md:text-left lg:grid-cols-4">
           <div className="">
           <Link
             href="/"
