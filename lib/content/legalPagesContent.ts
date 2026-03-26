@@ -186,15 +186,14 @@ export const contactPage = {
   meta: {
     title: "Contact - ExesTools",
     description:
-      "Get in touch with ExesTools for questions about our tools, privacy, or terms. We read every message when capacity allows.",
+      "Contact ExesTools for questions, help, or feedback. Reach us by email for text conversion tools and support.",
   },
   path: "/contact" as const,
   h1: "Contact",
   intro: [
-    "Have a question about ExesTools, a specific tool, or our policies? Use the form below to compose an email in your default mail client, or copy the address and write to us directly.",
+    "We're here to help you with all your text conversion needs. Whether you have questions, need assistance, or want to provide feedback, we'd love to hear from you.",
+    "Our team is dedicated to providing you with the best support and ensuring your experience with ExesTools is seamless and enjoyable.",
   ],
-  /** Set in lib/site.ts — displayed on Contact page */
-  emailLabel: "Email",
 } as const;
 
 export const aboutPage = {
