@@ -1,6 +1,6 @@
 /**
  * Global SEO defaults — single source for brand, URLs, and fallbacks.
- * Set NEXT_PUBLIC_SITE_URL in production (e.g. https://exestools.com).
+ * Set NEXT_PUBLIC_SITE_URL in production (e.g. https://www.exestools.com).
  */
 
 function normalizeSiteUrl(url: string): string {
@@ -15,7 +15,7 @@ const envUrl =
 export const defaultSEO = {
   siteName: "ExesTools",
   /** Canonical origin for sitemaps, canonical tags, and OG URLs */
-  siteUrl: envUrl ?? "https://yourdomain.com",
+  siteUrl: envUrl ?? "https://www.exestools.com",
   defaultTitle: "Free Online Tools - ExesTools",
   defaultDescription:
     "Free online tools for text, developers, and images. Fast, secure, and easy to use.",
