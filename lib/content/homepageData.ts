@@ -2,18 +2,12 @@ import { getDeveloperToolsGridItems } from "@/lib/content/developerToolsData";
 import { getImageToolsGridItems } from "@/lib/content/imageToolsData";
 import { getToolBySlug, textTools } from "@/lib/content/textToolsData";
 
-/** Homepage “Popular tools” — curated; expand without listing the full catalog. */
+/** Homepage “Popular tools” — 2–4 curated slugs (search modal + home list). */
 const POPULAR_TOOL_SLUGS = [
   "word-counter",
   "character-counter",
-  "uppercase-converter",
-  "lowercase-converter",
-  "find-replace",
-  "remove-extra-spaces",
-  "text-diff-checker",
   "json-formatter",
-  "base64-encoder",
-  "md5-generator",
+  "find-replace",
 ] as const;
 
 export type HomeCategory = {

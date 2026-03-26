@@ -9,10 +9,12 @@ import {
   LuImage,
   LuLayoutGrid,
   LuMenu,
+  LuSearch,
   LuSparkles,
   LuType,
   LuX,
 } from "react-icons/lu";
+import { ToolSearchModal } from "@/components/search/ToolSearchModal";
 import { navigationData } from "@/lib/content/homepageData";
 import { site } from "@/lib/site";
 
@@ -69,7 +71,8 @@ function NavLinks({
 }
 
 export function Header() {
-  const [open, setOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const { cta } = navigationData;
 
   return (
@@ -90,6 +93,17 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2 md:gap-3">
+          <button
+            type="button"
+            onClick={() => setSearchOpen(true)}
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-input-border bg-background text-secondary-text transition-all duration-200 hover:border-primary/40 hover:text-primary active:scale-95"
+            aria-haspopup="dialog"
+            aria-expanded={searchOpen}
+            aria-label="Open tool search"
+          >
+            <LuSearch className="h-5 w-5" aria-hidden />
+          </button>
+
           <Link
             href={cta.href}
             className="btn shrink-0 gap-2 text-sm md:text-base"
@@ -101,12 +115,12 @@ export function Header() {
           <button
             type="button"
             className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-input-border bg-background text-secondary-text transition-all duration-200 hover:border-primary/40 hover:text-primary active:scale-95 lg:hidden"
-            aria-expanded={open}
+            aria-expanded={mobileMenuOpen}
             aria-controls="mobile-nav"
-            aria-label={open ? "Close menu" : "Open menu"}
-            onClick={() => setOpen((v) => !v)}
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+            onClick={() => setMobileMenuOpen((v) => !v)}
           >
-            {open ? (
+            {mobileMenuOpen ? (
               <LuX className="h-5 w-5" aria-hidden />
             ) : (
               <LuMenu className="h-5 w-5" aria-hidden />
@@ -115,7 +129,9 @@ export function Header() {
         </div>
       </div>
 
-      {open ? (
+      <ToolSearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
+
+      {mobileMenuOpen ? (
         <div
           id="mobile-nav"
           className="animate-fade-in-up border-t border-input-border bg-background/95 backdrop-blur-md lg:hidden"
@@ -123,7 +139,7 @@ export function Header() {
           <nav className="container pb-4 pt-2" aria-label="Mobile">
             <NavLinks
               className="flex flex-col"
-              onNavigate={() => setOpen(false)}
+              onNavigate={() => setMobileMenuOpen(false)}
             />
           </nav>
         </div>
