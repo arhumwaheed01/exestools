@@ -23,3 +23,10 @@ export const defaultSEO = {
   twitterSite: process.env.NEXT_PUBLIC_TWITTER_SITE,
   locale: "en_US",
 } as const;
+
+/** GA4 Measurement ID. Override with NEXT_PUBLIC_GA_MEASUREMENT_ID (set empty to disable in dev). */
+export const ga4MeasurementId =
+  typeof process !== "undefined" &&
+  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID !== undefined
+    ? process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
+    : "G-JBGC5KFMLG";

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Nunito } from "next/font/google";
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { defaultSEO } from "@/lib/seo/seoConfig";
@@ -53,6 +54,7 @@ export default function RootLayout({
       className={`${nunito.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-secondary-text font-sans">
+        <GoogleAnalytics />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
