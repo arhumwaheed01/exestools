@@ -6,6 +6,14 @@ import type { Metadata } from "next";
 import { buildPageMetadata, buildToolPageMetadata } from "@/lib/seo/generateMeta";
 import { defaultSEO } from "@/lib/seo/seoConfig";
 import { getTextToolFullPage } from "@/lib/content/getTextToolFullPage";
+import {
+  aboutPage,
+  contactPage,
+  disclaimerPage,
+  dmcaPage,
+  privacyPolicyPage,
+  termsOfServicePage,
+} from "@/lib/content/legalPagesContent";
 import { allTools } from "@/lib/content/textToolsData";
 
 export type PageSeo = {
@@ -44,6 +52,36 @@ export const seoData = {
     title: "Free Image Tools Online",
     description:
       "Compress, convert, resize, crop, rotate, and optimize images online. Client-side processing with preview and download.",
+  },
+  privacyPolicy: {
+    path: privacyPolicyPage.path,
+    title: privacyPolicyPage.meta.title,
+    description: privacyPolicyPage.meta.description,
+  },
+  termsOfService: {
+    path: termsOfServicePage.path,
+    title: termsOfServicePage.meta.title,
+    description: termsOfServicePage.meta.description,
+  },
+  contact: {
+    path: contactPage.path,
+    title: contactPage.meta.title,
+    description: contactPage.meta.description,
+  },
+  about: {
+    path: aboutPage.path,
+    title: aboutPage.meta.title,
+    description: aboutPage.meta.description,
+  },
+  disclaimer: {
+    path: disclaimerPage.path,
+    title: disclaimerPage.meta.title,
+    description: disclaimerPage.meta.description,
+  },
+  dmca: {
+    path: dmcaPage.path,
+    title: dmcaPage.meta.title,
+    description: dmcaPage.meta.description,
   },
 } as const satisfies Record<string, RoutedPageSeo>;
 

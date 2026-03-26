@@ -88,9 +88,67 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-white/10 bg-black/10 py-4">
-        <div className="container text-center text-sm tracking-wide text-white/72">
-          © 2026 ExesTools. All rights reserved.
+      <div className="border-t border-white/10 bg-black/10 py-5">
+        <div className="container grid grid-cols-1 gap-4 text-sm tracking-wide text-white/72 sm:grid-cols-2 sm:items-center sm:gap-6">
+          <nav
+            aria-label="Legal and information"
+            className="flex flex-wrap items-center justify-center gap-x-1 gap-y-2 sm:justify-start"
+          >
+            <Link
+              href="/privacy-policy"
+              className="px-2 font-medium text-white/88 no-underline transition-colors hover:text-white"
+            >
+              Privacy Policy
+            </Link>
+            <span className="text-white/35" aria-hidden>
+              ·
+            </span>
+            <Link
+              href="/terms-of-service"
+              className="px-2 font-medium text-white/88 no-underline transition-colors hover:text-white"
+            >
+              Terms of Service
+            </Link>
+            <span className="text-white/35" aria-hidden>
+              ·
+            </span>
+            <Link
+              href="/contact"
+              className="px-2 font-medium text-white/88 no-underline transition-colors hover:text-white"
+            >
+              Contact
+            </Link>
+            <span className="text-white/35" aria-hidden>
+              ·
+            </span>
+            <Link
+              href="/about"
+              className="px-2 font-medium text-white/88 no-underline transition-colors hover:text-white"
+            >
+              About
+            </Link>
+            <span className="text-white/35" aria-hidden>
+              ·
+            </span>
+            <Link
+              href="/disclaimer"
+              className="px-2 font-medium text-white/88 no-underline transition-colors hover:text-white"
+            >
+              Disclaimer
+            </Link>
+            <span className="text-white/35" aria-hidden>
+              ·
+            </span>
+            <Link
+              href="/dmca"
+              className="px-2 font-medium text-white/88 no-underline transition-colors hover:text-white"
+            >
+              DMCA
+            </Link>
+          </nav>
+          <p className="mb-0 text-center text-white/72 sm:text-right">
+            © 2026 ExesTools. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

@@ -226,7 +226,7 @@ export const imageToolsPageContent = {
 export const notFoundPageContent = {
   title: "Page not found",
   description:
-    "The page you are looking for does not exist or has moved.",
+    "The page you are looking for does not exist or may have moved.",
   actions: [
     { label: "Home", href: "/" },
     { label: "All Tools", href: "/tools" },

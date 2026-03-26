@@ -8,6 +8,12 @@ const STATIC_PATHS = [
   "/developer-tools",
   "/image-tools",
   "/tools",
+  "/privacy-policy",
+  "/terms-of-service",
+  "/contact",
+  "/about",
+  "/disclaimer",
+  "/dmca",
 ] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -17,7 +23,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: absoluteUrl(path),
     lastModified,
     changeFrequency: "weekly",
-    priority: path === "/" ? 1 : 0.85,
+    priority:
+      path === "/"
+        ? 1
+        : path === "/privacy-policy" ||
+            path === "/terms-of-service" ||
+            path === "/contact" ||
+            path === "/about" ||
+            path === "/disclaimer" ||
+            path === "/dmca"
+          ? 0.5
+          : 0.85,
   }));
 
   const toolEntries: MetadataRoute.Sitemap = allTools.map((t) => ({
