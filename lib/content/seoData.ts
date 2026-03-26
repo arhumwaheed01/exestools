@@ -19,6 +19,8 @@ import { allTools } from "@/lib/content/textToolsData";
 export type PageSeo = {
   title: string;
   description: string;
+  /** Optional H1 line for /tools/[slug]; not emitted in meta tags. */
+  pageHeading?: string;
 };
 
 export type RoutedPageSeo = PageSeo & { path: string };

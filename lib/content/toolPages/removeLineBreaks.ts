@@ -6,6 +6,8 @@ export const removeLineBreaksPageContent: TransformToolPageContent = {
     title: "Remove Line Breaks — Free Online Join Lines | ExesTools",
     description:
       "Turn broken lines into continuous paragraphs by replacing newlines with spaces. Live browser preview and instant copy.",
+    pageHeading:
+      "Remove Line Breaks — join wrapped lines into smooth paragraphs instantly",
   },
   ui: {
     textareaPlaceholder: "Paste text with unwanted line breaks…",

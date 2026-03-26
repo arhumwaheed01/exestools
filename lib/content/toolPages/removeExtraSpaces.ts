@@ -6,6 +6,8 @@ export const removeExtraSpacesPageContent: TransformToolPageContent = {
     title: "Remove Extra Spaces — Free Online Whitespace Cleaner | ExesTools",
     description:
       "Collapse extra spaces and clean line ends in pasted text. Live preview, browser-based, copy output in one click.",
+    pageHeading:
+      "Remove Extra Spaces — clean double spaces and messy whitespace fast",
   },
   ui: {
     textareaPlaceholder: "Paste messy text with double spaces or stray tabs…",

@@ -6,6 +6,8 @@ export const lowercaseConverterPageContent: TransformToolPageContent = {
     title: "Lowercase Converter — Free Online lowercase text | ExesTools",
     description:
       "Convert any text to lowercase in one step. Fast browser-based normalization for slugs, emails, identifiers, and drafts—copy or clear instantly.",
+    pageHeading:
+      "Lowercase Converter — normalize text to lowercase for slugs, emails, and data",
   },
   ui: {
     textareaPlaceholder: "Paste text to convert to lowercase…",

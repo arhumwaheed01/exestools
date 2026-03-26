@@ -4,8 +4,12 @@ import { Container } from "@/components/Container";
 import { toolPageUi } from "@/lib/content/textToolsData";
 
 type ToolPageShellProps = {
+  /** Short label for breadcrumb (e.g. tool name). */
   title: string;
+  /** Hero line under H1; often matches meta description for consistency. */
   description: string;
+  /** Visible H1 (tool name + benefit). Defaults to `title` when omitted. */
+  pageHeading?: string;
   children?: ReactNode;
   /** Renders below the tool card, above footer links (e.g. long-form SEO). */
   afterCard?: ReactNode;
@@ -16,6 +20,7 @@ type ToolPageShellProps = {
 export function ToolPageShell({
   title,
   description,
+  pageHeading,
   children,
   afterCard,
   variant = "default",
@@ -69,7 +74,7 @@ export function ToolPageShell({
           <span className="text-secondary-text">{title}</span>
         </nav>
 
-        <h1 className="mt-0!">{title}</h1>
+        <h1 className="mt-0!">{pageHeading ?? title}</h1>
         <p className="mt-4 max-w-3xl text-lg leading-relaxed text-secondary-text">
           {description}
         </p>

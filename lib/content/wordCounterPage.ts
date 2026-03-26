@@ -7,6 +7,7 @@ export type WordCounterPageContent = {
   meta: {
     title: string;
     description: string;
+    pageHeading: string;
   };
   ui: {
     textareaPlaceholder: string;
@@ -44,6 +45,8 @@ export const wordCounterPageContent: WordCounterPageContent = {
     title: "Word Counter — Free Online Word, Character & Sentence Count",
     description:
       "Free word counter for essays, social posts, and SEO. Live counts for words, characters (with and without spaces), sentences, and paragraphs—no upload, works in your browser.",
+    pageHeading:
+      "Word Counter — live words, characters, sentences, and paragraphs",
   },
   ui: {
     textareaPlaceholder:

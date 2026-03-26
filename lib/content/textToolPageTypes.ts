@@ -11,6 +11,11 @@ export type TextToolSeoSections = {
     heading: string;
     steps: { title: string; body: string }[];
   };
+  /** Optional “Features” block for SEO structure (H2). */
+  features?: {
+    heading: string;
+    items: string[];
+  };
   faq: {
     heading: string;
     items: { question: string; answer: string }[];
@@ -18,6 +23,14 @@ export type TextToolSeoSections = {
   relatedTools: {
     heading: string;
   };
+};
+
+/** Per-tool document meta + visible page heading. */
+export type ToolPageMeta = {
+  title: string;
+  description: string;
+  /** Accessible H1: tool name + benefit */
+  pageHeading: string;
 };
 
 export type StatKey =
@@ -40,7 +53,7 @@ export type StatsToolUi = {
 
 export type StatsToolPageContent = TextToolSeoSections & {
   kind: "stats";
-  meta: { title: string; description: string };
+  meta: ToolPageMeta;
   ui: StatsToolUi;
 };
 
@@ -58,13 +71,13 @@ export type TransformToolUi = {
 
 export type TransformToolPageContent = TextToolSeoSections & {
   kind: "transform";
-  meta: { title: string; description: string };
+  meta: ToolPageMeta;
   ui: TransformToolUi;
 };
 
 export type CompareToolPageContent = TextToolSeoSections & {
   kind: "compare";
-  meta: { title: string; description: string };
+  meta: ToolPageMeta;
   ui: {
     leftPlaceholder: string;
     rightPlaceholder: string;
@@ -77,7 +90,7 @@ export type CompareToolPageContent = TextToolSeoSections & {
 
 export type FindReplaceToolPageContent = TextToolSeoSections & {
   kind: "find-replace";
-  meta: { title: string; description: string };
+  meta: ToolPageMeta;
   ui: {
     textareaPlaceholder: string;
     findPlaceholder: string;
@@ -91,7 +104,7 @@ export type FindReplaceToolPageContent = TextToolSeoSections & {
 
 export type SpeechToolPageContent = TextToolSeoSections & {
   kind: "speech-tts" | "speech-stt";
-  meta: { title: string; description: string };
+  meta: ToolPageMeta;
   ui: TransformToolUi;
 };
 
@@ -109,14 +122,14 @@ export type DevSpecialVariant =
 
 export type DevHashToolPageContent = TextToolSeoSections & {
   kind: "dev-hash";
-  meta: { title: string; description: string };
+  meta: ToolPageMeta;
   algorithm: DevHashAlgorithm;
   ui: TransformToolUi;
 };
 
 export type DevSpecialToolPageContent = TextToolSeoSections & {
   kind: "dev-special";
-  meta: { title: string; description: string };
+  meta: ToolPageMeta;
   variant: DevSpecialVariant;
   ui: TransformToolUi;
 };
@@ -143,7 +156,7 @@ export type ImageToolVariant =
 
 export type ImageToolPageContent = TextToolSeoSections & {
   kind: "image-tool";
-  meta: { title: string; description: string };
+  meta: ToolPageMeta;
   variant: ImageToolVariant;
   ui: TransformToolUi;
 };

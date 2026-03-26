@@ -14,6 +14,7 @@ export {
   buildImageToolMetaDescription,
 } from "./toolMeta";
 export {
+  buildSoftwareApplicationJsonLd,
   buildWebApplicationJsonLd,
   buildFaqPageJsonLd,
   buildWebsiteJsonLd,

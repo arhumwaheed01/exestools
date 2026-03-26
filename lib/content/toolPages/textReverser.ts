@@ -6,6 +6,8 @@ export const textReverserPageContent: TransformToolPageContent = {
     title: "Text Reverser — Reverse Characters or Lines Free Online | ExesTools",
     description:
       "Reverse text character-by-character or flip line order. Creative testing, puzzles, and QA with live preview in your browser.",
+    pageHeading:
+      "Text Reverser — flip characters or whole lines with live preview",
   },
   ui: {
     textareaPlaceholder: "Enter text to reverse.",

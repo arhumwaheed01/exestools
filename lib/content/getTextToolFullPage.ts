@@ -1,10 +1,13 @@
 import {
   buildDeveloperToolMetaDescription,
   buildDeveloperToolMetaTitle,
+  buildDeveloperToolPageHeading,
   buildImageToolMetaDescription,
   buildImageToolMetaTitle,
+  buildImageToolPageHeading,
   buildTextToolMetaDescription,
   buildTextToolMetaTitle,
+  buildTextToolPageHeading,
 } from "@/lib/seo/toolMeta";
 import { developerToolSpecsBySlug } from "./developerToolsData";
 import { imageToolSpecsBySlug } from "./imageToolsData";
@@ -26,8 +29,9 @@ export function getTextToolFullPage(
     const seo = buildSeoSections(tool.name, tool.description, tool.relatedTools);
 
     const meta = {
-      title: buildTextToolMetaTitle(tool.name),
+      title: buildTextToolMetaTitle(tool.name, catalog.kind),
       description: buildTextToolMetaDescription(tool.name, tool.description),
+      pageHeading: buildTextToolPageHeading(tool.name, tool.description, catalog.kind),
     };
 
     if (catalog.kind === "stats") {
@@ -133,8 +137,9 @@ export function getTextToolFullPage(
     return {
       kind: "image-tool",
       meta: {
-        title: buildImageToolMetaTitle(tool.name),
+        title: buildImageToolMetaTitle(tool.name, slug),
         description: buildImageToolMetaDescription(tool.name, tool.description),
+        pageHeading: buildImageToolPageHeading(tool.name, tool.description, slug),
       },
       variant: imageSpec.variant,
       ui: {
@@ -152,8 +157,9 @@ export function getTextToolFullPage(
 
   const seo = buildDeveloperSeoSections(tool.name, tool.description, tool.relatedTools);
   const meta = {
-    title: buildDeveloperToolMetaTitle(tool.name),
+    title: buildDeveloperToolMetaTitle(tool.name, slug),
     description: buildDeveloperToolMetaDescription(tool.name, tool.description),
+    pageHeading: buildDeveloperToolPageHeading(tool.name, tool.description, slug),
   };
 
   const transformUi = {
@@ -203,7 +209,7 @@ function buildImageSeoSections(
 ): TextToolSeoSections {
   void relatedTools;
   const paragraphs = [
-    `${toolName} is a browser-based image utility designed for fast, privacy-aware workflows. Instead of uploading files to a remote service, you can process common image tasks directly in your tab with modern web APIs like Canvas, FileReader, and Blob URLs. This approach is practical for developers, designers, marketers, support teams, and creators who need quick transformations without installing desktop software or waiting for server jobs to finish.`,
+    `${toolName} is a free online browser-based image utility designed for fast, privacy-aware workflows. Instead of uploading files to a remote service, you can process common image tasks directly in your tab with modern web APIs like Canvas, FileReader, and Blob URLs. This approach is practical for developers, designers, marketers, support teams, and creators who need quick transformations without installing desktop software or waiting for server jobs to finish.`,
     `Image work often includes repetitive micro-tasks: compressing screenshots for documentation, converting formats for compatibility, resizing assets for responsive layouts, rotating photos from mobile devices, and removing metadata before sharing externally. ${toolName} focuses on one of these jobs so the interface stays clear. Upload a file, preview before and after, tweak settings where available, and download the result. Keeping the process simple helps you iterate quickly and avoid accidental quality loss.`,
     `Client-side processing can improve both speed and control. Since work happens in your browser, there is no queue latency for standard operations, and you can immediately test multiple settings (for example, JPEG quality levels or target dimensions) to strike the right balance between fidelity and file size. This is especially useful for web performance workflows where a few kilobytes matter across many images and pages.`,
     `Teams also benefit from consistency. A stable URL for ${toolName} can be shared in runbooks, onboarding docs, or QA checklists so everyone follows the same steps for common tasks. That reduces one-off manual edits and makes outputs easier to review. Internal linking between related tools lets you chain workflows efficiently—for example, convert a format, then compress, then inspect metadata—without bouncing between unrelated sites.`,
@@ -214,7 +220,10 @@ function buildImageSeoSections(
   ];
 
   return {
-    seoArticle: { heading: toolName, paragraphs },
+    seoArticle: {
+      heading: `${toolName}: free online image tool guide`,
+      paragraphs,
+    },
     howToUse: {
       heading: `How to use ${toolName}`,
       steps: [
@@ -222,6 +231,16 @@ function buildImageSeoSections(
         { title: "Step 2: Configure options", body: "Adjust quality, size, rotation, format, or other settings depending on the selected tool." },
         { title: "Step 3: Review previews", body: "Compare before and after output to verify dimensions, quality, and expected result." },
         { title: "Step 4: Download output", body: "Use the download action to save the processed image to your device." },
+      ],
+    },
+    features: {
+      heading: "Features",
+      items: [
+        `Client-side image processing for ${toolName.toLowerCase()} with preview before download`,
+        "Drag-and-drop or file picker—works on desktop and mobile browsers",
+        "No account required; free to use on ExesTools",
+        "Download optimized output for web, email, and social workflows",
+        "Pairs with related image tools below for compression, conversion, and metadata tasks",
       ],
     },
     faq: {
@@ -232,6 +251,16 @@ function buildImageSeoSections(
         { question: "Can I use this on mobile?", answer: "Yes. The layout is responsive and supports touch interactions." },
         { question: "Is processing client-side?", answer: "Where possible, image processing uses browser APIs like Canvas and FileReader on your device." },
         { question: "Can I preview before download?", answer: "Yes. The workspace includes before/after preview blocks for visual verification." },
+        {
+          question: "Is this tool free to use?",
+          answer:
+            "Yes. ExesTools image utilities are free to use in supported browsers. Always follow your organization’s policies for sensitive media.",
+        },
+        {
+          question: "Will my images be uploaded to a server?",
+          answer:
+            "Processing is designed to run in your browser for typical workflows. Avoid uploading regulated or confidential files if your policy requires a different toolchain.",
+        },
       ],
     },
     relatedTools: { heading: "Related tools" },
@@ -245,7 +274,7 @@ function buildDeveloperSeoSections(
 ): TextToolSeoSections {
   void relatedTools;
   const baseParagraphs = [
-    `${toolName} is a developer-focused utility you can run directly in the browser. It is built for engineers, QA teams, technical writers, and anyone who needs a quick, reliable result without opening a heavy IDE plugin or shipping data to an unknown server. Whether you are debugging a flaky integration, normalizing a config snippet, or preparing examples for documentation, the same URL gives you a consistent workspace every time.`,
+    `${toolName} is a free online developer-focused utility you can run directly in the browser. It is built for engineers, QA teams, technical writers, and anyone who needs a quick, reliable result without opening a heavy IDE plugin or shipping data to an unknown server. Whether you are debugging a flaky integration, normalizing a config snippet, or preparing examples for documentation, the same URL gives you a consistent workspace every time.`,
     `Modern software workflows depend on dozens of small conversions: encoding and decoding, formatting and minifying, sanity checks on tokens and addresses, and readable dumps of structured data. ${toolName} targets one slice of that work so you can complete it in seconds. Because the interface presents clear input and output regions, you can compare before-and-after states instantly, catch subtle mistakes early, and copy results straight into tickets, terminals, or version control messages.`,
     `Client-side processing is a deliberate choice for developer ergonomics and practical privacy. Many tasks—JSON inspection, Base64 transforms, hash generation, and header parsing—do not need a backend if implemented carefully in modern browsers. That means lower latency for short jobs and fewer moving parts when you are offline or behind a restrictive network. ExesTools keeps controls obvious so onboarding stays minimal even when you are context-switching between incidents and feature work.`,
     `${toolName} also complements your local toolchain. Editors and CLIs are powerful, but a shareable link is sometimes faster when you are pairing remotely or handing steps to someone who does not share your environment. Bookmark the page, drop it into runbooks, or paste it into onboarding notes alongside ${description.toLowerCase()} The predictable layout scales as ExesTools adds more utilities: each tool keeps the same content structure for long-form guidance, FAQs, and related links so navigation remains familiar.`,
@@ -258,7 +287,7 @@ function buildDeveloperSeoSections(
 
   return {
     seoArticle: {
-      heading: `${toolName}`,
+      heading: `${toolName}: developer tool guide`,
       paragraphs: baseParagraphs,
     },
     howToUse: {
@@ -280,6 +309,16 @@ function buildDeveloperSeoSections(
           title: "Step 4: Reset for the next task",
           body: "Clear the fields when you are done so the next paste starts from a clean state.",
         },
+      ],
+    },
+    features: {
+      heading: "Features",
+      items: [
+        `Client-side ${toolName.toLowerCase()} workflow with instant feedback and copy actions`,
+        "Built for JSON, encoding, hashing, headers, and everyday debugging tasks",
+        "No signup—works in modern desktop and mobile browsers",
+        "Stable URL you can bookmark, share in tickets, and reuse in runbooks",
+        "Related tools section below for chaining encode → decode → format flows",
       ],
     },
     faq: {
@@ -306,6 +345,16 @@ function buildDeveloperSeoSections(
           answer:
             "Each page links to adjacent utilities—encoding, formatting, timestamps, and more—so you can move through a debugging flow without searching for new sites.",
         },
+        {
+          question: "Is this developer tool free?",
+          answer:
+            "Yes. ExesTools developer utilities are free to use in supported browsers. Always validate security-sensitive outputs in your own systems.",
+        },
+        {
+          question: "How accurate is the output?",
+          answer:
+            "Output is generated for typical inputs and edge cases common in day-to-day work. For regulated or production-critical decisions, verify results with your own tooling and policies.",
+        },
       ],
     },
     relatedTools: {
@@ -321,7 +370,7 @@ function buildSeoSections(
 ): TextToolSeoSections {
   void relatedTools;
   const baseParagraphs = [
-    `${toolName} is a browser-based text utility built for speed, clarity, and repeatable workflows. Instead of opening heavy software or writing one-off scripts, you can paste content and get immediate results. This is especially useful for editors, marketers, students, support teams, and developers who need small transformations many times per day. The interface keeps input and output side by side, so iteration is fast and mistakes are easier to catch before content moves to a CMS, spreadsheet, or production system.`,
+    `${toolName} is a free online browser-based text utility built for speed, clarity, and repeatable workflows. Instead of opening heavy software or writing one-off scripts, you can paste content and get immediate results. This is especially useful for editors, marketers, students, support teams, and developers who need small transformations many times per day. The interface keeps input and output side by side, so iteration is fast and mistakes are easier to catch before content moves to a CMS, spreadsheet, or production system.`,
     `The core value of ${toolName} is reducing friction in routine tasks. Repetitive editing often introduces subtle errors when done manually, especially under deadlines. A focused tool automates the mechanical parts and gives you a predictable output with one workflow every time. Since processing runs in the browser, you can use it across devices without installs, and the same URL can be shared with teammates for consistent results.`,
     `For teams, consistency is just as important as speed. When everyone applies the same transformation rules, documents stay cleaner across handoffs. That matters in SEO publishing, operations, localization, and technical documentation where formatting inconsistencies create downstream issues. By using ${toolName} in a structured way, teams can standardize micro-tasks and spend more time on high-value decisions like clarity, tone, and quality control.`,
     `Privacy and practicality also matter in day-to-day workflows. Browser tools help you quickly process drafts without setting up infrastructure. ExesTools focuses on transparent behavior: input, output, copy, and clear actions are always visible, and related tools are linked directly so you can chain tasks without context switching. This keeps momentum high when your pipeline needs multiple passes such as cleanup, conversion, counting, and validation.`,
@@ -333,7 +382,7 @@ function buildSeoSections(
 
   return {
     seoArticle: {
-      heading: `${toolName} Tool`,
+      heading: `${toolName}: free online text tool guide`,
       paragraphs: baseParagraphs,
     },
     howToUse: {
@@ -345,6 +394,16 @@ function buildSeoSections(
         { title: "Step 4: Start again", body: "Clear the workspace to process a new text block quickly." },
       ],
     },
+    features: {
+      heading: "Features",
+      items: [
+        `Live ${toolName.toLowerCase()} output with copy and clear controls`,
+        "Runs in your browser—no install, no account",
+        "Responsive layout for desktop, tablet, and phone",
+        "Designed for writers, students, marketers, and developers who repeat tasks daily",
+        "Use related tools below to chain counting, formatting, and cleanup in one session",
+      ],
+    },
     faq: {
       heading: "Frequently asked questions",
       items: [
@@ -353,6 +412,16 @@ function buildSeoSections(
         { question: "Does it work on mobile devices?", answer: "Yes. The layout is responsive and works across phone, tablet, and desktop." },
         { question: "Can I copy the result?", answer: "Yes. Use the copy button to copy output quickly." },
         { question: "Is this suitable for professional workflows?", answer: "Yes. It is designed for repeatable, production-friendly text operations." },
+        {
+          question: `How accurate is ${toolName}?`,
+          answer:
+            "The tool applies the described transformation to your input. Always review output for mission-critical or legal content before publishing.",
+        },
+        {
+          question: "Do I need to install anything?",
+          answer:
+            "No. ExesTools runs in modern browsers. Keep your browser updated for the best experience.",
+        },
       ],
     },
     relatedTools: {

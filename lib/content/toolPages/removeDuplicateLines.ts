@@ -6,6 +6,8 @@ export const removeDuplicateLinesPageContent: TransformToolPageContent = {
     title: "Remove Duplicate Lines — Free Online Dedupe Text | ExesTools",
     description:
       "Remove duplicate lines while preserving first-occurrence order. Clean logs, lists, and exports in your browser—copy the deduped output instantly.",
+    pageHeading:
+      "Remove Duplicate Lines — dedupe lists and logs while keeping order",
   },
   ui: {
     textareaPlaceholder: "Paste lines; duplicates will be removed in order…",

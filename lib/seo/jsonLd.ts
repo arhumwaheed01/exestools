@@ -3,8 +3,8 @@ import { defaultSEO } from "./seoConfig";
 
 export type FaqItem = { question: string; answer: string };
 
-/** schema.org WebApplication for individual tool pages */
-export function buildWebApplicationJsonLd(input: {
+/** schema.org SoftwareApplication for individual tool pages */
+export function buildSoftwareApplicationJsonLd(input: {
   name: string;
   description: string;
   urlPath: string;
@@ -13,7 +13,7 @@ export function buildWebApplicationJsonLd(input: {
   const url = absoluteUrl(input.urlPath);
   return {
     "@context": "https://schema.org",
-    "@type": "WebApplication",
+    "@type": "SoftwareApplication",
     name: input.name,
     description: input.description,
     url,
@@ -32,6 +32,9 @@ export function buildWebApplicationJsonLd(input: {
     },
   };
 }
+
+/** @deprecated Use buildSoftwareApplicationJsonLd */
+export const buildWebApplicationJsonLd = buildSoftwareApplicationJsonLd;
 
 /** schema.org FAQPage */
 export function buildFaqPageJsonLd(items: FaqItem[]): Record<string, unknown> {

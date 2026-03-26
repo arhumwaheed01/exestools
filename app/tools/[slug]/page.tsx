@@ -16,7 +16,7 @@ import { TransformSlugClient } from "@/components/tools/TransformSlugClient";
 import { getTextToolFullPage } from "@/lib/content/getTextToolFullPage";
 import { getSeoForTool, toolSlugMetadata } from "@/lib/content/seoData";
 import { allTools, getToolBySlug } from "@/lib/content/textToolsData";
-import { buildFaqPageJsonLd, buildWebApplicationJsonLd } from "@/lib/seo/jsonLd";
+import { buildFaqPageJsonLd, buildSoftwareApplicationJsonLd } from "@/lib/seo/jsonLd";
 import { buildPageMetadata } from "@/lib/seo/generateMeta";
 import { defaultSEO } from "@/lib/seo/seoConfig";
 import { schemaApplicationCategoryForSlug } from "@/lib/seo/toolRouteHelpers";
@@ -77,7 +77,7 @@ export default async function ToolPage({ params }: Props) {
     workspace = <TransformSlugClient slug={slug} ui={full.ui} />;
   }
 
-  const webAppLd = buildWebApplicationJsonLd({
+  const webAppLd = buildSoftwareApplicationJsonLd({
     name: tool.name,
     description: full.meta.description,
     urlPath: `/tools/${slug}`,
@@ -92,7 +92,8 @@ export default async function ToolPage({ params }: Props) {
       <JsonLd data={faqLd} id={`ld-faq-${slug}`} />
       <ToolPageShell
         title={tool.name}
-        description={tool.description}
+        pageHeading={full.meta.pageHeading}
+        description={full.meta.description}
         variant="featured"
         afterCard={
           <TextToolSeo
@@ -100,6 +101,7 @@ export default async function ToolPage({ params }: Props) {
             sections={{
               seoArticle: full.seoArticle,
               howToUse: full.howToUse,
+              features: full.features,
               faq: full.faq,
               relatedTools: full.relatedTools,
             }}

@@ -17,7 +17,7 @@ const sectionShell =
   "mx-auto w-full max-w-3xl text-center [&_.prose-block]:text-left";
 
 export function TextToolSeo({ tool, sections }: Props) {
-  const { seoArticle, howToUse, faq, relatedTools } = sections;
+  const { seoArticle, howToUse, features, faq, relatedTools } = sections;
 
   const relatedSlugs = getExpandedRelatedSlugs(tool.slug, tool.relatedTools);
   const related = relatedSlugs.flatMap((slug) => {
@@ -64,6 +64,28 @@ export function TextToolSeo({ tool, sections }: Props) {
           ))}
         </ol>
       </section>
+
+      {features ? (
+        <section className={sectionShell}>
+          <h2 className="mt-0! text-2xl font-semibold tracking-tight text-secondary-text md:text-3xl">
+            {features.heading}
+          </h2>
+          <ul className="prose-block mt-8 list-none space-y-4 text-left text-base leading-relaxed text-secondary-text">
+            {features.items.map((item, i) => (
+              <li
+                key={i}
+                className="flex gap-3 rounded-xl border border-input-border/70 bg-background/80 px-4 py-3 shadow-sm"
+              >
+                <span
+                  className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary"
+                  aria-hidden
+                />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       <section className="mx-auto w-full max-w-3xl">
         <FaqAccordion heading={faq.heading} items={faq.items} />

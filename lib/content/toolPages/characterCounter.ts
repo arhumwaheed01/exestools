@@ -7,6 +7,8 @@ export const characterCounterPageContent: StatsToolPageContent = {
       "Character Counter — Free Online With & Without Spaces | ExesTools",
     description:
       "Free character counter for tweets, meta tags, and forms. Live counts with spaces, without spaces, plus words, sentences, and paragraphs—runs locally in your browser.",
+    pageHeading:
+      "Character Counter — live counts with and without spaces, plus words and structure",
   },
   ui: {
     textareaPlaceholder:
