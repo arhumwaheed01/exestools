@@ -13,7 +13,7 @@ export default function AboutPage() {
     <LegalPageLayout title={a.h1}>
       {a.sections.map((s) => (
         <section key={s.title} className="scroll-mt-24">
-          <h2 className="!mt-0 text-xl font-semibold tracking-tight text-secondary-text md:text-2xl">
+          <h2 className="!mt-0 text-xl font-semibold tracking-tight text-secondary-text md:text-2xl lg:text-[1.4rem]">
             {s.title}
           </h2>
           <div className="mt-4 space-y-4">

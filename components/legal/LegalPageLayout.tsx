@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { Container } from "@/components/Container";
 
+/** Article chrome for legal pages. Outer shell + sidebar: `LegalLayout` in `app/(legal)/layout.tsx`. */
 export function LegalPageLayout({
   title,
   lastUpdated,
@@ -12,32 +12,30 @@ export function LegalPageLayout({
   children: ReactNode;
 }) {
   return (
-    <section className="bg-surface pb-14 pt-6 md:pb-20 md:pt-10">
-      <Container className="max-w-[52rem]">
-        <nav
-          className="mb-8 text-sm text-secondary-text/80"
-          aria-label="Breadcrumb"
+    <div className="rounded-2xl border border-input-border/80 bg-background px-6 py-8 shadow-[0_16px_48px_-32px_rgba(51,62,72,0.22)] ring-1 ring-slate-900/[0.04] md:px-9 md:py-10 lg:px-10 lg:py-11">
+      <nav
+        className="mb-7 text-sm font-medium text-secondary-text/80"
+        aria-label="Breadcrumb"
+      >
+        <Link
+          href="/"
+          className="font-semibold text-primary no-underline hover:underline"
         >
-          <Link
-            href="/"
-            className="font-medium text-primary no-underline hover:underline"
-          >
-            Home
-          </Link>
-        </nav>
-        <h1 className="!mt-0 text-3xl font-bold tracking-tight text-secondary-text md:text-4xl">
-          {title}
-        </h1>
-        {lastUpdated ? (
-          <p className="mt-2 text-sm text-secondary-text/70">
-            Last updated: {lastUpdated}
-          </p>
-        ) : null}
-        <div className="mt-10 space-y-10 text-base leading-relaxed text-secondary-text">
-          {children}
-        </div>
-      </Container>
-    </section>
+          Home
+        </Link>
+      </nav>
+      <h1 className="!mt-0 text-3xl font-bold tracking-tight text-secondary-text md:text-4xl md:font-extrabold lg:text-[2.65rem] lg:leading-[1.1]">
+        {title}
+      </h1>
+      {lastUpdated ? (
+        <p className="mt-3 text-sm font-medium text-secondary-text/65">
+          Last updated: {lastUpdated}
+        </p>
+      ) : null}
+      <div className="mt-9 space-y-10 text-base leading-[1.75] text-secondary-text md:mt-10 md:text-[1.0625rem] md:leading-[1.72]">
+        {children}
+      </div>
+    </div>
   );
 }
 
@@ -64,7 +62,7 @@ export function LegalSection({
 }: LegalSectionProps) {
   return (
     <section id={id} className="scroll-mt-24">
-      <h2 className="!mt-0 text-xl font-semibold tracking-tight text-secondary-text md:text-2xl">
+      <h2 className="!mt-0 text-xl font-semibold tracking-tight text-secondary-text md:text-2xl lg:text-[1.4rem]">
         {title}
       </h2>
       <div className="mt-4 space-y-4">

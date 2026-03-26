@@ -10,6 +10,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { createPortal } from "react-dom";
 import { LuClock, LuSearch, LuSparkles, LuX } from "react-icons/lu";
 import { homepageData } from "@/lib/content/homepageData";
@@ -31,15 +32,6 @@ const RESULT_LIMIT = 10;
 const RELATED_LIMIT = 8;
 const RECENT_KEY = "exestools-search-recent";
 const MAX_RECENT = 5;
-
-function useDebouncedValue<T>(value: T, ms: number): T {
-  const [debounced, setDebounced] = useState(value);
-  useEffect(() => {
-    const id = window.setTimeout(() => setDebounced(value), ms);
-    return () => window.clearTimeout(id);
-  }, [value, ms]);
-  return debounced;
-}
 
 function readRecentSlugs(): string[] {
   if (typeof window === "undefined") return [];
