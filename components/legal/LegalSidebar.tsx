@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useId, useMemo, useRef, useState } from "react";
 import { LuSearch } from "react-icons/lu";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
@@ -15,16 +16,32 @@ const SUGGESTION_LIMIT = 6;
 const cardClass =
   "rounded-xl border border-input-border/85 bg-background/95 p-3.5 shadow-sm shadow-black/[0.04] ring-1 ring-black/[0.025]";
 
+function normalizeLegalPath(path: string) {
+  const base = path.split("?")[0]?.split("#")[0] ?? path;
+  const trimmed = base.replace(/\/$/, "");
+  return trimmed === "" ? "/" : trimmed;
+}
+
 type Props = {
   popularTools: readonly { name: string; slug: string }[];
 };
 
 export function LegalSidebar({ popularTools }: Props) {
+  const pathname = usePathname() ?? "";
   const inputRef = useRef<HTMLInputElement>(null);
   const listId = useId();
   const [value, setValue] = useState("");
   const [open, setOpen] = useState(false);
   const debounced = useDebouncedValue(value, DEBOUNCE_MS);
+
+  const currentPath = normalizeLegalPath(pathname);
+  const usefulLinks = useMemo(
+    () =>
+      legalSidebarUsefulLinks.filter(
+        (item) => normalizeLegalPath(item.href) !== currentPath,
+      ),
+    [currentPath],
+  );
 
   const results = useMemo(
     () => searchTools(debounced, searchableTools, SUGGESTION_LIMIT),
@@ -134,26 +151,28 @@ export function LegalSidebar({ popularTools }: Props) {
         </ul>
       </section>
 
-      <section className={cardClass} aria-labelledby={`${listId}-links-heading`}>
-        <h2
-          id={`${listId}-links-heading`}
-          className="!mt-0 border-b border-input-border/65 pb-1.5 text-[0.65rem] font-bold uppercase tracking-[0.12em] text-secondary-text/70"
-        >
-          Useful links
-        </h2>
-        <ul className="mt-2 flex flex-col gap-0.5">
-          {legalSidebarUsefulLinks.map((item) => (
-            <li key={item.href}>
-              <Link
-                href={item.href}
-                className="block rounded-md px-1.5 py-1.5 text-xs font-semibold text-primary no-underline transition-colors hover:bg-primary/[0.07]"
-              >
-                {item.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
+      {usefulLinks.length > 0 ? (
+        <section className={cardClass} aria-labelledby={`${listId}-links-heading`}>
+          <h2
+            id={`${listId}-links-heading`}
+            className="!mt-0 border-b border-input-border/65 pb-1.5 text-[0.65rem] font-bold uppercase tracking-[0.12em] text-secondary-text/70"
+          >
+            Useful links
+          </h2>
+          <ul className="mt-2 flex flex-col gap-0.5">
+            {usefulLinks.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className="block rounded-md px-1.5 py-1.5 text-xs font-semibold text-primary no-underline transition-colors hover:bg-primary/[0.07]"
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
     </aside>
   );
 }
