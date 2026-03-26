@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { absoluteUrl } from "@/lib/seo/generateMeta";
-import { allTools } from "@/lib/content/textToolsData";
+import { getDeveloperToolsGridItems } from "@/lib/content/developerToolsData";
+import { getImageToolsGridItems } from "@/lib/content/imageToolsData";
+import { textTools } from "@/lib/content/textToolsData";
 
 const STATIC_PATHS = [
   "/",
@@ -36,11 +38,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
           : 0.85,
   }));
 
-  const toolEntries: MetadataRoute.Sitemap = allTools.map((t) => ({
-    url: absoluteUrl(`/tools/${t.slug}`),
+  const allToolSlugs = Array.from(
+    new Set([
+      ...textTools.map((t) => t.slug),
+      ...getDeveloperToolsGridItems().map((t) => t.slug),
+      ...getImageToolsGridItems().map((t) => t.slug),
+    ]),
+  );
+
+  const toolEntries: MetadataRoute.Sitemap = allToolSlugs.map((slug) => ({
+    url: absoluteUrl(`/tools/${slug}`),
     lastModified,
     changeFrequency: "weekly",
-    priority: 0.8,
+    priority: 0.75,
   }));
 
   return [...staticEntries, ...toolEntries];
