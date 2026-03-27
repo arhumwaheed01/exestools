@@ -1,5 +1,5 @@
 /**
- * Single source of truth for text tools — scale to 100+ entries for programmatic SEO.
+ * Single source of truth for text tools; scale to 100+ entries for programmatic SEO.
  * `allTools` adds developer utilities without changing the text-tools-only listing.
  */
 
@@ -43,7 +43,7 @@ export function getToolBySlug(slug: string) {
   return allTools.find((t) => t.slug === slug);
 }
 
-/** Text-tool index only — keeps /text-tools unchanged. */
+/** Text-tool index only; keeps /text-tools unchanged. */
 export function getTextToolBySlug(slug: string) {
   return textTools.find((t) => t.slug === slug);
 }

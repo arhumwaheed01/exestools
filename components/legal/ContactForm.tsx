@@ -10,7 +10,7 @@ export function ContactForm() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const params = new URLSearchParams({
-      subject: subject.trim() || "ExesTools — inquiry",
+      subject: subject.trim() || "ExesTools: inquiry",
       body: message.trim(),
     });
     window.location.href = `mailto:${site.contactEmail}?${params.toString()}`;

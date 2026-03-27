@@ -57,11 +57,11 @@ function lookupIp(raw: string): string {
   if (!ip) return "Enter an IPv4 address like 203.0.113.10";
   if (!IPV4.test(ip)) return "This checker validates dotted IPv4 notation only (ex. 192.0.2.5).";
   const [a, b] = ip.split(".").map(Number);
-  if (a === 10) return `${ip} — private range (RFC 1918 10.0.0.0/8).`;
-  if (a === 172 && b !== undefined && b >= 16 && b <= 31) return `${ip} — private range (RFC 1918 172.16.0.0/12).`;
-  if (a === 192 && b === 168) return `${ip} — private range (RFC 1918 192.168.0.0/16).`;
-  if (a === 127) return `${ip} — loopback (127.0.0.0/8).`;
-  return `${ip} — format OK (public/private classification is heuristic; no geolocation lookup).`;
+  if (a === 10) return `${ip}: private range (RFC 1918 10.0.0.0/8).`;
+  if (a === 172 && b !== undefined && b >= 16 && b <= 31) return `${ip}: private range (RFC 1918 172.16.0.0/12).`;
+  if (a === 192 && b === 168) return `${ip}: private range (RFC 1918 192.168.0.0/16).`;
+  if (a === 127) return `${ip}: loopback (127.0.0.0/8).`;
+  return `${ip}: format OK (public/private classification is heuristic; no geolocation lookup).`;
 }
 
 function parseUa(ua: string): string {
@@ -72,7 +72,7 @@ function parseUa(ua: string): string {
   else if (/Chrome\//i.test(t) && !/Chromium/i.test(t)) parts.push("Browser family: likely Chrome (heuristic).");
   else if (/Safari/i.test(t) && !/Chrome/i.test(t)) parts.push("Browser family: likely Safari.");
   else if (/Firefox\//i.test(t)) parts.push("Browser family: likely Firefox.");
-  else parts.push("Browser family: unrecognized — see raw string below.");
+  else parts.push("Browser family: unrecognized. See raw string below.");
 
   if (/Windows NT/i.test(t)) parts.push("OS hint: Windows.");
   else if (/Mac OS X|macOS/i.test(t)) parts.push("OS hint: macOS.");
@@ -119,7 +119,7 @@ function genPassword(len: number, upper: boolean, lower: boolean, num: boolean, 
 function describeCron(expr: string): string {
   const p = expr.trim().split(/\s+/).filter(Boolean);
   if (p.length !== 5) {
-    return "Use five fields: minute hour day-of-month month day-of-week (some engines differ—verify in your environment).";
+    return "Use five fields: minute hour day-of-month month day-of-week (some engines differ; verify in your environment).";
   }
   return `Expression\n${p.join(" ")}\n\nFields\nminute: ${p[0]}\nhour: ${p[1]}\nday of month: ${p[2]}\nmonth: ${p[3]}\nday of week: ${p[4]}`;
 }

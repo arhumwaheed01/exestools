@@ -41,13 +41,13 @@ export const seoData = {
     path: "/tools",
     title: "All Free Online Tools",
     description:
-      "Directory of text utilities, developer tools (JSON, encoding, hashes, JWT), and image tools—stable URLs, browser-based, easy to share.",
+      "Directory of text utilities, developer tools (JSON, encoding, hashes, JWT), and image tools: stable URLs, browser-based, easy to share.",
   },
   developerTools: {
     path: "/developer-tools",
     title: "Free Developer Tools Online",
     description:
-      "JSON formatter, Base64, URL encode/decode, hash generators, formatters, minifiers, JWT decode, and more—free in your browser.",
+      "JSON formatter, Base64, URL encode/decode, hash generators, formatters, minifiers, JWT decode, and more. Free in your browser.",
   },
   imageTools: {
     path: "/image-tools",
@@ -106,7 +106,7 @@ export function getSeoForTool(slug: string): PageSeo | undefined {
   return seoDataBySlug[slug];
 }
 
-/** Static hub pages — absolute titles, canonical + OG + Twitter */
+/** Static hub pages: absolute titles, canonical + OG + Twitter */
 export function toMetadata(seo: RoutedPageSeo): Metadata {
   return buildPageMetadata({
     title: seo.title,

@@ -1,5 +1,5 @@
 /**
- * Back-compat re-exports — prefer `@/lib/content/textToolsData` in new code.
+ * Back-compat re-exports; prefer `@/lib/content/textToolsData` in new code.
  */
 export {
   allTools,

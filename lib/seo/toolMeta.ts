@@ -14,7 +14,7 @@ export function clampMetaDescription(text: string, max = 158): string {
 
 function ensureMetaLength(text: string, min = 140, max = 158): string {
   let s = clampMetaDescription(text, max);
-  const suffix = ` Fast, free ${SITE} tool—no signup.`;
+  const suffix = ` Fast, free ${SITE} tool. No signup.`;
   if (s.length < min) {
     s = clampMetaDescription(s + suffix, max);
   }
@@ -103,7 +103,7 @@ export function buildTextToolMetaDescription(
   shortDescription: string,
 ): string {
   const n = toolName.toLowerCase();
-  const base = `Use our free online ${n} tool: ${shortDescription} Fast, accurate, and easy to use in your browser—no signup.`;
+  const base = `Use our free online ${n} tool: ${shortDescription} Fast, accurate, and easy to use in your browser. No signup.`;
   return ensureMetaLength(base);
 }
 
@@ -112,7 +112,7 @@ export function buildDeveloperToolMetaDescription(
   shortDescription: string,
 ): string {
   const n = toolName.toLowerCase();
-  const base = `Free ${n} for developers: ${shortDescription} Runs in your browser—no install, no account.`;
+  const base = `Free ${n} for developers: ${shortDescription} Runs in your browser. No install, no account.`;
   return ensureMetaLength(base);
 }
 
@@ -121,7 +121,7 @@ export function buildImageToolMetaDescription(
   shortDescription: string,
 ): string {
   const n = toolName.toLowerCase();
-  const base = `Free online ${n}: ${shortDescription} Client-side image processing with preview and download—no upload to our servers.`;
+  const base = `Free online ${n}: ${shortDescription} Client-side image processing with preview and download. No upload to our servers.`;
   return ensureMetaLength(base);
 }
 
@@ -134,7 +134,7 @@ export function buildToolPageHeading(
   const first =
     shortDescription.split(/(?<=[.!?])\s+/)[0]?.trim() ?? shortDescription.trim();
   const benefit = first.length > 120 ? `${first.slice(0, 117)}…` : first;
-  return `${toolName} — ${benefit || `Free online ${useCaseFallback} tool`}`;
+  return `${toolName}: ${benefit || `Free online ${useCaseFallback} tool`}`;
 }
 
 export function buildTextToolPageHeading(

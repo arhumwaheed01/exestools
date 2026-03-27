@@ -1,5 +1,5 @@
 /**
- * Global SEO defaults — single source for brand, URLs, and fallbacks.
+ * Global SEO defaults: single source for brand, URLs, and fallbacks.
  * Set NEXT_PUBLIC_SITE_URL in production (e.g. https://www.exestools.com).
  */
 

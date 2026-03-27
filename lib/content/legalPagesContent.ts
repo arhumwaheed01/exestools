@@ -1,5 +1,5 @@
 /**
- * Legal and informational page copy for ExesTools — edit here to update site-wide text.
+ * Legal and informational page copy for ExesTools: edit here to update site-wide text.
  */
 
 export const privacyPolicyPage = {
@@ -55,7 +55,7 @@ export const privacyPolicyPage = {
       id: "third-parties",
       title: "Third-party services",
       paragraphs: [
-        "We may rely on third-party providers for hosting, analytics, content delivery, or—if we introduce them in the future—advertising. Those providers process data under their own policies when their scripts or pixels load on our pages. We encourage you to review their documentation if you want full detail.",
+        "We may rely on third-party providers for hosting, analytics, content delivery, or (if we introduce them in the future) advertising. Those providers process data under their own policies when their scripts or pixels load on our pages. We encourage you to review their documentation if you want full detail.",
       ],
     },
     {
@@ -200,7 +200,7 @@ export const aboutPage = {
   meta: {
     title: "About - ExesTools",
     description:
-      "What ExesTools is: free online utilities for text, developers, and images—fast, focused, and built for everyday work.",
+      "Free online utilities for text, developers, and images. Fast, focused, and built for everyday work.",
   },
   path: "/about" as const,
   h1: "About ExesTools",
@@ -208,7 +208,7 @@ export const aboutPage = {
     {
       title: "What we do",
       paragraphs: [
-        "ExesTools is a collection of free online utilities you can use directly in the browser. We focus on text helpers, developer-oriented formatters and encoders, and image tasks such as compression and conversion—each on its own page with a stable URL you can bookmark or share.",
+        "ExesTools is a collection of free online utilities you can use directly in the browser. We focus on text helpers, developer-oriented formatters and encoders, and image tasks such as compression and conversion. Each tool has its own page with a stable URL you can bookmark or share.",
       ],
     },
     {
@@ -226,7 +226,7 @@ export const aboutPage = {
     {
       title: "Who it is for",
       paragraphs: [
-        "Developers, students, writers, marketers, and anyone who needs a fast result without installing software. ExesTools is meant to complement your workflow—not to replace specialized or regulated systems when those are required.",
+        "Developers, students, writers, marketers, and anyone who needs a fast result without installing software. ExesTools is meant to complement your workflow, not to replace specialized or regulated systems when those are required.",
       ],
     },
   ],

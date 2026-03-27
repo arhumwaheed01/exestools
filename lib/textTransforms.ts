@@ -1,5 +1,5 @@
 /**
- * Pure text transforms — safe to run client- or server-side.
+ * Pure text transforms; safe to run client- or server-side.
  */
 
 export type TextReverseMode = "characters" | "lines";

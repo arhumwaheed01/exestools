@@ -3,11 +3,11 @@ import type { TransformToolPageContent } from "../textToolPageTypes";
 export const uppercaseConverterPageContent: TransformToolPageContent = {
   kind: "transform",
   meta: {
-    title: "Uppercase Converter — Free Online ALL CAPS Text | ExesTools",
+    title: "Uppercase Converter - Free Online ALL CAPS Text | ExesTools",
     description:
-      "Convert text to UPPERCASE instantly. Free in-browser title styling, emphasis, and normalization—copy the result in one click.",
+      "Convert text to UPPERCASE instantly. Free in-browser title styling, emphasis, and normalization. Copy the result in one click.",
     pageHeading:
-      "Uppercase Converter — turn any text into ALL CAPS in one step",
+      "Uppercase Converter: turn any text into ALL CAPS in one step",
   },
   ui: {
     textareaPlaceholder: "Type or paste text to convert to uppercase…",

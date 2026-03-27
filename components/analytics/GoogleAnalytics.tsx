@@ -2,7 +2,7 @@ import Script from "next/script";
 import { ga4MeasurementId } from "@/lib/seo/seoConfig";
 
 /**
- * GA4 (gtag.js) — loaded once in root layout; tracks all App Router pages.
+ * GA4 (gtag.js): loaded once in root layout; tracks all App Router pages.
  */
 export function GoogleAnalytics() {
   if (!ga4MeasurementId) {

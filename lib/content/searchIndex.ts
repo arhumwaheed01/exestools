@@ -55,7 +55,7 @@ function dedupeBySlug(tools: TextTool[]): TextTool[] {
   return out;
 }
 
-/** Full searchable list — safe to import from client components. */
+/** Full searchable list; safe to import from client components. */
 export const searchableTools: SearchableTool[] = dedupeBySlug(allTools).map(
   (t) => ({
     name: t.name,

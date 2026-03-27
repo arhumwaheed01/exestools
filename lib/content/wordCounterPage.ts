@@ -1,5 +1,5 @@
 /**
- * Word Counter — full page copy, UI strings, and SEO (programmatic SEO source).
+ * Word Counter: full page copy, UI strings, and SEO (programmatic SEO source).
  * Re-exported from textToolsData for a single import path.
  */
 
@@ -42,11 +42,11 @@ export type WordCounterPageContent = {
 
 export const wordCounterPageContent: WordCounterPageContent = {
   meta: {
-    title: "Word Counter — Free Online Word, Character & Sentence Count",
+    title: "Word Counter - Free Online Word, Character & Sentence Count",
     description:
-      "Free word counter for essays, social posts, and SEO. Live counts for words, characters (with and without spaces), sentences, and paragraphs—no upload, works in your browser.",
+      "Free word counter for essays, social posts, and SEO. Live counts for words, characters (with and without spaces), sentences, and paragraphs. No upload; works in your browser.",
     pageHeading:
-      "Word Counter — live words, characters, sentences, and paragraphs",
+      "Word Counter: live words, characters, sentences, and paragraphs",
   },
   ui: {
     textareaPlaceholder:
@@ -69,10 +69,10 @@ export const wordCounterPageContent: WordCounterPageContent = {
       "A word counter is a lightweight utility that measures how many words appear in a piece of text. At its core, it answers a simple question that comes up constantly in writing workflows: how long is this draft? Beyond words, a capable counter also reports characters, sentences, and paragraphs so you can align with platform rules, assignment briefs, and editorial standards without guessing.",
       "Word counts matter because many systems still use length as a proxy for scope and readability. Academic papers, grant applications, and newsroom pieces often specify minimum or maximum words. Social networks, ad platforms, and product UIs cap characters to keep layouts stable. Even when a limit is not published, teams still compare drafts by length when estimating review time and translation cost. Having an accurate count removes friction from those conversations.",
       "Character counts add another layer of precision. Some forms count every keystroke including spaces; others exclude spaces to approximate “density” of letters and symbols. SEO titles and meta descriptions, SMS segments, and API fields frequently use character limits rather than word limits. Showing both with-space and without-space totals helps writers tune copy for the rule that actually applies, whether they are trimming a headline or padding a short description.",
-      "Sentence and paragraph counts support structure and accessibility reviews. Long sentences can signal complexity; uneven paragraphing can make mobile reading harder. Editors and educators use these signals alongside word totals when giving feedback. Support teams use quick counts when normalizing tickets, and marketers use them when comparing variants of landing copy. None of these tasks require a full word processor—just a fast, trustworthy counter.",
+      "Sentence and paragraph counts support structure and accessibility reviews. Long sentences can signal complexity; uneven paragraphing can make mobile reading harder. Editors and educators use these signals alongside word totals when giving feedback. Support teams use quick counts when normalizing tickets, and marketers use them when comparing variants of landing copy. None of these tasks require a full word processor, just a fast, trustworthy counter.",
       "Browser-based word counters are useful because they load quickly and work across devices. You can paste notes from a phone, polish an email on a laptop, or check a blog section on a shared computer without installing software. When processing stays local and nothing is uploaded unnecessarily, you can move faster with fewer concerns about where a draft might be stored. That speed is especially valuable under deadlines when context switching is costly.",
       "Writers and students rely on word counters to meet page or word minimums, stay inside essay limits, and verify that revisions actually shortened or expanded a section as intended. Content strategists use counts to compare drafts against briefs. Developers and technical writers use them when filling README sections, release notes, or UI strings that must stay within fixed layouts. Translators estimate effort from source length. The use cases are broad because text is everywhere.",
-      "A practical word counter should feel immediate: type or paste, see numbers update, copy or edit, repeat. It should present the metrics that match real-world rules—words for editorial limits, characters for form fields, sentences and paragraphs for structure. It should stay visually clear so you can scan results in seconds. ExesTools aims to deliver that experience in a clean interface so counting never gets in the way of writing.",
+      "A practical word counter should feel immediate: type or paste, see numbers update, copy or edit, repeat. It should present the metrics that match real-world rules: words for editorial limits, characters for form fields, sentences and paragraphs for structure. It should stay visually clear so you can scan results in seconds. ExesTools aims to deliver that experience in a clean interface so counting never gets in the way of writing.",
       "Whether you are polishing a cover letter, tightening a product description, or checking a social thread before posting, a dependable word counter helps you ship with confidence. Use the tool above to measure your text live, then explore related utilities on ExesTools when you need case changes, character-only limits, or other text transformations in the same workflow.",
     ],
   },

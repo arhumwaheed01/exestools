@@ -3,11 +3,11 @@ import type { TransformToolPageContent } from "../textToolPageTypes";
 export const sentenceCaseConverterPageContent: TransformToolPageContent = {
   kind: "transform",
   meta: {
-    title: "Sentence Case Converter — Free Online Fix Capitalization | ExesTools",
+    title: "Sentence Case Converter - Free Online Fix Capitalization | ExesTools",
     description:
       "Convert text to sentence case: lowercase with capital letters after sentence endings. Live browser preview, copy output, privacy-friendly.",
     pageHeading:
-      "Sentence Case Converter — fix capitalization with proper sentence starts",
+      "Sentence Case Converter: fix capitalization with proper sentence starts",
   },
   ui: {
     textareaPlaceholder: "Paste paragraphs to convert to sentence case…",

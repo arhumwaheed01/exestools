@@ -1,5 +1,5 @@
 /**
- * Pure counting helpers for text tools — same rules server/client.
+ * Pure counting helpers for text tools; same rules server/client.
  */
 
 export type TextStats = {

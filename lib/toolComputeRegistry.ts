@@ -132,8 +132,8 @@ export const transformComputeBySlug: Record<string, (s: string) => string> = {
     const normalized = s.toLowerCase().replace(/[^a-z0-9]/g, "");
     if (!normalized) return "Enter text to check palindrome.";
     return normalized === [...normalized].reverse().join("")
-      ? "Yes — this is a palindrome."
-      : "No — this is not a palindrome.";
+      ? "Yes: this is a palindrome."
+      : "No: this is not a palindrome.";
   },
   "reading-time-estimator": (s) => {
     const words = s.trim() ? s.trim().split(/\s+/).length : 0;

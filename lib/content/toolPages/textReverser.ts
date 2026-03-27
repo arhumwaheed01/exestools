@@ -3,11 +3,11 @@ import type { TransformToolPageContent } from "../textToolPageTypes";
 export const textReverserPageContent: TransformToolPageContent = {
   kind: "transform",
   meta: {
-    title: "Text Reverser — Reverse Characters or Lines Free Online | ExesTools",
+    title: "Text Reverser - Reverse Characters or Lines Free Online | ExesTools",
     description:
       "Reverse text character-by-character or flip line order. Creative testing, puzzles, and QA with live preview in your browser.",
     pageHeading:
-      "Text Reverser — flip characters or whole lines with live preview",
+      "Text Reverser: flip characters or whole lines with live preview",
   },
   ui: {
     textareaPlaceholder: "Enter text to reverse.",
@@ -34,7 +34,7 @@ export const textReverserPageContent: TransformToolPageContent = {
       "Stable URLs help onboarding docs stay accurate as themes update.",
       "Use deterministic reversal when the task is mechanical and your focus should stay on interpretation, not busywork.",
       "Security awareness programs sometimes demonstrate how reversible encodings mislead people who assume obscurity equals protection. Showing a reversed payload decoded live helps teams internalize why real cryptography matters. Trainers can snapshot before-and-after strings quickly from a browser tab without installing specialty software on locked-down machines.",
-      "Journalists comparing leaked document excerpts occasionally need to verify whether line order was altered when sources provide fragments. Reversing line order temporarily highlights whether context changes when read backward. The technique is forensic-adjacent and should complement—not replace—legal review, yet it costs little to attempt during early triage.",
+      "Journalists comparing leaked document excerpts occasionally need to verify whether line order was altered when sources provide fragments. Reversing line order temporarily highlights whether context changes when read backward. The technique is forensic-adjacent and should complement, not replace, legal review, yet it costs little to attempt during early triage.",
       "Musicians and poets experimenting with mirror forms explore palindrome constraints for rhythm games. Reversing characters reveals accidental symmetry or tension in a lyric draft. Because feedback is instant, creators iterate faster than toggling between notebooks and command-line toys.",
       "Customer support macros sometimes concatenate canned steps differently depending on channel. QA teams reverse sample transcripts to ensure macros remain coherent no matter assembly order. That behavioral check catches edge cases where pronouns flip awkwardly when blocks merge.",
       "Accessibility advocates caution that reversed strings should not appear as final UX copy. Reserve heavy reversal for staging, testing, or clearly labeled demos. Keeping the tool in an editor-first workflow respects end users who rely on predictable reading order.",

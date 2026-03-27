@@ -1,5 +1,5 @@
 /**
- * Shared shapes for full text-tool pages (SEO + UI) — scale to 100+ slugs.
+ * Shared shapes for full text-tool pages (SEO + UI); scale to 100+ slugs.
  */
 
 export type TextToolSeoSections = {

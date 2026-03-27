@@ -1,6 +1,6 @@
 /**
  * Developer tools category: grid order, specs for pages not in text toolCatalog, helpers.
- * Scales by appending entries — URLs stay /tools/[slug].
+ * Scales by appending entries; URLs stay /tools/[slug].
  */
 
 import { toolCatalog } from "./toolCatalog";
@@ -75,7 +75,7 @@ const devSpecs: DeveloperToolSpec[] = [
     name: "JSON Viewer",
     slug: "json-viewer",
     description:
-      "Format JSON for quick inspection—useful when logs or responses arrive as a single long line.",
+      "Format JSON for quick inspection, useful when logs or responses arrive as a single long line.",
     relatedTools: ["json-formatter", "json-validator", "csv-to-json"],
     pageKind: "transform",
   },
@@ -124,7 +124,7 @@ const devSpecs: DeveloperToolSpec[] = [
     name: "SHA1 Generator",
     slug: "sha1-generator",
     description:
-      "Generate SHA-1 digests in the browser using Web Crypto—handy for Git-adjacent workflows and audits.",
+      "Generate SHA-1 digests in the browser using Web Crypto, handy for Git-adjacent workflows and audits.",
     relatedTools: ["sha256-generator", "md5-generator", "text-to-hex"],
     pageKind: "dev-hash",
     algorithm: "sha1",
@@ -142,7 +142,7 @@ const devSpecs: DeveloperToolSpec[] = [
     name: "Password Generator",
     slug: "password-generator",
     description:
-      "Generate strong random passwords with adjustable length and character sets—client-side only.",
+      "Generate strong random passwords with adjustable length and character sets. Client-side only.",
     relatedTools: ["uuid-generator", "sha256-generator", "base64-encoder"],
     pageKind: "dev-special",
     variant: "password",
@@ -215,7 +215,7 @@ const devSpecs: DeveloperToolSpec[] = [
     name: "JWT Decoder",
     slug: "jwt-decoder",
     description:
-      "Decode JWT header and payload (Base64URL) for debugging—never replaces signature verification.",
+      "Decode JWT header and payload (Base64URL) for debugging. Never replaces signature verification.",
     relatedTools: ["base64-decoder", "unix-timestamp-converter", "json-formatter"],
     pageKind: "dev-special",
     variant: "jwt",
@@ -251,7 +251,7 @@ const devSpecs: DeveloperToolSpec[] = [
     name: "Unix Timestamp Converter",
     slug: "unix-timestamp-converter",
     description:
-      "Convert Unix seconds or milliseconds to ISO strings and back—ideal for logs and JWT exp fields.",
+      "Convert Unix seconds or milliseconds to ISO strings and back, ideal for logs and JWT exp fields.",
     relatedTools: ["jwt-decoder", "json-formatter", "uuid-generator"],
     pageKind: "dev-special",
     variant: "timestamp",

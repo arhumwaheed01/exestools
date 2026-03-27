@@ -212,7 +212,7 @@ function buildImageSeoSections(
     `${toolName} is a free online browser-based image utility designed for fast, privacy-aware workflows. Instead of uploading files to a remote service, you can process common image tasks directly in your tab with modern web APIs like Canvas, FileReader, and Blob URLs. This approach is practical for developers, designers, marketers, support teams, and creators who need quick transformations without installing desktop software or waiting for server jobs to finish.`,
     `Image work often includes repetitive micro-tasks: compressing screenshots for documentation, converting formats for compatibility, resizing assets for responsive layouts, rotating photos from mobile devices, and removing metadata before sharing externally. ${toolName} focuses on one of these jobs so the interface stays clear. Upload a file, preview before and after, tweak settings where available, and download the result. Keeping the process simple helps you iterate quickly and avoid accidental quality loss.`,
     `Client-side processing can improve both speed and control. Since work happens in your browser, there is no queue latency for standard operations, and you can immediately test multiple settings (for example, JPEG quality levels or target dimensions) to strike the right balance between fidelity and file size. This is especially useful for web performance workflows where a few kilobytes matter across many images and pages.`,
-    `Teams also benefit from consistency. A stable URL for ${toolName} can be shared in runbooks, onboarding docs, or QA checklists so everyone follows the same steps for common tasks. That reduces one-off manual edits and makes outputs easier to review. Internal linking between related tools lets you chain workflows efficiently—for example, convert a format, then compress, then inspect metadata—without bouncing between unrelated sites.`,
+    `Teams also benefit from consistency. A stable URL for ${toolName} can be shared in runbooks, onboarding docs, or QA checklists so everyone follows the same steps for common tasks. That reduces one-off manual edits and makes outputs easier to review. Internal linking between related tools lets you chain workflows efficiently (for example, convert a format, then compress, then inspect metadata) without bouncing between unrelated sites.`,
     `Security and privacy still depend on your environment and policies. Browser-based tools are convenient, but you should continue to handle sensitive files according to company rules. For regulated or confidential media, confirm approved workflows before processing. ExesTools emphasizes transparent controls and straightforward output so you can make informed decisions while keeping everyday image tasks lightweight and fast.`,
     `Mobile-friendly layouts make these tools useful beyond desktop setups. You can drop an image from your phone, perform quick edits, and share optimized output within minutes. The interface is responsive and built for touch interactions while still scaling up for larger desktop previews. Whether you are preparing assets for a CMS, creating issue repro screenshots, or cleaning up files before upload, ${toolName} helps you complete the task with minimal friction.`,
     `As the catalog grows, ExesTools keeps a programmatic SEO structure with clean slugs under /tools/[slug], standardized metadata, step-by-step usage, FAQs, and related links. That architecture supports long-term scale across text, developer, and image categories while preserving a consistent user experience. ${description}`,
@@ -237,7 +237,7 @@ function buildImageSeoSections(
       heading: "Features",
       items: [
         `Client-side image processing for ${toolName.toLowerCase()} with preview before download`,
-        "Drag-and-drop or file picker—works on desktop and mobile browsers",
+        "Drag-and-drop or file picker: works on desktop and mobile browsers",
         "No account required; free to use on ExesTools",
         "Download optimized output for web, email, and social workflows",
         "Pairs with related image tools below for compression, conversion, and metadata tasks",
@@ -276,12 +276,12 @@ function buildDeveloperSeoSections(
   const baseParagraphs = [
     `${toolName} is a free online developer-focused utility you can run directly in the browser. It is built for engineers, QA teams, technical writers, and anyone who needs a quick, reliable result without opening a heavy IDE plugin or shipping data to an unknown server. Whether you are debugging a flaky integration, normalizing a config snippet, or preparing examples for documentation, the same URL gives you a consistent workspace every time.`,
     `Modern software workflows depend on dozens of small conversions: encoding and decoding, formatting and minifying, sanity checks on tokens and addresses, and readable dumps of structured data. ${toolName} targets one slice of that work so you can complete it in seconds. Because the interface presents clear input and output regions, you can compare before-and-after states instantly, catch subtle mistakes early, and copy results straight into tickets, terminals, or version control messages.`,
-    `Client-side processing is a deliberate choice for developer ergonomics and practical privacy. Many tasks—JSON inspection, Base64 transforms, hash generation, and header parsing—do not need a backend if implemented carefully in modern browsers. That means lower latency for short jobs and fewer moving parts when you are offline or behind a restrictive network. ExesTools keeps controls obvious so onboarding stays minimal even when you are context-switching between incidents and feature work.`,
+    `Client-side processing is a deliberate choice for developer ergonomics and practical privacy. Many tasks (JSON inspection, Base64 transforms, hash generation, and header parsing) do not need a backend if implemented carefully in modern browsers. That means lower latency for short jobs and fewer moving parts when you are offline or behind a restrictive network. ExesTools keeps controls obvious so onboarding stays minimal even when you are context-switching between incidents and feature work.`,
     `${toolName} also complements your local toolchain. Editors and CLIs are powerful, but a shareable link is sometimes faster when you are pairing remotely or handing steps to someone who does not share your environment. Bookmark the page, drop it into runbooks, or paste it into onboarding notes alongside ${description.toLowerCase()} The predictable layout scales as ExesTools adds more utilities: each tool keeps the same content structure for long-form guidance, FAQs, and related links so navigation remains familiar.`,
     `Quality and safety still require human judgment. Automated helpers can misinterpret edge cases, especially with loosely specified formats or legacy data. Use ${toolName} to accelerate exploration, then apply your domain rules before production changes. For cryptographic material, treat hashes and decoders as diagnostics, not authorization: verifying signatures, enforcing access control, and storing secrets are separate concerns that belong in audited libraries and services.`,
-    `Performance matters when you iterate. The workspace is optimized for responsive typing, large pastes when reasonable, and immediate feedback so you are not waiting on network round trips. That responsiveness encourages experimentation—you can try alternate encodings, reformat minified blobs, and validate assumptions interactively. When the output is wrong, you can adjust input right away rather than re-running a script and hunting through logs.`,
+    `Performance matters when you iterate. The workspace is optimized for responsive typing, large pastes when reasonable, and immediate feedback so you are not waiting on network round trips. That responsiveness encourages experimentation: you can try alternate encodings, reformat minified blobs, and validate assumptions interactively. When the output is wrong, you can adjust input right away rather than re-running a script and hunting through logs.`,
     `Documentation and support teams benefit from the same clarity. Repro steps often include redacted headers, timestamps, and UUID examples; generating those artifacts quickly makes knowledge bases more accurate. Engineers reviewing pull requests can keep a tab open to normalize diffs of JSON or CSS without breaking focus. The adjacent related tools section helps you chain tasks such as decoding, reformatting, and validating in the same session without rebuilding context.`,
-    `ExesTools pages are structured for programmatic SEO and long-term maintenance. Stable slugs under /tools/[slug] support sitemaps, internal linking, and category hubs like Developer Tools that group related utilities. That architecture scales to hundreds of pages while keeping each tool self-contained. If you need a dependable, no-frills helper for everyday engineering chores, ${toolName} is designed to be the page you open first—fast, readable, and ready for the next task.`,
+    `ExesTools pages are structured for programmatic SEO and long-term maintenance. Stable slugs under /tools/[slug] support sitemaps, internal linking, and category hubs like Developer Tools that group related utilities. That architecture scales to hundreds of pages while keeping each tool self-contained. If you need a dependable, no-frills helper for everyday engineering chores, ${toolName} is designed to be the page you open first: fast, readable, and ready for the next task.`,
     `${description} This guide includes step-by-step usage and answers to common questions so you can adopt the workflow quickly and share it with collaborators.`,
   ];
 
@@ -316,7 +316,7 @@ function buildDeveloperSeoSections(
       items: [
         `Client-side ${toolName.toLowerCase()} workflow with instant feedback and copy actions`,
         "Built for JSON, encoding, hashing, headers, and everyday debugging tasks",
-        "No signup—works in modern desktop and mobile browsers",
+        "No signup; works in modern desktop and mobile browsers",
         "Stable URL you can bookmark, share in tickets, and reuse in runbooks",
         "Related tools section below for chaining encode → decode → format flows",
       ],
@@ -343,7 +343,7 @@ function buildDeveloperSeoSections(
         {
           question: "How does this relate to other developer tools here?",
           answer:
-            "Each page links to adjacent utilities—encoding, formatting, timestamps, and more—so you can move through a debugging flow without searching for new sites.",
+            "Each page links to adjacent utilities (encoding, formatting, timestamps, and more) so you can move through a debugging flow without searching for new sites.",
         },
         {
           question: "Is this developer tool free?",
@@ -398,7 +398,7 @@ function buildSeoSections(
       heading: "Features",
       items: [
         `Live ${toolName.toLowerCase()} output with copy and clear controls`,
-        "Runs in your browser—no install, no account",
+        "Runs in your browser. No install, no account",
         "Responsive layout for desktop, tablet, and phone",
         "Designed for writers, students, marketers, and developers who repeat tasks daily",
         "Use related tools below to chain counting, formatting, and cleanup in one session",

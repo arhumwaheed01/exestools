@@ -112,7 +112,7 @@ export function searchTools(
   return scored.slice(0, limit).map((x) => x.tool);
 }
 
-/** When there are zero direct hits — suggest tools by token overlap. */
+/** When there are zero direct hits, suggest tools by token overlap. */
 export function relatedByQueryTokens(
   query: string,
   tools: SearchableTool[],

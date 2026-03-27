@@ -46,7 +46,7 @@ export function ProgrammaticToolSeo({ tool, content, category }: Props) {
             id={tool.slug + "-about"}
             className="mt-0! text-2xl font-semibold tracking-tight text-secondary-text md:text-3xl"
           >
-            About {tool.name} — free online {catPhrase} tool
+            About {tool.name}: free online {catPhrase} tool
           </h2>
           <p className="prose-block mt-6 text-base leading-relaxed text-secondary-text">
             {intro}
@@ -86,7 +86,7 @@ export function ProgrammaticToolSeo({ tool, content, category }: Props) {
           id={tool.slug + "-features"}
           className="mt-0! text-2xl font-semibold tracking-tight text-secondary-text md:text-3xl"
         >
-          {tool.name} features — fast, free online highlights
+          {tool.name} features: fast, free online highlights
         </h2>
         <ul className="prose-block mt-8 list-none space-y-4 text-left text-base leading-relaxed text-secondary-text">
           {features.map((item, i) => (

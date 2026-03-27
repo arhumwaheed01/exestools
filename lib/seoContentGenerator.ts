@@ -1,5 +1,5 @@
 /**
- * Programmatic SEO copy for /tools/[slug] — deterministic per slug, varied phrasing.
+ * Programmatic SEO copy for /tools/[slug]: deterministic per slug, varied phrasing.
  * Build-time only (SSG); no runtime I/O.
  */
 
@@ -50,7 +50,7 @@ function countWords(text: string): number {
   return text.trim().split(/\s+/).filter(Boolean).length;
 }
 
-/** Keep intro roughly in 120–150 words by trimming or appending filler sentences. */
+/** Keep intro roughly in 120-150 words by trimming or appending filler sentences. */
 function tuneIntroLength(
   base: string,
   slug: string,
@@ -85,7 +85,7 @@ function fillerSentences(
   const site = "ExesTools";
   const common = [
     `The interface stays fast and readable so you can repeat this workflow whenever you need a quick result on ${site}.`,
-    `You can bookmark this free online page and return anytime—no signup is required for typical use.`,
+    `You can bookmark this free online page and return anytime. No signup is required for typical use.`,
     `Because the tool runs in your browser, you get immediate feedback while you edit or paste content.`,
     `That makes it practical for students, professionals, and teams who need dependable output without installing desktop software.`,
     `Use copy and clear actions to move results into your next step without friction.`,
@@ -128,7 +128,7 @@ function buildIntro(tool: ToolSeoInput): string {
     `Whether you are polishing drafts, debugging snippets, or preparing files to share, ${name} keeps the steps straightforward.`,
     `You get a clear workspace with obvious actions, so you spend less time hunting for controls and more time finishing the task.`,
     `The layout emphasizes speed: paste or upload, review output, then copy or download when you are satisfied.`,
-    `It is designed to feel lightweight—open the page, complete one focused job, and move on.`,
+    `It is designed to feel lightweight: open the page, complete one focused job, and move on.`,
   ];
 
   const closers = [
@@ -211,7 +211,7 @@ function buildHowToUse(tool: ToolSeoInput): string[] {
       `Set quality, dimensions, rotation, or format options as the tool allows.`,
       `Preview changes when available, then confirm the result looks correct.`,
       `Download the processed file and use it on your site, email, or social post.`,
-      `Run another file anytime—no account is required for typical use.`,
+      `Run another file anytime. No account is required for typical use.`,
     ],
     [
       `Open ${n} and add a photo or graphic you want to process.`,
@@ -242,12 +242,12 @@ function buildFeatures(tool: ToolSeoInput): string[] {
     `Real-time feedback so you are not waiting on uploads for typical operations.`,
     `Copy-friendly results that fit CMS, docs, tickets, and messaging apps.`,
     `Responsive design that works on desktop, tablet, and phone browsers.`,
-    `Straightforward controls—ideal when you need the same ${lc} workflow again tomorrow.`,
+    `Straightforward controls, ideal when you need the same ${lc} workflow again tomorrow.`,
   ];
 
   const devExtra = [
     `Built for developer workflows: readable panels, minimal noise, quick reset.`,
-    `Pairs well with related utilities linked below for encode → decode → format flows.`,
+    `Pairs well with related utilities linked below for encode, decode, and format flows.`,
   ];
 
   const imgExtra = [
@@ -343,7 +343,7 @@ function buildFaqs(tool: ToolSeoInput): { question: string; answer: string }[] {
     },
     {
       question: `How does ${name} help SEO and content workflows?`,
-      answer: `It helps you meet formatting and length goals, iterate drafts, and ship cleaner text or assets—supporting consistent on-page quality.`,
+      answer: `It helps you meet formatting and length goals, iterate drafts, and ship cleaner text or assets, supporting consistent on-page quality.`,
     },
     {
       question: `Can I trust the output from ${name}?`,
@@ -373,7 +373,7 @@ function buildFaqs(tool: ToolSeoInput): { question: string; answer: string }[] {
     },
     4: {
       question: `Will ${name} reduce image quality?`,
-      answer: `Compression and format changes can reduce fidelity—preview when offered and pick settings that match your delivery channel.`,
+      answer: `Compression and format changes can reduce fidelity. Preview when offered and pick settings that match your delivery channel.`,
     },
   };
 

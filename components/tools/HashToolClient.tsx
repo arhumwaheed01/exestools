@@ -39,7 +39,7 @@ export function HashToolClient({ algorithm, ui }: Props) {
         const hex = await digestWebCrypto(algorithm === "sha1" ? "SHA-1" : "SHA-256", input);
         if (!cancelled) setOutput(hex);
       } catch {
-        if (!cancelled) setOutput("Hash error — try shorter input or a different browser.");
+        if (!cancelled) setOutput("Hash error: try shorter input or a different browser.");
       }
     }
     void run();

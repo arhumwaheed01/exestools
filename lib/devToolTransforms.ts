@@ -18,7 +18,7 @@ export function jsonFormatter(raw: string): string {
 
 export function jsonValidator(raw: string): string {
   const t = raw.trim();
-  if (!t) return "Empty input — paste JSON to validate.";
+  if (!t) return "Empty input: paste JSON to validate.";
   try {
     JSON.parse(t);
     return "Valid JSON ✓\n\nFormatted:\n\n" + JSON.stringify(JSON.parse(t), null, 2);
@@ -36,7 +36,7 @@ export function base64Encoder(s: string): string {
   try {
     return btoa(unescape(encodeURIComponent(s)));
   } catch {
-    return "Could not encode — check for invalid characters.";
+    return "Could not encode. Check for invalid characters.";
   }
 }
 

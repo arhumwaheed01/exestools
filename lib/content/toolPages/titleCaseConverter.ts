@@ -3,11 +3,11 @@ import type { TransformToolPageContent } from "../textToolPageTypes";
 export const titleCaseConverterPageContent: TransformToolPageContent = {
   kind: "transform",
   meta: {
-    title: "Title Case Converter — Free Online Headline Case | ExesTools",
+    title: "Title Case Converter - Free Online Headline Case | ExesTools",
     description:
       "Convert text to Title Case for headlines and product names. Live preview and copy in your browser.",
     pageHeading:
-      "Title Case Converter — headline-style capitalization for titles and names",
+      "Title Case Converter: headline-style capitalization for titles and names",
   },
   ui: {
     textareaPlaceholder: "Paste text to convert to Title Case.",

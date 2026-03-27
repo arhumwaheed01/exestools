@@ -2,7 +2,7 @@ import { getDeveloperToolsGridItems } from "@/lib/content/developerToolsData";
 import { getImageToolsGridItems } from "@/lib/content/imageToolsData";
 import { getToolBySlug, textTools } from "@/lib/content/textToolsData";
 
-/** Homepage “Popular tools” — 2–4 curated slugs (search modal + home list). */
+/** Homepage “Popular tools”: 2-4 curated slugs (search modal + home list). */
 const POPULAR_TOOL_SLUGS = [
   "word-counter",
   "character-counter",
@@ -62,19 +62,19 @@ export const homepageData = {
   categoriesSection: {
     title: "Featured categories",
     subtitle:
-      "Pick a category to browse tools—live utilities today, more on the roadmap.",
+      "Pick a category to browse tools: live utilities today, more on the roadmap.",
     ctaLabel: "View category",
     categories: [
       {
         title: "Text Tools",
         description:
-          "Count words, change case, reverse text, and clean duplicates—right in your browser.",
+          "Count words, change case, reverse text, and clean duplicates, right in your browser.",
         link: "/text-tools",
       },
       {
         title: "Developer Tools",
         description:
-          "JSON helpers, encoders, hash generators, formatters, JWT decode, and more—client-side and fast.",
+          "JSON helpers, encoders, hash generators, formatters, JWT decode, and more. Client-side and fast.",
         link: "/developer-tools",
       },
       {
@@ -90,7 +90,7 @@ export const homepageData = {
   popularSection: {
     title: "Popular tools",
     subtitle:
-      "Jump into high-intent utilities—each opens on a dedicated, SEO-friendly URL under /tools/.",
+      "Jump into high-intent utilities. Each opens on a dedicated, SEO-friendly URL under /tools/.",
   },
 
   popularToolSlugs: POPULAR_TOOL_SLUGS,
@@ -117,7 +117,7 @@ export const homepageData = {
       },
       {
         type: "paragraph",
-        text: "Speed matters when you are in the middle of a deadline. Opening a dedicated app, waiting for updates, or navigating complex menus can break your concentration. A focused online tool loads quickly, shows a clear interface, and returns results you can copy right back into your document. That responsiveness is not just convenient—it helps you maintain momentum during editing sessions and reduces context switching between apps.",
+        text: "Speed matters when you are in the middle of a deadline. Opening a dedicated app, waiting for updates, or navigating complex menus can break your concentration. A focused online tool loads quickly, shows a clear interface, and returns results you can copy right back into your document. That responsiveness is not just convenient: it helps you maintain momentum during editing sessions and reduces context switching between apps.",
       },
       {
         type: "paragraph",
@@ -125,7 +125,7 @@ export const homepageData = {
       },
       {
         type: "paragraph",
-        text: "Accessibility is another reason browser tools remain popular. You do not need admin rights to install software on a shared computer, and you can often use keyboard shortcuts and screen readers with familiar web patterns. A well-structured tool page—clear headings, readable type, and predictable controls—helps people work faster regardless of device or assistive technology. That inclusivity matters for schools, libraries, and remote teams where environments vary widely.",
+        text: "Accessibility is another reason browser tools remain popular. You do not need admin rights to install software on a shared computer, and you can often use keyboard shortcuts and screen readers with familiar web patterns. A well-structured tool page (clear headings, readable type, and predictable controls) helps people work faster regardless of device or assistive technology. That inclusivity matters for schools, libraries, and remote teams where environments vary widely.",
       },
       {
         type: "paragraph",
@@ -152,7 +152,7 @@ export const homepageData = {
           {
             kind: "text",
             value:
-              " when you need uniform capitalization for headings or titles. These pages are designed for repeat visits—fast loads, clear typography, and internal links that help you jump between related utilities as your needs grow.",
+              " when you need uniform capitalization for headings or titles. These pages are designed for repeat visits: fast loads, clear typography, and internal links that help you jump between related utilities as your needs grow.",
           },
         ],
       },
@@ -164,7 +164,7 @@ export const homepageData = {
   },
 } as const;
 
-/** Header + footer navigation — keep labels out of components */
+/** Header + footer navigation: keep labels out of components */
 export const navigationData = {
   footerSectionTitle: "Explore",
   header: [
