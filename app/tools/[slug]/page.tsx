@@ -10,7 +10,7 @@ import { ImageToolClient } from "@/components/tools/ImageToolClient";
 import { SpeechToolsClient } from "@/components/tools/SpeechToolsClient";
 import { TextReverserToolClient } from "@/components/tools/TextReverserToolClient";
 import { TextStatsToolClient } from "@/components/tools/TextStatsToolClient";
-import { TextToolSeo } from "@/components/tools/TextToolSeo";
+import { ProgrammaticToolSeo } from "@/components/tools/ProgrammaticToolSeo";
 import { ToolPageShell } from "@/components/tools/ToolPageShell";
 import { TransformSlugClient } from "@/components/tools/TransformSlugClient";
 import { getTextToolFullPage } from "@/lib/content/getTextToolFullPage";
@@ -20,6 +20,10 @@ import { buildFaqPageJsonLd, buildSoftwareApplicationJsonLd } from "@/lib/seo/js
 import { buildPageMetadata } from "@/lib/seo/generateMeta";
 import { defaultSEO } from "@/lib/seo/seoConfig";
 import { schemaApplicationCategoryForSlug } from "@/lib/seo/toolRouteHelpers";
+import {
+  generateSEOContent,
+  resolveToolCategory,
+} from "@/lib/seoContentGenerator";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -77,6 +81,14 @@ export default async function ToolPage({ params }: Props) {
     workspace = <TransformSlugClient slug={slug} ui={full.ui} />;
   }
 
+  const category = resolveToolCategory(slug);
+  const seoContent = generateSEOContent({
+    name: tool.name,
+    slug: tool.slug,
+    description: tool.description,
+    category,
+  });
+
   const webAppLd = buildSoftwareApplicationJsonLd({
     name: tool.name,
     description: full.meta.description,
@@ -84,7 +96,7 @@ export default async function ToolPage({ params }: Props) {
     applicationCategory: schemaApplicationCategoryForSlug(slug),
   });
 
-  const faqLd = buildFaqPageJsonLd(full.faq.items);
+  const faqLd = buildFaqPageJsonLd(seoContent.faqs);
 
   return (
     <>
@@ -96,15 +108,10 @@ export default async function ToolPage({ params }: Props) {
         description={full.meta.description}
         variant="featured"
         afterCard={
-          <TextToolSeo
+          <ProgrammaticToolSeo
             tool={tool}
-            sections={{
-              seoArticle: full.seoArticle,
-              howToUse: full.howToUse,
-              features: full.features,
-              faq: full.faq,
-              relatedTools: full.relatedTools,
-            }}
+            category={category}
+            content={seoContent}
           />
         }
       >

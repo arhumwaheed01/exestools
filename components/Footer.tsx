@@ -73,7 +73,7 @@ export function Footer() {
             {site.name}
           </Link>
           <div className="mt-4 space-y-2.5">
-            <p className="max-w-sm text-sm leading-relaxed text-white/80">SEO-optimized online tools for everyday tasks.</p>
+            <p className="max-w-sm text-sm leading-relaxed text-white/80">Performance optimized online tools for everyday tasks.</p>
             <p className="max-w-sm text-sm leading-relaxed text-white/80">Use clean, fast, browser-based utilities.</p>
             <p className="max-w-sm text-sm leading-relaxed text-white/80">Built for text, developer, and image workflows.</p>
             <p className="max-w-sm text-sm leading-relaxed text-white/80">No clutter, just practical tools with shareable links.</p>
