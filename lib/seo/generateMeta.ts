@@ -8,6 +8,19 @@ export function absoluteUrl(path: string): string {
   return `${base}${p}`;
 }
 
+/**
+ * Path-only value for `alternates.canonical` and `openGraph.url`.
+ * Resolved to an absolute URL via root `metadataBase` (Next.js metadata composition).
+ */
+export function canonicalPath(path: string): string {
+  const p = path.startsWith("/") ? path : `/${path}`;
+  return p === "" ? "/" : p;
+}
+
+function ogAssetPath(relativePath: string): string {
+  return relativePath.startsWith("/") ? relativePath : `/${relativePath}`;
+}
+
 export type BuildPageMetadataInput = {
   title: string;
   description: string;
@@ -25,9 +38,9 @@ export type BuildPageMetadataInput = {
  * Full Next.js Metadata: canonical, Open Graph, Twitter, robots.
  */
 export function buildPageMetadata(input: BuildPageMetadataInput): Metadata {
-  const canonical = absoluteUrl(input.path);
+  const path = canonicalPath(input.path);
   const ogImage = input.ogImagePath
-    ? absoluteUrl(input.ogImagePath)
+    ? ogAssetPath(input.ogImagePath)
     : undefined;
 
   const titleField: Metadata["title"] = input.absoluteTitle
@@ -37,9 +50,8 @@ export function buildPageMetadata(input: BuildPageMetadataInput): Metadata {
   const metadata: Metadata = {
     title: titleField,
     description: input.description,
-    metadataBase: new URL(defaultSEO.siteUrl),
     alternates: {
-      canonical,
+      canonical: path,
     },
     robots: input.noindex
       ? { index: false, follow: true }
@@ -47,7 +59,7 @@ export function buildPageMetadata(input: BuildPageMetadataInput): Metadata {
     openGraph: {
       type: "website",
       locale: defaultSEO.locale,
-      url: canonical,
+      url: path,
       siteName: defaultSEO.siteName,
       title: input.title,
       description: input.description,

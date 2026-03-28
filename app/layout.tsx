@@ -32,7 +32,6 @@ export const metadata: Metadata = {
     siteName: defaultSEO.siteName,
     title: defaultSEO.defaultTitle,
     description: defaultSEO.defaultDescription,
-    url: defaultSEO.siteUrl,
   },
   twitter: {
     card: "summary_large_image",

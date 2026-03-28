@@ -12,10 +12,15 @@ const envUrl =
     ? normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL)
     : null;
 
+const vercelUrl =
+  typeof process !== "undefined" && process.env.VERCEL_URL
+    ? normalizeSiteUrl(`https://${process.env.VERCEL_URL}`)
+    : null;
+
 export const defaultSEO = {
   siteName: "ExesTools",
-  /** Canonical origin for sitemaps, canonical tags, and OG URLs */
-  siteUrl: envUrl ?? "https://www.exestools.com",
+  /** Canonical origin for sitemaps, JSON-LD, and metadataBase (see generateMeta for relative canonicals). */
+  siteUrl: envUrl ?? vercelUrl ?? "https://www.exestools.com",
   defaultTitle: "Free Online Tools - ExesTools",
   defaultDescription:
     "Free online tools for text, developers, and images. Fast, secure, and easy to use.",
