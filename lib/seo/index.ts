@@ -1,5 +1,6 @@
 export { defaultSEO } from "./seoConfig";
 export {
+  absoluteProductionUrl,
   absoluteUrl,
   buildPageMetadata,
   buildToolPageMetadata,

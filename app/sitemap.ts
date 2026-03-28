@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { absoluteUrl } from "@/lib/seo/generateMeta";
+import { absoluteProductionUrl } from "@/lib/seo/generateMeta";
 import { getDeveloperToolsGridItems } from "@/lib/content/developerToolsData";
 import { getImageToolsGridItems } from "@/lib/content/imageToolsData";
 import { textTools } from "@/lib/content/textToolsData";
@@ -22,7 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
 
   const staticEntries: MetadataRoute.Sitemap = STATIC_PATHS.map((path) => ({
-    url: absoluteUrl(path),
+    url: absoluteProductionUrl(path),
     lastModified,
   }));
 
@@ -35,7 +35,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   );
 
   const toolEntries: MetadataRoute.Sitemap = allToolSlugs.map((slug) => ({
-    url: absoluteUrl(`/tools/${slug}`),
+    url: absoluteProductionUrl(`/tools/${slug}`),
     lastModified,
   }));
 
