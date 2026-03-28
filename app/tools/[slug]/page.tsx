@@ -7,6 +7,7 @@ import { DevSpecialToolClient } from "@/components/tools/DevSpecialToolClient";
 import { FindReplaceToolClient } from "@/components/tools/FindReplaceToolClient";
 import { HashToolClient } from "@/components/tools/HashToolClient";
 import { ImageToolClient } from "@/components/tools/ImageToolClient";
+import { PdfToolClient } from "@/components/tools/PdfToolClient";
 import { SpeechToolsClient } from "@/components/tools/SpeechToolsClient";
 import { TextReverserToolClient } from "@/components/tools/TextReverserToolClient";
 import { TextStatsToolClient } from "@/components/tools/TextStatsToolClient";
@@ -77,6 +78,8 @@ export default async function ToolPage({ params }: Props) {
     workspace = <DevSpecialToolClient variant={full.variant} ui={full.ui} />;
   } else if (full.kind === "image-tool") {
     workspace = <ImageToolClient variant={full.variant} ui={full.ui} />;
+  } else if (full.kind === "pdf-tool") {
+    workspace = <PdfToolClient variant={full.variant} ui={full.ui} />;
   } else {
     workspace = <TransformSlugClient slug={slug} ui={full.ui} />;
   }
@@ -98,6 +101,11 @@ export default async function ToolPage({ params }: Props) {
 
   const faqLd = buildFaqPageJsonLd(seoContent.faqs);
 
+  const shellVariant =
+    full.kind === "pdf-tool" && full.variant === "pdf-editor-free"
+      ? "pdf-editor"
+      : "featured";
+
   return (
     <>
       <JsonLd data={webAppLd} id={`ld-webapp-${slug}`} />
@@ -106,7 +114,7 @@ export default async function ToolPage({ params }: Props) {
         title={tool.name}
         pageHeading={full.meta.pageHeading}
         description={full.meta.description}
-        variant="featured"
+        variant={shellVariant}
         afterCard={
           <ProgrammaticToolSeo
             tool={tool}

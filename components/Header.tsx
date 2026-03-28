@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
   LuCode,
+  LuFileText,
   LuHouse,
   LuImage,
   LuLayoutGrid,
@@ -23,6 +24,7 @@ const navIcons = {
   type: LuType,
   code: LuCode,
   image: LuImage,
+  file: LuFileText,
 } as const;
 
 function NavLinks({

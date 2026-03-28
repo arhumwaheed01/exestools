@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { LuCode, LuImage, LuSparkles } from "react-icons/lu";
+import { LuCode, LuFileText, LuImage, LuSparkles } from "react-icons/lu";
 
 const categoryIcons = {
   code: LuCode,
   image: LuImage,
+  file: LuFileText,
 } as const;
 
 type LinkItem = {

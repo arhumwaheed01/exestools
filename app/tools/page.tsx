@@ -3,7 +3,12 @@ import Link from "next/link";
 import { Container } from "@/components/Container";
 import { ToolsDirectoryCard } from "@/components/tools/ToolsDirectoryCard";
 import { ToolsMoreCategories } from "@/components/tools/ToolsMoreCategories";
-import { allToolsPageContent, developerToolsGrid, imageToolsGrid } from "@/lib/content/homepageData";
+import {
+  allToolsPageContent,
+  developerToolsGrid,
+  imageToolsGrid,
+  pdfToolsGrid,
+} from "@/lib/content/homepageData";
 import { seoData, toMetadata } from "@/lib/content/seoData";
 import { textTools } from "@/lib/content/textToolsData";
 
@@ -72,6 +77,27 @@ export default function AllToolsPage() {
           </div>
           <ul className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
             {imageToolsGrid.map((tool) => (
+              <li key={tool.slug}>
+                <ToolsDirectoryCard tool={tool} />
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="mt-16 md:mt-20">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <h2 className="!mt-0 text-center text-xl font-semibold tracking-tight text-secondary-text sm:text-left md:text-2xl">
+              {c.pdfToolsHeading}
+            </h2>
+            <Link
+              href="/pdf-tools"
+              className="text-center text-sm font-semibold text-primary no-underline hover:underline sm:text-right"
+            >
+              View PDF hub →
+            </Link>
+          </div>
+          <ul className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            {pdfToolsGrid.map((tool) => (
               <li key={tool.slug}>
                 <ToolsDirectoryCard tool={tool} />
               </li>

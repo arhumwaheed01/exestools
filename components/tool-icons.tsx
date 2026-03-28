@@ -4,9 +4,11 @@ import {
   LuBinary,
   LuCaseUpper,
   LuCode,
+  LuCombine,
   LuCpu,
   LuFileCode2,
   LuFileText,
+  LuScissors,
   LuFingerprint,
   LuHash,
   LuImage,
@@ -25,6 +27,12 @@ const toolIconMap: Record<string, IconType> = {
   "uppercase-converter": LuCaseUpper,
   "text-reverser": LuArrowLeftRight,
   "remove-duplicate-lines": LuListMinus,
+  "pdf-to-word": LuFileText,
+  "word-to-pdf": LuFileText,
+  "merge-pdf": LuCombine,
+  "split-pdf": LuScissors,
+  "compress-pdf": LuFileCode2,
+  "pdf-editor-free": LuFileText,
 };
 
 const keywordIconRules: Array<[RegExp, IconType]> = [

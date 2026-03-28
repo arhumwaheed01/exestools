@@ -161,6 +161,21 @@ export type ImageToolPageContent = TextToolSeoSections & {
   ui: TransformToolUi;
 };
 
+export type PdfToolVariant =
+  | "pdf-to-word"
+  | "word-to-pdf"
+  | "merge-pdf"
+  | "split-pdf"
+  | "compress-pdf"
+  | "pdf-editor-free";
+
+export type PdfToolPageContent = TextToolSeoSections & {
+  kind: "pdf-tool";
+  meta: ToolPageMeta;
+  variant: PdfToolVariant;
+  ui: TransformToolUi;
+};
+
 export type TextToolFullPageContent =
   | StatsToolPageContent
   | TransformToolPageContent
@@ -169,4 +184,5 @@ export type TextToolFullPageContent =
   | SpeechToolPageContent
   | DevHashToolPageContent
   | DevSpecialToolPageContent
-  | ImageToolPageContent;
+  | ImageToolPageContent
+  | PdfToolPageContent;

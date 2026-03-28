@@ -1,14 +1,13 @@
 import type { MetadataRoute } from "next";
 import { absoluteProductionUrl } from "@/lib/seo/generateMeta";
-import { getDeveloperToolsGridItems } from "@/lib/content/developerToolsData";
-import { getImageToolsGridItems } from "@/lib/content/imageToolsData";
-import { textTools } from "@/lib/content/textToolsData";
+import { allTools } from "@/lib/content/textToolsData";
 
 const STATIC_PATHS = [
   "/",
   "/text-tools",
   "/developer-tools",
   "/image-tools",
+  "/pdf-tools",
   "/tools",
   "/privacy-policy",
   "/terms-of-service",
@@ -26,13 +25,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified,
   }));
 
-  const allToolSlugs = Array.from(
-    new Set([
-      ...textTools.map((t) => t.slug),
-      ...getDeveloperToolsGridItems().map((t) => t.slug),
-      ...getImageToolsGridItems().map((t) => t.slug),
-    ]),
-  );
+  const allToolSlugs = Array.from(new Set(allTools.map((t) => t.slug)));
 
   const toolEntries: MetadataRoute.Sitemap = allToolSlugs.map((slug) => ({
     url: absoluteProductionUrl(`/tools/${slug}`),

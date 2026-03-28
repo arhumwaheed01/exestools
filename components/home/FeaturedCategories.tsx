@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { LuArrowUpRight, LuCode, LuImage, LuType } from "react-icons/lu";
+import { LuArrowUpRight, LuCode, LuFileText, LuImage, LuType } from "react-icons/lu";
 import { homepageData } from "@/lib/content/homepageData";
 
 const categoryIcons = {
   "/text-tools": LuType,
   "/developer-tools": LuCode,
   "/image-tools": LuImage,
+  "/pdf-tools": LuFileText,
 } as const;
 
 export function FeaturedCategories() {
@@ -20,7 +21,7 @@ export function FeaturedCategories() {
         <p className="mx-auto mt-4 max-w-2xl text-center text-base leading-relaxed text-secondary-text">
           {categoriesSection.subtitle}
         </p>
-        <ul className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
           {categoriesSection.categories.map((cat, index) => {
             const Icon =
               categoryIcons[cat.link as keyof typeof categoryIcons] ?? LuType;

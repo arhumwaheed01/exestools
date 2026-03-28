@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LuCode, LuImage, LuSparkles, LuType } from "react-icons/lu";
+import { LuCode, LuFileText, LuImage, LuSparkles, LuType } from "react-icons/lu";
 import { site } from "@/lib/site";
 
 const textToolLinks = [
@@ -21,6 +21,13 @@ const imageToolLinks = [
   { label: "JPG to PNG", href: "/tools/jpg-to-png" },
   { label: "Image Resizer", href: "/tools/image-resizer" },
   { label: "Image Metadata Viewer", href: "/tools/image-metadata-viewer" },
+];
+
+const pdfToolLinks = [
+  { label: "PDF Editor Free", href: "/tools/pdf-editor-free" },
+  { label: "Merge PDF", href: "/tools/merge-pdf" },
+  { label: "Compress PDF", href: "/tools/compress-pdf" },
+  { label: "PDF to Word", href: "/tools/pdf-to-word" },
 ];
 
 function FooterLinkList({
@@ -61,7 +68,7 @@ export function Footer() {
   return (
     <footer className="relative overflow-hidden border-t border-white/10 bg-secondary-text text-white">
       <div className="container relative py-14 md:py-16">
-        <div className="grid grid-cols-1 gap-6 sm:text-center text-left md:grid-cols-2 md:gap-6 md:text-left lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-6 text-left sm:text-center md:grid-cols-2 md:gap-6 md:text-left lg:grid-cols-5">
           <div className="">
           <Link
             href="/"
@@ -85,6 +92,8 @@ export function Footer() {
         <FooterLinkList title="Developer Tools" icon={LuCode} links={developerToolLinks} />
 
         <FooterLinkList title="Image Tools" icon={LuImage} links={imageToolLinks} />
+
+        <FooterLinkList title="PDF Tools" icon={LuFileText} links={pdfToolLinks} />
         </div>
       </div>
 

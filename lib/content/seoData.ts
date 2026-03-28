@@ -41,7 +41,7 @@ export const seoData = {
     path: "/tools",
     title: "All Free Online Tools",
     description:
-      "Directory of text utilities, developer tools (JSON, encoding, hashes, JWT), and image tools: stable URLs, browser-based, easy to share.",
+      "Directory of text, developer, image, and PDF tools—merge, split, compress, convert, and edit: stable URLs, easy to share.",
   },
   developerTools: {
     path: "/developer-tools",
@@ -54,6 +54,12 @@ export const seoData = {
     title: "Free Image Tools Online",
     description:
       "Compress, convert, resize, crop, rotate, and optimize images online. Client-side processing with preview and download.",
+  },
+  pdfTools: {
+    path: "/pdf-tools",
+    title: "Free PDF Tools Online",
+    description:
+      "Merge, split, compress, convert PDF and Word, and edit PDFs online: visual editor with text, watermark, and page tools. Up to 20 MB per file.",
   },
   privacyPolicy: {
     path: privacyPolicyPage.path,

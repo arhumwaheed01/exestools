@@ -5,8 +5,9 @@
 
 import { DEVELOPER_CATEGORY_SLUGS } from "@/lib/content/developerToolsData";
 import { IMAGE_CATEGORY_SLUGS } from "@/lib/content/imageToolsData";
+import { PDF_CATEGORY_SLUGS } from "@/lib/content/pdfToolsData";
 
-export type ToolCategory = "text" | "developer" | "image";
+export type ToolCategory = "text" | "developer" | "image" | "pdf";
 
 export type ToolSeoInput = {
   name: string;
@@ -25,9 +26,11 @@ export type SEOGeneratedContent = {
 
 const devSlugSet = new Set<string>(DEVELOPER_CATEGORY_SLUGS);
 const imageSlugSet = new Set<string>(IMAGE_CATEGORY_SLUGS);
+const pdfSlugSet = new Set<string>(PDF_CATEGORY_SLUGS);
 
 export function resolveToolCategory(slug: string): ToolCategory {
   if (imageSlugSet.has(slug)) return "image";
+  if (pdfSlugSet.has(slug)) return "pdf";
   if (devSlugSet.has(slug)) return "developer";
   return "text";
 }
@@ -100,8 +103,14 @@ function fillerSentences(
     `This fits everyday web, email, and social workflows where file size and format matter.`,
     `You can process files locally in the browser for many standard image operations.`,
   ] as const;
+  const pdf = [
+    `Upload limits and validation help keep processing reliable for everyday documents.`,
+    `Download output as soon as processing completes and continue in your usual editor.`,
+    `The PDF editor includes thumbnails and canvas tools for quick markups before export.`,
+  ] as const;
   if (category === "developer") return [...common, ...dev];
   if (category === "image") return [...common, ...img];
+  if (category === "pdf") return [...common, ...pdf];
   return [...common];
 }
 
@@ -158,6 +167,22 @@ function buildIntro(tool: ToolSeoInput): string {
     ]);
     const b = pick(slug, 7, bridges);
     const c = pick(slug, 8, closers);
+    return tuneIntroLength(`${o} ${m} ${b} ${c}`, slug, category);
+  }
+
+  if (category === "pdf") {
+    const o = pick(slug, 50, [
+      `Use this free online ${lcName} tool to handle PDF and document tasks with clear upload and download steps.`,
+      `This ${lcName} utility processes files securely within typical size limits so you can finish contracts, reports, and bundles faster.`,
+      `Try ${name} when you need a dependable PDF workflow without installing desktop software.`,
+    ]);
+    const m = pick(slug, 51, [
+      `Upload your PDF or Word file, choose options, then download the result when processing completes.`,
+      `The editor view combines thumbnails with a canvas so you can reorder pages, rotate, and add text before export.`,
+      `Merge, split, compress, and conversion tools each focus on one job to keep controls simple.`,
+    ]);
+    const b = pick(slug, 52, bridges);
+    const c = pick(slug, 53, closers);
     return tuneIntroLength(`${o} ${m} ${b} ${c}`, slug, category);
   }
 
@@ -221,6 +246,22 @@ function buildHowToUse(tool: ToolSeoInput): string[] {
     ],
   ];
 
+  const pdfSteps = [
+    [
+      `Open ${n} and upload your PDF or Word file within the stated size limit.`,
+      `Configure merge order, split mode, compression, or open the visual editor as needed.`,
+      `Start processing and wait for the progress indicator to finish.`,
+      `Download PDF, DOCX, or ZIP output and verify it in your viewer.`,
+      `Use related tools below if you need another pass (for example merge then compress).`,
+    ],
+    [
+      `Drag files into the upload zone or use the file picker.`,
+      `For the editor: pick a page in the sidebar, add text on the canvas, set watermark if needed, then download.`,
+      `Reorder thumbnails to change export order; delete pages you do not need.`,
+      `Rotate pages from the toolbar when scans appear sideways.`,
+    ],
+  ];
+
   if (category === "developer") {
     const pack = pick(slug, 20, devSteps);
     return pack.length >= 5 ? pack : [...pack, devSteps[0][4]!];
@@ -228,6 +269,10 @@ function buildHowToUse(tool: ToolSeoInput): string[] {
   if (category === "image") {
     const pack = pick(slug, 21, imageSteps);
     return pack.length >= 5 ? pack : [...pack, imageSteps[0][4]!];
+  }
+  if (category === "pdf") {
+    const pack = pick(slug, 54, pdfSteps);
+    return pack.length >= 5 ? pack : [...pack, pdfSteps[0][4]!];
   }
   const pack = pick(slug, 22, textSteps);
   return pack.length >= 5 ? pack : [...pack, textSteps[0][4]!];
@@ -255,11 +300,22 @@ function buildFeatures(tool: ToolSeoInput): string[] {
     `Preview-oriented flow to reduce surprises before you publish or attach a file.`,
   ];
 
+  const pdfExtra = [
+    `Validated uploads with sensible limits so merges, splits, and edits stay reliable.`,
+    `Editor workspace with thumbnails, text overlay, watermark, and page operations before download.`,
+  ];
+
   let items: string[] = [...universal];
   if (category === "developer") {
     items = [...items.slice(0, 3), ...devExtra, ...items.slice(3)];
   } else if (category === "image") {
     items = [...items.slice(0, 2), ...imgExtra, ...items.slice(2)];
+  } else if (category === "pdf") {
+    items = [
+      `Free online ${name.toLowerCase()} with upload, progress feedback, and download.`,
+      ...pdfExtra,
+      ...items.slice(2),
+    ];
   }
 
   const extra = pick(slug, 32, [
@@ -298,12 +354,23 @@ function buildUseCases(tool: ToolSeoInput): string[] {
     `Creating assets for presentations and docs without opening heavy editors.`,
   ];
 
+  const pdfCases = [
+    `Bundling signed scans and invoices into one PDF for email or archive.`,
+    `Extracting a page range or splitting every page for redaction workflows.`,
+    `Shrinking large exports before attaching to tickets or CRM records.`,
+    `Moving text between Word and PDF for light edits without a desktop suite.`,
+    `Adding a watermark or on-page labels before external distribution.`,
+    `Reordering rotated scans after batch digitization.`,
+  ];
+
   const pool =
     category === "developer"
       ? devCases
       : category === "image"
         ? imgCases
-        : textCases;
+        : category === "pdf"
+          ? pdfCases
+          : textCases;
 
   const rotated: string[] = [];
   const offset = hashSlug(slug) % pool.length;
@@ -377,9 +444,25 @@ function buildFaqs(tool: ToolSeoInput): { question: string; answer: string }[] {
     },
   };
 
+  const pdfTweak: Record<number, { question: string; answer: string }> = {
+    0: {
+      question: `What does ${name} do?`,
+      answer: `${d} Uploads are validated and processed to produce a download you can open in your usual PDF or Word app.`,
+    },
+    2: {
+      question: `Is my PDF stored on the server?`,
+      answer: `Files are processed for the request to generate your output and are not kept as a long-term archive. Follow your policy for confidential documents.`,
+    },
+    4: {
+      question: `Why is my PDF to Word layout different?`,
+      answer: `Text extraction works best on text-based PDFs. Complex layouts and scans may require dedicated OCR or desktop tools for pixel-perfect results.`,
+    },
+  };
+
   const items = baseFaqs.map((item, idx) => {
     if (category === "developer" && devTweak[idx]) return devTweak[idx]!;
     if (category === "image" && imgTweak[idx]) return imgTweak[idx]!;
+    if (category === "pdf" && pdfTweak[idx]) return pdfTweak[idx]!;
     return item;
   });
 

@@ -14,7 +14,7 @@ type ToolPageShellProps = {
   /** Renders below the tool card, above footer links (e.g. long-form SEO). */
   afterCard?: ReactNode;
   /** Featured layout (grid, blurred accents, elevated card). */
-  variant?: "default" | "featured" | "word-counter";
+  variant?: "default" | "featured" | "word-counter" | "pdf-editor";
 };
 
 export function ToolPageShell({
@@ -27,8 +27,9 @@ export function ToolPageShell({
 }: ToolPageShellProps) {
   const { breadcrumb, footerLinks } = toolPageUi;
 
+  const isPdfEditor = variant === "pdf-editor";
   const isFeaturedLayout =
-    variant === "featured" || variant === "word-counter";
+    variant === "featured" || variant === "word-counter" || isPdfEditor;
   const sectionClass = isFeaturedLayout
     ? "relative overflow-hidden bg-surface pt-4 pb-12 md:pt-8 md:pb-16 lg:pt-10 lg:pb-20"
     : "bg-surface pt-4 pb-12 md:pt-8 md:pb-16 lg:pt-10 lg:pb-20";
@@ -54,7 +55,15 @@ export function ToolPageShell({
           />
         </>
       ) : null}
-      <Container className={isFeaturedLayout ? "relative" : undefined}>
+      <Container
+        className={
+          isPdfEditor
+            ? "relative max-w-[min(100%,1680px)]!"
+            : isFeaturedLayout
+              ? "relative"
+              : undefined
+        }
+      >
         <nav
           className="mb-8 flex flex-wrap items-center gap-2 text-sm text-secondary-text/85"
           aria-label="Breadcrumb"
@@ -79,7 +88,11 @@ export function ToolPageShell({
           {description}
         </p>
 
-        <div className={cardClass}>{children}</div>
+        {isPdfEditor ? (
+          <div className="mt-6 w-full min-w-0">{children}</div>
+        ) : (
+          <div className={cardClass}>{children}</div>
+        )}
 
         {afterCard}
 

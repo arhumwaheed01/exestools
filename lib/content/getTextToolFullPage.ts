@@ -5,12 +5,16 @@ import {
   buildImageToolMetaDescription,
   buildImageToolMetaTitle,
   buildImageToolPageHeading,
+  buildPdfToolMetaDescription,
+  buildPdfToolMetaTitle,
+  buildPdfToolPageHeading,
   buildTextToolMetaDescription,
   buildTextToolMetaTitle,
   buildTextToolPageHeading,
 } from "@/lib/seo/toolMeta";
 import { developerToolSpecsBySlug } from "./developerToolsData";
 import { imageToolSpecsBySlug } from "./imageToolsData";
+import { pdfToolSpecsBySlug } from "./pdfToolsData";
 import { getToolBySlug } from "./textToolsData";
 import { toolCatalog } from "./toolCatalog";
 import type {
@@ -130,6 +134,30 @@ export function getTextToolFullPage(
 
   const devSpec = developerToolSpecsBySlug[slug];
   if (!devSpec) {
+    const pdfSpec = pdfToolSpecsBySlug[slug];
+    if (pdfSpec) {
+      const seo = buildPdfSeoSections(tool.name, tool.description, tool.relatedTools);
+      return {
+        kind: "pdf-tool",
+        meta: {
+          title: buildPdfToolMetaTitle(tool.name, slug),
+          description: buildPdfToolMetaDescription(tool.name, tool.description),
+          pageHeading: buildPdfToolPageHeading(tool.name, tool.description, slug),
+        },
+        variant: pdfSpec.variant,
+        ui: {
+          textareaPlaceholder: "Paste Base64 or use upload where available…",
+          outputHeading: "Result",
+          outputEmptyHint: "Download will appear after processing.",
+          copyInput: "Copy",
+          copyOutput: "Copy output",
+          clearButton: "Clear",
+          copySuccess: "Copied!",
+        },
+        ...seo,
+      };
+    }
+
     const imageSpec = imageToolSpecsBySlug[slug];
     if (!imageSpec) return undefined;
 
@@ -199,6 +227,59 @@ export function getTextToolFullPage(
     variant: devSpec.variant!,
     ui: transformUi,
     ...seo,
+  };
+}
+
+function buildPdfSeoSections(
+  toolName: string,
+  description: string,
+  relatedTools: string[],
+): TextToolSeoSections {
+  void relatedTools;
+  const paragraphs = [
+    `${toolName} is a secure server-side PDF utility on ExesTools. Upload your file (up to 20 MB per document), and the service processes it with validated inputs and rate limits so everyday workflows stay fast and predictable. This fits teams and individuals who need reliable merge, split, compression, conversion, or visual editing without installing desktop software.`,
+    `PDF tasks are often urgent: combine scanned attachments before email, extract one page for a client, shrink a large export, move text between Word and PDF, or add a watermark before distribution. ${toolName} focuses on one job per page so controls stay obvious. Drag and drop files, confirm options, then download the result. For the visual editor, you get thumbnails, page order, rotation, and on-page text with styling before export.`,
+    `Quality expectations vary by source. Text extraction to Word works best on text-based PDFs; scanned documents may need OCR elsewhere first. Word-to-PDF uses a text-first layout path—complex tables and graphics may simplify. Compression rebuilds the PDF and can reduce size when redundant objects are present; results depend on how the original was produced.`,
+    `Security and hygiene matter. Files are processed for the request and not kept as a permanent archive. Still, avoid uploading regulated or highly confidential material unless your policy allows it. ExesTools validates file types and sizes to reduce abuse; if conversion fails, you will see a clear error instead of a silent bad file.`,
+    `The PDF tools hub links related utilities so you can chain workflows: merge, then compress, or split, then edit. Stable URLs under /tools/[slug] support bookmarks, internal docs, and SEO. ${description}`,
+    `${toolName} is free to use in modern browsers. Prefer wired connections for large files, and retry if the network drops mid-upload.`,
+  ];
+
+  return {
+    seoArticle: {
+      heading: `${toolName}: free online PDF tool guide`,
+      paragraphs,
+    },
+    howToUse: {
+      heading: `How to use ${toolName}`,
+      steps: [
+        { title: "Step 1: Upload", body: "Choose PDF or Word files, or drag them into the upload area." },
+        { title: "Step 2: Configure", body: "Pick merge order, split mode, compression, or open the visual editor." },
+        { title: "Step 3: Process", body: "Run the action and wait for the progress state to finish." },
+        { title: "Step 4: Download", body: "Save the PDF, DOCX, or ZIP output to your device." },
+      ],
+    },
+    features: {
+      heading: "Features",
+      items: [
+        "Server-side processing with type and size validation (20 MB per file)",
+        "Drag-and-drop upload and clear error messages",
+        "Rate limiting to keep the service responsive",
+        "Related PDF tools linked below for multi-step workflows",
+        "PDF Editor: thumbnails, reorder, rotate, text, watermark, export",
+      ],
+    },
+    faq: {
+      heading: "Frequently asked questions",
+      items: [
+        { question: `What does ${toolName} do?`, answer: description },
+        { question: "Is there a file size limit?", answer: "Yes. Each upload is limited to 20 MB unless noted otherwise on the tool." },
+        { question: "Are my files stored?", answer: "Files are processed to produce your download and are not kept as a long-term archive." },
+        { question: "Why did conversion fail?", answer: "Password-protected, corrupted, or unusual PDFs may fail. Try another file or simplify the document." },
+        { question: `Is ${toolName} free?`, answer: "Yes. ExesTools PDF utilities are free to use in supported browsers." },
+      ],
+    },
+    relatedTools: { heading: "Related tools" },
   };
 }
 

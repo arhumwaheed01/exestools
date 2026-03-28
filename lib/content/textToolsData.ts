@@ -5,6 +5,7 @@
 
 import { buildDeveloperTextTools } from "./developerToolsData";
 import { buildImageTextTools } from "./imageToolsData";
+import { buildPdfTextTools } from "./pdfToolsData";
 import { toolCatalog } from "./toolCatalog";
 
 export type TextToolFaq = { question: string; answer: string };
@@ -35,9 +36,10 @@ export const textTools: TextTool[] = toolCatalog.map((t) => ({
 /** Developer-only tool rows merged for /tools/[slug], SEO, and related links. */
 export const developerTools: TextTool[] = buildDeveloperTextTools();
 export const imageTools: TextTool[] = buildImageTextTools();
+export const pdfTools: TextTool[] = buildPdfTextTools();
 
-/** Full catalog for shared dynamic routes (text + developer). */
-export const allTools: TextTool[] = [...textTools, ...developerTools, ...imageTools];
+/** Full catalog for shared dynamic routes (text + developer + image + PDF). */
+export const allTools: TextTool[] = [...textTools, ...developerTools, ...imageTools, ...pdfTools];
 
 export function getToolBySlug(slug: string) {
   return allTools.find((t) => t.slug === slug);
@@ -117,6 +119,7 @@ export const toolPageUi = {
     { label: "← Back to Text Tools", href: "/text-tools" },
     { label: "Developer tools", href: "/developer-tools" },
     { label: "Image tools", href: "/image-tools" },
+    { label: "PDF tools", href: "/pdf-tools" },
     { label: "Browse all tools", href: "/tools" },
   ],
 } as const;

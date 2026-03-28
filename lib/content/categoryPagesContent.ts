@@ -14,6 +14,17 @@ export const developerCategorySeoArticle = {
   ],
 } as const;
 
+export const pdfCategorySeoArticle = {
+  heading: "Why use free PDF tools online?",
+  paragraphs: [
+    "PDF remains the default for contracts, forms, invoices, and handoffs because it preserves a consistent view across devices. The downside is that small tasks—merge attachments, split a long scan, shrink a bloated export, or nudge text and watermarks—often require a dedicated app. Browser-based PDF utilities reduce that friction: upload, act, download, without waiting on IT installs or license queues.",
+    "ExesTools combines focused tools with a visual editor for markup-style changes. Merge and split address packaging and extraction; compression rebuilds files when structure allows; conversion paths help when you need editable text in Word or a shareable PDF from a document. The editor layers thumbnails, rotation, reorder, and canvas text so you can prepare a file before it leaves your desk.",
+    "Server processing includes validation and limits so the system stays responsive. Each tool explains its tradeoffs: text-first conversion may simplify rich layouts; scanned PDFs are not automatically OCR’d. When a job fails, clear errors beat silent corruption. Pair tools from the hub for real workflows—merge several scans, compress the bundle, then add a confidential watermark in the editor.",
+    "Privacy is still your responsibility. Avoid uploading highly sensitive material if policy requires on-prem tools. Files are processed to produce output and are not archived as a personal library. For everyday business PDFs, schoolwork, and internal drafts, the combination of speed, predictable URLs, and related links keeps work moving.",
+    "Long term, the same programmatic SEO structure used elsewhere on ExesTools applies here: stable /tools/[slug] pages, FAQs, and internal links. That makes the PDF category easy to extend with new utilities while keeping navigation familiar.",
+  ],
+} as const;
+
 export const imageCategorySeoArticle = {
   heading: "Why use free image tools online?",
   paragraphs: [

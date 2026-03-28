@@ -69,6 +69,16 @@ function developerSlugToUseCase(slug: string): string {
   return "Developer";
 }
 
+function pdfSlugToUseCase(slug: string): string {
+  if (slug.includes("merge")) return "PDF Merging";
+  if (slug.includes("split")) return "PDF Splitting";
+  if (slug.includes("compress")) return "PDF Compression";
+  if (slug.includes("word-to-pdf")) return "Document Conversion";
+  if (slug.includes("pdf-to-word")) return "PDF Conversion";
+  if (slug.includes("editor")) return "PDF Editing";
+  return "PDF";
+}
+
 function imageSlugToUseCase(slug: string): string {
   if (slug.includes("compress")) return "Image Compression";
   if (slug.includes("-to-") || slug.startsWith("jpg-") || slug.startsWith("png-") || slug.startsWith("webp-")) {
@@ -98,6 +108,10 @@ export function buildImageToolMetaTitle(toolName: string, slug: string): string 
   return `${toolName} - Free Online ${useCase} Tool | ${SITE}`;
 }
 
+export function buildPdfToolMetaTitle(toolName: string, slug: string): string {
+  return `${toolName} - Free Online ${pdfSlugToUseCase(slug)} Tool | ${SITE}`;
+}
+
 export function buildTextToolMetaDescription(
   toolName: string,
   shortDescription: string,
@@ -122,6 +136,12 @@ export function buildImageToolMetaDescription(
 ): string {
   const n = toolName.toLowerCase();
   const base = `Free online ${n}: ${shortDescription} Client-side image processing with preview and download. No upload to our servers.`;
+  return ensureMetaLength(base);
+}
+
+export function buildPdfToolMetaDescription(toolName: string, shortDescription: string): string {
+  const n = toolName.toLowerCase();
+  const base = `Free ${n}: ${shortDescription} Secure processing, up to 20 MB per file. Fast download. No account.`;
   return ensureMetaLength(base);
 }
 
@@ -159,4 +179,8 @@ export function buildImageToolPageHeading(
   slug: string,
 ): string {
   return buildToolPageHeading(toolName, description, imageSlugToUseCase(slug));
+}
+
+export function buildPdfToolPageHeading(toolName: string, description: string, slug: string): string {
+  return buildToolPageHeading(toolName, description, pdfSlugToUseCase(slug));
 }

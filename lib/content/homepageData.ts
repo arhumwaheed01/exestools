@@ -1,5 +1,6 @@
 import { getDeveloperToolsGridItems } from "@/lib/content/developerToolsData";
 import { getImageToolsGridItems } from "@/lib/content/imageToolsData";
+import { getPdfToolsGridItems } from "@/lib/content/pdfToolsData";
 import { getToolBySlug, textTools } from "@/lib/content/textToolsData";
 
 /** Homepage “Popular tools”: 2-4 curated slugs (search modal + home list). */
@@ -45,7 +46,7 @@ export const homepageData = {
     badge: "Free Tools · Fast Tools · Browser-based Tools",
     title: "Free Online Tools for Everyday Tasks",
     subtitle:
-      "Simple, fast, and powerful tools for text, images, and developers.",
+      "Simple, fast, and powerful tools for text, images, PDFs, and developers.",
     cta: "Explore Tools",
     ctaHref: "/tools",
     quickLinks: [
@@ -82,6 +83,13 @@ export const homepageData = {
         description:
           "Resize, compress, and convert images without installing software.",
         link: "/image-tools",
+        badge: "Live",
+      },
+      {
+        title: "PDF Tools",
+        description:
+          "Merge, split, compress, convert, and edit PDFs with a visual workspace.",
+        link: "/pdf-tools",
         badge: "Live",
       },
     ] satisfies HomeCategory[],
@@ -176,11 +184,13 @@ export const navigationData = {
       icon: "code" as const,
     },
     { href: "/image-tools", label: "Image Tools", icon: "image" as const },
+    { href: "/pdf-tools", label: "PDF Tools", icon: "file" as const },
   ],
   cta: { href: "/tools", label: "All Tools" },
   footer: [
     { href: "/text-tools", label: "Text Tools", icon: "type" as const },
     { href: "/developer-tools", label: "Developer Tools", icon: "code" as const },
+    { href: "/pdf-tools", label: "PDF Tools", icon: "file" as const },
     { href: "/tools", label: "All Tools", icon: "wrench" as const },
   ],
 } as const;
@@ -192,6 +202,7 @@ export const allToolsPageContent = {
   textToolsHeading: "Text tools",
   developerToolsHeading: "Developer tools",
   imageToolsHeading: "Image tools",
+  pdfToolsHeading: "PDF tools",
   moreCategories: {
     title: "More categories",
     description:
@@ -203,6 +214,7 @@ export const allToolsPageContent = {
         icon: "code" as const,
       },
       { label: "Image Tools", href: "/image-tools", icon: "image" as const },
+      { label: "PDF Tools", href: "/pdf-tools", icon: "file" as const },
     ],
   },
 } as const;
@@ -210,6 +222,7 @@ export const allToolsPageContent = {
 /** Curated grid rows for /developer-tools and directory cards */
 export const developerToolsGrid = getDeveloperToolsGridItems();
 export const imageToolsGrid = getImageToolsGridItems();
+export const pdfToolsGrid = getPdfToolsGridItems();
 
 export const developerToolsPageContent = {
   title: "Free Developer Tools Online",
@@ -221,6 +234,12 @@ export const imageToolsPageContent = {
   title: "Free Image Tools Online",
   intro:
     "Compress, convert, resize, rotate, crop, and inspect images directly in your browser. Every tool has a stable URL for repeat workflows and internal linking.",
+} as const;
+
+export const pdfToolsPageContent = {
+  title: "Free PDF Tools Online",
+  intro:
+    "Merge, split, compress, convert PDF and Word, and use the visual PDF editor: text, watermark, rotate, reorder, and delete pages. Each tool lives on a stable URL under /tools/.",
 } as const;
 
 export const notFoundPageContent = {

@@ -23,6 +23,8 @@ function categoryHeadingPhrase(category: ToolCategory): string {
       return "developer";
     case "image":
       return "image";
+    case "pdf":
+      return "PDF";
     default:
       return "text";
   }
