@@ -12,18 +12,13 @@ const envUrl =
     ? normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL)
     : null;
 
-const vercelUrl =
-  typeof process !== "undefined" && process.env.VERCEL_URL
-    ? normalizeSiteUrl(`https://${process.env.VERCEL_URL}`)
-    : null;
-
-/** Live site origin for sitemap entries and robots `Sitemap:` (always production, not preview hosts). */
+/** Live public origin when `NEXT_PUBLIC_SITE_URL` is unset (canonical, metadataBase, JSON-LD, absoluteUrl). */
 export const productionSiteUrl = normalizeSiteUrl("https://www.exestools.com");
 
 export const defaultSEO = {
   siteName: "ExesTools",
-  /** Runtime origin for metadataBase, JSON-LD, and general absoluteUrl (env / Vercel preview when unset). */
-  siteUrl: envUrl ?? vercelUrl ?? productionSiteUrl,
+  /** Site origin: env override, else production (never Vercel preview host — keeps canonical/OG on www). */
+  siteUrl: envUrl ?? productionSiteUrl,
   defaultTitle: "Free Online Tools - ExesTools",
   defaultDescription:
     "Free online tools for text, developers, and images. Fast, secure, and easy to use.",

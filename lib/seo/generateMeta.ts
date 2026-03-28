@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { defaultSEO, productionSiteUrl } from "./seoConfig";
 
-/** Absolute URL for a site path (leading slash). Uses runtime siteUrl (preview-aware when configured). */
+/** Absolute URL for a site path (leading slash). Uses `defaultSEO.siteUrl` (env or production). */
 export function absoluteUrl(path: string): string {
   const base = defaultSEO.siteUrl.replace(/\/$/, "");
   const p = path.startsWith("/") ? path : `/${path}`;
