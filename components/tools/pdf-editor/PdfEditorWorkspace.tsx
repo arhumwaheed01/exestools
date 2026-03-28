@@ -1,7 +1,7 @@
 "use client";
 
 import type { CSSProperties, DragEvent, MutableRefObject, ReactNode } from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   LuAlignCenter,
   LuAlignLeft,
@@ -33,11 +33,20 @@ import { fabricJsonToPngBase64 } from "@/components/tools/pdf-editor/exportOverl
 import { PDFJS_DIST_VERSION } from "@/lib/pdf/constants";
 import { MAX_PDF_FILE_BYTES } from "@/lib/pdf/constants";
 import {
+  extractOcrTextHitsFromCanvas,
+  mergeNativeAndOcrHitsForPick,
+} from "@/lib/pdf/ocrPageTextHits";
+import {
   extractPdfTextHits,
   getEditorPageViewport,
   pickPdfTextHit,
   type PdfTextHit,
 } from "@/lib/pdf/pdfPageTextHits";
+import {
+  FloatingTextFormatBar,
+  type TextBarAction,
+} from "@/components/tools/pdf-editor/FloatingTextFormatBar";
+import { FABRIC_TEXTBOX_EDIT_CHROME } from "@/components/tools/pdf-editor/fabricTextChrome";
 
 const MAX_PAGES = 120;
 const ZOOM_MIN = 0.5;
@@ -59,14 +68,55 @@ type FabricCanvasInstance = InstanceType<(typeof import("fabric"))["Canvas"]>;
 
 const FABRIC_JSON_PROPS = ["pdfHitIndex", "pdfMaskForHit"] as const;
 
+/** Hover preview rect — must never be persisted in undo/export JSON. */
+function stripHoverGuideForSnapshot(c: FabricCanvasInstance): import("fabric").FabricObject[] {
+  const removed: import("fabric").FabricObject[] = [];
+  for (const o of c.getObjects()) {
+    if ((o as { pdfHoverGuide?: boolean }).pdfHoverGuide) {
+      c.remove(o);
+      removed.push(o);
+    }
+  }
+  return removed;
+}
+
 function fabricSnapshot(c: FabricCanvasInstance): string {
-  return JSON.stringify(c.toJSON([...FABRIC_JSON_PROPS]));
+  const ephem = stripHoverGuideForSnapshot(c);
+  try {
+    return JSON.stringify(c.toJSON([...FABRIC_JSON_PROPS]));
+  } finally {
+    ephem.forEach((o) => c.add(o));
+  }
+}
+
+function hidePdfTextHoverGuide(c: FabricCanvasInstance) {
+  const g = c.getObjects().find((o) => (o as { pdfHoverGuide?: boolean }).pdfHoverGuide);
+  if (g && (g as { visible?: boolean }).visible !== false) {
+    g.set({ visible: false });
+    c.requestRenderAll();
+  }
+}
+
+function isPdfHitClaimedByTextbox(c: FabricCanvasInstance, hitIndex: number): boolean {
+  return c.getObjects().some((o) => {
+    const typ = (o as { type?: string }).type?.toLowerCase();
+    const a = o as { pdfHitIndex?: number };
+    return typ === "textbox" && a.pdfHitIndex === hitIndex;
+  });
+}
+
+function baseCursorForTool(t: EditorTool): string {
+  if (t === "select") return "default";
+  if (t === "image") return "copy";
+  return "crosshair";
 }
 
 function reviveFabricPdfMeta(serialized: object, obj: import("fabric").FabricObject) {
-  const o = serialized as { pdfHitIndex?: number; pdfMaskForHit?: number };
+  const o = serialized as { pdfHitIndex?: number; pdfMaskForHit?: number; type?: string };
   if (typeof o.pdfHitIndex === "number") obj.set("pdfHitIndex", o.pdfHitIndex);
   if (typeof o.pdfMaskForHit === "number") obj.set("pdfMaskForHit", o.pdfMaskForHit);
+  const typ = o.type?.toLowerCase() ?? (obj as { type?: string }).type?.toLowerCase();
+  if (typ === "textbox") obj.set({ ...FABRIC_TEXTBOX_EDIT_CHROME });
 }
 
 function formatBytes(n: number) {
@@ -208,6 +258,7 @@ export function PdfEditorWorkspace() {
   const pdfFileRef = useRef<File | null>(null);
   /** PDF text runs for click-to-edit (viewport-aligned with active canvas). */
   const nativeTextHitsRef = useRef<Record<number, PdfTextHit[]>>({});
+  const ocrTextHitsRef = useRef<Record<number, PdfTextHit[]>>({});
   const fabricJsonByPage = useRef<Record<number, string>>({});
   const dimsByPage = useRef<Record<number, { w: number; h: number }>>({});
   const prevOrigRef = useRef<number | null>(null);
@@ -223,12 +274,19 @@ export function PdfEditorWorkspace() {
   const [layoutWidth, setLayoutWidth] = useState(720);
   const [zoom, setZoom] = useState(1);
   const [tool, setTool] = useState<EditorTool>("select");
+  const toolRef = useRef<EditorTool>(tool);
+  toolRef.current = tool;
   const [strokeColor, setStrokeColor] = useState("#111827");
   const [fillColor, setFillColor] = useState("transparent");
   const [brushWidth, setBrushWidth] = useState(3);
   const [textColor, setTextColor] = useState("#111827");
   const [fontFamily, setFontFamily] = useState(FONT_OPTIONS[0]!);
   const [selTick, setSelTick] = useState(0);
+  /** Viewport position for Acrobat-style floating text toolbar (fixed px). */
+  const [textFloatBar, setTextFloatBar] = useState<{ centerX: number; top: number } | null>(null);
+  const setTextFloatBarRef = useRef(setTextFloatBar);
+  setTextFloatBarRef.current = setTextFloatBar;
+  const computeTextBarPositionRef = useRef<() => void>(() => {});
 
   const [fileName, setFileName] = useState("");
   const [busy, setBusy] = useState(false);
@@ -245,6 +303,8 @@ export function PdfEditorWorkspace() {
   const [fontSize, setFontSize] = useState(18);
   const [thumbRev, setThumbRev] = useState(0);
   const [exportOk, setExportOk] = useState(false);
+  const [ocrBusy, setOcrBusy] = useState(false);
+  const [ocrStatus, setOcrStatus] = useState("");
   const [editorDropActive, setEditorDropActive] = useState(false);
   const editorDragDepth = useRef(0);
   const [pdfDocUi, setPdfDocUi] = useState<import("pdfjs-dist").PDFDocumentProxy | null>(
@@ -272,6 +332,10 @@ export function PdfEditorWorkspace() {
     return () => window.clearTimeout(t);
   }, [exportOk]);
 
+  useEffect(() => {
+    setOcrStatus("");
+  }, [activeIdx]);
+
   const persistCurrentFabric = useCallback(() => {
     const c = fabricRef.current;
     const orig = prevOrigRef.current;
@@ -295,23 +359,197 @@ export function PdfEditorWorkspace() {
 
   const bumpSelection = useCallback(() => setSelTick((t) => t + 1), []);
 
+  const computeTextFloatBar = useCallback(() => {
+    const c = fabricRef.current;
+    if (!c) {
+      setTextFloatBarRef.current(null);
+      return;
+    }
+    const o = c.getActiveObject();
+    const t = (o as { type?: string })?.type;
+    if (!o || t !== "textbox") {
+      setTextFloatBarRef.current(null);
+      return;
+    }
+    const rect = o.getBoundingRect();
+    const upper = c.upperCanvasEl;
+    if (!upper) {
+      setTextFloatBarRef.current(null);
+      return;
+    }
+    const cr = upper.getBoundingClientRect();
+    const cw = c.width || 1;
+    const ch = c.height || 1;
+    const scaleX = cr.width / cw;
+    const scaleY = cr.height / ch;
+    const centerX = cr.left + (rect.left + rect.width / 2) * scaleX;
+    const top = cr.top + rect.top * scaleY;
+    setTextFloatBarRef.current({ centerX, top: top - 46 });
+  }, []);
+  computeTextBarPositionRef.current = computeTextFloatBar;
+
+  const onFloatBarAction = useCallback(
+    (action: TextBarAction) => {
+      void (async () => {
+        const { Textbox } = await import("fabric");
+        const c = fabricRef.current;
+        if (!c) return;
+        const o = c.getActiveObject();
+        if (!(o instanceof Textbox)) return;
+        switch (action) {
+          case "underline":
+            o.set("underline", !o.underline);
+            break;
+          case "strikethrough":
+            o.set("linethrough", !o.linethrough);
+            break;
+          case "alignLeft":
+            o.set("textAlign", "left");
+            break;
+          case "alignCenter":
+            o.set("textAlign", "center");
+            break;
+          case "alignRight":
+            o.set("textAlign", "right");
+            break;
+          case "lineTight":
+            o.set("lineHeight", Math.max(0.72, Number(o.lineHeight ?? 1.2) - 0.12));
+            break;
+          case "lineLoose":
+            o.set("lineHeight", Math.min(2.35, Number(o.lineHeight ?? 1.2) + 0.12));
+            break;
+          default:
+            break;
+        }
+        c.requestRenderAll();
+        pushUndo();
+        computeTextFloatBar();
+      })();
+    },
+    [pushUndo, computeTextFloatBar],
+  );
+
+  const onFloatBarFontFamily = useCallback(
+    (f: string) => {
+      setFontFamily(f);
+      void (async () => {
+        const { Textbox } = await import("fabric");
+        const c = fabricRef.current;
+        if (!c) return;
+        const o = c.getActiveObject();
+        if (!(o instanceof Textbox)) return;
+        o.set("fontFamily", f);
+        c.requestRenderAll();
+        pushUndo();
+        bumpSelection();
+        computeTextFloatBar();
+      })();
+    },
+    [pushUndo, computeTextFloatBar, bumpSelection],
+  );
+
+  const onFloatBarToggleBold = useCallback(() => {
+    void (async () => {
+      const { Textbox } = await import("fabric");
+      const c = fabricRef.current;
+      if (!c) return;
+      const o = c.getActiveObject();
+      if (!(o instanceof Textbox)) return;
+      const w = o.fontWeight;
+      const next = w === "bold" || w === 700 || w === "700" ? "normal" : "bold";
+      o.set("fontWeight", next);
+      c.requestRenderAll();
+      pushUndo();
+      bumpSelection();
+      computeTextFloatBar();
+    })();
+  }, [pushUndo, bumpSelection, computeTextFloatBar]);
+
+  const onFloatBarToggleItalic = useCallback(() => {
+    void (async () => {
+      const { Textbox } = await import("fabric");
+      const c = fabricRef.current;
+      if (!c) return;
+      const o = c.getActiveObject();
+      if (!(o instanceof Textbox)) return;
+      o.set("fontStyle", o.fontStyle === "italic" ? "normal" : "italic");
+      c.requestRenderAll();
+      pushUndo();
+      bumpSelection();
+      computeTextFloatBar();
+    })();
+  }, [pushUndo, bumpSelection, computeTextFloatBar]);
+
+  const onFloatBarFontSize = useCallback(
+    (n: number) => {
+      const size = Math.max(8, Math.min(96, Math.round(n)));
+      setFontSize(size);
+      void (async () => {
+        const { Textbox } = await import("fabric");
+        const c = fabricRef.current;
+        if (!c) return;
+        const o = c.getActiveObject();
+        if (!(o instanceof Textbox)) return;
+        o.set("fontSize", size);
+        c.requestRenderAll();
+        pushUndo();
+        bumpSelection();
+        computeTextFloatBar();
+      })();
+    },
+    [pushUndo, bumpSelection, computeTextFloatBar],
+  );
+
+  const onFloatBarFillColor = useCallback(
+    (hex: string) => {
+      setTextColor(hex);
+      void (async () => {
+        const { Textbox } = await import("fabric");
+        const c = fabricRef.current;
+        if (!c) return;
+        const o = c.getActiveObject();
+        if (!(o instanceof Textbox)) return;
+        o.set("fill", hex);
+        c.requestRenderAll();
+        pushUndo();
+        bumpSelection();
+        computeTextFloatBar();
+      })();
+    },
+    [pushUndo, bumpSelection, computeTextFloatBar],
+  );
+
+  const applySmoothTextChrome = useCallback((tb: import("fabric").Textbox) => {
+    tb.set({ ...FABRIC_TEXTBOX_EDIT_CHROME });
+  }, []);
+
   const tryOpenNativeTextEdit = useCallback(
     async (
       c: FabricCanvasInstance,
       hit: PdfTextHit,
       style: { textColor: string; fontFamily: string },
     ): Promise<boolean> => {
+      const fabric = await import("fabric");
       const existing = c
         .getObjects()
         .find((o) => (o as { pdfHitIndex?: number }).pdfHitIndex === hit.hitIndex);
-      if (existing) {
+      if (existing && existing instanceof fabric.Textbox) {
+        applySmoothTextChrome(existing);
         c.setActiveObject(existing);
         c.requestRenderAll();
         bumpSelection();
+        requestAnimationFrame(() => {
+          try {
+            existing.enterEditing();
+            existing.selectAll();
+          } catch {
+            /* ignore */
+          }
+          computeTextBarPositionRef.current();
+        });
         return true;
       }
 
-      const fabric = await import("fabric");
       const pad = 4;
       const maskH = Math.max(hit.height + pad * 2, hit.fontSizePx * 1.22 + pad * 2);
       const mask = new fabric.Rect({
@@ -338,6 +576,7 @@ export function PdfEditorWorkspace() {
         lineHeight: 1.15,
       });
       tb.set({ pdfHitIndex: hit.hitIndex });
+      applySmoothTextChrome(tb);
 
       c.add(mask);
       c.sendObjectToBack(mask);
@@ -345,9 +584,18 @@ export function PdfEditorWorkspace() {
       c.setActiveObject(tb);
       c.requestRenderAll();
       bumpSelection();
+      requestAnimationFrame(() => {
+        try {
+          tb.enterEditing();
+          tb.selectAll();
+        } catch {
+          /* ignore */
+        }
+        computeTextBarPositionRef.current();
+      });
       return true;
     },
-    [bumpSelection],
+    [bumpSelection, applySmoothTextChrome],
   );
 
   const removeFabricObjectAndPdfPair = useCallback((c: FabricCanvasInstance, o: import("fabric").FabricObject) => {
@@ -469,6 +717,16 @@ export function PdfEditorWorkspace() {
         canvas.on("selection:created", bumpSelection);
         canvas.on("selection:updated", bumpSelection);
         canvas.on("selection:cleared", bumpSelection);
+
+        const barRefresh = () =>
+          requestAnimationFrame(() => computeTextBarPositionRef.current());
+        canvas.on("object:moving", barRefresh);
+        canvas.on("object:scaling", barRefresh);
+        canvas.on("object:rotating", barRefresh);
+        canvas.on("object:modified", barRefresh);
+        canvas.on("text:changed", barRefresh);
+        canvas.on("text:editing:entered", barRefresh);
+        canvas.on("text:editing:exited", barRefresh);
       } else {
         canvas.setDimensions({ width: w, height: h });
       }
@@ -506,6 +764,18 @@ export function PdfEditorWorkspace() {
     renderPdfPage,
     bumpSelection,
   ]);
+
+  useEffect(() => {
+    computeTextFloatBar();
+  }, [selTick, zoom, activeIdx, computeTextFloatBar]);
+
+  useEffect(() => {
+    const el = scrollAreaRef.current;
+    if (!el) return;
+    const h = () => computeTextFloatBar();
+    el.addEventListener("scroll", h, { passive: true });
+    return () => el.removeEventListener("scroll", h);
+  }, [computeTextFloatBar]);
 
   /** Tool mode: drawing vs selection vs shape placement */
   useEffect(() => {
@@ -557,7 +827,11 @@ export function PdfEditorWorkspace() {
 
         // Click PDF text layer: works in select/text/shapes (not while drawing or placing image).
         if (orig !== null) {
-          const hit = pickPdfTextHit(p.x, p.y, nativeTextHitsRef.current[orig]);
+          const merged = mergeNativeAndOcrHitsForPick(
+            nativeTextHitsRef.current[orig] ?? [],
+            ocrTextHitsRef.current[orig] ?? [],
+          );
+          const hit = pickPdfTextHit(p.x, p.y, merged);
           if (hit) {
             await tryOpenNativeTextEdit(c, hit, { textColor, fontFamily });
             return;
@@ -575,9 +849,20 @@ export function PdfEditorWorkspace() {
             fill: textColor,
             fontFamily,
           });
+          applySmoothTextChrome(tb);
           c.add(tb);
           c.setActiveObject(tb);
           c.requestRenderAll();
+          bumpSelection();
+          requestAnimationFrame(() => {
+            try {
+              tb.enterEditing();
+              tb.selectAll();
+            } catch {
+              /* ignore */
+            }
+            computeTextBarPositionRef.current();
+          });
           return;
         }
 
@@ -656,7 +941,148 @@ export function PdfEditorWorkspace() {
     fillColor,
     activeIdx,
     tryOpenNativeTextEdit,
+    applySmoothTextChrome,
+    bumpSelection,
   ]);
+
+  /** Hover highlight + I-beam over detectable PDF text (pdf.js + OCR); stripped from undo/export. */
+  useEffect(() => {
+    const c = fabricRef.current;
+    if (!c || !canEditCanvas) return;
+
+    let raf = 0;
+
+    const runHoverFrame = (opt: { e?: Event; target?: unknown }) => {
+      const upper = c.upperCanvasEl;
+      if (!upper) return;
+
+      if (c.isDrawingMode) {
+        hidePdfTextHoverGuide(c);
+        upper.style.cursor = "";
+        return;
+      }
+
+      const e = opt.e as MouseEvent | undefined;
+      if (!e) return;
+
+      const t = toolRef.current;
+      if (t === "draw" || t === "highlight") {
+        hidePdfTextHoverGuide(c);
+        upper.style.cursor = "";
+        return;
+      }
+
+      if (opt.target) {
+        hidePdfTextHoverGuide(c);
+        const typ = (opt.target as { type?: string }).type?.toLowerCase();
+        upper.style.cursor =
+          typ === "textbox" ? "text" : baseCursorForTool(toolRef.current);
+        return;
+      }
+
+      const p = c.getScenePoint(e);
+      const orig = prevOrigRef.current;
+      if (orig === null) {
+        hidePdfTextHoverGuide(c);
+        upper.style.cursor = "";
+        return;
+      }
+
+      const merged = mergeNativeAndOcrHitsForPick(
+        nativeTextHitsRef.current[orig] ?? [],
+        ocrTextHitsRef.current[orig] ?? [],
+      );
+      const hit = pickPdfTextHit(p.x, p.y, merged);
+
+      if (!hit) {
+        hidePdfTextHoverGuide(c);
+        upper.style.cursor = "";
+        return;
+      }
+
+      if (isPdfHitClaimedByTextbox(c, hit.hitIndex)) {
+        hidePdfTextHoverGuide(c);
+        upper.style.cursor = "text";
+        return;
+      }
+
+      const pad = 5;
+      const boxH = Math.max(hit.height + pad * 2, hit.fontSizePx * 1.2 + pad * 2);
+      upper.style.cursor = "text";
+
+      void import("fabric").then((fabric) => {
+        if (fabricRef.current !== c) return;
+        let g = c
+          .getObjects()
+          .find((o) => (o as { pdfHoverGuide?: boolean }).pdfHoverGuide) as
+          | import("fabric").Rect
+          | undefined;
+        if (!g) {
+          g = new fabric.Rect({
+            left: hit.left - pad,
+            top: hit.top - pad,
+            width: hit.width + pad * 2,
+            height: boxH,
+            fill: "rgba(147, 197, 253, 0.2)",
+            stroke: "rgba(56, 189, 248, 0.65)",
+            strokeWidth: 1,
+            rx: 2,
+            ry: 2,
+            selectable: false,
+            evented: false,
+            visible: true,
+            objectCaching: false,
+          });
+          (g as { pdfHoverGuide?: boolean }).pdfHoverGuide = true;
+          c.add(g);
+        } else {
+          const same =
+            g.left === hit.left - pad &&
+            g.top === hit.top - pad &&
+            g.width === hit.width + pad * 2 &&
+            g.height === boxH &&
+            (g as { visible?: boolean }).visible === true;
+          if (!same) {
+            g.set({
+              left: hit.left - pad,
+              top: hit.top - pad,
+              width: hit.width + pad * 2,
+              height: boxH,
+              visible: true,
+            });
+          }
+        }
+        c.requestRenderAll();
+      });
+    };
+
+    const onMove = (...args: unknown[]) => {
+      const opt = args[0] as { e?: Event; target?: unknown };
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        runHoverFrame(opt);
+      });
+    };
+
+    const onOut = () => {
+      if (raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+      hidePdfTextHoverGuide(c);
+      if (c.upperCanvasEl) c.upperCanvasEl.style.cursor = "";
+    };
+
+    c.on("mouse:move", onMove);
+    c.on("mouse:out", onOut);
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      c.off("mouse:move", onMove);
+      c.off("mouse:out", onOut);
+      if (c.upperCanvasEl) c.upperCanvasEl.style.cursor = "";
+    };
+  }, [tool, canEditCanvas, activeIdx]);
 
   useEffect(() => {
     const h = (e: KeyboardEvent) => {
@@ -675,14 +1101,45 @@ export function PdfEditorWorkspace() {
     return () => window.removeEventListener("keydown", h);
   }, [removeFabricObjectAndPdfPair]);
 
+  const runOcrOnActivePage = useCallback(async () => {
+    const orig = pageOrder[activeIdx];
+    if (orig === undefined) return;
+    const canvas = pdfCanvasRef.current;
+    if (!canvas || canvas.width < 8 || canvas.height < 8) {
+      setOcrStatus("Wait for the page to finish rendering, then try again.");
+      return;
+    }
+    setOcrBusy(true);
+    setOcrStatus("Preparing OCR…");
+    try {
+      const hits = await extractOcrTextHitsFromCanvas(canvas, (pct, status) => {
+        setOcrStatus(`${status} ${pct}%`);
+      });
+      ocrTextHitsRef.current[orig] = hits;
+      setOcrStatus(
+        hits.length > 0
+          ? `Found ${hits.length} word region(s). Click a word to edit (English).`
+          : "No text detected. Try a clearer scan or larger type.",
+      );
+    } catch {
+      setOcrStatus(
+        "OCR failed. First run downloads the language model — check your connection and try again.",
+      );
+    } finally {
+      setOcrBusy(false);
+    }
+  }, [activeIdx, pageOrder]);
+
   const onPickFile = useCallback(async (f: File | null) => {
     setLoadErr("");
+    setOcrStatus("");
     mainPdfRenderTaskRef.current?.cancel();
     mainPdfRenderTaskRef.current = null;
     pdfDocRef.current = null;
     setPdfDocUi(null);
     fabricJsonByPage.current = {};
     nativeTextHitsRef.current = {};
+    ocrTextHitsRef.current = {};
     dimsByPage.current = {};
     undoByPage.current = {};
     redoByPage.current = {};
@@ -720,7 +1177,8 @@ export function PdfEditorWorkspace() {
       setActiveIdx(0);
       setPageRotations({});
       setThumbRev((x) => x + 1);
-      setTool("select");
+      // Default to Edit text so the flow matches Acrobat-style “click text to type”.
+      setTool("text");
     } catch {
       setLoadErr("Could not read this PDF.");
     } finally {
@@ -741,10 +1199,21 @@ export function PdfEditorWorkspace() {
       fill: textColor,
       fontFamily,
     });
+    applySmoothTextChrome(tb);
     c.add(tb);
     c.setActiveObject(tb);
     c.requestRenderAll();
-  }, [fontSize, textColor, fontFamily]);
+    bumpSelection();
+    requestAnimationFrame(() => {
+      try {
+        tb.enterEditing();
+        tb.selectAll();
+      } catch {
+        /* ignore */
+      }
+      computeTextBarPositionRef.current();
+    });
+  }, [fontSize, textColor, fontFamily, applySmoothTextChrome, bumpSelection]);
 
   const applyStyleToSelection = useCallback(
     async (fn: (t: import("fabric").Textbox) => void) => {
@@ -905,7 +1374,10 @@ export function PdfEditorWorkspace() {
         throw new Error("Export payload is too large. Reduce annotations or page count.");
       }
       const fd = new FormData();
-      fd.append("file", f);
+      const uploadName = /\.pdf$/i.test(f.name)
+        ? f.name
+        : `${(f.name.replace(/\.[^/.]+$/, "") || "document").replace(/[^\w.\-()+ ]/g, "_")}.pdf`;
+      fd.append("file", f, uploadName);
       fd.append("operations", json);
       const res = await fetch("/api/pdf/edit-advanced", { method: "POST", body: fd });
       if (!res.ok) throw new Error(await readApiError(res));
@@ -949,8 +1421,23 @@ export function PdfEditorWorkspace() {
     scrollToActivePage();
   }, [activeIdx, scrollToActivePage]);
 
+  const floatBarFormatting = useMemo(() => {
+    if (!textFloatBar) return null;
+    const c = fabricRef.current;
+    const o = c?.getActiveObject() as import("fabric").Textbox | undefined;
+    if (!o || o.type?.toLowerCase() !== "textbox") return null;
+    const fw = o.fontWeight;
+    return {
+      bold: fw === "bold" || fw === 700 || fw === "700",
+      italic: o.fontStyle === "italic",
+      fontSize: Math.round(Number(o.fontSize ?? 18)),
+      fill: typeof o.fill === "string" ? o.fill : "#111827",
+    };
+  }, [selTick, textFloatBar]);
+
   const activeObj = fabricRef.current?.getActiveObject();
   void selTick;
+  void activeObj;
 
   return (
     <div className="flex min-h-[78vh] flex-col rounded-xl border border-input-border/80 bg-background shadow-inner">
@@ -999,7 +1486,7 @@ export function PdfEditorWorkspace() {
             <LuMousePointer2 className="h-4 w-4" />
           </ToolToggle>
           <ToolToggle
-            label="Text — click empty canvas for new text; PDF text opens an editor from most tools"
+            label="Edit text — click PDF text or canvas; inline typing + floating bar"
             active={tool === "text"}
             onClick={() => setTool("text")}
             disabled={!canEditCanvas}
@@ -1109,15 +1596,20 @@ export function PdfEditorWorkspace() {
         </div>
       </div>
 
-      <p className="border-b border-input-border/40 px-3 py-1.5 text-[11px] leading-relaxed text-secondary-text/75 md:text-xs">
-        Click <span className="font-medium text-secondary-text/90">any existing PDF text</span> (except while using Draw
-        or Highlight) to edit or erase it—a white patch hides the original pixels underneath.{" "}
-        <span className="font-medium text-secondary-text/90">Double-click</span> the box to type; when it is selected
-        (not typing), press{" "}
-        <kbd className="rounded border border-input-border/80 bg-surface px-1 font-mono text-[10px]">Delete</kbd> or{" "}
-        <kbd className="rounded border border-input-border/80 bg-surface px-1 font-mono text-[10px]">Backspace</kbd> to
-        remove the overlay. Scanned PDFs without a text layer cannot be clicked this way.
-      </p>
+      <div className="border-b border-input-border/40 bg-sky-50/50 px-3 py-2 dark:bg-sky-950/25">
+        <p className="text-xs font-medium text-secondary-text/90 md:text-sm">
+          Open a PDF → <span className="font-medium text-secondary-text/85">hover</span> detectable text (light blue
+          outline + I-beam) → <span className="font-medium text-secondary-text/85">click</span> to edit in place (white
+          mask + overlay + floating bar) → <span className="text-primary">Download PDF</span> flattens overlays onto the
+          page.
+        </p>
+        <p className="mt-1 text-[11px] leading-relaxed text-secondary-text/75 md:text-xs">
+          Text comes from the PDF text layer (pdf.js). Multiple regions stay independent. No text layer? Use the{" "}
+          <span className="font-medium text-secondary-text/85">Text</span> tool or{" "}
+          <span className="font-medium text-secondary-text/85">OCR</span> (English). Draw / Highlight pause hover
+          click-to-edit until you switch tools.
+        </p>
+      </div>
 
       <div className="flex min-h-0 min-w-0 flex-1 flex-col lg:flex-row">
         {/* Left: thumbnails */}
@@ -1262,6 +1754,28 @@ export function PdfEditorWorkspace() {
                         <p className="mb-2 text-center text-xs font-semibold text-primary">
                           Editing · Page {listIdx + 1}
                         </p>
+                        <div className="mb-2 flex flex-col items-center gap-1.5">
+                          <button
+                            type="button"
+                            disabled={ocrBusy}
+                            onClick={() => void runOcrOnActivePage()}
+                            className="inline-flex items-center gap-2 rounded-lg border border-sky-300 bg-sky-100/90 px-3 py-1.5 text-xs font-semibold text-sky-950 shadow-sm transition-colors hover:bg-sky-200/90 disabled:cursor-not-allowed disabled:opacity-60 dark:border-sky-700 dark:bg-sky-950/50 dark:text-sky-100 dark:hover:bg-sky-900/60"
+                          >
+                            {ocrBusy ? (
+                              <>
+                                <LuLoaderCircle className="h-3.5 w-3.5 animate-spin" />
+                                Running OCR…
+                              </>
+                            ) : (
+                              <>Recognize text (OCR) — scanned pages</>
+                            )}
+                          </button>
+                          {ocrStatus ? (
+                            <p className="max-w-md text-center text-[11px] leading-snug text-secondary-text/80">
+                              {ocrStatus}
+                            </p>
+                          ) : null}
+                        </div>
                         <div className="relative mx-auto inline-block max-w-full">
                           <canvas
                             ref={pdfCanvasRef}
@@ -1496,6 +2010,19 @@ export function PdfEditorWorkspace() {
           </div>
         </aside>
       </div>
+
+      <FloatingTextFormatBar
+        position={textFloatBar}
+        fontFamily={fontFamily}
+        fontOptions={FONT_OPTIONS}
+        formatting={floatBarFormatting}
+        onFontFamily={onFloatBarFontFamily}
+        onFontSize={onFloatBarFontSize}
+        onFillColor={onFloatBarFillColor}
+        onToggleBold={onFloatBarToggleBold}
+        onToggleItalic={onFloatBarToggleItalic}
+        onAction={onFloatBarAction}
+      />
     </div>
   );
 }

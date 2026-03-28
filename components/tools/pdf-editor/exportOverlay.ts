@@ -1,5 +1,7 @@
 "use client";
 
+import { FABRIC_TEXTBOX_EDIT_CHROME } from "@/components/tools/pdf-editor/fabricTextChrome";
+
 /**
  * Renders saved Fabric JSON at page pixel size and returns raw base64 PNG (no data: prefix).
  * Uses multiplier ≤ 1.5 capped by maxEdge to limit upload size while staying sharp.
@@ -19,6 +21,12 @@ export async function fabricJsonToPngBase64(
   }
   if (!parsed.objects?.length) return null;
 
+  parsed.objects = parsed.objects.filter((ob) => {
+    const o = ob as { pdfHoverGuide?: boolean };
+    return !o.pdfHoverGuide;
+  });
+  if (!parsed.objects.length) return null;
+
   const { Canvas } = await import("fabric");
   const el = document.createElement("canvas");
   el.width = Math.floor(width);
@@ -32,9 +40,14 @@ export async function fabricJsonToPngBase64(
 
   try {
     await c.loadFromJSON(parsed, (serialized, obj) => {
-      const o = serialized as { pdfHitIndex?: number; pdfMaskForHit?: number };
+      const o = serialized as {
+        pdfHitIndex?: number;
+        pdfMaskForHit?: number;
+        type?: string;
+      };
       if (typeof o.pdfHitIndex === "number") obj.set("pdfHitIndex", o.pdfHitIndex);
       if (typeof o.pdfMaskForHit === "number") obj.set("pdfMaskForHit", o.pdfMaskForHit);
+      if (o.type?.toLowerCase() === "textbox") obj.set({ ...FABRIC_TEXTBOX_EDIT_CHROME });
     });
   } catch {
     c.dispose();

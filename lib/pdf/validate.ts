@@ -1,5 +1,8 @@
 import { MAX_MERGE_FILE_COUNT, MAX_MERGE_TOTAL_BYTES, MAX_PDF_FILE_BYTES } from "./constants";
 
+/** How far to search for `%PDF-` — many producers emit a short binary preamble first. */
+const PDF_SIGNATURE_SCAN_BYTES = 16_384;
+
 /** Skip UTF-8 BOM and leading whitespace some tools emit before %PDF-. */
 function pdfHeaderOffset(view: Uint8Array): number {
   let i = 0;
@@ -15,16 +18,35 @@ function pdfHeaderOffset(view: Uint8Array): number {
   return i;
 }
 
+/** Offset of `%PDF/` (0x25 0x50 0x44 0x46 0x2f) within the first scan window, or -1. */
+export function findPdfSignatureOffset(view: Uint8Array): number {
+  const limit = Math.min(view.length - 5, PDF_SIGNATURE_SCAN_BYTES);
+  for (let i = 0; i <= limit; i++) {
+    if (
+      view[i] === 0x25 &&
+      view[i + 1] === 0x50 &&
+      view[i + 2] === 0x44 &&
+      view[i + 3] === 0x46 &&
+      view[i + 4] === 0x2f
+    ) {
+      return i;
+    }
+  }
+  return -1;
+}
+
 export function isPdfMagic(view: Uint8Array): boolean {
   const i = pdfHeaderOffset(view);
-  if (view.length - i < 5) return false;
-  return (
-    view[i] === 0x25 &&
-    view[i + 1] === 0x50 &&
-    view[i + 2] === 0x44 &&
-    view[i + 3] === 0x46 &&
-    view[i + 4] === 0x2f
-  );
+  if (view.length - i >= 5) {
+    const atHeader =
+      view[i] === 0x25 &&
+      view[i + 1] === 0x50 &&
+      view[i + 2] === 0x44 &&
+      view[i + 3] === 0x46 &&
+      view[i + 4] === 0x2f;
+    if (atHeader) return true;
+  }
+  return findPdfSignatureOffset(view) >= 0;
 }
 
 export function isZipMagic(view: Uint8Array): boolean {
@@ -53,13 +75,16 @@ export async function collectPdfFiles(
     const n = file.name.toLowerCase();
     const pdfish =
       n.endsWith(".pdf") || file.type === "application/pdf" || file.type === "application/x-pdf";
-    if (!pdfish) throw new Error("Only PDF files are allowed.");
 
     const buf = await fileToBuffer(file, opts.maxEach);
     total += buf.length;
     if (total > opts.maxTotal) throw new Error("Combined file size is too large.");
     const view = new Uint8Array(buf.buffer, buf.byteOffset, buf.byteLength);
-    if (!isPdfMagic(view)) throw new Error("Invalid or corrupted PDF file.");
+    if (!isPdfMagic(view)) {
+      throw new Error(
+        pdfish ? "Invalid or corrupted PDF file." : "Only PDF files are allowed.",
+      );
+    }
     buffers.push(buf);
   }
 

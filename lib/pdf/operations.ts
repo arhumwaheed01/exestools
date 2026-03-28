@@ -1,7 +1,8 @@
 import { Document, Packer, Paragraph, TextRun } from "docx";
 import mammoth from "mammoth";
-import { degrees, PDFDocument, type PDFFont, rgb, StandardFonts } from "pdf-lib";
+import { PDFDocument } from "pdf-lib";
 import JSZip from "jszip";
+import { renderMammothHtmlToPdf } from "@/lib/pdf/docxHtmlToPdf";
 
 export async function mergePdfBuffers(buffers: Buffer[]): Promise<Uint8Array> {
   const merged = await PDFDocument.create();
@@ -77,66 +78,8 @@ export async function pdfBufferToDocx(buffer: Buffer): Promise<Uint8Array> {
   return new Uint8Array(out);
 }
 
-function wrapLineToWidth(text: string, font: PDFFont, fontSize: number, maxWidth: number): string[] {
-  const words = text.split(/\s+/).filter(Boolean);
-  if (words.length === 0) return [""];
-  const lines: string[] = [];
-  let line = "";
-  for (const word of words) {
-    const test = line ? `${line} ${word}` : word;
-    if (font.widthOfTextAtSize(test, fontSize) <= maxWidth) {
-      line = test;
-    } else {
-      if (line) lines.push(line);
-      if (font.widthOfTextAtSize(word, fontSize) <= maxWidth) {
-        line = word;
-      } else {
-        let rest = word;
-        while (rest.length > 0) {
-          let take = rest.length;
-          while (take > 0 && font.widthOfTextAtSize(rest.slice(0, take), fontSize) > maxWidth) {
-            take--;
-          }
-          if (take < 1) take = 1;
-          lines.push(rest.slice(0, take));
-          rest = rest.slice(take);
-        }
-        line = "";
-      }
-    }
-  }
-  if (line) lines.push(line);
-  return lines;
-}
-
 export async function docxBufferToPdf(buffer: Buffer): Promise<Uint8Array> {
-  const { value: text } = await mammoth.extractRawText({ buffer });
-  const body = text?.trim() ? text : " ";
-  const pdf = await PDFDocument.create();
-  const font = await pdf.embedFont(StandardFonts.Helvetica);
-  const fontSize = 11;
-  const lineHeight = fontSize * 1.35;
-  const margin = 50;
-  const pageWidth = 612;
-  const pageHeight = 792;
-  const maxWidth = pageWidth - margin * 2;
-
-  let page = pdf.addPage([pageWidth, pageHeight]);
-  let y = pageHeight - margin;
-
-  const paragraphs = body.split(/\r?\n/);
-  for (const para of paragraphs) {
-    const wrapped = wrapLineToWidth(para, font, fontSize, maxWidth);
-    const lines = wrapped.length ? wrapped : [""];
-    for (const wline of lines) {
-      if (y < margin + lineHeight) {
-        page = pdf.addPage([pageWidth, pageHeight]);
-        y = pageHeight - margin;
-      }
-      page.drawText(wline || " ", { x: margin, y, size: fontSize, font, color: rgb(0, 0, 0) });
-      y -= lineHeight;
-    }
-  }
-
-  return pdf.save({ useObjectStreams: true });
+  const { value: html } = await mammoth.convertToHtml({ buffer });
+  const fragment = html?.trim() ? html : "<p> </p>";
+  return renderMammothHtmlToPdf(fragment);
 }

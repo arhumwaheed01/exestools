@@ -3,6 +3,7 @@ declare module "fabric" {
   export class FabricObject {
     set(key: string | Record<string, unknown>, value?: unknown): this;
     type?: string;
+    getBoundingRect(): { left: number; top: number; width: number; height: number };
     left?: number;
     top?: number;
     width?: number;
@@ -27,6 +28,13 @@ declare module "fabric" {
     textAlign?: string;
     fill?: string;
     underline?: boolean;
+    linethrough?: boolean;
+    lineHeight?: number;
+    selectionColor?: string;
+    editingBorderColor?: string;
+    enterEditing(): void;
+    exitEditing(): this;
+    selectAll(): this;
   }
 
   export class PencilBrush {
@@ -73,6 +81,7 @@ declare module "fabric" {
 
   export class Canvas {
     constructor(element: HTMLCanvasElement, options?: Record<string, unknown>);
+    upperCanvasEl: HTMLCanvasElement;
     width: number;
     height: number;
     backgroundColor: string;
