@@ -24,18 +24,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticEntries: MetadataRoute.Sitemap = STATIC_PATHS.map((path) => ({
     url: absoluteUrl(path),
     lastModified,
-    changeFrequency: "weekly",
-    priority:
-      path === "/"
-        ? 1
-        : path === "/privacy-policy" ||
-            path === "/terms-of-service" ||
-            path === "/contact" ||
-            path === "/about" ||
-            path === "/disclaimer" ||
-            path === "/dmca"
-          ? 0.5
-          : 0.85,
   }));
 
   const allToolSlugs = Array.from(
@@ -49,8 +37,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const toolEntries: MetadataRoute.Sitemap = allToolSlugs.map((slug) => ({
     url: absoluteUrl(`/tools/${slug}`),
     lastModified,
-    changeFrequency: "weekly",
-    priority: 0.75,
   }));
 
   return [...staticEntries, ...toolEntries];
