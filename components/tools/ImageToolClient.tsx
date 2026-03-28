@@ -4,6 +4,11 @@ import type { DragEvent } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { LuCopy, LuCopyCheck, LuDownload, LuImagePlus, LuTrash2, LuUpload } from "react-icons/lu";
 import type { ImageToolVariant, TransformToolUi } from "@/lib/content/textToolPageTypes";
+import {
+  imageToolFileAccept,
+  imageToolInputHint,
+  validateImageToolFile,
+} from "@/lib/image/imageToolFileAccept";
 import { ToolLayout } from "@/components/tools/ToolLayout";
 import { ToolResult } from "@/components/tools/ToolResult";
 
@@ -87,7 +92,7 @@ export function ImageToolClient({ variant, ui }: Props) {
   const [cropW, setCropW] = useState(800);
   const [cropH, setCropH] = useState(600);
   const [lockAspect, setLockAspect] = useState(true);
-  const [rotation, setRotation] = useState<0 | 90 | 180 | 270>(90);
+  const [rotation, setRotation] = useState<0 | 90 | 180 | 270>(0);
   const [flipH, setFlipH] = useState(true);
   const [flipV, setFlipV] = useState(false);
   const [result, setResult] = useState<ProcessedResult>({});
@@ -99,17 +104,24 @@ export function ImageToolClient({ variant, ui }: Props) {
   const needsFile = !isBase64InputMode;
   const hasSource = isBase64InputMode ? Boolean(base64Input.trim()) : Boolean(sourceDataUrl);
 
-  const onPickFile = useCallback(async (picked?: File | null) => {
-    if (!picked) return;
-    if (!picked.type.startsWith("image/")) {
-      setError("Please select an image file.");
-      return;
-    }
-    setError("");
+  const fileAccept = useMemo(() => imageToolFileAccept(variant), [variant]);
+  const formatHint = useMemo(() => imageToolInputHint(variant), [variant]);
+
+  const onPickFile = useCallback(
+    async (picked?: File | null) => {
+      if (!picked) return;
+      const validationError = validateImageToolFile(picked, variant);
+      if (validationError) {
+        setError(validationError);
+        return;
+      }
+      setError("");
     setFile(picked);
-    const dataUrl = await readFileAsDataUrl(picked);
-    setSourceDataUrl(dataUrl);
-  }, []);
+      const dataUrl = await readFileAsDataUrl(picked);
+      setSourceDataUrl(dataUrl);
+    },
+    [variant],
+  );
 
   const onDrop = useCallback(
     async (e: DragEvent<HTMLDivElement>) => {
@@ -305,10 +317,13 @@ export function ImageToolClient({ variant, ui }: Props) {
                 browse file
               </button>
             </p>
+            {formatHint ? (
+              <p className="mt-1.5 text-xs text-secondary-text/75">{formatHint}</p>
+            ) : null}
             <input
               ref={inputRef}
               type="file"
-              accept="image/*"
+              accept={fileAccept}
               className="hidden"
               onChange={(e) => void onPickFile(e.target.files?.[0] ?? null)}
             />
@@ -398,6 +413,7 @@ export function ImageToolClient({ variant, ui }: Props) {
             onChange={(e) => setRotation(Number(e.target.value) as 0 | 90 | 180 | 270)}
             className="input w-full"
           >
+            <option value={0}>0° (no rotation)</option>
             <option value={90}>90°</option>
             <option value={180}>180°</option>
             <option value={270}>270°</option>
