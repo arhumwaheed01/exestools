@@ -1,6 +1,6 @@
 "use client";
 
-import type { DragEvent, MutableRefObject, ReactNode } from "react";
+import type { CSSProperties, DragEvent, MutableRefObject, ReactNode } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   LuAlignCenter,
@@ -32,6 +32,12 @@ import type { PdfEditorPayloadV2 } from "@/lib/pdf/editorTypes";
 import { fabricJsonToPngBase64 } from "@/components/tools/pdf-editor/exportOverlay";
 import { PDFJS_DIST_VERSION } from "@/lib/pdf/constants";
 import { MAX_PDF_FILE_BYTES } from "@/lib/pdf/constants";
+import {
+  extractPdfTextHits,
+  getEditorPageViewport,
+  pickPdfTextHit,
+  type PdfTextHit,
+} from "@/lib/pdf/pdfPageTextHits";
 
 const MAX_PAGES = 120;
 const ZOOM_MIN = 0.5;
@@ -50,6 +56,18 @@ type EditorTool =
   | "image";
 
 type FabricCanvasInstance = InstanceType<(typeof import("fabric"))["Canvas"]>;
+
+const FABRIC_JSON_PROPS = ["pdfHitIndex", "pdfMaskForHit"] as const;
+
+function fabricSnapshot(c: FabricCanvasInstance): string {
+  return JSON.stringify(c.toJSON([...FABRIC_JSON_PROPS]));
+}
+
+function reviveFabricPdfMeta(serialized: object, obj: import("fabric").FabricObject) {
+  const o = serialized as { pdfHitIndex?: number; pdfMaskForHit?: number };
+  if (typeof o.pdfHitIndex === "number") obj.set("pdfHitIndex", o.pdfHitIndex);
+  if (typeof o.pdfMaskForHit === "number") obj.set("pdfMaskForHit", o.pdfMaskForHit);
+}
 
 function formatBytes(n: number) {
   if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
@@ -188,6 +206,8 @@ export function PdfEditorWorkspace() {
   const fabricRef = useRef<FabricCanvasInstance | null>(null);
   const pdfDocRef = useRef<import("pdfjs-dist").PDFDocumentProxy | null>(null);
   const pdfFileRef = useRef<File | null>(null);
+  /** PDF text runs for click-to-edit (viewport-aligned with active canvas). */
+  const nativeTextHitsRef = useRef<Record<number, PdfTextHit[]>>({});
   const fabricJsonByPage = useRef<Record<number, string>>({});
   const dimsByPage = useRef<Record<number, { w: number; h: number }>>({});
   const prevOrigRef = useRef<number | null>(null);
@@ -256,7 +276,7 @@ export function PdfEditorWorkspace() {
     const c = fabricRef.current;
     const orig = prevOrigRef.current;
     if (c && orig !== null) {
-      fabricJsonByPage.current[orig] = JSON.stringify(c.toJSON());
+      fabricJsonByPage.current[orig] = fabricSnapshot(c);
     }
   }, []);
 
@@ -265,7 +285,7 @@ export function PdfEditorWorkspace() {
     const c = fabricRef.current;
     const orig = prevOrigRef.current;
     if (!c || orig === null) return;
-    const snap = JSON.stringify(c.toJSON());
+    const snap = fabricSnapshot(c);
     const u = undoByPage.current[orig] ?? [];
     u.push(snap);
     if (u.length > 60) u.shift();
@@ -274,6 +294,76 @@ export function PdfEditorWorkspace() {
   }, []);
 
   const bumpSelection = useCallback(() => setSelTick((t) => t + 1), []);
+
+  const tryOpenNativeTextEdit = useCallback(
+    async (
+      c: FabricCanvasInstance,
+      hit: PdfTextHit,
+      style: { textColor: string; fontFamily: string },
+    ): Promise<boolean> => {
+      const existing = c
+        .getObjects()
+        .find((o) => (o as { pdfHitIndex?: number }).pdfHitIndex === hit.hitIndex);
+      if (existing) {
+        c.setActiveObject(existing);
+        c.requestRenderAll();
+        bumpSelection();
+        return true;
+      }
+
+      const fabric = await import("fabric");
+      const pad = 4;
+      const maskH = Math.max(hit.height + pad * 2, hit.fontSizePx * 1.22 + pad * 2);
+      const mask = new fabric.Rect({
+        left: hit.left - pad,
+        top: hit.top - pad,
+        width: hit.width + pad * 2,
+        height: maskH,
+        fill: "#ffffff",
+        strokeWidth: 0,
+        selectable: false,
+        evented: false,
+        objectCaching: false,
+      });
+      mask.set({ pdfMaskForHit: hit.hitIndex });
+
+      const raw = hit.str.replace(/\r/g, "").replace(/\u00ad/g, "");
+      const tb = new fabric.Textbox(raw.length > 0 ? raw : " ", {
+        left: hit.left,
+        top: hit.top,
+        width: Math.max(hit.width + 28, 56),
+        fontSize: Math.round(Math.min(96, Math.max(8, hit.fontSizePx))),
+        fill: style.textColor,
+        fontFamily: hit.fontFamily || style.fontFamily,
+        lineHeight: 1.15,
+      });
+      tb.set({ pdfHitIndex: hit.hitIndex });
+
+      c.add(mask);
+      c.sendObjectToBack(mask);
+      c.add(tb);
+      c.setActiveObject(tb);
+      c.requestRenderAll();
+      bumpSelection();
+      return true;
+    },
+    [bumpSelection],
+  );
+
+  const removeFabricObjectAndPdfPair = useCallback((c: FabricCanvasInstance, o: import("fabric").FabricObject) => {
+    const anyO = o as { pdfHitIndex?: number; pdfMaskForHit?: number };
+    const idx = anyO.pdfHitIndex ?? anyO.pdfMaskForHit;
+    c.remove(o);
+    if (idx !== undefined) {
+      const linked = c.getObjects().filter((x) => {
+        const a = x as { pdfHitIndex?: number; pdfMaskForHit?: number };
+        return a.pdfHitIndex === idx || a.pdfMaskForHit === idx;
+      });
+      linked.forEach((x) => c.remove(x));
+    }
+    c.discardActiveObject();
+    c.requestRenderAll();
+  }, []);
 
   const renderPdfPage = useCallback(
     async (origIdx: number, fabricW: number, fabricH: number) => {
@@ -293,10 +383,8 @@ export function PdfEditorWorkspace() {
       }
 
       const page = await pdf.getPage(origIdx + 1);
-      const rot = pageRotations[String(origIdx)] ?? pageRotations[origIdx] ?? 0;
-      const baseVp = page.getViewport({ scale: 1, rotation: rot });
-      const scale = Math.min(fabricW / baseVp.width, fabricH / baseVp.height, 2.5);
-      const vp = page.getViewport({ scale, rotation: rot });
+      const rot = Number(pageRotations[String(origIdx)] ?? pageRotations[origIdx] ?? 0);
+      const vp = getEditorPageViewport(page, rot, fabricW, fabricH);
       pdfCanvas.width = Math.floor(vp.width);
       pdfCanvas.height = Math.floor(vp.height);
       const ctx = pdfCanvas.getContext("2d");
@@ -336,6 +424,19 @@ export function PdfEditorWorkspace() {
       const maxH = 900;
       await renderPdfPage(orig, maxW, maxH);
       if (cancelled) return;
+
+      const pdf = pdfDocRef.current;
+      if (pdf) {
+        const page = await pdf.getPage(orig + 1);
+        const rot = Number(pageRotations[String(orig)] ?? pageRotations[orig] ?? 0);
+        const vp = getEditorPageViewport(page, rot, maxW, maxH);
+        try {
+          const hits = await extractPdfTextHits(page, vp);
+          if (!cancelled) nativeTextHitsRef.current[orig] = hits;
+        } catch {
+          if (!cancelled) nativeTextHitsRef.current[orig] = [];
+        }
+      }
 
       const pdfCanvas = pdfCanvasRef.current;
       if (!pdfCanvas || !fabricCanvasElRef.current) return;
@@ -379,12 +480,12 @@ export function PdfEditorWorkspace() {
       canvas.clear();
       canvas.backgroundColor = "transparent";
       try {
-        await canvas.loadFromJSON(json);
+        await canvas.loadFromJSON(json, reviveFabricPdfMeta);
       } catch {
-        await canvas.loadFromJSON({ objects: [] });
+        await canvas.loadFromJSON({ objects: [] }, reviveFabricPdfMeta);
       }
       canvas.renderAll();
-      undoByPage.current[orig] = [JSON.stringify(canvas.toJSON())];
+      undoByPage.current[orig] = [fabricSnapshot(canvas)];
       redoByPage.current[orig] = [];
       requestAnimationFrame(() => {
         fabricLoadingRef.current = false;
@@ -399,6 +500,7 @@ export function PdfEditorWorkspace() {
     activeIdx,
     pageOrder,
     layoutWidth,
+    pageRotations,
     persistCurrentFabric,
     pushUndo,
     renderPdfPage,
@@ -413,7 +515,8 @@ export function PdfEditorWorkspace() {
     void (async () => {
       const fabric = await import("fabric");
       c.isDrawingMode = false;
-      c.selection = tool === "select" || tool === "text";
+      // Keep selection on whenever not drawing so PDF text overlays stay movable/deletable.
+      c.selection = tool !== "draw" && tool !== "highlight";
       c.defaultCursor =
         tool === "select" ? "default" : tool === "image" ? "copy" : "crosshair";
 
@@ -435,12 +538,11 @@ export function PdfEditorWorkspace() {
     })();
   }, [tool, strokeColor, brushWidth, canEditCanvas, activeIdx]);
 
-  /** Canvas click → text / shapes */
+  /** Canvas click → native PDF text, new text, or shapes */
   useEffect(() => {
     const c = fabricRef.current;
     if (!c || !canEditCanvas) return;
-    if (tool === "draw" || tool === "highlight" || tool === "select" || tool === "image")
-      return;
+    if (tool === "draw" || tool === "highlight") return;
 
     const onDown = (...args: unknown[]) => {
       const opt = args[0] as { e?: Event; target?: unknown };
@@ -451,6 +553,18 @@ export function PdfEditorWorkspace() {
       void (async () => {
         const fabric = await import("fabric");
         const p = c.getScenePoint(e);
+        const orig = prevOrigRef.current;
+
+        // Click PDF text layer: works in select/text/shapes (not while drawing or placing image).
+        if (orig !== null) {
+          const hit = pickPdfTextHit(p.x, p.y, nativeTextHitsRef.current[orig]);
+          if (hit) {
+            await tryOpenNativeTextEdit(c, hit, { textColor, fontFamily });
+            return;
+          }
+        }
+
+        if (tool === "select") return;
 
         if (tool === "text") {
           const tb = new fabric.Textbox("Text", {
@@ -541,6 +655,7 @@ export function PdfEditorWorkspace() {
     strokeColor,
     fillColor,
     activeIdx,
+    tryOpenNativeTextEdit,
   ]);
 
   useEffect(() => {
@@ -553,14 +668,12 @@ export function PdfEditorWorkspace() {
       if (!c) return;
       const o = c.getActiveObject();
       if (o) {
-        c.remove(o);
-        c.discardActiveObject();
-        c.requestRenderAll();
+        removeFabricObjectAndPdfPair(c, o);
       }
     };
     window.addEventListener("keydown", h);
     return () => window.removeEventListener("keydown", h);
-  }, []);
+  }, [removeFabricObjectAndPdfPair]);
 
   const onPickFile = useCallback(async (f: File | null) => {
     setLoadErr("");
@@ -569,6 +682,7 @@ export function PdfEditorWorkspace() {
     pdfDocRef.current = null;
     setPdfDocUi(null);
     fabricJsonByPage.current = {};
+    nativeTextHitsRef.current = {};
     dimsByPage.current = {};
     undoByPage.current = {};
     redoByPage.current = {};
@@ -703,7 +817,7 @@ export function PdfEditorWorkspace() {
     const prev = u[u.length - 1]!;
     (redoByPage.current[orig] ??= []).push(cur);
     fabricLoadingRef.current = true;
-    void c.loadFromJSON(JSON.parse(prev) as object).then(() => {
+    void c.loadFromJSON(JSON.parse(prev) as object, reviveFabricPdfMeta).then(() => {
       c.renderAll();
       fabricLoadingRef.current = false;
       bumpSelection();
@@ -719,7 +833,7 @@ export function PdfEditorWorkspace() {
     const snap = r.pop()!;
     (undoByPage.current[orig] ??= []).push(snap);
     fabricLoadingRef.current = true;
-    void c.loadFromJSON(JSON.parse(snap) as object).then(() => {
+    void c.loadFromJSON(JSON.parse(snap) as object, reviveFabricPdfMeta).then(() => {
       c.renderAll();
       fabricLoadingRef.current = false;
       bumpSelection();
@@ -731,11 +845,9 @@ export function PdfEditorWorkspace() {
     if (!c) return;
     const o = c.getActiveObject();
     if (!o) return;
-    c.remove(o);
-    c.discardActiveObject();
-    c.requestRenderAll();
+    removeFabricObjectAndPdfPair(c, o);
     bumpSelection();
-  }, [bumpSelection]);
+  }, [bumpSelection, removeFabricObjectAndPdfPair]);
 
   const buildPayloadV2 = useCallback(async (): Promise<PdfEditorPayloadV2> => {
     persistCurrentFabric();
@@ -879,7 +991,7 @@ export function PdfEditorWorkspace() {
 
         <div className="flex flex-wrap items-center gap-1">
           <ToolToggle
-            label="Select"
+            label="Select — move, resize, or delete overlays (PDF text is clickable in other tools too)"
             active={tool === "select"}
             onClick={() => setTool("select")}
             disabled={!canEditCanvas}
@@ -887,7 +999,7 @@ export function PdfEditorWorkspace() {
             <LuMousePointer2 className="h-4 w-4" />
           </ToolToggle>
           <ToolToggle
-            label="Text"
+            label="Text — click empty canvas for new text; PDF text opens an editor from most tools"
             active={tool === "text"}
             onClick={() => setTool("text")}
             disabled={!canEditCanvas}
@@ -997,9 +1109,14 @@ export function PdfEditorWorkspace() {
         </div>
       </div>
 
-      <p className="border-b border-input-border/40 px-3 py-1.5 text-[11px] text-secondary-text/75 md:text-xs">
-        Overlay editing: click the canvas to place text and shapes. PDF text is not extracted for editing—add
-        new layers on top. Export flattens your annotations onto each page.
+      <p className="border-b border-input-border/40 px-3 py-1.5 text-[11px] leading-relaxed text-secondary-text/75 md:text-xs">
+        Click <span className="font-medium text-secondary-text/90">any existing PDF text</span> (except while using Draw
+        or Highlight) to edit or erase it—a white patch hides the original pixels underneath.{" "}
+        <span className="font-medium text-secondary-text/90">Double-click</span> the box to type; when it is selected
+        (not typing), press{" "}
+        <kbd className="rounded border border-input-border/80 bg-surface px-1 font-mono text-[10px]">Delete</kbd> or{" "}
+        <kbd className="rounded border border-input-border/80 bg-surface px-1 font-mono text-[10px]">Backspace</kbd> to
+        remove the overlay. Scanned PDFs without a text layer cannot be clicked this way.
       </p>
 
       <div className="flex min-h-0 min-w-0 flex-1 flex-col lg:flex-row">
@@ -1126,10 +1243,17 @@ export function PdfEditorWorkspace() {
 
             {numPages > 0 && pdfDocUi ? (
               <div
-                className="mx-auto flex w-full max-w-[min(100%,920px)] flex-col gap-8"
-                style={{
-                  zoom: zoom,
-                }}
+                className="mx-auto flex w-full max-w-[min(100%,920px)] flex-col gap-8 origin-top"
+                style={
+                  typeof CSS !== "undefined" &&
+                  typeof CSS.supports === "function" &&
+                  CSS.supports("zoom", "1")
+                    ? ({ zoom } as CSSProperties)
+                    : {
+                        transform: `scale(${zoom})`,
+                        transformOrigin: "top center",
+                      }
+                }
               >
                 {pageOrder.map((orig, listIdx) => (
                   <div key={`${orig}-${listIdx}`} id={`editor-page-${listIdx}`} className="scroll-mt-4">

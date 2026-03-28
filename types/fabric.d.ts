@@ -93,8 +93,13 @@ declare module "fabric" {
     setDimensions(dim: { width: number; height: number }): void;
     dispose(): void;
     renderAll(): void;
-    toJSON(): object;
-    loadFromJSON(json: object | string): Promise<this>;
+    toJSON(propertiesToInclude?: string[]): object;
+    loadFromJSON(
+      json: object | string,
+      reviver?: (serialized: Record<string, unknown>, obj: FabricObject) => void,
+    ): Promise<this>;
+    getObjects(): FabricObject[];
+    sendObjectToBack(object: FabricObject): void;
     toDataURL(options: { format?: string; multiplier: number }): string;
   }
 }

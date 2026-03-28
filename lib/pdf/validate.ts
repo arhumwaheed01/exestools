@@ -1,13 +1,29 @@
 import { MAX_MERGE_FILE_COUNT, MAX_MERGE_TOTAL_BYTES, MAX_PDF_FILE_BYTES } from "./constants";
 
+/** Skip UTF-8 BOM and leading whitespace some tools emit before %PDF-. */
+function pdfHeaderOffset(view: Uint8Array): number {
+  let i = 0;
+  if (view.length >= 3 && view[0] === 0xef && view[1] === 0xbb && view[2] === 0xbf) {
+    i = 3;
+  }
+  while (
+    i < view.length &&
+    (view[i] === 0x09 || view[i] === 0x0a || view[i] === 0x0d || view[i] === 0x20)
+  ) {
+    i++;
+  }
+  return i;
+}
+
 export function isPdfMagic(view: Uint8Array): boolean {
-  if (view.length < 5) return false;
+  const i = pdfHeaderOffset(view);
+  if (view.length - i < 5) return false;
   return (
-    view[0] === 0x25 &&
-    view[1] === 0x50 &&
-    view[2] === 0x44 &&
-    view[3] === 0x46 &&
-    view[4] === 0x2f
+    view[i] === 0x25 &&
+    view[i + 1] === 0x50 &&
+    view[i + 2] === 0x44 &&
+    view[i + 3] === 0x46 &&
+    view[i + 4] === 0x2f
   );
 }
 

@@ -31,7 +31,11 @@ export async function fabricJsonToPngBase64(
   });
 
   try {
-    await c.loadFromJSON(parsed);
+    await c.loadFromJSON(parsed, (serialized, obj) => {
+      const o = serialized as { pdfHitIndex?: number; pdfMaskForHit?: number };
+      if (typeof o.pdfHitIndex === "number") obj.set("pdfHitIndex", o.pdfHitIndex);
+      if (typeof o.pdfMaskForHit === "number") obj.set("pdfMaskForHit", o.pdfMaskForHit);
+    });
   } catch {
     c.dispose();
     return null;

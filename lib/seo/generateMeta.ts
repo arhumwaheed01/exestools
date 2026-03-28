@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { defaultSEO, productionSiteUrl } from "./seoConfig";
+import { defaultSEO, productionSiteUrl, TEMP_SITEWIDE_NOINDEX } from "./seoConfig";
 
 /** Absolute URL for a site path (leading slash). Uses `defaultSEO.siteUrl` (env or production). */
 export function absoluteUrl(path: string): string {
@@ -60,9 +60,10 @@ export function buildPageMetadata(input: BuildPageMetadataInput): Metadata {
     alternates: {
       canonical: path,
     },
-    robots: input.noindex
-      ? { index: false, follow: true }
-      : { index: true, follow: true },
+    robots:
+      TEMP_SITEWIDE_NOINDEX || input.noindex
+        ? { index: false, follow: true }
+        : { index: true, follow: true },
     openGraph: {
       type: "website",
       locale: defaultSEO.locale,
