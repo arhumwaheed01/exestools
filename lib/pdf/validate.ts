@@ -18,7 +18,7 @@ function pdfHeaderOffset(view: Uint8Array): number {
   return i;
 }
 
-/** Offset of `%PDF/` (0x25 0x50 0x44 0x46 0x2f) within the first scan window, or -1. */
+/** Offset of `%PDF-` (0x25 0x50 0x44 0x46 0x2d) within the first scan window, or -1. */
 export function findPdfSignatureOffset(view: Uint8Array): number {
   const limit = Math.min(view.length - 5, PDF_SIGNATURE_SCAN_BYTES);
   for (let i = 0; i <= limit; i++) {
@@ -27,7 +27,7 @@ export function findPdfSignatureOffset(view: Uint8Array): number {
       view[i + 1] === 0x50 &&
       view[i + 2] === 0x44 &&
       view[i + 3] === 0x46 &&
-      view[i + 4] === 0x2f
+      (view[i + 4] === 0x2d || view[i + 4] === 0x2f)
     ) {
       return i;
     }
@@ -43,7 +43,7 @@ export function isPdfMagic(view: Uint8Array): boolean {
       view[i + 1] === 0x50 &&
       view[i + 2] === 0x44 &&
       view[i + 3] === 0x46 &&
-      view[i + 4] === 0x2f;
+      (view[i + 4] === 0x2d || view[i + 4] === 0x2f);
     if (atHeader) return true;
   }
   return findPdfSignatureOffset(view) >= 0;
