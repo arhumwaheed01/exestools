@@ -3,12 +3,6 @@
  * Set NEXT_PUBLIC_SITE_URL in production (e.g. https://www.exestools.com).
  */
 
-/**
- * When true, every HTML page emits `noindex` (via Next.js metadata + merged page meta).
- * TEMPORARY — set to `false` before launch / when you want indexing again.
- */
-export const TEMP_SITEWIDE_NOINDEX = true;
-
 function normalizeSiteUrl(url: string): string {
   return url.replace(/\/$/, "");
 }

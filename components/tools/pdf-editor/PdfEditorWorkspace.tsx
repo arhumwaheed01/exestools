@@ -21,8 +21,10 @@ import {
   LuPencil,
   LuPlus,
   LuRedo2,
+  LuReplace,
   LuRotateCwSquare,
   LuSquare,
+  LuSquarePen,
   LuTrash2,
   LuType,
   LuUnderline,
@@ -56,6 +58,9 @@ const LAYOUT_MAX_W = 880;
 type PdfRenderTask = ReturnType<import("pdfjs-dist").PDFPageProxy["render"]>;
 type EditorTool =
   | "select"
+  /** Click PDF/OCR text runs to edit in place (no new text on empty canvas). */
+  | "editPdfText"
+  /** Place a new text box on empty canvas; PDF text clicks still open inline edit. */
   | "text"
   | "draw"
   | "highlight"
@@ -107,6 +112,7 @@ function isPdfHitClaimedByTextbox(c: FabricCanvasInstance, hitIndex: number): bo
 
 function baseCursorForTool(t: EditorTool): string {
   if (t === "select") return "default";
+  if (t === "editPdfText") return "text";
   if (t === "image") return "copy";
   return "crosshair";
 }
@@ -269,11 +275,12 @@ export function PdfEditorWorkspace() {
   const mainPdfRenderTaskRef = useRef<PdfRenderTask | null>(null);
   const centerColRef = useRef<HTMLDivElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
+  const replaceImageInputRef = useRef<HTMLInputElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   const [layoutWidth, setLayoutWidth] = useState(720);
   const [zoom, setZoom] = useState(1);
-  const [tool, setTool] = useState<EditorTool>("select");
+  const [tool, setTool] = useState<EditorTool>("editPdfText");
   const toolRef = useRef<EditorTool>(tool);
   toolRef.current = tool;
   const [strokeColor, setStrokeColor] = useState("#111827");
@@ -788,7 +795,13 @@ export function PdfEditorWorkspace() {
       // Keep selection on whenever not drawing so PDF text overlays stay movable/deletable.
       c.selection = tool !== "draw" && tool !== "highlight";
       c.defaultCursor =
-        tool === "select" ? "default" : tool === "image" ? "copy" : "crosshair";
+        tool === "select"
+          ? "default"
+          : tool === "editPdfText"
+            ? "text"
+            : tool === "image"
+              ? "copy"
+              : "crosshair";
 
       if (tool === "draw") {
         const brush = new fabric.PencilBrush(c);
@@ -838,7 +851,7 @@ export function PdfEditorWorkspace() {
           }
         }
 
-        if (tool === "select") return;
+        if (tool === "select" || tool === "editPdfText") return;
 
         if (tool === "text") {
           const tb = new fabric.Textbox("Text", {
@@ -1177,8 +1190,7 @@ export function PdfEditorWorkspace() {
       setActiveIdx(0);
       setPageRotations({});
       setThumbRev((x) => x + 1);
-      // Default to Edit text so the flow matches Acrobat-style “click text to type”.
-      setTool("text");
+      setTool("editPdfText");
     } catch {
       setLoadErr("Could not read this PDF.");
     } finally {
@@ -1246,6 +1258,7 @@ export function PdfEditorWorkspace() {
           c.add(img);
           c.setActiveObject(img);
           c.requestRenderAll();
+          bumpSelection();
         } catch {
           setLoadErr("Could not load image.");
         } finally {
@@ -1254,7 +1267,47 @@ export function PdfEditorWorkspace() {
       })();
       setTool("select");
     },
-    [],
+    [bumpSelection],
+  );
+
+  const onReplaceImagePick = useCallback(
+    (list: FileList | null) => {
+      const f = list?.[0];
+      if (!f || !f.type.startsWith("image/")) return;
+      const c = fabricRef.current;
+      if (!c) return;
+      const o = c.getActiveObject();
+      if (!o || String(o.type ?? "").toLowerCase() !== "image") return;
+      const url = URL.createObjectURL(f);
+      void (async () => {
+        const { FabricImage } = await import("fabric");
+        try {
+          const w = o.getScaledWidth();
+          const img = await FabricImage.fromURL(url, { crossOrigin: "anonymous" });
+          img.scaleToWidth(Math.max(24, w));
+          img.set({
+            left: o.left,
+            top: o.top,
+            angle: o.angle,
+            originX: o.originX,
+            originY: o.originY,
+            flipX: o.flipX,
+            flipY: o.flipY,
+            opacity: o.opacity,
+          });
+          c.remove(o);
+          c.add(img);
+          c.setActiveObject(img);
+          c.requestRenderAll();
+          bumpSelection();
+        } catch {
+          setLoadErr("Could not replace image.");
+        } finally {
+          URL.revokeObjectURL(url);
+        }
+      })();
+    },
+    [bumpSelection],
   );
 
   const rotatePage = useCallback(() => {
@@ -1308,6 +1361,41 @@ export function PdfEditorWorkspace() {
       bumpSelection();
     });
   }, [bumpSelection]);
+
+  /** Editor shortcuts (skip when typing in inputs / Fabric’s hidden textarea). */
+  useEffect(() => {
+    const inTextField = (el: EventTarget | null) => {
+      if (!(el instanceof HTMLElement)) return false;
+      const tag = el.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return true;
+      if (el.isContentEditable) return true;
+      return false;
+    };
+
+    const onKey = (e: KeyboardEvent) => {
+      if (inTextField(e.target)) return;
+      const mod = e.metaKey || e.ctrlKey;
+      if (mod && e.key.toLowerCase() === "z") {
+        e.preventDefault();
+        if (e.shiftKey) redo();
+        else undo();
+        return;
+      }
+      if (mod && (e.key === "y" || e.key === "Y")) {
+        e.preventDefault();
+        redo();
+        return;
+      }
+      if (mod || e.altKey || !canEditCanvas || numPages === 0) return;
+      const k = e.key.toLowerCase();
+      if (k === "e") setTool("editPdfText");
+      if (k === "t") setTool("text");
+      if (k === "v") setTool("select");
+    };
+
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [undo, redo, canEditCanvas, numPages]);
 
   const deleteSelection = useCallback(() => {
     const c = fabricRef.current;
@@ -1435,12 +1523,22 @@ export function PdfEditorWorkspace() {
     };
   }, [selTick, textFloatBar]);
 
+  const selectedIsImage = useMemo(() => {
+    const c = fabricRef.current;
+    const o = c?.getActiveObject();
+    return String(o?.type ?? "").toLowerCase() === "image";
+  }, [selTick]);
+
   const activeObj = fabricRef.current?.getActiveObject();
   void selTick;
   void activeObj;
 
   return (
-    <div className="flex min-h-[78vh] flex-col rounded-xl border border-input-border/80 bg-background shadow-inner">
+    <div
+      className="flex min-h-[78vh] flex-col rounded-xl border border-input-border/80 bg-background shadow-inner"
+      role="application"
+      aria-label="PDF document editor"
+    >
       {/* Top toolbar */}
       <div className="flex flex-col gap-2 border-b border-input-border/70 bg-surface/50 px-3 py-2 lg:flex-row lg:flex-wrap lg:items-center">
         <div className="flex flex-wrap items-center gap-1 border-b border-input-border/40 pb-2 lg:border-0 lg:pb-0">
@@ -1478,7 +1576,7 @@ export function PdfEditorWorkspace() {
 
         <div className="flex flex-wrap items-center gap-1">
           <ToolToggle
-            label="Select — move, resize, or delete overlays (PDF text is clickable in other tools too)"
+            label="Select (V) — move, resize, or delete overlays"
             active={tool === "select"}
             onClick={() => setTool("select")}
             disabled={!canEditCanvas}
@@ -1486,7 +1584,15 @@ export function PdfEditorWorkspace() {
             <LuMousePointer2 className="h-4 w-4" />
           </ToolToggle>
           <ToolToggle
-            label="Edit text — click PDF text or canvas; inline typing + floating bar"
+            label="Edit text (E) — click PDF or OCR text to edit in place; floating format bar"
+            active={tool === "editPdfText"}
+            onClick={() => setTool("editPdfText")}
+            disabled={!canEditCanvas}
+          >
+            <LuSquarePen className="h-4 w-4" />
+          </ToolToggle>
+          <ToolToggle
+            label="Add text (T) — click empty area to place a new text box"
             active={tool === "text"}
             onClick={() => setTool("text")}
             disabled={!canEditCanvas}
@@ -1553,6 +1659,20 @@ export function PdfEditorWorkspace() {
             className="sr-only"
             onChange={(e) => onImagePick(e.target.files)}
           />
+          <input
+            ref={replaceImageInputRef}
+            type="file"
+            accept="image/*"
+            className="sr-only"
+            onChange={(e) => onReplaceImagePick(e.target.files)}
+          />
+          <ToolbarBtn
+            label="Replace selected image"
+            disabled={!canEditCanvas || !selectedIsImage}
+            onClick={() => replaceImageInputRef.current?.click()}
+          >
+            <LuReplace className="h-4 w-4" />
+          </ToolbarBtn>
         </div>
 
         <div className="mx-2 hidden h-6 w-px bg-input-border lg:block" />
@@ -1598,16 +1718,20 @@ export function PdfEditorWorkspace() {
 
       <div className="border-b border-input-border/40 bg-sky-50/50 px-3 py-2 dark:bg-sky-950/25">
         <p className="text-xs font-medium text-secondary-text/90 md:text-sm">
-          Open a PDF → <span className="font-medium text-secondary-text/85">hover</span> detectable text (light blue
-          outline + I-beam) → <span className="font-medium text-secondary-text/85">click</span> to edit in place (white
-          mask + overlay + floating bar) → <span className="text-primary">Download PDF</span> flattens overlays onto the
-          page.
+          <span className="font-medium text-secondary-text/85">Edit text</span>: hover detectable lines (blue outline) →
+          click to type in place (mask + floating bar).{" "}
+          <span className="font-medium text-secondary-text/85">Add text</span>: click empty canvas for a new box.{" "}
+          <span className="font-medium text-secondary-text/85">Replace image</span>: select a placed image, then the swap
+          icon. <span className="text-primary">Download PDF</span> burns in overlays.
         </p>
         <p className="mt-1 text-[11px] leading-relaxed text-secondary-text/75 md:text-xs">
-          Text comes from the PDF text layer (pdf.js). Multiple regions stay independent. No text layer? Use the{" "}
-          <span className="font-medium text-secondary-text/85">Text</span> tool or{" "}
-          <span className="font-medium text-secondary-text/85">OCR</span> (English). Draw / Highlight pause hover
-          click-to-edit until you switch tools.
+          Shortcuts: <kbd className="rounded border border-input-border/80 bg-background px-1">E</kbd> edit text,{" "}
+          <kbd className="rounded border border-input-border/80 bg-background px-1">T</kbd> add text,{" "}
+          <kbd className="rounded border border-input-border/80 bg-background px-1">V</kbd> select,{" "}
+          <kbd className="rounded border border-input-border/80 bg-background px-1">Ctrl+Z</kbd> /{" "}
+          <kbd className="rounded border border-input-border/80 bg-background px-1">Ctrl+Y</kbd> undo/redo. Scanned
+          pages: run <span className="font-medium text-secondary-text/85">OCR</span> (English), then use Edit text.
+          Draw / Highlight turn off PDF text hover until you switch back.
         </p>
       </div>
 

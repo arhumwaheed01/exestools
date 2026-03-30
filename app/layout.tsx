@@ -3,7 +3,7 @@ import { Inter, Nunito } from "next/font/google";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { defaultSEO, TEMP_SITEWIDE_NOINDEX } from "@/lib/seo/seoConfig";
+import { defaultSEO } from "@/lib/seo/seoConfig";
 import "./globals.css";
 
 const nunito = Nunito({
@@ -40,9 +40,6 @@ export const metadata: Metadata = {
       ? { site: `@${defaultSEO.twitterSite.replace(/^@/, "")}` }
       : {}),
   },
-  ...(TEMP_SITEWIDE_NOINDEX
-    ? { robots: { index: false, follow: true } }
-    : {}),
 };
 
 export default function RootLayout({
