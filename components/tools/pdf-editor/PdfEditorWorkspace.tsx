@@ -71,6 +71,22 @@ type EditorTool =
 
 type FabricCanvasInstance = InstanceType<(typeof import("fabric"))["Canvas"]>;
 
+/**
+ * fabric@6: `Canvas#getActiveObject()` is typed as a minimal `FabricObject`; runtime instances
+ * expose geometry/layout APIs from the internal object chain. Vercel/CI uses strict `tsc`.
+ */
+type FabricLayoutObject = import("fabric").FabricObject & {
+  getScaledWidth(): number;
+  left: number;
+  top: number;
+  angle: number;
+  originX: string;
+  originY: string;
+  flipX: boolean;
+  flipY: boolean;
+  opacity: number;
+};
+
 const FABRIC_JSON_PROPS = ["pdfHitIndex", "pdfMaskForHit"] as const;
 
 /** Hover preview rect — must never be persisted in undo/export JSON. */
@@ -1282,18 +1298,19 @@ export function PdfEditorWorkspace() {
       void (async () => {
         const { FabricImage } = await import("fabric");
         try {
-          const w = o.getScaledWidth();
+          const lo = o as FabricLayoutObject;
+          const w = lo.getScaledWidth();
           const img = await FabricImage.fromURL(url, { crossOrigin: "anonymous" });
           img.scaleToWidth(Math.max(24, w));
           img.set({
-            left: o.left,
-            top: o.top,
-            angle: o.angle,
-            originX: o.originX,
-            originY: o.originY,
-            flipX: o.flipX,
-            flipY: o.flipY,
-            opacity: o.opacity,
+            left: lo.left,
+            top: lo.top,
+            angle: lo.angle,
+            originX: lo.originX,
+            originY: lo.originY,
+            flipX: lo.flipX,
+            flipY: lo.flipY,
+            opacity: lo.opacity,
           });
           c.remove(o);
           c.add(img);
