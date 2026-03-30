@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { Inter, Nunito } from "next/font/google";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { Footer } from "@/components/Footer";
@@ -58,12 +57,6 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-background text-secondary-text font-sans">
         <GoogleAnalytics />
-        {/* Ahrefs Webmaster Tools (site verification + SEO insights) */}
-        <Script
-          src="https://analytics.ahrefs.com/analytics.js"
-          strategy="beforeInteractive"
-          data-key="dXt6vs/vE40l2HO8o0ckmw"
-        />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
