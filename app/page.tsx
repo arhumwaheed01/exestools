@@ -9,8 +9,7 @@ type PageProps = {
 };
 
 export async function generateMetadata(): Promise<Metadata> {
-  // Canonical always clean www — never bake noindex into the homepage HTML.
-  // Legacy ?c= noindex is applied only via middleware X-Robots-Tag when `c` is present.
+  // Canonical always points at the clean www homepage (including legacy ?c= shares).
   return {
     title: {
       absolute: "Free Spinner Wheel Online — Spin & Decide | ExesTools",

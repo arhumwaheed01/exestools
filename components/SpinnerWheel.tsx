@@ -346,12 +346,22 @@ export function SpinnerWheel({
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:items-start">
         <div className="rounded-3xl border border-border bg-surface p-4 sm:p-6">
-          <div className="relative mx-auto aspect-square w-full max-w-[420px]">
-            <div className={`absolute inset-0 transition-opacity ${ready ? "pointer-events-none opacity-0" : "opacity-100"}`}>
-              <StaticWheelPreview choices={choices.length ? choices : defaults} />
+          <div
+            className="relative mx-auto w-full max-w-[420px]"
+            style={{ aspectRatio: "1 / 1" }}
+          >
+            <div
+              className={`absolute inset-0 transition-opacity ${ready ? "pointer-events-none opacity-0" : "opacity-100"}`}
+            >
+              <StaticWheelPreview
+                choices={choices.length ? choices : defaults}
+                className="!max-w-none h-full"
+              />
             </div>
-            <div className={`absolute inset-0 transition-opacity ${ready ? "opacity-100" : "opacity-0"}`}>
-              <WheelCanvas choices={choices} rotation={rotation} className="!max-w-none" />
+            <div
+              className={`absolute inset-0 transition-opacity ${ready ? "opacity-100" : "opacity-0"}`}
+            >
+              <WheelCanvas choices={choices} rotation={rotation} className="!max-w-none h-full" />
             </div>
           </div>
           <SpinControls

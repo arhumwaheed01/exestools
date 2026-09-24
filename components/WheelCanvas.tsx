@@ -105,7 +105,11 @@ export function WheelCanvas({ choices, rotation, className = "" }: Props) {
   }, [choices, rotation]);
 
   return (
-    <div ref={wrapRef} className={`relative mx-auto w-full max-w-[420px] ${className}`}>
+    <div
+      ref={wrapRef}
+      className={`relative mx-auto aspect-square h-full w-full max-w-[420px] ${className}`}
+      style={{ aspectRatio: "1 / 1" }}
+    >
       <div
         className="pointer-events-none absolute left-1/2 top-0 z-10 -translate-x-1/2"
         aria-hidden
@@ -119,7 +123,9 @@ export function WheelCanvas({ choices, rotation, className = "" }: Props) {
       </div>
       <canvas
         ref={canvasRef}
-        className="relative z-[1] h-auto w-full drop-shadow-xl"
+        width={420}
+        height={420}
+        className="relative z-[1] block h-full w-full drop-shadow-xl"
         role="img"
         aria-label={`Spinner wheel with ${choices.length} choices`}
       />

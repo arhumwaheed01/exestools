@@ -6,10 +6,6 @@ export const metadata: Metadata = {
     absolute: "Page not found | ExesTools",
   },
   description: "This page does not exist on ExesTools. Return to the Spinner Wheel or browse our tools.",
-  robots: {
-    index: false,
-    follow: false,
-  },
 };
 
 export default function NotFound() {
