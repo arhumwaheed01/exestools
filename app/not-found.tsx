@@ -18,20 +18,38 @@ export default function NotFound() {
       <p className="text-sm font-semibold uppercase tracking-wider text-accent">404</p>
       <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-foreground">Page not found</h1>
       <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
-        That URL is not on ExesTools. The Spinner Wheel is still ready on the homepage.
+        That URL isn’t on ExesTools. Try the free Spinner Wheel, or jump to a specialized tool below.
       </p>
       <div className="mt-8 flex flex-wrap justify-center gap-3">
         <Link
           href="/"
           className="rounded-xl bg-accent-strong px-5 py-2.5 text-sm font-bold text-slate-950 hover:bg-accent outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
-          Open Spinner Wheel
+          Spinner Wheel home
         </Link>
         <Link
-          href="/about"
-          className="rounded-xl border border-border bg-surface px-5 py-2.5 text-sm font-bold text-foreground hover:bg-surface-2 outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          href="/classroom-spinner"
+          className="rounded-xl border border-border bg-surface px-5 py-2.5 text-sm font-bold text-foreground hover:bg-surface-2"
         >
-          About
+          Classroom
+        </Link>
+        <Link
+          href="/yes-no-wheel"
+          className="rounded-xl border border-border bg-surface px-5 py-2.5 text-sm font-bold text-foreground hover:bg-surface-2"
+        >
+          Yes / No
+        </Link>
+        <Link
+          href="/random-name-picker"
+          className="rounded-xl border border-border bg-surface px-5 py-2.5 text-sm font-bold text-foreground hover:bg-surface-2"
+        >
+          Name picker
+        </Link>
+        <Link
+          href="/prize-wheel"
+          className="rounded-xl border border-border bg-surface px-5 py-2.5 text-sm font-bold text-foreground hover:bg-surface-2"
+        >
+          Prize wheel
         </Link>
       </div>
     </div>

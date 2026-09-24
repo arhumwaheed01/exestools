@@ -4,8 +4,20 @@ import { absoluteUrl, siteConfig } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "About Us",
-  description: `About ${siteConfig.name} — free Spinner Wheel by Arhum Waheed. Privacy-friendly random name picker and decision tools.`,
+  description: `About ${siteConfig.name} — free Spinner Wheel by Arhum Waheed. Privacy-friendly random selection tools for names, classrooms, and decisions.`,
   alternates: { canonical: absoluteUrl("/about") },
+  openGraph: {
+    title: `About ${siteConfig.name}`,
+    description: `About ${siteConfig.name} — free Spinner Wheel by Arhum Waheed. Privacy-friendly random selection tools for names, classrooms, and decisions.`,
+    url: absoluteUrl("/about"),
+    images: [{ url: siteConfig.ogImagePath, width: 1200, height: 630, alt: "ExesTools" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `About ${siteConfig.name}`,
+    description: `About ${siteConfig.name} — free Spinner Wheel by Arhum Waheed. Privacy-friendly random selection tools for names, classrooms, and decisions.`,
+    images: [siteConfig.ogImagePath],
+  },
 };
 
 export default function AboutPage() {
@@ -40,6 +52,19 @@ export default function AboutPage() {
             Contact page
           </Link>
         </p>
+        <section>
+          <h2 className="text-lg font-bold text-foreground">For teachers</h2>
+          <p className="mt-2">
+            Use the{" "}
+            <Link href="/classroom-spinner" className="font-semibold text-accent hover:underline">
+              Classroom spinner
+            </Link>{" "}
+            to pick students fairly with no account — your class list stays in this browser, you can
+            share a link when policy allows, and Remove winner helps everyone get a turn before
+            repeats. Fullscreen/projector mode and CSV import are on the roadmap; this page only
+            claims features that are live today.
+          </p>
+        </section>
         <p>
           Try the{" "}
           <Link href="/" className="font-semibold text-accent hover:underline">

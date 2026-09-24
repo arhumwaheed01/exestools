@@ -1,74 +1,87 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { GuideSection, UseCaseToolPage } from "@/components/UseCaseToolPage";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 
+type PageProps = {
+  searchParams: Promise<{ c?: string; preset?: string }>;
+};
+
 export const metadata: Metadata = {
-  title: "Classroom Spinner Wheel — Random Student Picker",
+  title: "Classroom Spinner Wheel for Teachers",
   description:
-    "Free classroom spinner for fair turn-taking and random student selection. Paste a roster, spin, and use remove-winner for no-repeat fairness. No signup.",
+    "Free classroom spinner for fair turn-taking. Paste your class list, spin, and optionally skip repeats so every student gets a turn. No signup on ExesTools.",
   alternates: { canonical: absoluteUrl("/classroom-spinner") },
   openGraph: {
-    title: "Classroom Spinner Wheel | ExesTools",
+    title: "Classroom Spinner Wheel for Teachers | ExesTools",
     description:
-      "A free spinner teachers can use for fair student selection and classroom games.",
+      "Free classroom spinner for fair turn-taking. Paste your class list, spin, and optionally skip repeats so every student gets a turn. No signup on ExesTools.",
     url: absoluteUrl("/classroom-spinner"),
     images: [{ url: siteConfig.ogImagePath, width: 1200, height: 630, alt: "ExesTools Spinner Wheel" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Classroom Spinner Wheel | ExesTools",
+    title: "Classroom Spinner Wheel for Teachers | ExesTools",
     description:
-      "A free spinner teachers can use for fair student selection and classroom games.",
+      "Free classroom spinner for fair turn-taking. Paste your class list, spin, and optionally skip repeats so every student gets a turn. No signup on ExesTools.",
     images: [siteConfig.ogImagePath],
   },
 };
 
 const FAQS = [
   {
-    q: "How do teachers keep selection fair?",
-    a: "Use Remove & continue after each spin so each student is selected once before anyone is drawn twice.",
+    q: "Free for teachers?",
+    a: "Yes.",
   },
   {
-    q: "Can I project this for the class?",
-    a: "Yes. Open this page on the classroom display or laptop and use the browser’s fullscreen mode. The SPIN button stays large and touch-friendly.",
+    q: "Call on everyone once?",
+    a: "Remove-winner on; re-paste when the list empties.",
   },
   {
-    q: "Is student data uploaded?",
-    a: "Lists stay in the browser by default. Avoid putting sensitive student data in shareable links unless your school policy allows it.",
+    q: "Projector?",
+    a: "Present the browser. Dedicated fullscreen is on the roadmap—not claimed as live yet.",
   },
   {
-    q: "Can I reuse the same class list tomorrow?",
-    a: "Choices are saved in local storage on that device so you can return to the same list later.",
+    q: "First vs last names?",
+    a: "First names + initials usually enough.",
+  },
+  {
+    q: "Student picker vs name picker?",
+    a: "This page = class workflows; generic lists → Generic name picker.",
+  },
+  {
+    q: "Uploaded to a server?",
+    a: "Not when only spinning; device storage unless you share a URL.",
   },
 ];
 
-export default function ClassroomSpinnerPage() {
+export default async function ClassroomSpinnerPage({ searchParams }: PageProps) {
+  const sp = await searchParams;
   return (
     <UseCaseToolPage
-      path="/classroom-spinner"
+      toolId="classroom-spinner"
+      breadcrumbLabel="Classroom spinner"
       title="Classroom spinner wheel"
-      intro="Fair student selection for questions, presentations, and warm-ups — paste your roster and spin so the class can see the result."
-      presetId="names"
+      intro="Opens with a sample class roster. Paste your students (one per line), project the page, hit SPIN. Remove-winner defaults on for fair turn-taking. No account."
       faqs={FAQS}
+      initialEncoded={typeof sp.c === "string" ? sp.c : null}
+      initialPresetQuery={typeof sp.preset === "string" ? sp.preset : null}
     >
-      <GuideSection title="How teachers use this">
-        <p>
-          Paste your class list (or a volunteer subset). Spin to select the next speaker. Use Remove
-          &amp; continue so participation spreads across the room before anyone is picked twice.
-        </p>
+      <GuideSection title="How to use">
+        <ol className="list-decimal space-y-2 pl-5">
+          <li>Edit the sample roster or choose Classroom jobs, Brain break activities, Reading groups.</li>
+          <li>Press SPIN.</li>
+          <li>Keep remove-winner on / use Remove &amp; continue for one-pass fairness.</li>
+          <li>Avoid Copy share link for full rosters unless policy allows. Fresh wheel restores classroom default.</li>
+        </ol>
       </GuideSection>
-      <GuideSection title="Classroom activity ideas">
-        <ul className="list-disc space-y-2 pl-5">
-          <li>Who answers the next review question</li>
-          <li>Presentation or share-out order</li>
-          <li>Random partners or discussion leads</li>
-          <li>Low-stakes privilege or prize draws for completed work</li>
-        </ul>
-      </GuideSection>
-      <GuideSection title="Privacy note for schools">
+      <GuideSection title="Privacy for schools">
         <p>
-          By default, names stay on the device. Shared links encode the list in the URL — use them
-          carefully with student data and follow your school’s privacy rules.
+          Share fragments expose names—follow school policy. See our{" "}
+          <Link href="/privacy-policy" className="font-semibold text-accent hover:underline">
+            Privacy Policy
+          </Link>
+          .
         </p>
       </GuideSection>
     </UseCaseToolPage>

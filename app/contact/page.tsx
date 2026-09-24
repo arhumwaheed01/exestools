@@ -8,8 +8,15 @@ export const metadata: Metadata = {
   alternates: { canonical: absoluteUrl("/contact") },
   openGraph: {
     title: `Contact | ${siteConfig.name}`,
+    description: `Contact ${siteConfig.name} about the Spinner Wheel. Email ${siteConfig.contactEmail}.`,
     url: absoluteUrl("/contact"),
-    images: [{ url: siteConfig.ogImagePath, width: 1200, height: 630 }],
+    images: [{ url: siteConfig.ogImagePath, width: 1200, height: 630, alt: "ExesTools" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `Contact | ${siteConfig.name}`,
+    description: `Contact ${siteConfig.name} about the Spinner Wheel. Email ${siteConfig.contactEmail}.`,
+    images: [siteConfig.ogImagePath],
   },
 };
 

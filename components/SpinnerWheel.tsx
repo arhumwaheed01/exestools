@@ -1,23 +1,31 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import { Link2, Share2 } from "lucide-react";
 import { useReducedMotion } from "framer-motion";
-import { AdPlaceholder } from "@/components/AdPlaceholder";
+import { StaticWheelPreview } from "@/components/StaticWheelPreview";
 import { ChoicesEditor } from "@/components/ChoicesEditor";
 import { PresetSelector } from "@/components/PresetSelector";
 import { SpinControls } from "@/components/SpinControls";
 import { WheelCanvas } from "@/components/WheelCanvas";
 import { WinnerModal } from "@/components/WinnerModal";
-import { DEFAULT_CHOICES, getPresetById, type WheelPreset } from "@/lib/presets";
+import { encodeShareHash, readShareFromLocation } from "@/lib/share-codec";
+import {
+  defaultChoicesForTool,
+  getPresetById,
+  presetsForTool,
+  type WheelPreset,
+} from "@/lib/presets";
 import {
   decodeChoicesParam,
-  encodeChoicesParam,
   loadPrefs,
   loadSession,
   savePrefs,
   saveSession,
-} from "@/lib/storage";
+} from "@/lib/spinner-storage";
+import { track } from "@/lib/track";
+import { cleanPathFor, defaultAutoRemoveWinner, type ToolId } from "@/lib/tools";
 import {
   choicesToText,
   easeOutCubic,
@@ -28,27 +36,23 @@ import {
 } from "@/lib/wheel";
 
 type Props = {
-  /** Optional initial choices from URL (?c=) — applied once on mount. */
+  toolId: ToolId;
+  /** Legacy ?c= (read-only). */
   initialEncoded?: string | null;
-  /** Load this preset when no share URL is present (use-case landings). */
-  presetId?: string;
-  /** When false, reserve no ad chrome (AdSense not live yet). */
-  showAdSlots?: boolean;
+  /** Optional ?preset= allowlisted id. */
+  initialPresetQuery?: string | null;
 };
 
-function defaultTextForPreset(presetId?: string): string {
-  const preset = presetId ? getPresetById(presetId) : undefined;
-  if (preset) return choicesToText(preset.choices);
-  return choicesToText([...DEFAULT_CHOICES]);
-}
-
 export function SpinnerWheel({
+  toolId,
   initialEncoded = null,
-  presetId,
-  showAdSlots = false,
+  initialPresetQuery = null,
 }: Props) {
   const reduceMotion = useReducedMotion();
-  const [text, setText] = useState(() => defaultTextForPreset(presetId));
+  const defaults = useMemo(() => defaultChoicesForTool(toolId), [toolId]);
+  const toolPresets = useMemo(() => presetsForTool(toolId), [toolId]);
+
+  const [text, setText] = useState(() => choicesToText(defaults));
   const [rotation, setRotation] = useState(0);
   const [spinning, setSpinning] = useState(false);
   const [winner, setWinner] = useState<string | null>(null);
@@ -56,13 +60,26 @@ export function SpinnerWheel({
   const [soundEnabled, setSoundEnabled] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const [toast, setToast] = useState("");
+  const [sharedMode, setSharedMode] = useState(false);
+  const [autoRemove, setAutoRemove] = useState(() => defaultAutoRemoveWinner(toolId));
+  const [ready, setReady] = useState(false);
 
   const spinningRef = useRef(false);
   const rotationRef = useRef(0);
   const rafRef = useRef(0);
   const audioCtxRef = useRef<AudioContext | null>(null);
+  const allowSaveRef = useRef(true);
 
   const choices = useMemo(() => parseChoicesText(text), [text]);
+  const rawLineCount = useMemo(
+    () =>
+      text
+        .split(/\r?\n/)
+        .map((l) => l.trim())
+        .filter(Boolean).length,
+    [text],
+  );
+  const duplicatesSkipped = Math.max(0, rawLineCount - choices.length);
   const canSpin = choices.length >= 2 && !spinning;
 
   const status = useMemo(() => {
@@ -82,35 +99,60 @@ export function SpinnerWheel({
   useEffect(() => {
     const prefs = loadPrefs();
     setSoundEnabled(prefs.soundEnabled);
+    setAutoRemove(defaultAutoRemoveWinner(toolId));
 
-    const fromUrl = initialEncoded ? decodeChoicesParam(initialEncoded) : null;
-    if (fromUrl && fromUrl.length >= 1) {
-      setText(choicesToText(fromUrl));
-    } else if (presetId) {
-      const preset = getPresetById(presetId);
-      if (preset) setText(choicesToText(preset.choices));
+    // Hydrate: #w= → ?preset= → legacy ?c= → localStorage → default
+    const fromHash = readShareFromLocation();
+    const fromLegacy = initialEncoded ? decodeChoicesParam(initialEncoded) : null;
+    const fromPreset =
+      initialPresetQuery && getPresetById(initialPresetQuery)
+        ? getPresetById(initialPresetQuery)!.choices
+        : null;
+    const session = loadSession(toolId);
+
+    if (fromHash && fromHash.choices.length >= 1) {
+      setText(choicesToText(fromHash.choices));
+      setSharedMode(true);
+      allowSaveRef.current = false;
+      track("share_open", { toolId, via: "hash" });
+    } else if (fromLegacy && fromLegacy.length >= 1) {
+      setText(choicesToText(fromLegacy));
+      setSharedMode(true);
+      allowSaveRef.current = false;
+      track("share_open", { toolId, via: "legacy_c" });
+    } else if (fromPreset && fromPreset.length >= 1) {
+      setText(choicesToText(fromPreset));
+      allowSaveRef.current = true;
+      track("preset_load", { toolId, preset: initialPresetQuery });
+    } else if (session?.choices?.length) {
+      setText(choicesToText(session.choices));
+      allowSaveRef.current = true;
+      track("return_visit", { toolId });
     } else {
-      const session = loadSession();
-      if (session?.choices?.length) {
-        setText(choicesToText(session.choices));
-      }
+      setText(choicesToText(defaults));
+      allowSaveRef.current = true;
     }
+
     setHydrated(true);
+    // Reveal canvas after first paint of reserved shell
+    requestAnimationFrame(() => setReady(true));
 
     return () => {
       cancelAnimationFrame(rafRef.current);
     };
-  }, [initialEncoded, presetId]);
+  }, [initialEncoded, initialPresetQuery, toolId, defaults]);
 
   useEffect(() => {
-    if (!hydrated) return;
-    saveSession(choices);
-  }, [choices, hydrated]);
+    if (!hydrated || !allowSaveRef.current) return;
+    saveSession(toolId, choices);
+  }, [choices, hydrated, toolId]);
 
   const playTick = useCallback(() => {
     if (!soundEnabled) return;
     try {
-      const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const Ctx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       if (!Ctx) return;
       const ctx = audioCtxRef.current ?? new Ctx();
       audioCtxRef.current = ctx;
@@ -143,8 +185,17 @@ export function SpinnerWheel({
       setModalOpen(Boolean(name));
       setSpinning(false);
       playTick();
+      track("spin", { toolId, count: choices.length });
+
+      if (autoRemove && name && allowSaveRef.current) {
+        const next = choices.filter((c) => c !== name);
+        setText(choicesToText(next));
+      } else if (autoRemove && name && !allowSaveRef.current) {
+        const next = choices.filter((c) => c !== name);
+        setText(choicesToText(next));
+      }
     },
-    [choices, playTick],
+    [choices, playTick, autoRemove, toolId],
   );
 
   const spin = useCallback(() => {
@@ -153,10 +204,10 @@ export function SpinnerWheel({
     setWinner(null);
     setSpinning(true);
 
-    const winner = Math.floor(Math.random() * choices.length);
+    const winnerIdx = Math.floor(Math.random() * choices.length);
     const start = rotationRef.current;
     const extra = reduceMotion ? 2 : 5 + Math.floor(Math.random() * 3);
-    const end = targetRotationForIndex(winner, choices.length, start, extra);
+    const end = targetRotationForIndex(winnerIdx, choices.length, start, extra);
     const duration = reduceMotion ? 1200 : 4200 + Math.random() * 900;
     const t0 = performance.now();
 
@@ -178,6 +229,7 @@ export function SpinnerWheel({
   const onTextChange = (raw: string) => {
     if (spinningRef.current) return;
     setText(raw);
+    track("entries_edited", { toolId });
   };
 
   const onShuffle = () => {
@@ -193,7 +245,7 @@ export function SpinnerWheel({
 
   const onRestoreDefaults = () => {
     if (spinningRef.current) return;
-    setText(defaultTextForPreset(presetId));
+    setText(choicesToText(defaults));
   };
 
   const onCopy = async () => {
@@ -209,21 +261,18 @@ export function SpinnerWheel({
     if (spinningRef.current) return;
     setText(choicesToText(preset.choices));
     setRotation(0);
+    track("preset_load", { toolId, preset: preset.id });
   };
 
   const onShare = async () => {
-    const encoded = encodeChoicesParam(choices);
-    if (!encoded) {
-      showToast("List too long to share via URL.");
-      return;
-    }
-    const path = window.location.pathname || "/";
-    const url = `${window.location.origin}${path}?c=${encoded}`;
     try {
+      const hash = encodeShareHash(choices, toolId);
+      const url = `${window.location.origin}${cleanPathFor(toolId)}${hash}`;
       await navigator.clipboard.writeText(url);
+      track("share_create", { toolId });
       showToast("Share link copied.");
     } catch {
-      showToast("Could not copy share link.");
+      showToast("List too long to share, or clipboard blocked.");
     }
   };
 
@@ -244,84 +293,152 @@ export function SpinnerWheel({
     setRotation(0);
   };
 
+  const saveSharedToDevice = () => {
+    allowSaveRef.current = true;
+    saveSession(toolId, choices);
+    setSharedMode(false);
+    showToast("Saved to this device.");
+  };
+
+  const editSharedCopy = () => {
+    allowSaveRef.current = true;
+    setSharedMode(false);
+    showToast("Editing a local copy — save as you go.");
+  };
+
   return (
-    <div className="space-y-6">
-      {showAdSlots ? <AdPlaceholder label="Header banner" sizeClassName="h-20 md:h-24" /> : null}
-
-      <div
-        className={`grid gap-6 lg:items-start ${showAdSlots ? "lg:grid-cols-[minmax(0,1fr)_240px]" : ""}`}
-      >
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)]">
-          <div className="rounded-3xl border border-border bg-surface p-4 sm:p-6">
-            <WheelCanvas choices={choices} rotation={rotation} />
-            <SpinControls
-              canSpin={canSpin}
-              spinning={spinning}
-              soundEnabled={soundEnabled}
-              status={status}
-              onSpin={spin}
-              onReset={() => {
-                if (!spinning) setRotation(0);
-              }}
-              onToggleSound={onToggleSound}
-            />
-            <div className="mt-4 flex flex-wrap justify-center gap-2">
-              <button
-                type="button"
-                onClick={() => void onShare()}
-                disabled={choices.length < 1 || spinning}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface-2 px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-border disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              >
-                <Share2 className="h-3.5 w-3.5" aria-hidden />
-                Copy share link
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setText(defaultTextForPreset(presetId));
-                  setRotation(0);
-                  setWinner(null);
-                  setModalOpen(false);
-                }}
-                disabled={spinning}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface-2 px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-border disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              >
-                <Link2 className="h-3.5 w-3.5" aria-hidden />
-                Fresh wheel
-              </button>
-            </div>
-            {showAdSlots ? (
-              <AdPlaceholder label="Below wheel" className="mt-6" sizeClassName="h-24 sm:h-28" />
-            ) : null}
+    <div className="space-y-4">
+      {sharedMode ? (
+        <div
+          className="rounded-2xl border border-accent/40 bg-surface-2 px-4 py-3 text-sm text-foreground"
+          role="status"
+        >
+          <p className="font-semibold">You’re viewing a shared wheel.</p>
+          <p className="mt-1 text-muted">
+            Names stay in this browser unless you save. Your saved list for this tool is not
+            overwritten until you choose Save.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={saveSharedToDevice}
+              className="min-h-11 rounded-lg bg-accent-strong px-3 py-2 text-xs font-bold text-slate-950 hover:bg-accent"
+            >
+              Save to this device
+            </button>
+            <button
+              type="button"
+              onClick={editSharedCopy}
+              className="min-h-11 rounded-lg border border-border bg-surface px-3 py-2 text-xs font-bold text-foreground hover:bg-border"
+            >
+              Edit copy
+            </button>
+            <button
+              type="button"
+              onClick={() => setSharedMode(false)}
+              className="min-h-11 rounded-lg px-3 py-2 text-xs font-bold text-muted hover:text-foreground"
+            >
+              Dismiss
+            </button>
           </div>
-
-          <div className="flex flex-col gap-4">
-            <ChoicesEditor
-              text={text}
-              count={choices.length}
-              disabled={spinning}
-              onChange={onTextChange}
-              onShuffle={onShuffle}
-              onClear={onClear}
-              onRestoreDefaults={onRestoreDefaults}
-              onCopy={() => void onCopy()}
-            />
-            <PresetSelector disabled={spinning} onSelect={onPreset} />
-          </div>
-        </div>
-
-        {showAdSlots ? (
-          <aside className="hidden lg:block">
-            <AdPlaceholder label="Sidebar" sizeClassName="min-h-[480px] sticky top-20" />
-          </aside>
-        ) : null}
-      </div>
-
-      {showAdSlots ? (
-        <div className="lg:hidden">
-          <AdPlaceholder label="Mobile ad area" sizeClassName="h-36" />
         </div>
       ) : null}
+
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:items-start">
+        <div className="rounded-3xl border border-border bg-surface p-4 sm:p-6">
+          <div className="relative mx-auto aspect-square w-full max-w-[420px]">
+            <div className={`absolute inset-0 transition-opacity ${ready ? "pointer-events-none opacity-0" : "opacity-100"}`}>
+              <StaticWheelPreview choices={choices.length ? choices : defaults} />
+            </div>
+            <div className={`absolute inset-0 transition-opacity ${ready ? "opacity-100" : "opacity-0"}`}>
+              <WheelCanvas choices={choices} rotation={rotation} className="!max-w-none" />
+            </div>
+          </div>
+          <SpinControls
+            canSpin={canSpin}
+            spinning={spinning}
+            soundEnabled={soundEnabled}
+            status={status}
+            onSpin={spin}
+            onReset={() => {
+              if (!spinning) setRotation(0);
+            }}
+            onToggleSound={onToggleSound}
+          />
+          <label className="mt-3 flex min-h-11 cursor-pointer items-center justify-center gap-2 text-sm text-foreground">
+            <input
+              type="checkbox"
+              checked={autoRemove}
+              onChange={(e) => setAutoRemove(e.target.checked)}
+              className="h-4 w-4 accent-cyan-500"
+            />
+            Remove winner after spin (no repeats)
+          </label>
+          <div className="mt-4 flex flex-wrap justify-center gap-2">
+            <button
+              type="button"
+              onClick={() => void onShare()}
+              disabled={choices.length < 1 || spinning}
+              className="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-border bg-surface-2 px-3 py-2 text-xs font-semibold text-foreground hover:bg-border disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              <Share2 className="h-3.5 w-3.5" aria-hidden />
+              Copy share link
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setText(choicesToText(defaults));
+                setRotation(0);
+                setWinner(null);
+                setModalOpen(false);
+                allowSaveRef.current = true;
+                setSharedMode(false);
+              }}
+              disabled={spinning}
+              className="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-border bg-surface-2 px-3 py-2 text-xs font-semibold text-foreground hover:bg-border disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              <Link2 className="h-3.5 w-3.5" aria-hidden />
+              Fresh wheel
+            </button>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <ChoicesEditor
+            text={text}
+            count={choices.length}
+            disabled={spinning}
+            duplicatesSkipped={duplicatesSkipped}
+            onChange={onTextChange}
+            onShuffle={onShuffle}
+            onClear={onClear}
+            onRestoreDefaults={onRestoreDefaults}
+            onCopy={() => void onCopy()}
+          />
+          <p className="text-xs text-muted">
+            Lists save in this browser for this tool. Share links use a private page fragment (
+            <code className="text-foreground">#w=</code>
+            ).{" "}
+            <Link href="/privacy-policy" className="font-semibold text-accent hover:underline">
+              Privacy Policy
+            </Link>
+          </p>
+          <PresetSelector
+            presets={toolPresets}
+            disabled={spinning}
+            onSelect={onPreset}
+            homeLinks={
+              toolId === "home"
+                ? [
+                    { href: "/random-name-picker", label: "Name picker" },
+                    { href: "/prize-wheel", label: "Prize wheel" },
+                    { href: "/yes-no-wheel", label: "Yes / No" },
+                  ]
+                : undefined
+            }
+          />
+        </div>
+      </div>
 
       {toast ? (
         <p

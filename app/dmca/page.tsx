@@ -6,6 +6,18 @@ export const metadata: Metadata = {
   title: "DMCA / Copyright",
   description: `Copyright and DMCA notice policy for ${siteConfig.name}.`,
   alternates: { canonical: absoluteUrl("/dmca") },
+  openGraph: {
+    title: `DMCA / Copyright | ${siteConfig.name}`,
+    description: `Copyright and DMCA notice policy for ${siteConfig.name}.`,
+    url: absoluteUrl("/dmca"),
+    images: [{ url: siteConfig.ogImagePath, width: 1200, height: 630, alt: "ExesTools" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `DMCA / Copyright | ${siteConfig.name}`,
+    description: `Copyright and DMCA notice policy for ${siteConfig.name}.`,
+    images: [siteConfig.ogImagePath],
+  },
 };
 
 export default function DmcaPage() {

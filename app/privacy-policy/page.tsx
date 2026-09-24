@@ -4,8 +4,20 @@ import { absoluteUrl, siteConfig } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: `How ${siteConfig.name} handles Spinner Wheel data, local storage, hosting logs, and future advertising.`,
+  description: `How ${siteConfig.name} handles Spinner Wheel data, local storage, share links, and hosting logs.`,
   alternates: { canonical: absoluteUrl("/privacy-policy") },
+  openGraph: {
+    title: `Privacy Policy | ${siteConfig.name}`,
+    description: `How ${siteConfig.name} handles Spinner Wheel data, local storage, share links, and hosting logs.`,
+    url: absoluteUrl("/privacy-policy"),
+    images: [{ url: siteConfig.ogImagePath, width: 1200, height: 630, alt: "ExesTools" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `Privacy Policy | ${siteConfig.name}`,
+    description: `How ${siteConfig.name} handles Spinner Wheel data, local storage, share links, and hosting logs.`,
+    images: [siteConfig.ogImagePath],
+  },
 };
 
 export default function PrivacyPolicyPage() {
@@ -48,8 +60,11 @@ export default function PrivacyPolicyPage() {
         <section>
           <h2 className="text-lg font-bold text-foreground">Share links</h2>
           <p className="mt-2">
-            If you copy a share link, your choices may be encoded in the URL. Anyone with that link
-            can see the list. Do not put sensitive personal data in shareable URLs.
+            If you copy a share link, your choices are packed into the page fragment after{" "}
+            <code className="text-foreground">#w=</code> (not sent to our servers as a query). Anyone
+            with that link can see the list. Do not put sensitive personal data in shareable URLs.
+            Older links that used <code className="text-foreground">?c=</code> still open for
+            compatibility.
           </p>
         </section>
 

@@ -4,8 +4,20 @@ import { absoluteUrl, siteConfig } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
-  description: `Terms of Service for ${siteConfig.name}. Review before publishing the Spinner Wheel site.`,
+  description: `Terms of Service for ${siteConfig.name} Spinner Wheel. Fair-use, no-warranty, and contest disclaimer.`,
   alternates: { canonical: absoluteUrl("/terms") },
+  openGraph: {
+    title: `Terms of Service | ${siteConfig.name}`,
+    description: `Terms of Service for ${siteConfig.name} Spinner Wheel. Fair-use, no-warranty, and contest disclaimer.`,
+    url: absoluteUrl("/terms"),
+    images: [{ url: siteConfig.ogImagePath, width: 1200, height: 630, alt: "ExesTools" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `Terms of Service | ${siteConfig.name}`,
+    description: `Terms of Service for ${siteConfig.name} Spinner Wheel. Fair-use, no-warranty, and contest disclaimer.`,
+    images: [siteConfig.ogImagePath],
+  },
 };
 
 export default function TermsPage() {

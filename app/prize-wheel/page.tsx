@@ -2,68 +2,73 @@ import type { Metadata } from "next";
 import { GuideSection, UseCaseToolPage } from "@/components/UseCaseToolPage";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 
+type PageProps = {
+  searchParams: Promise<{ c?: string; preset?: string }>;
+};
+
 export const metadata: Metadata = {
-  title: "Prize Wheel & Giveaway Spinner",
+  title: "Prize Wheel & Giveaway Spinner (Free)",
   description:
-    "Free online prize wheel for giveaways and raffles. Spin prize segments or entrant names with a clear pointer result. Disclose your contest rules.",
+    "Free online prize wheel for giveaways and raffles. Add prizes or entrant names, spin so everyone sees the result, and share your list. Disclose contest rules.",
   alternates: { canonical: absoluteUrl("/prize-wheel") },
   openGraph: {
-    title: "Prize Wheel & Giveaway Spinner | ExesTools",
-    description: "Spin a free prize wheel for giveaways and raffles. Transparent pointer-based results.",
+    title: "Prize Wheel & Giveaway Spinner (Free) | ExesTools",
+    description:
+      "Free online prize wheel for giveaways and raffles. Add prizes or entrant names, spin so everyone sees the result, and share your list. Disclose contest rules.",
     url: absoluteUrl("/prize-wheel"),
     images: [{ url: siteConfig.ogImagePath, width: 1200, height: 630, alt: "ExesTools Spinner Wheel" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Prize Wheel & Giveaway Spinner | ExesTools",
-    description: "Spin a free prize wheel for giveaways and raffles. Transparent pointer-based results.",
+    title: "Prize Wheel & Giveaway Spinner (Free) | ExesTools",
+    description:
+      "Free online prize wheel for giveaways and raffles. Add prizes or entrant names, spin so everyone sees the result, and share your list. Disclose contest rules.",
     images: [siteConfig.ogImagePath],
   },
 };
 
 const FAQS = [
   {
-    q: "Should I put prizes or people’s names on the wheel?",
-    a: "Either works. Prize segments decide what someone wins; name segments decide who wins. Match the setup to your contest rules.",
+    q: "Online generator?",
+    a: "Yes.",
   },
   {
-    q: "Is this a certified lottery system?",
-    a: "No. ExesTools is a convenience spinner. Follow platform and local rules for giveaways, and disclose how winners are chosen.",
+    q: "Prizes or names?",
+    a: "Both; use the matching chip.",
   },
   {
-    q: "How do I run multiple winners?",
-    a: "Spin, note the winner, then Remove & continue (or edit the list) and spin again for the next prize.",
+    q: "Legal lottery?",
+    a: "No; follow your platform/local rules.",
   },
   {
-    q: "Can I share the prize list?",
-    a: "Yes — use Copy share link so others open the same choices on this page.",
+    q: "Fairness?",
+    a: "Visible pointer + labels; explain “try again” up front.",
+  },
+  {
+    q: "Social giveaways?",
+    a: "You may film the spin; platform policies still apply.",
   },
 ];
 
-export default function PrizeWheelPage() {
+export default async function PrizeWheelPage({ searchParams }: PageProps) {
+  const sp = await searchParams;
   return (
     <UseCaseToolPage
-      path="/prize-wheel"
-      title="Prize wheel and giveaway spinner"
-      intro="Run a clear visual draw: load prize segments or entrant names, spin, and let everyone see where the pointer lands."
-      presetId="prizes"
+      toolId="prize-wheel"
+      breadcrumbLabel="Prize wheel"
+      title="Prize wheel & giveaway spinner"
+      intro="Loads prize reward segments. Edit or switch chips (stream giveaway / classroom rewards / entrant names), then SPIN in view of everyone. Free online tool—not a certified lottery. No signup."
       faqs={FAQS}
+      initialEncoded={typeof sp.c === "string" ? sp.c : null}
+      initialPresetQuery={typeof sp.preset === "string" ? sp.preset : null}
     >
-      <GuideSection title="Two common setups">
-        <p>
-          <strong className="text-foreground">Prize segments</strong> — put rewards on the wheel
-          (gift card, try again, mystery box) and spin for what someone wins.
-        </p>
-        <p>
-          <strong className="text-foreground">Entrant names</strong> — put participant names on the
-          wheel and spin to choose a winner, then remove them for multi-round draws.
-        </p>
-      </GuideSection>
-      <GuideSection title="Fairness and disclosure">
-        <p>
-          Tell your audience how winners are selected, keep records if required, and follow local or
-          platform giveaway rules. This tool is not a regulated lottery system.
-        </p>
+      <GuideSection title="How to use">
+        <ol className="list-decimal space-y-2 pl-5">
+          <li>Start from Prize rewards or another chip.</li>
+          <li>Press SPIN.</li>
+          <li>Remove-winner off by default; turn on for multi-winner name draws.</li>
+          <li>Share this path + #w=. State rules before spinning.</li>
+        </ol>
       </GuideSection>
     </UseCaseToolPage>
   );

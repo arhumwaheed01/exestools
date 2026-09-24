@@ -47,10 +47,6 @@ export const metadata: Metadata = {
     description: siteConfig.defaultDescription,
     images: [siteConfig.ogImagePath],
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

@@ -1,28 +1,34 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { SpinnerWheel } from "@/components/SpinnerWheel";
+import { RelatedTools } from "@/components/RelatedTools";
+import { SpinnerMount } from "@/components/SpinnerMount";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
-
-const SIBLINGS = [
-  { href: "/random-name-picker", label: "Random name picker" },
-  { href: "/classroom-spinner", label: "Classroom spinner" },
-  { href: "/prize-wheel", label: "Prize wheel" },
-  { href: "/yes-no-wheel", label: "Yes / No wheel" },
-] as const;
+import type { ToolId } from "@/lib/tools";
 
 type FaqItem = { q: string; a: string };
 
 type Props = {
+  toolId: Exclude<ToolId, "home">;
   title: string;
   intro: string;
-  presetId: string;
   children: ReactNode;
   faqs: FaqItem[];
-  /** Current path for sibling highlighting */
-  path: string;
+  breadcrumbLabel: string;
+  initialEncoded?: string | null;
+  initialPresetQuery?: string | null;
 };
 
-export function UseCaseToolPage({ title, intro, presetId, children, faqs, path }: Props) {
+export function UseCaseToolPage({
+  toolId,
+  title,
+  intro,
+  children,
+  faqs,
+  breadcrumbLabel,
+  initialEncoded = null,
+  initialPresetQuery = null,
+}: Props) {
+  const path = `/${toolId}`;
   const faqLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -44,8 +50,17 @@ export function UseCaseToolPage({ title, intro, presetId, children, faqs, path }
     description: intro,
   };
 
+  const crumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+      { "@type": "ListItem", position: 2, name: breadcrumbLabel, item: absoluteUrl(path) },
+    ],
+  };
+
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+    <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(appLd) }}
@@ -54,24 +69,31 @@ export function UseCaseToolPage({ title, intro, presetId, children, faqs, path }
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(crumbLd) }}
+      />
 
-      <header className="mb-6 max-w-3xl">
-        <p className="text-xs font-semibold uppercase tracking-wider text-accent">
-          <Link href="/" className="hover:underline">
-            Spinner Wheel
-          </Link>
-          <span className="mx-1.5 text-muted">/</span>
-          Tool
-        </p>
-        <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
-          {title}
-        </h1>
+      <nav className="mb-3 text-xs font-semibold text-muted" aria-label="Breadcrumb">
+        <Link href="/" className="text-accent hover:underline">
+          Home
+        </Link>
+        <span className="mx-1.5">→</span>
+        <span className="text-foreground">{breadcrumbLabel}</span>
+      </nav>
+
+      <header className="mb-4 max-w-3xl">
+        <h1 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">{title}</h1>
         <p className="mt-2 text-sm leading-relaxed text-muted sm:text-base">{intro}</p>
       </header>
 
-      <SpinnerWheel presetId={presetId} />
+      <SpinnerMount
+        toolId={toolId}
+        initialEncoded={initialEncoded}
+        initialPresetQuery={initialPresetQuery}
+      />
 
-      <div className="mt-14 space-y-10 border-t border-border pt-12">
+      <div className="mt-12 space-y-10 border-t border-border pt-10">
         <div className="max-w-3xl space-y-8 text-sm leading-relaxed text-muted sm:text-base">
           {children}
         </div>
@@ -100,29 +122,7 @@ export function UseCaseToolPage({ title, intro, presetId, children, faqs, path }
           </div>
         </section>
 
-        <nav className="max-w-3xl" aria-label="Related tools">
-          <h2 className="text-lg font-bold text-foreground">Related tools</h2>
-          <ul className="mt-3 flex flex-wrap gap-2">
-            <li>
-              <Link
-                href="/"
-                className="inline-flex rounded-lg border border-border bg-surface px-3 py-1.5 text-sm font-semibold text-foreground hover:border-accent"
-              >
-                Main Spinner Wheel
-              </Link>
-            </li>
-            {SIBLINGS.filter((s) => s.href !== path).map((s) => (
-              <li key={s.href}>
-                <Link
-                  href={s.href}
-                  className="inline-flex rounded-lg border border-border bg-surface px-3 py-1.5 text-sm font-semibold text-foreground hover:border-accent"
-                >
-                  {s.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <RelatedTools toolId={toolId} />
       </div>
     </div>
   );

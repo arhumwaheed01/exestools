@@ -4,9 +4,9 @@ export const siteConfig = {
   domain: "https://www.exestools.com",
   url: "https://www.exestools.com",
   tagline: "Free online tools for everyday decisions",
-  defaultTitle: "Free Spinner Wheel — Random Name & Prize Picker | ExesTools",
+  defaultTitle: "Free Spinner Wheel Online — Spin & Decide | ExesTools",
   defaultDescription:
-    "Create a custom spinner wheel online. Add names or prizes, spin for a fair random result, save your list locally, and share a link. Free on ExesTools.",
+    "Free online spinner wheel. Add your options, hit SPIN, and get a fair result. Save in your browser or share a link—no signup on ExesTools.",
   contactEmail: "hello@exestools.com",
   ogImagePath: "/og.png",
 } as const;
