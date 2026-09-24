@@ -1,6 +1,5 @@
-/** Public GA4 measurement ID (also overridable via NEXT_PUBLIC_GA_ID). */
-export const GA_MEASUREMENT_ID =
-  process.env.NEXT_PUBLIC_GA_ID?.trim() || "G-DJKH68VDEJ";
+/** Public GA4 measurement ID. */
+export const GA_MEASUREMENT_ID = "G-DJKH68VDEJ";
 
 /** EEA + UK + CH — Consent Mode defaults analytics/ads to denied in these regions. */
 export const CONSENT_DENIED_REGIONS = [
