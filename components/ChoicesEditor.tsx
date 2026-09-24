@@ -100,7 +100,7 @@ function ActionBtn({
       type="button"
       disabled={disabled}
       onClick={onClick}
-      className={`inline-flex min-h-11 items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50 ${
+      className={`inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50 ${
         danger
           ? "bg-rose-950/60 text-rose-300 hover:bg-rose-900/70"
           : "bg-surface-2 text-foreground hover:bg-border"

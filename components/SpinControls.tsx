@@ -37,7 +37,7 @@ export function SpinControls({
           type="button"
           onClick={onReset}
           disabled={spinning}
-          className="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-xs font-semibold text-foreground hover:bg-surface-2 disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="inline-flex min-h-11 min-w-11 items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-xs font-semibold text-foreground hover:bg-surface-2 disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           <RotateCcw className="h-3.5 w-3.5" aria-hidden />
           Reset rotation
@@ -45,7 +45,7 @@ export function SpinControls({
         <button
           type="button"
           onClick={onToggleSound}
-          className="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-xs font-semibold text-foreground hover:bg-surface-2 outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="inline-flex min-h-11 min-w-11 items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-xs font-semibold text-foreground hover:bg-surface-2 outline-none focus-visible:ring-2 focus-visible:ring-accent"
           aria-pressed={soundEnabled}
           title={soundEnabled ? "Mute spin sound" : "Enable spin sound (optional)"}
         >

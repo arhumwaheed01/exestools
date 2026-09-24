@@ -6,23 +6,24 @@ type PageProps = {
   searchParams: Promise<{ c?: string; preset?: string }>;
 };
 
+const TITLE = "Random Name Picker Wheel (Free Online)";
+const META =
+  "Paste names and spin a free random name picker wheel. Fair picks for meetings, parties, and lists. Remove-winner option. No signup.";
+
 export const metadata: Metadata = {
-  title: "Random Name Picker Wheel (Free Online)",
-  description:
-    "Paste names and spin a free random name picker wheel. Fair picks for classrooms, meetings, and parties. Optional remove-winner mode. No signup on ExesTools.",
+  title: TITLE,
+  description: META,
   alternates: { canonical: absoluteUrl("/random-name-picker") },
   openGraph: {
-    title: "Random Name Picker Wheel (Free Online) | ExesTools",
-    description:
-      "Paste names and spin a free random name picker wheel. Fair picks for classrooms, meetings, and parties. Optional remove-winner mode. No signup on ExesTools.",
+    title: `${TITLE} | ExesTools`,
+    description: META,
     url: absoluteUrl("/random-name-picker"),
     images: [{ url: siteConfig.ogImagePath, width: 1200, height: 630, alt: "ExesTools Spinner Wheel" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Random Name Picker Wheel (Free Online) | ExesTools",
-    description:
-      "Paste names and spin a free random name picker wheel. Fair picks for classrooms, meetings, and parties. Optional remove-winner mode. No signup on ExesTools.",
+    title: `${TITLE} | ExesTools`,
+    description: META,
     images: [siteConfig.ogImagePath],
   },
 };
@@ -62,13 +63,16 @@ export default async function RandomNamePickerPage({ searchParams }: PageProps) 
       initialEncoded={typeof sp.c === "string" ? sp.c : null}
       initialPresetQuery={typeof sp.preset === "string" ? sp.preset : null}
     >
-      <GuideSection title="How to use">
+      <GuideSection title="How to pick a name">
         <ol className="list-decimal space-y-2 pl-5">
           <li>Use the loaded Sample names preset, or paste your list (one per line). Optional chips: Meeting order, Party / icebreakers.</li>
           <li>Press SPIN.</li>
           <li>Modal: Remove &amp; continue, Spin again, or Close.</li>
           <li>Copy share link → this path + #w=. Fresh wheel → page default sample names.</li>
         </ol>
+      </GuideSection>
+      <GuideSection title="Tips">
+        <p>Short display names read better on the wheel. Add an initial if two people share a name.</p>
       </GuideSection>
       <GuideSection title="Privacy">
         <p>

@@ -76,7 +76,7 @@ export function WinnerModal({ open, winner, onClose, onSpinAgain, onRemoveWinner
               ref={closeRef}
               type="button"
               onClick={onClose}
-              className="absolute right-3 top-3 rounded-lg p-2 text-muted hover:bg-surface-2 outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="absolute right-3 top-3 inline-flex h-11 w-11 items-center justify-center rounded-lg text-muted hover:bg-surface-2 outline-none focus-visible:ring-2 focus-visible:ring-accent"
               aria-label="Close"
             >
               <X className="h-5 w-5" />

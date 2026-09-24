@@ -7,6 +7,7 @@ import { useReducedMotion } from "framer-motion";
 import { StaticWheelPreview } from "@/components/StaticWheelPreview";
 import { ChoicesEditor } from "@/components/ChoicesEditor";
 import { PresetSelector } from "@/components/PresetSelector";
+import { RelatedTools } from "@/components/RelatedTools";
 import { SpinControls } from "@/components/SpinControls";
 import { WheelCanvas } from "@/components/WheelCanvas";
 import { WinnerModal } from "@/components/WinnerModal";
@@ -63,6 +64,7 @@ export function SpinnerWheel({
   const [sharedMode, setSharedMode] = useState(false);
   const [autoRemove, setAutoRemove] = useState(() => defaultAutoRemoveWinner(toolId));
   const [ready, setReady] = useState(false);
+  const [showNextSteps, setShowNextSteps] = useState(false);
 
   const spinningRef = useRef(false);
   const rotationRef = useRef(0);
@@ -120,6 +122,21 @@ export function SpinnerWheel({
       setSharedMode(true);
       allowSaveRef.current = false;
       track("share_open", { toolId, via: "legacy_c" });
+      // Optional: strip legacy ?c= from the address bar after hydrate (canonical stays clean).
+      try {
+        const url = new URL(window.location.href);
+        if (url.searchParams.has("c")) {
+          url.searchParams.delete("c");
+          const qs = url.searchParams.toString();
+          window.history.replaceState(
+            {},
+            "",
+            `${url.pathname}${qs ? `?${qs}` : ""}${url.hash}`,
+          );
+        }
+      } catch {
+        /* ignore */
+      }
     } else if (fromPreset && fromPreset.length >= 1) {
       setText(choicesToText(fromPreset));
       allowSaveRef.current = true;
@@ -239,13 +256,19 @@ export function SpinnerWheel({
 
   const onClear = () => {
     if (spinningRef.current) return;
-    if (!window.confirm("Clear all choices? This cannot be undone.")) return;
     setText("");
+    setRotation(0);
+    setWinner(null);
+    setModalOpen(false);
+    setShowNextSteps(false);
+    allowSaveRef.current = true;
+    showToast("Cleared — add at least 2 choices to spin.");
   };
 
   const onRestoreDefaults = () => {
     if (spinningRef.current) return;
     setText(choicesToText(defaults));
+    setShowNextSteps(false);
   };
 
   const onCopy = async () => {
@@ -271,8 +294,12 @@ export function SpinnerWheel({
       await navigator.clipboard.writeText(url);
       track("share_create", { toolId });
       showToast("Share link copied.");
-    } catch {
-      showToast("List too long to share, or clipboard blocked.");
+    } catch (err) {
+      const msg =
+        err instanceof Error && err.message === "LIST_TOO_LONG"
+          ? "List too long to share via URL."
+          : "List too long to share, or clipboard blocked.";
+      showToast(msg);
     }
   };
 
@@ -291,52 +318,64 @@ export function SpinnerWheel({
     setModalOpen(false);
     setWinner(null);
     setRotation(0);
+    setShowNextSteps(true);
   };
 
-  const saveSharedToDevice = () => {
+  const keepThisWheel = () => {
     allowSaveRef.current = true;
     saveSession(toolId, choices);
     setSharedMode(false);
-    showToast("Saved to this device.");
+    showToast("Kept on this device.");
   };
 
-  const editSharedCopy = () => {
+  const backToMyWheel = () => {
+    const session = loadSession(toolId);
+    setText(choicesToText(session?.choices?.length ? session.choices : defaults));
+    setRotation(0);
+    setWinner(null);
+    setModalOpen(false);
     allowSaveRef.current = true;
     setSharedMode(false);
-    showToast("Editing a local copy — save as you go.");
+    showToast("Back to your saved wheel.");
   };
 
+  const wheelShellStyle = {
+    aspectRatio: "1 / 1",
+    width: sharedMode
+      ? "min(100%, 300px, calc(100svh - 16rem))"
+      : "min(100%, 420px, calc(100svh - 14rem))",
+    maxWidth: "420px",
+  } as const;
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {sharedMode ? (
         <div
-          className="rounded-2xl border border-accent/40 bg-surface-2 px-4 py-3 text-sm text-foreground"
+          className="flex max-h-16 flex-wrap items-center gap-2 rounded-xl border border-accent/40 bg-surface-2 px-3 py-2 text-xs text-foreground sm:text-sm"
           role="status"
         >
-          <p className="font-semibold">You’re viewing a shared wheel.</p>
-          <p className="mt-1 text-muted">
-            Names stay in this browser unless you save. Your saved list for this tool is not
-            overwritten until you choose Save.
+          <p className="min-w-0 flex-1 font-semibold leading-snug">
+            You’re viewing a shared wheel. Names stay here unless you keep it.
           </p>
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5">
             <button
               type="button"
-              onClick={saveSharedToDevice}
-              className="min-h-11 rounded-lg bg-accent-strong px-3 py-2 text-xs font-bold text-slate-950 hover:bg-accent"
+              onClick={keepThisWheel}
+              className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg bg-accent-strong px-3 text-xs font-bold text-slate-950 hover:bg-accent"
             >
-              Save to this device
+              Keep this wheel
             </button>
             <button
               type="button"
-              onClick={editSharedCopy}
-              className="min-h-11 rounded-lg border border-border bg-surface px-3 py-2 text-xs font-bold text-foreground hover:bg-border"
+              onClick={backToMyWheel}
+              className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-border bg-surface px-3 text-xs font-bold text-foreground hover:bg-border"
             >
-              Edit copy
+              Back to my wheel
             </button>
             <button
               type="button"
               onClick={() => setSharedMode(false)}
-              className="min-h-11 rounded-lg px-3 py-2 text-xs font-bold text-muted hover:text-foreground"
+              className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg px-3 text-xs font-bold text-muted hover:text-foreground"
             >
               Dismiss
             </button>
@@ -344,12 +383,9 @@ export function SpinnerWheel({
         </div>
       ) : null}
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:items-start">
-        <div className="rounded-3xl border border-border bg-surface p-4 sm:p-6">
-          <div
-            className="relative mx-auto w-full max-w-[420px]"
-            style={{ aspectRatio: "1 / 1" }}
-          >
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:items-start lg:gap-6">
+        <div className="rounded-3xl border border-border bg-surface p-3 sm:p-5">
+          <div className="relative mx-auto" style={wheelShellStyle}>
             <div
               className={`absolute inset-0 transition-opacity ${ready ? "pointer-events-none opacity-0" : "opacity-100"}`}
             >
@@ -389,7 +425,7 @@ export function SpinnerWheel({
               type="button"
               onClick={() => void onShare()}
               disabled={choices.length < 1 || spinning}
-              className="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-border bg-surface-2 px-3 py-2 text-xs font-semibold text-foreground hover:bg-border disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="inline-flex min-h-11 min-w-11 items-center gap-1.5 rounded-lg border border-border bg-surface-2 px-3 py-2 text-xs font-semibold text-foreground hover:bg-border disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
               <Share2 className="h-3.5 w-3.5" aria-hidden />
               Copy share link
@@ -401,16 +437,27 @@ export function SpinnerWheel({
                 setRotation(0);
                 setWinner(null);
                 setModalOpen(false);
+                setShowNextSteps(false);
                 allowSaveRef.current = true;
                 setSharedMode(false);
               }}
               disabled={spinning}
-              className="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-border bg-surface-2 px-3 py-2 text-xs font-semibold text-foreground hover:bg-border disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="inline-flex min-h-11 min-w-11 items-center gap-1.5 rounded-lg border border-border bg-surface-2 px-3 py-2 text-xs font-semibold text-foreground hover:bg-border disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
               <Link2 className="h-3.5 w-3.5" aria-hidden />
               Fresh wheel
             </button>
           </div>
+          {showNextSteps ? (
+            <div className="mt-4 rounded-xl border border-border bg-surface-2 px-3 py-3">
+              <p className="text-sm font-semibold text-foreground">
+                Spin again, or try a related spinner below.
+              </p>
+              <div className="mt-2">
+                <RelatedTools toolId={toolId} compact heading="Next steps" />
+              </div>
+            </div>
+          ) : null}
         </div>
 
         <div className="flex flex-col gap-4">
@@ -442,7 +489,7 @@ export function SpinnerWheel({
                 ? [
                     { href: "/random-name-picker", label: "Name picker" },
                     { href: "/prize-wheel", label: "Prize wheel" },
-                    { href: "/yes-no-wheel", label: "Yes / No" },
+                    { href: "/yes-no-wheel", label: "Yes or no wheel" },
                   ]
                 : undefined
             }
@@ -462,9 +509,13 @@ export function SpinnerWheel({
       <WinnerModal
         open={modalOpen}
         winner={winner}
-        onClose={() => setModalOpen(false)}
+        onClose={() => {
+          setModalOpen(false);
+          setShowNextSteps(true);
+        }}
         onSpinAgain={() => {
           setModalOpen(false);
+          setShowNextSteps(false);
           spin();
         }}
         onRemoveWinner={onRemoveWinner}

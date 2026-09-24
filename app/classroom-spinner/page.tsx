@@ -7,23 +7,24 @@ type PageProps = {
   searchParams: Promise<{ c?: string; preset?: string }>;
 };
 
+const TITLE = "Classroom Spinner Wheel — Random Student Picker";
+const META =
+  "Free classroom spinner & random student picker. Paste your roster, spin, optionally skip repeats. Lists stay in-browser.";
+
 export const metadata: Metadata = {
-  title: "Classroom Spinner Wheel for Teachers",
-  description:
-    "Free classroom spinner for fair turn-taking. Paste your class list, spin, and optionally skip repeats so every student gets a turn. No signup on ExesTools.",
+  title: TITLE,
+  description: META,
   alternates: { canonical: absoluteUrl("/classroom-spinner") },
   openGraph: {
-    title: "Classroom Spinner Wheel for Teachers | ExesTools",
-    description:
-      "Free classroom spinner for fair turn-taking. Paste your class list, spin, and optionally skip repeats so every student gets a turn. No signup on ExesTools.",
+    title: `${TITLE} | ExesTools`,
+    description: META,
     url: absoluteUrl("/classroom-spinner"),
     images: [{ url: siteConfig.ogImagePath, width: 1200, height: 630, alt: "ExesTools Spinner Wheel" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Classroom Spinner Wheel for Teachers | ExesTools",
-    description:
-      "Free classroom spinner for fair turn-taking. Paste your class list, spin, and optionally skip repeats so every student gets a turn. No signup on ExesTools.",
+    title: `${TITLE} | ExesTools`,
+    description: META,
     images: [siteConfig.ogImagePath],
   },
 };
@@ -62,12 +63,13 @@ export default async function ClassroomSpinnerPage({ searchParams }: PageProps) 
       toolId="classroom-spinner"
       breadcrumbLabel="Classroom spinner"
       title="Classroom spinner wheel"
+      sectionHeading="Random student picker for fair turn-taking"
       intro="Opens with a sample class roster. Paste your students (one per line), project the page, hit SPIN. Remove-winner defaults on for fair turn-taking. No account."
       faqs={FAQS}
       initialEncoded={typeof sp.c === "string" ? sp.c : null}
       initialPresetQuery={typeof sp.preset === "string" ? sp.preset : null}
     >
-      <GuideSection title="How to use">
+      <GuideSection title="How teachers use this">
         <ol className="list-decimal space-y-2 pl-5">
           <li>Edit the sample roster or choose Classroom jobs, Brain break activities, Reading groups.</li>
           <li>Press SPIN.</li>

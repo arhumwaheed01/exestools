@@ -11,6 +11,8 @@ type Props = {
   toolId: Exclude<ToolId, "home">;
   title: string;
   intro: string;
+  /** Optional H2 under intro (kw-map packs). */
+  sectionHeading?: string;
   children: ReactNode;
   faqs: FaqItem[];
   breadcrumbLabel: string;
@@ -22,6 +24,7 @@ export function UseCaseToolPage({
   toolId,
   title,
   intro,
+  sectionHeading,
   children,
   faqs,
   breadcrumbLabel,
@@ -60,7 +63,7 @@ export function UseCaseToolPage({
   };
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6">
+    <div className="mx-auto max-w-6xl px-4 py-3 sm:px-6 sm:py-4">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(appLd) }}
@@ -74,7 +77,7 @@ export function UseCaseToolPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(crumbLd) }}
       />
 
-      <nav className="mb-3 text-xs font-semibold text-muted" aria-label="Breadcrumb">
+      <nav className="mb-2 text-xs font-semibold text-muted" aria-label="Breadcrumb">
         <Link href="/" className="text-accent hover:underline">
           Home
         </Link>
@@ -82,9 +85,18 @@ export function UseCaseToolPage({
         <span className="text-foreground">{breadcrumbLabel}</span>
       </nav>
 
-      <header className="mb-4 max-w-3xl">
-        <h1 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">{title}</h1>
-        <p className="mt-2 text-sm leading-relaxed text-muted sm:text-base">{intro}</p>
+      <header className="mb-3 max-w-3xl">
+        <h1 className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl lg:text-3xl">
+          {title}
+        </h1>
+        <p className="mt-1 line-clamp-2 text-sm leading-snug text-muted sm:line-clamp-none sm:leading-relaxed">
+          {intro}
+        </p>
+        {sectionHeading ? (
+          <h2 className="mt-3 text-base font-bold tracking-tight text-foreground sm:text-lg">
+            {sectionHeading}
+          </h2>
+        ) : null}
       </header>
 
       <SpinnerMount

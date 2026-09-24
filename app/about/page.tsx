@@ -59,10 +59,14 @@ export default function AboutPage() {
             <Link href="/classroom-spinner" className="font-semibold text-accent hover:underline">
               Classroom spinner
             </Link>{" "}
-            to pick students fairly with no account — your class list stays in this browser, you can
-            share a link when policy allows, and Remove winner helps everyone get a turn before
-            repeats. Fullscreen/projector mode and CSV import are on the roadmap; this page only
-            claims features that are live today.
+            for fair turn-taking with no account — your class list stays in this browser, you can
+            share a link when policy allows, and <strong className="text-foreground">Remove winner</strong>{" "}
+            helps everyone get a turn before repeats. Fullscreen/projector and CSV import are
+            roadmap items; only live features are claimed here. Questions?{" "}
+            <Link href="/contact" className="font-semibold text-accent hover:underline">
+              Contact
+            </Link>
+            .
           </p>
         </section>
         <p>

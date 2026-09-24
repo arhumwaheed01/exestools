@@ -8,19 +8,21 @@ type PageProps = {
   searchParams: Promise<{ c?: string; preset?: string }>;
 };
 
+const HOME_TITLE = "Free Spinner Wheel Online — Spin & Decide | ExesTools";
+const HOME_META =
+  "Free online spinner wheel. Add options, hit SPIN, get a fair pick. Works as a multi-option decision wheel too. No signup on ExesTools.";
+
 export async function generateMetadata(): Promise<Metadata> {
   // Canonical always points at the clean www homepage (including legacy ?c= shares).
   return {
     title: {
-      absolute: "Free Spinner Wheel Online — Spin & Decide | ExesTools",
+      absolute: HOME_TITLE,
     },
-    description:
-      "Free online spinner wheel. Add your options, hit SPIN, and get a fair result. Save in your browser or share a link—no signup on ExesTools.",
+    description: HOME_META,
     alternates: { canonical: absoluteUrl("/") },
     openGraph: {
-      title: "Free Spinner Wheel Online — Spin & Decide | ExesTools",
-      description:
-        "Free online spinner wheel. Add your options, hit SPIN, and get a fair result. Save in your browser or share a link—no signup on ExesTools.",
+      title: HOME_TITLE,
+      description: HOME_META,
       url: absoluteUrl("/"),
       images: [
         {
@@ -33,9 +35,8 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: "Free Spinner Wheel Online — Spin & Decide | ExesTools",
-      description:
-        "Free online spinner wheel. Add your options, hit SPIN, and get a fair result. Save in your browser or share a link—no signup on ExesTools.",
+      title: HOME_TITLE,
+      description: HOME_META,
       images: [siteConfig.ogImagePath],
     },
   };
@@ -59,6 +60,10 @@ const HOME_FAQS = [
     a: "Need at least two choices.",
   },
   {
+    q: "Can I use this as a decision wheel?",
+    a: "Yes when you have several options—add each choice and spin. For only yes vs no, use the Yes or no wheel.",
+  },
+  {
     q: "Where are name, classroom, prize, and Yes/No tools?",
     a: "See Related ExesTools spinners.",
   },
@@ -77,25 +82,24 @@ export default async function HomePage({ searchParams }: PageProps) {
     applicationCategory: "UtilitiesApplication",
     operatingSystem: "Any",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-    description:
-      "Free online spinner wheel for custom lists and fair random selection.",
+    description: HOME_META,
   };
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6">
+    <div className="mx-auto max-w-6xl px-4 py-3 sm:px-6 sm:py-4">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <header className="mb-4 max-w-3xl">
-        <h1 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+      <header className="mb-3 max-w-3xl">
+        <h1 className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl lg:text-3xl">
           Free spinner wheel online
         </h1>
-        <p className="mt-2 text-sm leading-relaxed text-muted sm:text-base">
-          Add one option per line, hit SPIN, and land on a fair result. ExesTools is a free online
-          spinner wheel for custom lists—no account required. For specialized lists, use Related
-          ExesTools spinners (names, classroom, prizes, Yes/No).
+        <p className="mt-1 line-clamp-2 text-sm leading-snug text-muted sm:line-clamp-none sm:text-base sm:leading-relaxed">
+          Add one option per line, hit SPIN, and land on a fair result. Works as a multi-option
+          decision wheel when you have several choices—no account required. For specialized lists,
+          use Related ExesTools spinners.
         </p>
       </header>
 
@@ -125,6 +129,20 @@ export default async function HomePage({ searchParams }: PageProps) {
             A spinner wheel divides options into colored segments. When it stops, the segment under
             the fixed pointer is the selected result. ExesTools draws the wheel on canvas and
             computes the winner from the final rotation so the on-screen result matches what you see.
+          </p>
+        </section>
+
+        <section id="multi-option" className="max-w-3xl">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+            Multi-option decision wheel
+          </h2>
+          <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
+            When you need to choose among several options—not just yes or no—list each choice and
+            spin. For a binary yes/no answer only, use the{" "}
+            <Link href="/yes-no-wheel" className="font-semibold text-accent hover:underline">
+              Yes or no wheel
+            </Link>
+            .
           </p>
         </section>
 
