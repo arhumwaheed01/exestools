@@ -1,36 +1,23 @@
 import type { MetadataRoute } from "next";
-import { absoluteProductionUrl } from "@/lib/seo/generateMeta";
-import { allTools } from "@/lib/content/textToolsData";
+import { siteConfig } from "@/lib/seo";
 
-const STATIC_PATHS = [
+const routes = [
   "/",
-  "/text-tools",
-  "/developer-tools",
-  "/image-tools",
-  "/pdf-tools",
-  "/tools",
-  "/privacy-policy",
-  "/terms-of-service",
-  "/contact",
+  "/random-name-picker",
+  "/classroom-spinner",
+  "/prize-wheel",
+  "/yes-no-wheel",
   "/about",
-  "/disclaimer",
-  "/dmca",
+  "/privacy-policy",
+  "/terms",
 ] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
-
-  const staticEntries: MetadataRoute.Sitemap = STATIC_PATHS.map((path) => ({
-    url: absoluteProductionUrl(path),
+  return routes.map((path) => ({
+    url: `${siteConfig.url}${path === "/" ? "" : path}`,
     lastModified,
+    changeFrequency: path === "/" ? "weekly" : "monthly",
+    priority: path === "/" ? 1 : path.startsWith("/random") || path.includes("wheel") || path.includes("spinner") ? 0.8 : 0.6,
   }));
-
-  const allToolSlugs = Array.from(new Set(allTools.map((t) => t.slug)));
-
-  const toolEntries: MetadataRoute.Sitemap = allToolSlugs.map((slug) => ({
-    url: absoluteProductionUrl(`/tools/${slug}`),
-    lastModified,
-  }));
-
-  return [...staticEntries, ...toolEntries];
 }

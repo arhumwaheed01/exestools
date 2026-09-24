@@ -1,59 +1,60 @@
 import type { Metadata } from "next";
-import { Inter, Nunito } from "next/font/google";
-import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
+import { Geist, Geist_Mono } from "next/font/google";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { defaultSEO } from "@/lib/seo/seoConfig";
+import { absoluteUrl, siteConfig } from "@/lib/seo";
 import "./globals.css";
 
-const nunito = Nunito({
+const geistSans = Geist({
+  variable: "--font-geist-sans",
   subsets: ["latin"],
-  variable: "--font-nunito",
-  display: "swap",
 });
 
-const inter = Inter({
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(defaultSEO.siteUrl),
+  metadataBase: new URL(siteConfig.domain),
   title: {
-    default: defaultSEO.defaultTitle,
-    template: `%s | ${defaultSEO.siteName}`,
+    default: siteConfig.defaultTitle,
+    template: `%s | ${siteConfig.name}`,
   },
-  description: defaultSEO.defaultDescription,
+  description: siteConfig.defaultDescription,
+  alternates: {
+    canonical: absoluteUrl("/"),
+  },
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+  },
   openGraph: {
     type: "website",
-    locale: defaultSEO.locale,
-    siteName: defaultSEO.siteName,
-    title: defaultSEO.defaultTitle,
-    description: defaultSEO.defaultDescription,
+    locale: "en_US",
+    url: siteConfig.domain,
+    siteName: siteConfig.name,
+    title: siteConfig.defaultTitle,
+    description: siteConfig.defaultDescription,
   },
   twitter: {
     card: "summary_large_image",
-    title: defaultSEO.defaultTitle,
-    description: defaultSEO.defaultDescription,
-    ...(defaultSEO.twitterSite
-      ? { site: `@${defaultSEO.twitterSite.replace(/^@/, "")}` }
-      : {}),
+    title: siteConfig.defaultTitle,
+    description: siteConfig.defaultDescription,
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
-      className={`${nunito.variable} ${inter.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      style={{ colorScheme: "dark" }}
     >
-      <body className="min-h-full flex flex-col bg-background text-secondary-text font-sans">
-        <GoogleAnalytics />
+      <body className="flex min-h-full flex-col bg-background text-foreground">
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

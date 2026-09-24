@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { absoluteProductionUrl } from "@/lib/seo/generateMeta";
+import { siteConfig } from "@/lib/seo";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -7,6 +7,7 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: absoluteProductionUrl("/sitemap.xml"),
+    sitemap: `${siteConfig.url}/sitemap.xml`,
+    host: siteConfig.url,
   };
 }

@@ -1,8 +1,20 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ["pdf-parse"],
-  transpilePackages: ["fabric"],
+  async redirects() {
+    return [
+      {
+        source: "/spinner-wheel",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/contact",
+        destination: "/about",
+        permanent: false,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
