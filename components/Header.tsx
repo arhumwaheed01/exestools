@@ -9,6 +9,8 @@ import { siteConfig } from "@/lib/seo";
 
 const NAV = [
   { href: "/", label: "Spinner Wheel" },
+  { href: "/classroom-spinner", label: "Classroom" },
+  { href: "/yes-no-wheel", label: "Yes / No" },
   { href: "/about", label: "About" },
 ] as const;
 
@@ -45,6 +47,12 @@ export function Header() {
               </Link>
             );
           })}
+          <Link
+            href="/contact"
+            className="ml-2 rounded-xl bg-accent-strong px-3.5 py-2 text-sm font-semibold text-slate-950 hover:bg-accent outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          >
+            Contact
+          </Link>
         </nav>
 
         <button
@@ -72,6 +80,13 @@ export function Header() {
                 {item.label}
               </Link>
             ))}
+            <Link
+              href="/contact"
+              className="rounded-lg px-3 py-2.5 text-sm font-semibold text-accent hover:bg-surface-2"
+              onClick={() => setOpen(false)}
+            >
+              Contact
+            </Link>
           </nav>
         </div>
       ) : null}

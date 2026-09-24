@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { absoluteUrl, siteConfig } from "@/lib/seo";
+import { siteConfig } from "@/lib/seo";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -22,9 +22,6 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.defaultDescription,
-  alternates: {
-    canonical: absoluteUrl("/"),
-  },
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
   },
@@ -35,11 +32,20 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     title: siteConfig.defaultTitle,
     description: siteConfig.defaultDescription,
+    images: [
+      {
+        url: siteConfig.ogImagePath,
+        width: 1200,
+        height: 630,
+        alt: "ExesTools Spinner Wheel",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: siteConfig.defaultTitle,
     description: siteConfig.defaultDescription,
+    images: [siteConfig.ogImagePath],
   },
   robots: {
     index: true,

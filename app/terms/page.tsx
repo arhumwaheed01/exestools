@@ -51,11 +51,18 @@ export default function TermsPage() {
         <section>
           <h2 className="text-lg font-bold text-foreground">Questions</h2>
           <p className="mt-2">
-            Questions about these terms can be noted on our{" "}
-            <Link href="/about" className="font-semibold text-accent hover:underline">
-              About
-            </Link>{" "}
-            page until a contact channel is published.
+            Questions about these terms: email{" "}
+            <a
+              href={`mailto:${siteConfig.contactEmail}`}
+              className="font-semibold text-accent hover:underline"
+            >
+              {siteConfig.contactEmail}
+            </a>{" "}
+            or visit{" "}
+            <Link href="/contact" className="font-semibold text-accent hover:underline">
+              Contact
+            </Link>
+            .
           </p>
         </section>
       </div>

@@ -9,7 +9,7 @@ import { PresetSelector } from "@/components/PresetSelector";
 import { SpinControls } from "@/components/SpinControls";
 import { WheelCanvas } from "@/components/WheelCanvas";
 import { WinnerModal } from "@/components/WinnerModal";
-import { DEFAULT_CHOICES, type WheelPreset } from "@/lib/presets";
+import { DEFAULT_CHOICES, getPresetById, type WheelPreset } from "@/lib/presets";
 import {
   decodeChoicesParam,
   encodeChoicesParam,
@@ -30,11 +30,25 @@ import {
 type Props = {
   /** Optional initial choices from URL (?c=) — applied once on mount. */
   initialEncoded?: string | null;
+  /** Load this preset when no share URL is present (use-case landings). */
+  presetId?: string;
+  /** When false, reserve no ad chrome (AdSense not live yet). */
+  showAdSlots?: boolean;
 };
 
-export function SpinnerWheel({ initialEncoded = null }: Props) {
+function defaultTextForPreset(presetId?: string): string {
+  const preset = presetId ? getPresetById(presetId) : undefined;
+  if (preset) return choicesToText(preset.choices);
+  return choicesToText([...DEFAULT_CHOICES]);
+}
+
+export function SpinnerWheel({
+  initialEncoded = null,
+  presetId,
+  showAdSlots = false,
+}: Props) {
   const reduceMotion = useReducedMotion();
-  const [text, setText] = useState(choicesToText([...DEFAULT_CHOICES]));
+  const [text, setText] = useState(() => defaultTextForPreset(presetId));
   const [rotation, setRotation] = useState(0);
   const [spinning, setSpinning] = useState(false);
   const [winner, setWinner] = useState<string | null>(null);
@@ -72,6 +86,9 @@ export function SpinnerWheel({ initialEncoded = null }: Props) {
     const fromUrl = initialEncoded ? decodeChoicesParam(initialEncoded) : null;
     if (fromUrl && fromUrl.length >= 1) {
       setText(choicesToText(fromUrl));
+    } else if (presetId) {
+      const preset = getPresetById(presetId);
+      if (preset) setText(choicesToText(preset.choices));
     } else {
       const session = loadSession();
       if (session?.choices?.length) {
@@ -83,7 +100,7 @@ export function SpinnerWheel({ initialEncoded = null }: Props) {
     return () => {
       cancelAnimationFrame(rafRef.current);
     };
-  }, [initialEncoded]);
+  }, [initialEncoded, presetId]);
 
   useEffect(() => {
     if (!hydrated) return;
@@ -176,7 +193,7 @@ export function SpinnerWheel({ initialEncoded = null }: Props) {
 
   const onRestoreDefaults = () => {
     if (spinningRef.current) return;
-    setText(choicesToText([...DEFAULT_CHOICES]));
+    setText(defaultTextForPreset(presetId));
   };
 
   const onCopy = async () => {
@@ -200,7 +217,8 @@ export function SpinnerWheel({ initialEncoded = null }: Props) {
       showToast("List too long to share via URL.");
       return;
     }
-    const url = `${window.location.origin}/?c=${encoded}`;
+    const path = window.location.pathname || "/";
+    const url = `${window.location.origin}${path}?c=${encoded}`;
     try {
       await navigator.clipboard.writeText(url);
       showToast("Share link copied.");
@@ -228,9 +246,11 @@ export function SpinnerWheel({ initialEncoded = null }: Props) {
 
   return (
     <div className="space-y-6">
-      <AdPlaceholder label="Header banner" sizeClassName="h-20 md:h-24" />
+      {showAdSlots ? <AdPlaceholder label="Header banner" sizeClassName="h-20 md:h-24" /> : null}
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_240px] lg:items-start">
+      <div
+        className={`grid gap-6 lg:items-start ${showAdSlots ? "lg:grid-cols-[minmax(0,1fr)_240px]" : ""}`}
+      >
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)]">
           <div className="rounded-3xl border border-border bg-surface p-4 sm:p-6">
             <WheelCanvas choices={choices} rotation={rotation} />
@@ -255,15 +275,24 @@ export function SpinnerWheel({ initialEncoded = null }: Props) {
                 <Share2 className="h-3.5 w-3.5" aria-hidden />
                 Copy share link
               </button>
-              <a
-                href="/"
-                className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface-2 px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-border outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              <button
+                type="button"
+                onClick={() => {
+                  setText(defaultTextForPreset(presetId));
+                  setRotation(0);
+                  setWinner(null);
+                  setModalOpen(false);
+                }}
+                disabled={spinning}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface-2 px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-border disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
                 <Link2 className="h-3.5 w-3.5" aria-hidden />
                 Fresh wheel
-              </a>
+              </button>
             </div>
-            <AdPlaceholder label="Below wheel" className="mt-6" sizeClassName="h-24 sm:h-28" />
+            {showAdSlots ? (
+              <AdPlaceholder label="Below wheel" className="mt-6" sizeClassName="h-24 sm:h-28" />
+            ) : null}
           </div>
 
           <div className="flex flex-col gap-4">
@@ -281,14 +310,18 @@ export function SpinnerWheel({ initialEncoded = null }: Props) {
           </div>
         </div>
 
-        <aside className="hidden lg:block">
-          <AdPlaceholder label="Sidebar" sizeClassName="min-h-[480px] sticky top-20" />
-        </aside>
+        {showAdSlots ? (
+          <aside className="hidden lg:block">
+            <AdPlaceholder label="Sidebar" sizeClassName="min-h-[480px] sticky top-20" />
+          </aside>
+        ) : null}
       </div>
 
-      <div className="lg:hidden">
-        <AdPlaceholder label="Mobile ad area" sizeClassName="h-36" />
-      </div>
+      {showAdSlots ? (
+        <div className="lg:hidden">
+          <AdPlaceholder label="Mobile ad area" sizeClassName="h-36" />
+        </div>
+      ) : null}
 
       {toast ? (
         <p

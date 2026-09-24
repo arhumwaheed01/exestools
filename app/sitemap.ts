@@ -8,16 +8,26 @@ const routes = [
   "/prize-wheel",
   "/yes-no-wheel",
   "/about",
+  "/contact",
   "/privacy-policy",
   "/terms",
+  "/dmca",
 ] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date();
-  return routes.map((path) => ({
-    url: `${siteConfig.url}${path === "/" ? "" : path}`,
-    lastModified,
-    changeFrequency: path === "/" ? "weekly" : "monthly",
-    priority: path === "/" ? 1 : path.startsWith("/random") || path.includes("wheel") || path.includes("spinner") ? 0.8 : 0.6,
-  }));
+  const lastModified = new Date("2026-09-24");
+  return routes.map((path) => {
+    const isHome = path === "/";
+    const isTool =
+      path === "/" ||
+      path.includes("wheel") ||
+      path.includes("spinner") ||
+      path.includes("picker");
+    return {
+      url: `${siteConfig.url}${isHome ? "" : path}`,
+      lastModified,
+      changeFrequency: isHome ? "weekly" : "monthly",
+      priority: isHome ? 1 : isTool ? 0.85 : 0.5,
+    };
+  });
 }

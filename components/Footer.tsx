@@ -9,8 +9,10 @@ const FOOTER_LINKS = [
   { href: "/prize-wheel", label: "Prize Wheel" },
   { href: "/yes-no-wheel", label: "Yes / No" },
   { href: "/about", label: "About Us" },
+  { href: "/contact", label: "Contact" },
   { href: "/privacy-policy", label: "Privacy Policy" },
   { href: "/terms", label: "Terms of Service" },
+  { href: "/dmca", label: "DMCA" },
 ] as const;
 
 export function Footer() {

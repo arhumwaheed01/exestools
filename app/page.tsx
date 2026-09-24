@@ -1,44 +1,51 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { AdPlaceholder } from "@/components/AdPlaceholder";
 import { FAQSection } from "@/components/FAQSection";
 import { SpinnerWheel } from "@/components/SpinnerWheel";
 import { faqsToJsonLd } from "@/lib/faqs";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: {
-    absolute: "Free Spinner Wheel — Random Name & Prize Picker | ExesTools",
-  },
-  description:
-    "Free online spinner wheel and random name picker. Add choices, spin fairly, save locally, share a link. Ideal for classrooms, giveaways, Yes/No decisions, and teams.",
-  alternates: { canonical: absoluteUrl("/") },
-  openGraph: {
-    title: "Free Spinner Wheel | ExesTools",
-    description:
-      "Custom random spinner for names, Yes/No, prizes, and classroom activities. No signup required.",
-    url: absoluteUrl("/"),
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Free Spinner Wheel | ExesTools",
-    description:
-      "Custom random spinner for names, Yes/No, prizes, and classroom activities. No signup required.",
-  },
-  keywords: [
-    "spinner wheel",
-    "random name picker",
-    "prize wheel",
-    "decision wheel",
-    "yes no wheel",
-    "classroom spinner",
-    "giveaway spinner",
-  ],
-};
-
 type PageProps = {
   searchParams: Promise<{ c?: string }>;
 };
+
+export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
+  const sp = await searchParams;
+  const hasShare = typeof sp.c === "string" && sp.c.length > 0;
+
+  return {
+    title: {
+      absolute: "Free Spinner Wheel — Random Name & Prize Picker | ExesTools",
+    },
+    description:
+      "Free online spinner wheel and random name picker. Add choices, spin fairly, save locally, share a link. Ideal for classrooms, giveaways, Yes/No decisions, and teams.",
+    alternates: { canonical: absoluteUrl("/") },
+    openGraph: {
+      title: "Free Spinner Wheel | ExesTools",
+      description:
+        "Custom random spinner for names, Yes/No, prizes, and classroom activities. No signup required.",
+      url: absoluteUrl("/"),
+      images: [
+        {
+          url: siteConfig.ogImagePath,
+          width: 1200,
+          height: 630,
+          alt: "ExesTools Spinner Wheel",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Free Spinner Wheel | ExesTools",
+      description:
+        "Custom random spinner for names, Yes/No, prizes, and classroom activities. No signup required.",
+      images: [siteConfig.ogImagePath],
+    },
+    robots: hasShare
+      ? { index: false, follow: true }
+      : { index: true, follow: true },
+  };
+}
 
 export default async function HomePage({ searchParams }: PageProps) {
   const sp = await searchParams;
@@ -73,7 +80,7 @@ export default async function HomePage({ searchParams }: PageProps) {
 
       <header className="mb-6 max-w-3xl">
         <h1 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
-          Free Spinner Wheel &amp; Random Name Picker
+          Free Spinner Wheel & Random Name Picker
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-muted sm:text-base">
           Enter your choices, hit SPIN, and get a clear random result. Free on {siteConfig.name} —
@@ -161,7 +168,6 @@ export default async function HomePage({ searchParams }: PageProps) {
         </section>
 
         <FAQSection />
-        <AdPlaceholder label="Footer area" sizeClassName="h-24" />
       </div>
     </div>
   );
