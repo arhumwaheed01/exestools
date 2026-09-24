@@ -72,8 +72,34 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-lg font-bold text-foreground">Hosting and logs</h2>
           <p className="mt-2">
             Our hosting provider (for example Vercel) may collect standard server logs such as IP
-            address, user agent, and request path for security and reliability. We do not currently
-            load third-party analytics scripts on the site.
+            address, user agent, and request path for security and reliability.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-lg font-bold text-foreground">Analytics (Google Analytics 4)</h2>
+          <p className="mt-2">
+            We use Google Analytics 4 (measurement ID{" "}
+            <code className="text-foreground">G-DJKH68VDEJ</code>) to understand aggregate traffic
+            and product usage (for example page views and events like spin, share, and preset load).
+            We do not send your wheel choice text or names to Analytics.
+          </p>
+          <p className="mt-2">
+            Google Consent Mode v2 is enabled. For visitors in the European Economic Area, the United
+            Kingdom, and Switzerland, analytics and advertising storage default to denied unless a
+            future consent choice updates that state. Outside those regions, analytics storage is
+            granted by default so we can measure site usage; advertising storage remains denied
+            because we do not run personalized ads today. Google may process measurement data under
+            its own terms — see{" "}
+            <a
+              href="https://policies.google.com/privacy"
+              className="font-semibold text-accent hover:underline"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Google&apos;s Privacy Policy
+            </a>
+            .
           </p>
         </section>
 

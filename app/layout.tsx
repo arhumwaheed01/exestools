@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Footer } from "@/components/Footer";
+import { GoogleTag } from "@/components/GoogleTag";
 import { Header } from "@/components/Header";
 import { siteConfig } from "@/lib/seo";
 import "./globals.css";
@@ -60,6 +61,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
+        <GoogleTag />
       </body>
     </html>
   );
