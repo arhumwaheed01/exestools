@@ -7,6 +7,40 @@ import type { ToolId } from "@/lib/tools";
 
 type FaqItem = { q: string; a: string };
 
+/** Bracketed phrases in FAQ answers → internal links (visible FAQ only). */
+const FAQ_LINK_HREFS: Record<string, string> = {
+  "Privacy Policy": "/privacy-policy",
+  "Random name picker": "/random-name-picker",
+  "Classroom spinner": "/classroom-spinner",
+  "Terms of Service": "/terms",
+  "Yes or no wheel": "/yes-no-wheel",
+  "multi-option decision wheel": "/",
+};
+
+function faqPlainText(answer: string): string {
+  return answer.replace(/\[|\]/g, "");
+}
+
+function FaqAnswer({ text }: { text: string }) {
+  const parts = text.split(/(\[[^\]]+\])/g);
+  return (
+    <>
+      {parts.map((part, i) => {
+        const m = /^\[([^\]]+)\]$/.exec(part);
+        if (!m) return <span key={i}>{part}</span>;
+        const label = m[1];
+        const href = FAQ_LINK_HREFS[label];
+        if (!href) return <span key={i}>{label}</span>;
+        return (
+          <Link key={i} href={href} className="font-semibold text-accent hover:underline">
+            {label}
+          </Link>
+        );
+      })}
+    </>
+  );
+}
+
 type Props = {
   toolId: Exclude<ToolId, "home">;
   title: string;
@@ -38,7 +72,7 @@ export function UseCaseToolPage({
     mainEntity: faqs.map((item) => ({
       "@type": "Question",
       name: item.q,
-      acceptedAnswer: { "@type": "Answer", text: item.a },
+      acceptedAnswer: { "@type": "Answer", text: faqPlainText(item.a) },
     })),
   };
 
@@ -128,7 +162,9 @@ export function UseCaseToolPage({
                     </span>
                   </span>
                 </summary>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{item.a}</p>
+                <p className="mt-2 text-sm leading-relaxed text-muted">
+                  <FaqAnswer text={item.a} />
+                </p>
               </details>
             ))}
           </div>

@@ -30,24 +30,28 @@ export const metadata: Metadata = {
 
 const FAQS = [
   {
-    q: "Long lists?",
-    a: "Yes; one name per line. Prefer short display names.",
+    q: "How do I pick a random name from a list?",
+    a: "Paste or type your list in the Your choices box, one name per line, then press SPIN. You can paste a column straight from a spreadsheet or document. Empty lines are ignored, and up to 60 names fit on the wheel.",
   },
   {
-    q: "No repeats?",
-    a: "Keep remove-winner on, or Remove & continue.",
+    q: "Can the random name picker avoid repeats?",
+    a: 'Yes. "Remove winner after spin (no repeats)" is on by default on this page, so each picked name comes off the wheel until you reset the list. Turn it off if you want every name to stay in for every spin.',
   },
   {
-    q: "Duplicates?",
-    a: "Case-insensitive dupes skipped; add an initial if needed.",
+    q: "Can I pick more than one winner?",
+    a: "Yes, one at a time. With remove-winner on, spin once for each winner you need. Each winner leaves the wheel, so nobody can be picked twice.",
   },
   {
-    q: "Does Shuffle change odds?",
-    a: "No.",
+    q: "What happens with duplicate names?",
+    a: 'Duplicate lines are skipped, and capital letters don\'t count as a difference, so each name appears once. If two people share a name, add an initial, like "Sam K." and "Sam P."',
   },
   {
-    q: "Class roster?",
-    a: "Use Classroom / student spinner (Related-tools).",
+    q: "Does Shuffle change the odds?",
+    a: "No. Shuffle only changes the order of names around the wheel. Every name has the same chance on each spin.",
+  },
+  {
+    q: "I'm a teacher. Which picker should I use?",
+    a: "Use the [Classroom spinner]. It opens with a sample class roster and classroom example wheels, and it has the same no-repeat option.",
   },
 ];
 

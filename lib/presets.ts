@@ -96,12 +96,6 @@ export const WHEEL_PRESETS: WheelPreset[] = [
     choices: ["Yes", "No", "Maybe"],
   },
   {
-    id: "yes-no-weighted-hint",
-    name: "Extra Yes slice",
-    description: "Visual extra Yes (equal odds still per segment).",
-    choices: ["Yes", "Yes", "No"],
-  },
-  {
     id: "quick-decide",
     name: "Quick decide",
     description: "Go / wait / rethink.",
@@ -198,7 +192,7 @@ export const TOOL_DEFAULTS: Record<ToolId, ToolPresetConfig> = {
   },
   "yes-no-wheel": {
     defaultPresetId: "yes-no",
-    presetIds: ["yes-no", "yes-no-maybe", "yes-no-weighted-hint", "quick-decide"],
+    presetIds: ["yes-no", "yes-no-maybe", "quick-decide"],
   },
 };
 

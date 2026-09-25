@@ -39,10 +39,6 @@ const FAQS = [
     a: "Use Yes / No / Maybe chip.",
   },
   {
-    q: "Double-Yes chip?",
-    a: "Visual extra Yes slice only (phase 1).",
-  },
-  {
     q: "Decision with many options?",
     a: "Use the Multi-option decision wheel on the homepage — this page is for yes vs no.",
   },
@@ -55,7 +51,7 @@ export default async function YesNoWheelPage({ searchParams }: PageProps) {
       toolId="yes-no-wheel"
       breadcrumbLabel="Yes or no wheel"
       title="Yes or no wheel"
-      intro="Opens on Yes / No. Hit SPIN, or switch to Yes / No / Maybe or the extra-Yes slice chip. For lists with many options, use the homepage Multi-option decision wheel."
+      intro="Opens on Yes / No. Hit SPIN, or switch to Yes / No / Maybe. For lists with many options, use the homepage Multi-option decision wheel."
       faqs={FAQS}
       initialEncoded={typeof sp.c === "string" ? sp.c : null}
       initialPresetQuery={typeof sp.preset === "string" ? sp.preset : null}
