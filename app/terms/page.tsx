@@ -26,12 +26,11 @@ export default function TermsPage() {
       <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
         Terms of Service
       </h1>
-      <p className="mt-2 text-sm text-muted">Last updated: September 24, 2026</p>
+      <p className="mt-2 text-sm text-muted">Last updated: 25 September 2026</p>
       <div className="mt-6 space-y-5 text-sm leading-relaxed text-muted sm:text-base">
         <p>
           These Terms govern use of <strong className="text-foreground">{siteConfig.name}</strong> at{" "}
-          {siteConfig.url}. They are a starter draft — have counsel review them before relying on
-          them in production.
+          {siteConfig.url}.
         </p>
 
         <section>
