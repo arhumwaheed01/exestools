@@ -504,6 +504,7 @@ export function SpinnerWheel({
       <WinnerModal
         open={modalOpen}
         winner={winner}
+        showRemoveContinue={!autoRemove}
         onClose={() => {
           setModalOpen(false);
           setShowNextSteps(true);

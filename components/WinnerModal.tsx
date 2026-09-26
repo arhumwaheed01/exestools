@@ -7,12 +7,21 @@ import { X } from "lucide-react";
 type Props = {
   open: boolean;
   winner: string | null;
+  /** When remove-winner is already on, the winner is off the list — hide the redundant button. */
+  showRemoveContinue?: boolean;
   onClose: () => void;
   onSpinAgain: () => void;
   onRemoveWinner: () => void;
 };
 
-export function WinnerModal({ open, winner, onClose, onSpinAgain, onRemoveWinner }: Props) {
+export function WinnerModal({
+  open,
+  winner,
+  showRemoveContinue = true,
+  onClose,
+  onSpinAgain,
+  onRemoveWinner,
+}: Props) {
   const titleId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
   const reduceMotion = useReducedMotion();
@@ -99,13 +108,15 @@ export function WinnerModal({ open, winner, onClose, onSpinAgain, onRemoveWinner
               >
                 Spin again
               </button>
-              <button
-                type="button"
-                onClick={onRemoveWinner}
-                className="rounded-xl border border-border bg-surface-2 px-5 py-3 text-sm font-bold text-foreground hover:bg-border outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              >
-                Remove &amp; continue
-              </button>
+              {showRemoveContinue ? (
+                <button
+                  type="button"
+                  onClick={onRemoveWinner}
+                  className="rounded-xl border border-border bg-surface-2 px-5 py-3 text-sm font-bold text-foreground hover:bg-border outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                >
+                  Remove &amp; continue
+                </button>
+              ) : null}
               <button
                 type="button"
                 onClick={onClose}
