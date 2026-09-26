@@ -9,21 +9,27 @@ export type SharePayload = {
   choices: string[];
   toolId?: ToolId;
   ts?: number;
+  /** Any other top-level keys from the encoded JSON (team, num, raffle, …). */
+  extra: Record<string, unknown>;
 };
 
 const MAX_HASH_LEN = 6000;
 
-/** Build `#w=v1.…` fragment for the current path. Throws if too long. */
-export function encodeShareHash(choices: string[], toolId?: ToolId): string {
-  const payload = compressToEncodedURIComponent(
-    JSON.stringify({
-      v: 1,
-      choices: choices.slice(0, 60),
-      toolId,
-      ts: Date.now(),
-    } satisfies SharePayload),
-  );
-  const hash = `#w=v1.${payload}`;
+/** Build `#w=v1.…` fragment. Optional `extra` fields are merged into the payload. */
+export function encodeShareHash(
+  choices: string[],
+  toolId?: ToolId,
+  extra?: Record<string, unknown>,
+): string {
+  const payload: Record<string, unknown> = {
+    v: 1,
+    choices,
+    toolId,
+    ts: Date.now(),
+    ...extra,
+  };
+  const compressed = compressToEncodedURIComponent(JSON.stringify(payload));
+  const hash = `#w=v1.${compressed}`;
   if (hash.length > MAX_HASH_LEN) {
     throw new Error("LIST_TOO_LONG");
   }
@@ -38,13 +44,16 @@ export function decodeShareHash(hash: string): SharePayload | null {
     if (!compressed) return null;
     const json = decompressFromEncodedURIComponent(compressed);
     if (!json) return null;
-    const parsed = JSON.parse(json) as SharePayload;
+    const parsed = JSON.parse(json) as Record<string, unknown>;
     if (parsed.v !== 1 || !Array.isArray(parsed.choices)) return null;
+    const choices = parsed.choices.filter((c): c is string => typeof c === "string");
+    const { v: _v, choices: _c, toolId, ts, ...rest } = parsed;
     return {
       v: 1,
-      choices: parsed.choices.filter((c) => typeof c === "string").slice(0, 60),
-      toolId: parsed.toolId,
-      ts: parsed.ts,
+      choices,
+      toolId: typeof toolId === "string" ? (toolId as ToolId) : undefined,
+      ts: typeof ts === "number" ? ts : undefined,
+      extra: rest,
     };
   } catch {
     return null;

@@ -6,13 +6,10 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { BrandLogo } from "@/components/BrandLogo";
 import { siteConfig } from "@/lib/seo";
+import { TOOLS } from "@/lib/tools";
 
 const NAV = [
-  { href: "/", label: "Spinner Wheel" },
-  { href: "/random-name-picker", label: "Name Picker" },
-  { href: "/classroom-spinner", label: "Classroom" },
-  { href: "/prize-wheel", label: "Prize Wheel" },
-  { href: "/yes-no-wheel", label: "Yes / No" },
+  ...TOOLS.map((t) => ({ href: t.path, label: t.navLabel })),
   { href: "/about", label: "About" },
 ] as const;
 

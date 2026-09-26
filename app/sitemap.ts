@@ -7,6 +7,7 @@ const routes = [
   "/classroom-spinner",
   "/prize-wheel",
   "/yes-no-wheel",
+  "/random-team-generator",
   "/about",
   "/contact",
   "/privacy-policy",
@@ -15,14 +16,15 @@ const routes = [
 ] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date("2026-09-24");
+  const lastModified = new Date("2026-09-26");
   return routes.map((path) => {
     const isHome = path === "/";
     const isTool =
       path === "/" ||
       path.includes("wheel") ||
       path.includes("spinner") ||
-      path.includes("picker");
+      path.includes("picker") ||
+      path.includes("team");
     return {
       url: `${siteConfig.url}${isHome ? "" : path}`,
       lastModified,

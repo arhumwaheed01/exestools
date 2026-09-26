@@ -109,6 +109,16 @@ export default async function ClassroomSpinnerPage({ searchParams }: PageProps) 
             Groups and presentations: use Reading groups to choose which group shares next, or spin
             your roster to set the presentation order.
           </li>
+          <li>
+            Need groups for a project?{" "}
+            <Link
+              href="/random-team-generator"
+              className="font-semibold text-accent hover:underline"
+            >
+              Split the class into groups
+            </Link>{" "}
+            with the random team generator.
+          </li>
         </ul>
       </GuideSection>
       <GuideSection title="Privacy for schools">

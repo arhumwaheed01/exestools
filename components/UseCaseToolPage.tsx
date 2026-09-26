@@ -42,7 +42,7 @@ function FaqAnswer({ text }: { text: string }) {
 }
 
 type Props = {
-  toolId: Exclude<ToolId, "home">;
+  toolId: Exclude<ToolId, "home" | "random-team-generator">;
   title: string;
   intro: string;
   /** Optional H2 under intro (kw-map packs). */

@@ -4,7 +4,6 @@ import {
   ALLOWED_PRESET_QUERY,
   defaultChoicesForTool,
   getPresetById,
-  TOOL_DEFAULTS,
 } from "@/lib/presets";
 import type { ToolId } from "@/lib/tools";
 
@@ -25,15 +24,12 @@ export function SpinnerMount({
       : null;
   const previewChoices =
     (safePreset && getPresetById(safePreset)?.choices) || defaultChoicesForTool(toolId);
-  const cfg = TOOL_DEFAULTS[toolId];
 
   return (
     <div>
-      <div className="sr-only" aria-hidden>
+      <div className="sr-only">
         <StaticWheelPreview choices={[...previewChoices]} />
-        <p>
-          Tool {toolId}. Default preset {cfg.defaultPresetId}. Options: {previewChoices.join(", ")}.
-        </p>
+        <p>{`${previewChoices.length} choices on the wheel: ${previewChoices.join(", ")}.`}</p>
       </div>
       <SpinnerWheel
         toolId={toolId}

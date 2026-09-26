@@ -17,14 +17,18 @@ export const DEFAULT_CHOICES = [
 ] as const;
 
 const CLASSROOM_STUDENTS = [
-  "Alex",
-  "Jordan",
-  "Sam",
-  "Riley",
-  "Casey",
-  "Morgan",
-  "Taylor",
-  "Jamie",
+  "Ava",
+  "Noah",
+  "Mia",
+  "Liam",
+  "Sophia",
+  "Ethan",
+  "Isabella",
+  "Lucas",
+  "Harper",
+  "Mason",
+  "Amelia",
+  "Elijah",
 ];
 
 export const WHEEL_PRESETS: WheelPreset[] = [
@@ -193,6 +197,10 @@ export const TOOL_DEFAULTS: Record<ToolId, ToolPresetConfig> = {
   "yes-no-wheel": {
     defaultPresetId: "yes-no",
     presetIds: ["yes-no", "yes-no-maybe", "quick-decide"],
+  },
+  "random-team-generator": {
+    defaultPresetId: "classroom-students",
+    presetIds: [],
   },
 };
 

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { GuideSection, UseCaseToolPage } from "@/components/UseCaseToolPage";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 
@@ -62,25 +63,45 @@ export default async function RandomNamePickerPage({ searchParams }: PageProps) 
       toolId="random-name-picker"
       breadcrumbLabel="Random name picker"
       title="Random name picker wheel"
-      intro="This page loads a sample name list—edit freely (one name per line) and hit SPIN. Built for meetings, parties, and who-goes-first. Remove winner after spin defaults on so repeats stay off until you reset. No signup."
+      intro="Paste a list of names, one per line, and hit SPIN to pick one at random. Remove winner is on by default, so nobody is picked twice until you reset the list. Use it for meetings, parties, and deciding who goes first. Free, no signup."
       faqs={FAQS}
       initialEncoded={typeof sp.c === "string" ? sp.c : null}
       initialPresetQuery={typeof sp.preset === "string" ? sp.preset : null}
     >
       <GuideSection title="How to pick a name">
         <ol className="list-decimal space-y-2 pl-5">
-          <li>Use the loaded Sample names preset, or paste your list (one per line). Optional chips: Meeting order, Party / icebreakers.</li>
-          <li>Press SPIN.</li>
-          <li>Modal: Remove &amp; continue, Spin again, or Close.</li>
-          <li>Copy share link → this path + #w=. Fresh wheel → page default sample names.</li>
+          <li>
+            Replace the sample names with your own list, or try the Meeting order or Party /
+            icebreakers example.
+          </li>
+          <li>
+            Press SPIN. The name under the pointer is the winner, and it leaves the wheel while
+            remove-winner is on.
+          </li>
+          <li>Press Spin again for the next pick, or Close to stop.</li>
+          <li>
+            Press Copy share link to send the same list to someone else. It opens on this page with
+            your names loaded.
+          </li>
         </ol>
       </GuideSection>
-      <GuideSection title="Tips">
-        <p>Short display names read better on the wheel. Add an initial if two people share a name.</p>
+      <GuideSection title="Random name picker with no repeats">
+        <p>
+          Leave &quot;Remove winner after spin (no repeats)&quot; switched on and each name leaves
+          the wheel once it&apos;s picked. Keep spinning until everyone has had a turn. This works
+          well for speaking order in a meeting or for drawing several winners. When one name is
+          left, that person goes last. To run the list again, paste it back in.
+        </p>
       </GuideSection>
       <GuideSection title="Privacy">
         <p>
-          Lists save under this tool in your browser. Don’t put sensitive names in share URLs.
+          Your list is saved in this browser on this device, not on our servers. A share link
+          contains the names themselves, so don&apos;t share lists that include sensitive
+          information. Read our{" "}
+          <Link href="/privacy-policy" className="font-semibold text-accent hover:underline">
+            Privacy Policy
+          </Link>
+          .
         </p>
       </GuideSection>
     </UseCaseToolPage>

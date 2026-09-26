@@ -1,13 +1,10 @@
 import Link from "next/link";
 import { BrandLogo } from "@/components/BrandLogo";
 import { siteConfig } from "@/lib/seo";
+import { TOOLS } from "@/lib/tools";
 
 const FOOTER_LINKS = [
-  { href: "/", label: "Spinner Wheel" },
-  { href: "/random-name-picker", label: "Name Picker" },
-  { href: "/classroom-spinner", label: "Classroom" },
-  { href: "/prize-wheel", label: "Prize Wheel" },
-  { href: "/yes-no-wheel", label: "Yes / No" },
+  ...TOOLS.map((t) => ({ href: t.path, label: t.footerLabel })),
   { href: "/about", label: "About Us" },
   { href: "/contact", label: "Contact" },
   { href: "/privacy-policy", label: "Privacy Policy" },
@@ -19,7 +16,7 @@ export function Footer() {
   const year = new Date().getFullYear();
   return (
     <footer className="mt-auto border-t border-border bg-surface">
-      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 sm:px-6 md:flex-row md:items-start md:justify-between">
+      <div className="mx-auto flex flex-col gap-6 px-4 py-10 sm:px-6 md:flex-row md:items-start md:justify-between max-w-6xl">
         <div className="max-w-sm">
           <div className="flex items-center gap-2.5">
             <BrandLogo className="h-8 w-8" title={`${siteConfig.name} logo`} />

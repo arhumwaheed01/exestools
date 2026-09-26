@@ -25,13 +25,13 @@ import {
   savePrefs,
   saveSession,
 } from "@/lib/spinner-storage";
+import { randomInt, shuffle } from "@/lib/random";
 import { track } from "@/lib/track";
 import { cleanPathFor, defaultAutoRemoveWinner, type ToolId } from "@/lib/tools";
 import {
   choicesToText,
   easeOutCubic,
-  parseChoicesText,
-  shuffleArray,
+  parseChoicesWithStats,
   targetRotationForIndex,
   winnerIndexAt,
 } from "@/lib/wheel";
@@ -72,16 +72,10 @@ export function SpinnerWheel({
   const audioCtxRef = useRef<AudioContext | null>(null);
   const allowSaveRef = useRef(true);
 
-  const choices = useMemo(() => parseChoicesText(text), [text]);
-  const rawLineCount = useMemo(
-    () =>
-      text
-        .split(/\r?\n/)
-        .map((l) => l.trim())
-        .filter(Boolean).length,
+  const { choices, duplicatesSkipped, overLimit } = useMemo(
+    () => parseChoicesWithStats(text),
     [text],
   );
-  const duplicatesSkipped = Math.max(0, rawLineCount - choices.length);
   const canSpin = choices.length >= 2 && !spinning;
 
   const status = useMemo(() => {
@@ -221,11 +215,11 @@ export function SpinnerWheel({
     setWinner(null);
     setSpinning(true);
 
-    const winnerIdx = Math.floor(Math.random() * choices.length);
+    const winnerIdx = randomInt(choices.length);
     const start = rotationRef.current;
-    const extra = reduceMotion ? 2 : 5 + Math.floor(Math.random() * 3);
+    const extra = reduceMotion ? 2 : 5 + randomInt(3);
     const end = targetRotationForIndex(winnerIdx, choices.length, start, extra);
-    const duration = reduceMotion ? 1200 : 4200 + Math.random() * 900;
+    const duration = reduceMotion ? 1200 : 4200 + randomInt(900);
     const t0 = performance.now();
 
     cancelAnimationFrame(rafRef.current);
@@ -251,7 +245,7 @@ export function SpinnerWheel({
 
   const onShuffle = () => {
     if (spinningRef.current) return;
-    setText(choicesToText(shuffleArray(choices)));
+    setText(choicesToText(shuffle(choices)));
   };
 
   const onClear = () => {
@@ -466,6 +460,7 @@ export function SpinnerWheel({
             count={choices.length}
             disabled={spinning}
             duplicatesSkipped={duplicatesSkipped}
+            overLimit={overLimit}
             onChange={onTextChange}
             onShuffle={onShuffle}
             onClear={onClear}
@@ -473,9 +468,8 @@ export function SpinnerWheel({
             onCopy={() => void onCopy()}
           />
           <p className="text-xs text-muted">
-            Lists save in this browser for this tool. Share links use a private page fragment (
-            <code className="text-foreground">#w=</code>
-            ).{" "}
+            Your list is saved in this browser. Share links carry the list inside the link, so anyone
+            with the link can see it.{" "}
             <Link href="/privacy-policy" className="font-semibold text-accent hover:underline">
               Privacy Policy
             </Link>
@@ -490,6 +484,7 @@ export function SpinnerWheel({
                     { href: "/random-name-picker", label: "Name picker" },
                     { href: "/prize-wheel", label: "Prize wheel" },
                     { href: "/yes-no-wheel", label: "Yes or no wheel" },
+                    { href: "/random-team-generator", label: "Team generator" },
                   ]
                 : undefined
             }

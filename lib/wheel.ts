@@ -62,29 +62,41 @@ export function truncateLabel(text: string, max = 16): string {
 }
 
 export function parseChoicesText(raw: string): string[] {
+  return parseChoicesWithStats(raw).choices;
+}
+
+export type ParsedChoices = {
+  choices: string[];
+  duplicatesSkipped: number;
+  overLimit: number;
+};
+
+const MAX_CHOICES = 60;
+
+/** Deduplicate first, then cap at 60 so over-limit lines aren't mislabelled as duplicates. */
+export function parseChoicesWithStats(raw: string): ParsedChoices {
+  const lines = raw
+    .split(/\r?\n/)
+    .map((s) => s.trim())
+    .filter(Boolean);
   const seen = new Set<string>();
-  const out: string[] = [];
-  for (const line of raw.split(/\r?\n/)) {
-    const v = line.trim();
-    if (!v) continue;
-    const key = v.toLowerCase();
-    if (seen.has(key)) continue;
+  const unique: string[] = [];
+  let duplicatesSkipped = 0;
+  for (const line of lines) {
+    const truncated = line.slice(0, 64);
+    const key = truncated.toLocaleLowerCase();
+    if (seen.has(key)) {
+      duplicatesSkipped++;
+      continue;
+    }
     seen.add(key);
-    out.push(v.slice(0, 64));
-    if (out.length >= 60) break;
+    unique.push(truncated);
   }
-  return out;
+  const choices = unique.slice(0, MAX_CHOICES);
+  const overLimit = Math.max(0, unique.length - MAX_CHOICES);
+  return { choices, duplicatesSkipped, overLimit };
 }
 
 export function choicesToText(choices: string[]): string {
   return choices.join("\n");
-}
-
-export function shuffleArray<T>(items: T[]): T[] {
-  const a = [...items];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j]!, a[i]!];
-  }
-  return a;
 }

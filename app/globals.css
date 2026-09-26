@@ -31,6 +31,33 @@ body {
   color-scheme: dark;
 }
 
+@media print {
+  header,
+  footer,
+  .print\:hidden,
+  nav[aria-label="Primary"],
+  nav[aria-label="Mobile"],
+  nav[aria-label="Related ExesTools tools"] {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+    color: #111;
+    color-scheme: light;
+  }
+
+  .team-results {
+    display: block !important;
+  }
+
+  .team-results article {
+    break-inside: avoid;
+    border: 1px solid #ccc;
+    color: #111;
+  }
+}
+
 .confetti-piece {
   animation: confettiFall 1.15s ease-out forwards;
 }

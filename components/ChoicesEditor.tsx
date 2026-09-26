@@ -8,6 +8,7 @@ type Props = {
   count: number;
   disabled?: boolean;
   duplicatesSkipped?: number;
+  overLimit?: number;
   onChange: (text: string) => void;
   onShuffle: () => void;
   onClear: () => void;
@@ -20,6 +21,7 @@ export function ChoicesEditor({
   count,
   disabled,
   duplicatesSkipped = 0,
+  overLimit = 0,
   onChange,
   onShuffle,
   onClear,
@@ -32,8 +34,9 @@ export function ChoicesEditor({
         <div>
           <h2 className="text-base font-bold text-foreground">Your choices</h2>
           <p className="mt-0.5 text-xs text-muted">
-            One name/option per line. Empty lines ignored. Duplicate lines are skipped
-            (case-insensitive)—add an initial if two people share a name.
+            One name or option per line, up to 60. Empty lines are ignored. Duplicate lines are
+            skipped (capital letters don&apos;t count as different), so add an initial if two people
+            share a name.
           </p>
         </div>
         <span className="shrink-0 rounded-full bg-surface-2 px-2.5 py-1 text-xs font-bold text-foreground">
@@ -58,6 +61,12 @@ export function ChoicesEditor({
       {duplicatesSkipped > 0 ? (
         <p className="text-xs font-medium text-amber-300" role="status">
           {duplicatesSkipped} duplicate line{duplicatesSkipped === 1 ? "" : "s"} skipped.
+        </p>
+      ) : null}
+      {overLimit > 0 ? (
+        <p className="text-xs font-medium text-amber-300" role="status">
+          Only the first 60 are on the wheel. {overLimit} line
+          {overLimit === 1 ? " was" : "s were"} left out.
         </p>
       ) : null}
 

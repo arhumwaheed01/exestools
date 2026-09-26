@@ -7,15 +7,18 @@ const RELATED: Record<ToolId, { href: string; label: string }[]> = {
     { href: "/classroom-spinner", label: "Classroom spinner" },
     { href: "/prize-wheel", label: "Prize wheel" },
     { href: "/yes-no-wheel", label: "Yes or no wheel" },
+    { href: "/random-team-generator", label: "Random team generator" },
   ],
   "random-name-picker": [
     { href: "/classroom-spinner", label: "Classroom / student spinner" },
+    { href: "/random-team-generator", label: "Random team generator" },
     { href: "/", label: "Free spinner wheel" },
     { href: "/yes-no-wheel", label: "Yes or no wheel" },
     { href: "/prize-wheel", label: "Prize / giveaway wheel" },
   ],
   "classroom-spinner": [
     { href: "/random-name-picker", label: "Generic name picker" },
+    { href: "/random-team-generator", label: "Split the class into groups" },
     { href: "/prize-wheel", label: "Classroom reward / prize wheel" },
     { href: "/", label: "All-purpose spinner wheel" },
     { href: "/yes-no-wheel", label: "Yes or no wheel" },
@@ -32,6 +35,11 @@ const RELATED: Record<ToolId, { href: string; label: string }[]> = {
     { href: "/prize-wheel", label: "Prize wheel" },
     { href: "/classroom-spinner", label: "Classroom spinner" },
   ],
+  "random-team-generator": [
+    { href: "/classroom-spinner", label: "Classroom spinner (pick one student)" },
+    { href: "/random-name-picker", label: "Random name picker" },
+    { href: "/", label: "Spinner wheel" },
+  ],
 };
 
 export function relatedLinksFor(toolId: ToolId) {
@@ -40,7 +48,7 @@ export function relatedLinksFor(toolId: ToolId) {
 
 export function RelatedTools({
   toolId,
-  heading = "Related ExesTools spinners",
+  heading = "Related ExesTools tools",
   compact = false,
 }: {
   toolId: ToolId;
@@ -49,7 +57,7 @@ export function RelatedTools({
 }) {
   const links = RELATED[toolId];
   return (
-    <nav className={compact ? "max-w-3xl" : "max-w-3xl"} aria-label="Related ExesTools spinners">
+    <nav className={compact ? "max-w-3xl" : "max-w-3xl"} aria-label="Related ExesTools tools">
       <h2
         className={
           compact
