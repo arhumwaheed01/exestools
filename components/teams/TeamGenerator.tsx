@@ -5,7 +5,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { encodeShareHash, readShareFromLocation } from "@/lib/share-codec";
 import { track } from "@/lib/track";
 import {
+  MAX_PER_TEAM,
+  MAX_TEAMS,
   TEAM_SAMPLE_NAMES,
+  clampTeamN,
   formatTeamsPlain,
   generateTeams,
   parseTeamNames,
@@ -106,7 +109,9 @@ export function TeamGenerator({ initialPresetQuery = null }: Props) {
 
   const applyClampStatus = useCallback(
     (nameCount: number, nextMode: TeamMode, nextN: number) => {
-      if (nextMode === "groups" && nextN > nameCount && nameCount >= 2) {
+      if (nextMode === "groups" && nextN > MAX_TEAMS) {
+        setClampNote("The most teams you can make is 50.");
+      } else if (nextMode === "groups" && nextN > nameCount && nameCount >= 2) {
         setClampNote(
           `You have ${nameCount} names, so the most you can make is ${nameCount} teams.`,
         );
@@ -117,12 +122,10 @@ export function TeamGenerator({ initialPresetQuery = null }: Props) {
     [],
   );
 
-  const effectiveN = useMemo(() => {
-    if (names.length < 2) return n;
-    if (mode === "groups") return Math.min(Math.max(2, n), names.length);
-    return Math.min(Math.max(1, n), names.length);
-  }, [mode, n, names.length]);
-
+  const effectiveN = useMemo(
+    () => clampTeamN(mode, n, names.length),
+    [mode, n, names.length],
+  );
   useEffect(() => {
     applyClampStatus(names.length, mode, n);
   }, [names.length, mode, n, applyClampStatus]);
@@ -276,14 +279,14 @@ export function TeamGenerator({ initialPresetQuery = null }: Props) {
       (result ? result.status : "Ready — press Generate teams.");
 
   const dupeNotice =
-    parsed.duplicateLabels.length > 0
-      ? `${parsed.duplicateLabels.length} name${parsed.duplicateLabels.length === 1 ? "" : "s"} appear more than once (${parsed.duplicateLabels.slice(0, 3).join(", ")}${parsed.duplicateLabels.length > 3 ? "…" : ""}). Add an initial to tell them apart.`
+    parsed.duplicateCount > 0
+      ? `${parsed.duplicateCount} names appear more than once (${parsed.duplicateLabels.slice(0, 3).join(", ")}${parsed.duplicateLabels.length > 3 ? "…" : ""}). Add an initial to tell them apart.`
       : null;
 
   return (
     <div className="team-generator">
       {sharedMode ? (
-        <div className="mb-4 flex flex-wrap items-center gap-2 rounded-xl border border-accent/40 bg-surface-2 px-3 py-2.5 text-sm">
+        <div className="mb-4 flex flex-wrap items-center gap-2 rounded-xl border border-accent/40 bg-surface-2 px-3 py-2.5 text-sm print:hidden">
           <p className="flex-1 text-muted">
             Shared teams — not saved on this device until you keep them.
           </p>
@@ -305,7 +308,7 @@ export function TeamGenerator({ initialPresetQuery = null }: Props) {
       ) : null}
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="flex flex-col gap-4 rounded-2xl border border-border bg-surface p-4 sm:p-5">
+        <div className="flex flex-col gap-4 rounded-2xl border border-border bg-surface p-4 sm:p-5 print:hidden">
           <div>
             <h2 className="text-base font-bold text-foreground">Names</h2>
             <p className="mt-0.5 text-xs text-muted">
@@ -374,12 +377,17 @@ export function TeamGenerator({ initialPresetQuery = null }: Props) {
               <input
                 type="number"
                 min={mode === "groups" ? 2 : 1}
-                max={mode === "groups" ? 50 : 100}
+                max={mode === "groups" ? MAX_TEAMS : MAX_PER_TEAM}
                 value={n}
                 onChange={(e) => {
-                  const v = Number(e.target.value) || (mode === "groups" ? 2 : 1);
+                  const raw = Number(e.target.value);
+                  const v = Number.isFinite(raw) ? raw : mode === "groups" ? 2 : 1;
                   setN(v);
                   setResult(null);
+                }}
+                onBlur={() => {
+                  const clamped = clampTeamN(mode, n, Math.max(names.length, 2));
+                  if (clamped !== n) setN(clamped);
                 }}
                 className="min-h-12 w-24 rounded-lg border border-border bg-surface-2 px-3 text-foreground outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
               />
@@ -479,7 +487,7 @@ export function TeamGenerator({ initialPresetQuery = null }: Props) {
           </p>
         </div>
 
-        <div className="team-results min-h-[280px]">
+        <div className="team-results min-h-[280px] print:col-span-full">
           {result && result.teams.length > 0 ? (
             <>
               <div className="mb-4 flex flex-wrap gap-2 print:hidden">
@@ -487,7 +495,7 @@ export function TeamGenerator({ initialPresetQuery = null }: Props) {
                 <ActionBtn label="Copy share link" onClick={() => void onShare()} />
                 <ActionBtn label="Print" onClick={() => window.print()} />
               </div>
-              <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 print:grid-cols-3">
                 {result.teams.map((team) => (
                   <article
                     key={team.name}

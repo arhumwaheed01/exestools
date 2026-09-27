@@ -2,7 +2,8 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { RelatedTools } from "@/components/RelatedTools";
 import { SpinnerMount } from "@/components/SpinnerMount";
-import { absoluteUrl, siteConfig } from "@/lib/seo";
+import { absoluteUrl } from "@/lib/seo";
+import { webAppLd } from "@/lib/seo/jsonld";
 import type { ToolId } from "@/lib/tools";
 
 type FaqItem = { q: string; a: string };
@@ -12,9 +13,11 @@ const FAQ_LINK_HREFS: Record<string, string> = {
   "Privacy Policy": "/privacy-policy",
   "Random name picker": "/random-name-picker",
   "Classroom spinner": "/classroom-spinner",
+  "classroom spinner": "/classroom-spinner",
   "Terms of Service": "/terms",
   "Yes or no wheel": "/yes-no-wheel",
   "multi-option decision wheel": "/",
+  "How ExesTools picks a result": "/about#how-it-works",
 };
 
 function faqPlainText(answer: string): string {
@@ -44,7 +47,7 @@ function FaqAnswer({ text }: { text: string }) {
 type Props = {
   toolId: Exclude<ToolId, "home" | "random-team-generator">;
   title: string;
-  intro: string;
+  intro: ReactNode;
   /** Optional H2 under intro (kw-map packs). */
   sectionHeading?: string;
   children: ReactNode;
@@ -52,6 +55,9 @@ type Props = {
   breadcrumbLabel: string;
   initialEncoded?: string | null;
   initialPresetQuery?: string | null;
+  schemaName: string;
+  schemaDescription: string;
+  schemaCategory?: string;
 };
 
 export function UseCaseToolPage({
@@ -64,6 +70,9 @@ export function UseCaseToolPage({
   breadcrumbLabel,
   initialEncoded = null,
   initialPresetQuery = null,
+  schemaName,
+  schemaDescription,
+  schemaCategory = "UtilitiesApplication",
 }: Props) {
   const path = `/${toolId}`;
   const faqLd = {
@@ -76,16 +85,12 @@ export function UseCaseToolPage({
     })),
   };
 
-  const appLd = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: `${title} | ${siteConfig.name}`,
-    url: absoluteUrl(path),
-    applicationCategory: "UtilitiesApplication",
-    operatingSystem: "Any",
-    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-    description: intro,
-  };
+  const appLd = webAppLd({
+    path,
+    name: schemaName,
+    description: schemaDescription,
+    category: schemaCategory,
+  });
 
   const crumbLd = {
     "@context": "https://schema.org",

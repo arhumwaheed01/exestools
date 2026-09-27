@@ -23,7 +23,7 @@ export function Footer() {
             <p className="text-lg font-bold text-foreground">{siteConfig.name}</p>
           </div>
           <p className="mt-2 text-sm leading-relaxed text-muted">
-            {siteConfig.tagline}. Free spinner wheel and decision tools — no account required.
+            {siteConfig.tagline}. Free spinner wheel and decision tools, no account required.
           </p>
           <p className="mt-4 text-xs text-muted/80">
             © {year} {siteConfig.name}

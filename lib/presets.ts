@@ -35,7 +35,7 @@ export const WHEEL_PRESETS: WheelPreset[] = [
   {
     id: "names",
     name: "Sample names",
-    description: "Starter name list for the homepage.",
+    description: "A few names to try.",
     choices: [...DEFAULT_CHOICES],
   },
   {
@@ -102,13 +102,19 @@ export const WHEEL_PRESETS: WheelPreset[] = [
   {
     id: "quick-decide",
     name: "Quick decide",
-    description: "Go / wait / rethink.",
+    description: "Do it, wait, ask someone, or skip.",
     choices: ["Do it", "Wait", "Ask someone", "Skip"],
+  },
+  {
+    id: "heads-tails",
+    name: "Heads / Tails",
+    description: "Flip a coin on the wheel.",
+    choices: ["Heads", "Tails"],
   },
   {
     id: "prizes",
     name: "Prize rewards",
-    description: "Giveaway reward segments.",
+    description: "Prize ideas for a giveaway.",
     choices: [
       "Gift card",
       "Free coffee",
@@ -121,7 +127,7 @@ export const WHEEL_PRESETS: WheelPreset[] = [
   {
     id: "prize-rewards",
     name: "Prize rewards",
-    description: "Giveaway reward segments.",
+    description: "Prize ideas for a giveaway.",
     choices: [
       "Gift card",
       "Free coffee",
@@ -170,6 +176,66 @@ export const WHEEL_PRESETS: WheelPreset[] = [
       "Stay in",
     ],
   },
+  {
+    id: "letters-a-z",
+    name: "Letters A–Z",
+    description: "Spin a random letter.",
+    choices: [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T",
+      "U",
+      "V",
+      "W",
+      "X",
+      "Y",
+      "Z",
+    ],
+  },
+  {
+    id: "letters-word-game",
+    name: "Word game letters",
+    description: "20 letters, no Q, U, V, X, Y, Z.",
+    choices: [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "R",
+      "S",
+      "T",
+      "W",
+    ],
+  },
 ];
 
 export type ToolPresetConfig = {
@@ -180,7 +246,15 @@ export type ToolPresetConfig = {
 export const TOOL_DEFAULTS: Record<ToolId, ToolPresetConfig> = {
   home: {
     defaultPresetId: "names",
-    presetIds: ["names", "yes-no", "prizes", "food", "activity"],
+    presetIds: [
+      "names",
+      "yes-no",
+      "prizes",
+      "food",
+      "activity",
+      "letters-a-z",
+      "letters-word-game",
+    ],
   },
   "random-name-picker": {
     defaultPresetId: "sample-names",
@@ -188,7 +262,13 @@ export const TOOL_DEFAULTS: Record<ToolId, ToolPresetConfig> = {
   },
   "classroom-spinner": {
     defaultPresetId: "classroom-students",
-    presetIds: ["classroom-students", "classroom-jobs", "brain-breaks", "reading-groups"],
+    presetIds: [
+      "classroom-students",
+      "classroom-jobs",
+      "brain-breaks",
+      "reading-groups",
+      "letters-a-z",
+    ],
   },
   "prize-wheel": {
     defaultPresetId: "prize-rewards",
@@ -196,7 +276,7 @@ export const TOOL_DEFAULTS: Record<ToolId, ToolPresetConfig> = {
   },
   "yes-no-wheel": {
     defaultPresetId: "yes-no",
-    presetIds: ["yes-no", "yes-no-maybe", "quick-decide"],
+    presetIds: ["yes-no", "yes-no-maybe", "quick-decide", "heads-tails"],
   },
   "random-team-generator": {
     defaultPresetId: "classroom-students",

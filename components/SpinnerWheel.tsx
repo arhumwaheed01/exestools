@@ -482,6 +482,7 @@ export function SpinnerWheel({
               toolId === "home"
                 ? [
                     { href: "/random-name-picker", label: "Name picker" },
+                    { href: "/classroom-spinner", label: "Classroom spinner" },
                     { href: "/prize-wheel", label: "Prize wheel" },
                     { href: "/yes-no-wheel", label: "Yes or no wheel" },
                     { href: "/random-team-generator", label: "Team generator" },

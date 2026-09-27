@@ -41,7 +41,7 @@ const FAQS = [
   },
   {
     q: "Is the random student picker really random?",
-    a: "Yes. Each spin picks one name from the current list, and every name has the same chance. The pick comes from your browser's built-in random number generator, and the wheel then stops on that name, so the student under the pointer is always the result. Streaks can happen by chance. Keep remove-winner on if you want everyone picked once.",
+    a: "Yes. Each spin picks one name from the current list, and every name has the same chance. The pick comes from your browser's built-in random number generator, and the wheel then stops on that name, so the student under the pointer is always the result. Streaks can happen by chance. Keep remove-winner on if you want everyone picked once. Learn more: [How ExesTools picks a result].",
   },
   {
     q: "Can I use it on a projector or interactive whiteboard?",
@@ -59,6 +59,10 @@ const FAQS = [
     q: "How is this different from the random name picker?",
     a: "This page is set up for classrooms. It opens with a sample class roster, has classroom example wheels (Classroom jobs, Brain break activities, Reading groups), and has remove-winner on so every student gets a turn. For general lists such as meetings or parties, use the [Random name picker].",
   },
+  {
+    q: "Can I use it as an alphabet or letter wheel?",
+    a: 'Yes. Tap Letters A–Z under Example wheels to put all 26 letters on the wheel. With remove-winner on, each letter comes off after it\'s picked, so you can work through the whole alphabet without repeats. It works well for letter of the day, phonics warm-ups, and "name something that starts with…" games.',
+  },
 ];
 
 export default async function ClassroomSpinnerPage({ searchParams }: PageProps) {
@@ -71,6 +75,9 @@ export default async function ClassroomSpinnerPage({ searchParams }: PageProps) 
       sectionHeading="Random student picker for fair turn-taking"
       intro="Paste your class list, one name per line, and hit SPIN to call on a student at random. Remove winner is on by default, so every student gets a turn before anyone repeats. Free for teachers, no signup, and your roster stays in this browser."
       faqs={FAQS}
+      schemaName="Classroom Spinner Wheel"
+      schemaDescription={META}
+      schemaCategory="EducationalApplication"
       initialEncoded={typeof sp.c === "string" ? sp.c : null}
       initialPresetQuery={typeof sp.preset === "string" ? sp.preset : null}
     >
@@ -108,6 +115,10 @@ export default async function ClassroomSpinnerPage({ searchParams }: PageProps) 
           <li>
             Groups and presentations: use Reading groups to choose which group shares next, or spin
             your roster to set the presentation order.
+          </li>
+          <li>
+            Letter of the day and phonics warm-ups: tap Letters A–Z and leave remove-winner on to
+            work through the alphabet with no repeats.
           </li>
           <li>
             Need groups for a project?{" "}

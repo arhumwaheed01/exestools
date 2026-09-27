@@ -43,7 +43,7 @@ type Props = {
 /** SSR example split (crawlers / loading) + client tool. Fixed min-height avoids CLS. */
 export function TeamGeneratorMount({ initialPresetQuery = null }: Props) {
   return (
-    <div className="min-h-[520px]">
+    <div className="min-h-[1190px] lg:min-h-[800px]">
       <TeamGenerator initialPresetQuery={initialPresetQuery} />
     </div>
   );

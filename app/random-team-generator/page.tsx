@@ -3,6 +3,7 @@ import Link from "next/link";
 import { RelatedTools } from "@/components/RelatedTools";
 import { TeamGeneratorMount } from "@/components/teams/TeamGeneratorMount";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
+import { webAppLd } from "@/lib/seo/jsonld";
 
 type PageProps = {
   searchParams: Promise<{ preset?: string }>;
@@ -30,10 +31,34 @@ export const metadata: Metadata = {
   },
 };
 
+const FAQ_LINK_HREFS: Record<string, string> = {
+  "How ExesTools picks a result": "/about#how-it-works",
+};
+
+function FaqAnswer({ text }: { text: string }) {
+  const parts = text.split(/(\[[^\]]+\])/g);
+  return (
+    <>
+      {parts.map((part, i) => {
+        const m = /^\[([^\]]+)\]$/.exec(part);
+        if (!m) return <span key={i}>{part}</span>;
+        const label = m[1];
+        const href = FAQ_LINK_HREFS[label];
+        if (!href) return <span key={i}>{label}</span>;
+        return (
+          <Link key={i} href={href} className="font-semibold text-accent hover:underline">
+            {label}
+          </Link>
+        );
+      })}
+    </>
+  );
+}
+
 const FAQS = [
   {
     q: "How does the random team generator pick teams?",
-    a: "It shuffles your whole list with a Fisher–Yates shuffle, using your browser's secure random number generator, then deals the names into teams one at a time. Every arrangement is equally likely, and nobody is placed on a team in advance.",
+    a: "It shuffles your whole list with a Fisher–Yates shuffle, using your browser's secure random number generator, then deals the names into teams one at a time. Every arrangement is equally likely, and nobody is placed on a team in advance. Learn more: [How ExesTools picks a result].",
   },
   {
     q: "What happens if the names don't split evenly?",
@@ -61,17 +86,11 @@ export default async function RandomTeamGeneratorPage({ searchParams }: PageProp
   const sp = await searchParams;
   const preset = typeof sp.preset === "string" && sp.preset === "pairs" ? "pairs" : null;
 
-  const appLd = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: "Random team generator | ExesTools",
-    url: absoluteUrl("/random-team-generator"),
-    applicationCategory: "UtilitiesApplication",
-    operatingSystem: "Any",
-    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-    description:
-      "Paste a list of names and split it into balanced random teams or pairs. Choose the number of teams or people per team, reshuffle, copy or share the result. Free, no signup, and the list stays in your browser.",
-  };
+  const appLd = webAppLd({
+    path: "/random-team-generator",
+    name: "Random Team Generator",
+    description: META,
+  });
 
   const faqLd = {
     "@context": "https://schema.org",
@@ -79,7 +98,7 @@ export default async function RandomTeamGeneratorPage({ searchParams }: PageProp
     mainEntity: FAQS.map((item) => ({
       "@type": "Question",
       name: item.q,
-      acceptedAnswer: { "@type": "Answer", text: item.a },
+      acceptedAnswer: { "@type": "Answer", text: item.a.replace(/\[|\]/g, "") },
     })),
   };
 
@@ -187,6 +206,8 @@ export default async function RandomTeamGeneratorPage({ searchParams }: PageProp
                       </Link>{" "}
                       for details.
                     </>
+                  ) : item.q.startsWith("How does the random team") ? (
+                    <FaqAnswer text={item.a} />
                   ) : (
                     item.a
                   )}

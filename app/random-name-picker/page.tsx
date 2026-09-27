@@ -48,7 +48,7 @@ const FAQS = [
   },
   {
     q: "Does Shuffle change the odds?",
-    a: "No. Shuffle only changes the order of names around the wheel. Every name has the same chance on each spin.",
+    a: "No. Shuffle only changes the order of names around the wheel. Every name has the same chance on each spin. Learn more: [How ExesTools picks a result].",
   },
   {
     q: "I'm a teacher. Which picker should I use?",
@@ -65,6 +65,8 @@ export default async function RandomNamePickerPage({ searchParams }: PageProps) 
       title="Random name picker wheel"
       intro="Paste a list of names, one per line, and hit SPIN to pick one at random. Remove winner is on by default, so nobody is picked twice until you reset the list. Use it for meetings, parties, and deciding who goes first. Free, no signup."
       faqs={FAQS}
+      schemaName="Random Name Picker Wheel"
+      schemaDescription={META}
       initialEncoded={typeof sp.c === "string" ? sp.c : null}
       initialPresetQuery={typeof sp.preset === "string" ? sp.preset : null}
     >

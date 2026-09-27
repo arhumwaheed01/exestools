@@ -120,6 +120,7 @@ describe("parseTeamNames", () => {
     const parsed = parseTeamNames("Alex\nalex\nSam");
     expect(parsed.names).toEqual(["Alex", "alex", "Sam"]);
     expect(parsed.duplicateLabels).toEqual(["Alex"]);
+    expect(parsed.duplicateCount).toBe(2);
   });
 });
 
