@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import { Footer } from "@/components/Footer";
 import { GoogleTag } from "@/components/GoogleTag";
 import { Header } from "@/components/Header";
@@ -15,6 +16,9 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+/** ca-pub-… from Vercel env. No ad units until approval (MD-05). */
+const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.domain),
@@ -48,6 +52,8 @@ export const metadata: Metadata = {
     description: siteConfig.defaultDescription,
     images: [siteConfig.ogImagePath],
   },
+  // AdSense site verification (meta-tag method)
+  other: ADSENSE_CLIENT ? { "google-adsense-account": ADSENSE_CLIENT } : {},
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -62,6 +68,15 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <main className="flex-1">{children}</main>
         <Footer />
         <GoogleTag />
+        {ADSENSE_CLIENT ? (
+          <Script
+            id="adsense-loader"
+            async
+            strategy="afterInteractive"
+            crossOrigin="anonymous"
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+          />
+        ) : null}
       </body>
     </html>
   );

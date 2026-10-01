@@ -118,7 +118,8 @@ export default function AboutPage() {
             Your lists are saved only in your browser, on your device, not on our servers. Share links
             carry the list inside the link itself, so anyone with the link can see it. We use Google
             Analytics to count visits and tool use, but we never send the names or options you type.
-            Read the{" "}
+            The site is paid for by ads from Google AdSense. Visitors in the EEA, the UK and
+            Switzerland are asked for consent before ads use cookies for personalization. Read the{" "}
             <Link href="/privacy-policy" className="font-semibold text-accent hover:underline">
               Privacy Policy
             </Link>{" "}

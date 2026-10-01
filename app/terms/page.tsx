@@ -26,7 +26,7 @@ export default function TermsPage() {
       <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
         Terms of Service
       </h1>
-      <p className="mt-2 text-sm text-muted">Last updated: September 25, 2026</p>
+      <p className="mt-2 text-sm text-muted">Last updated: October 1, 2026</p>
       <div className="mt-6 space-y-5 text-sm leading-relaxed text-muted sm:text-base">
         <p>
           These Terms govern use of <strong className="text-foreground">{siteConfig.name}</strong> at{" "}
@@ -56,6 +56,15 @@ export default function TermsPage() {
           <p className="mt-2">
             To the fullest extent permitted by law, {siteConfig.name} is not liable for indirect or
             consequential damages arising from use of the site.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-lg font-bold text-foreground">Advertising</h2>
+          <p className="mt-2">
+            ExesTools is free to use and is supported by ads. Ads are provided by third parties,
+            including Google. We don&apos;t control the content of individual ads, and if you visit
+            an advertiser&apos;s site, that site&apos;s own terms and privacy policy apply.
           </p>
         </section>
 

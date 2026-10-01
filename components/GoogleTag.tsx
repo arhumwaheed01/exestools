@@ -4,8 +4,8 @@ import { CONSENT_DENIED_REGIONS, GA_MEASUREMENT_ID } from "@/lib/analytics";
 
 /**
  * Consent Mode v2 defaults (before gtag config) + Google Analytics tag.
- * EEA/UK/CH: analytics + ads denied (cookieless pings only until a CMP grants).
- * Elsewhere: analytics granted; ads stay denied (no AdSense yet).
+ * EEA/UK/CH: analytics + ads denied until Google's CMP updates consent.
+ * Elsewhere: analytics granted; ads denied by default (CMP / AdSense may update).
  */
 export function GoogleTag() {
   if (!GA_MEASUREMENT_ID) return null;
