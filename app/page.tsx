@@ -204,6 +204,14 @@ export default async function HomePage({ searchParams }: PageProps) {
               game.
             </li>
             <li>
+              Quick number picks. Tap Numbers 1–10 for a fast pick. For bigger ranges like 1–100, or
+              to draw numbers without repeats, use the{" "}
+              <Link href="/random-number-wheel" className="font-semibold text-accent hover:underline">
+                random number wheel
+              </Link>
+              .
+            </li>
+            <li>
               Turn order. Add everyone&apos;s name and switch on &quot;Remove winner after
               spin&quot;. The order in which names come off the wheel is your turn order.
             </li>

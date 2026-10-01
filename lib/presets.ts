@@ -236,6 +236,12 @@ export const WHEEL_PRESETS: WheelPreset[] = [
       "W",
     ],
   },
+  {
+    id: "numbers-1-10",
+    name: "Numbers 1–10",
+    description: "Spin a number from 1 to 10.",
+    choices: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+  },
 ];
 
 export type ToolPresetConfig = {
@@ -254,6 +260,7 @@ export const TOOL_DEFAULTS: Record<ToolId, ToolPresetConfig> = {
       "activity",
       "letters-a-z",
       "letters-word-game",
+      "numbers-1-10",
     ],
   },
   "random-name-picker": {
@@ -280,6 +287,10 @@ export const TOOL_DEFAULTS: Record<ToolId, ToolPresetConfig> = {
   },
   "random-team-generator": {
     defaultPresetId: "classroom-students",
+    presetIds: [],
+  },
+  "random-number-wheel": {
+    defaultPresetId: "numbers-1-10",
     presetIds: [],
   },
 };

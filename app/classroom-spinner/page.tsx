@@ -121,6 +121,16 @@ export default async function ClassroomSpinnerPage({ searchParams }: PageProps) 
             work through the alphabet with no repeats.
           </li>
           <li>
+            Numbered seats and math warm-ups: spin the{" "}
+            <Link
+              href="/random-number-wheel"
+              className="font-semibold text-accent hover:underline"
+            >
+              number wheel
+            </Link>{" "}
+            to call on a desk number or pick numbers for mental math.
+          </li>
+          <li>
             Need groups for a project?{" "}
             <Link
               href="/random-team-generator"

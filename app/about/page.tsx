@@ -52,6 +52,10 @@ export default function AboutPage() {
           , a{" "}
           <Link href="/yes-no-wheel" className="font-semibold text-accent hover:underline">
             yes or no wheel
+          </Link>
+          , a{" "}
+          <Link href="/random-number-wheel" className="font-semibold text-accent hover:underline">
+            random number wheel
           </Link>{" "}
           and a{" "}
           <Link href="/random-team-generator" className="font-semibold text-accent hover:underline">

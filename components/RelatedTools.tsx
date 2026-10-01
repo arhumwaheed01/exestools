@@ -8,6 +8,7 @@ const RELATED: Record<ToolId, { href: string; label: string }[]> = {
     { href: "/prize-wheel", label: "Prize wheel" },
     { href: "/yes-no-wheel", label: "Yes or no wheel" },
     { href: "/random-team-generator", label: "Random team generator" },
+    { href: "/random-number-wheel", label: "Random number wheel" },
   ],
   "random-name-picker": [
     { href: "/classroom-spinner", label: "Classroom / student spinner" },
@@ -22,6 +23,7 @@ const RELATED: Record<ToolId, { href: string; label: string }[]> = {
     { href: "/prize-wheel", label: "Classroom reward / prize wheel" },
     { href: "/", label: "All-purpose spinner wheel" },
     { href: "/yes-no-wheel", label: "Yes or no wheel" },
+    { href: "/random-number-wheel", label: "Number wheel for math games" },
   ],
   "prize-wheel": [
     { href: "/random-name-picker", label: "Pick a winner by name" },
@@ -39,6 +41,13 @@ const RELATED: Record<ToolId, { href: string; label: string }[]> = {
     { href: "/classroom-spinner", label: "Classroom spinner (pick one student)" },
     { href: "/random-name-picker", label: "Random name picker" },
     { href: "/", label: "Spinner wheel" },
+    { href: "/random-number-wheel", label: "Random number wheel" },
+  ],
+  "random-number-wheel": [
+    { href: "/", label: "Spinner wheel" },
+    { href: "/classroom-spinner", label: "Classroom spinner" },
+    { href: "/prize-wheel", label: "Prize wheel" },
+    { href: "/random-team-generator", label: "Random team generator" },
   ],
 };
 

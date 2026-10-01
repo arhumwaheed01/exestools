@@ -1,0 +1,26 @@
+name: IndexNow
+
+# Ping IndexNow after a successful production deploy (MA-11).
+# Skips preview deployments via the environment check and the script's VERCEL_ENV guard.
+
+on:
+  deployment_status:
+
+jobs:
+  ping:
+    if: >
+      github.event.deployment_status.state == 'success' &&
+      (github.event.deployment_status.environment == 'Production' ||
+       github.event.deployment_status.environment == 'production')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Wait for CDN
+        run: sleep 45
+      - name: Ping IndexNow
+        env:
+          VERCEL_ENV: production
+        run: node scripts/ping-indexnow.mjs

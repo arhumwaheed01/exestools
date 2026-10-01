@@ -4,7 +4,8 @@ export type ToolId =
   | "classroom-spinner"
   | "prize-wheel"
   | "yes-no-wheel"
-  | "random-team-generator";
+  | "random-team-generator"
+  | "random-number-wheel";
 
 export type ToolDef = {
   id: ToolId;
@@ -46,6 +47,12 @@ export const TOOLS: ToolDef[] = [
     navLabel: "Teams",
     footerLabel: "Team Generator",
   },
+  {
+    id: "random-number-wheel",
+    path: "/random-number-wheel",
+    navLabel: "Numbers",
+    footerLabel: "Number Wheel",
+  },
 ];
 
 export function cleanPathFor(toolId: ToolId): string {
@@ -59,5 +66,5 @@ export function defaultAutoRemoveWinner(toolId: ToolId): boolean {
 }
 
 export function isWheelTool(toolId: ToolId): boolean {
-  return toolId !== "random-team-generator";
+  return toolId !== "random-team-generator" && toolId !== "random-number-wheel";
 }
