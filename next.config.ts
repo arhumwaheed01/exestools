@@ -10,6 +10,21 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async headers() {
+    return [
+      {
+        // Backup for middleware: Google Sites can iframe these URLs. No X-Frame-Options.
+        source: "/classroom-spinner/embed/:path*",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value:
+              "frame-ancestors 'self' https://sites.google.com https://*.googleusercontent.com",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

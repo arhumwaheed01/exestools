@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { headers } from "next/headers";
 import Script from "next/script";
 import { Footer } from "@/components/Footer";
 import { GoogleTag } from "@/components/GoogleTag";
@@ -56,7 +57,12 @@ export const metadata: Metadata = {
   other: ADSENSE_CLIENT ? { "google-adsense-account": ADSENSE_CLIENT } : {},
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
+  const headerList = await headers();
+  const isEmbed = headerList.get("x-exestools-embed") === "1";
+
   return (
     <html
       lang="en"
@@ -64,11 +70,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       style={{ colorScheme: "dark" }}
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">
-        <Header />
+        {isEmbed ? null : <Header />}
         <main className="flex-1">{children}</main>
-        <Footer />
+        {isEmbed ? null : <Footer />}
+        {/* Embeds: no AdSense units; keep GA for aggregate embed_view / spin only */}
         <GoogleTag />
-        {ADSENSE_CLIENT ? (
+        {!isEmbed && ADSENSE_CLIENT ? (
           <Script
             id="adsense-loader"
             async
