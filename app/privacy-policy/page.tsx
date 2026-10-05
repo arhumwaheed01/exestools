@@ -29,7 +29,7 @@ export default function PrivacyPolicyPage() {
       <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
         Privacy Policy
       </h1>
-      <p className="mt-2 text-sm text-muted">Last updated: October 1, 2026</p>
+      <p className="mt-2 text-sm text-muted">Last updated: October 5, 2026</p>
       <div className="mt-6 space-y-5 text-sm leading-relaxed text-muted sm:text-base">
         <p>
           This Privacy Policy explains how ExesTools (https://www.exestools.com) handles information
@@ -181,12 +181,19 @@ export default function PrivacyPolicyPage() {
           </h2>
           <p className="mt-2">
             If you visit from the European Economic Area, the United Kingdom or Switzerland, we use
-            Google&apos;s consent management platform, which is certified under the IAB Transparency
-            and Consent Framework, to ask for your consent before cookies or similar storage are
-            used for personalized ads, where the law requires it. If you don&apos;t consent, Google
-            may show non-personalized or limited ads instead. You can change or withdraw your choice
-            at any time with the &quot;Privacy and cookie settings&quot; link in the footer of every
-            page.
+            Google&apos;s Funding Choices consent messaging (certified under the IAB Transparency and
+            Consent Framework) to ask for your consent before cookies or similar storage are used for
+            personalized ads, where the law requires it. If you don&apos;t consent, Google may show
+            non-personalized or limited ads instead. When Google serves that message on this site,
+            you can make or change your choice in the dialog it shows. You can also control or clear
+            cookies in your browser settings, or email{" "}
+            <a
+              href={`mailto:${siteConfig.contactEmail}`}
+              className="font-semibold text-accent hover:underline"
+            >
+              {siteConfig.contactEmail}
+            </a>{" "}
+            with privacy questions.
           </p>
           <p className="mt-2">
             We do not use the names or options you type into the tools for advertising, and we do

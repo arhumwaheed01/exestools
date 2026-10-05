@@ -8,6 +8,12 @@ const nextConfig: NextConfig = {
         destination: "/",
         permanent: true,
       },
+      {
+        // Browsers often request /favicon.ico; we ship SVG icons.
+        source: "/favicon.ico",
+        destination: "/favicon.svg",
+        permanent: false,
+      },
     ];
   },
   async headers() {

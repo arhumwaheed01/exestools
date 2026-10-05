@@ -5,15 +5,15 @@
  */
 export const LASTMOD: Record<string, string> = {
   "/": "2026-10-01",
-  "/random-name-picker": "2026-09-26",
+  "/random-name-picker": "2026-10-05",
   "/classroom-spinner": "2026-10-01",
   "/prize-wheel": "2026-09-26",
   "/yes-no-wheel": "2026-09-26",
-  "/random-team-generator": "2026-10-01",
+  "/random-team-generator": "2026-10-05",
   "/random-number-wheel": "2026-10-01",
   "/about": "2026-10-01",
   "/contact": "2026-09-26",
-  "/privacy-policy": "2026-10-01",
+  "/privacy-policy": "2026-10-05",
   "/terms": "2026-10-01",
   "/dmca": "2026-09-24",
 };

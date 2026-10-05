@@ -12,11 +12,13 @@ type FaqItem = { q: string; a: string };
 const FAQ_LINK_HREFS: Record<string, string> = {
   "Privacy Policy": "/privacy-policy",
   "Random name picker": "/random-name-picker",
+  "random team generator": "/random-team-generator",
   "Classroom spinner": "/classroom-spinner",
   "classroom spinner": "/classroom-spinner",
   "Terms of Service": "/terms",
   "Yes or no wheel": "/yes-no-wheel",
   "multi-option decision wheel": "/",
+  "prize wheel": "/prize-wheel",
   "How ExesTools picks a result": "/about#how-it-works",
 };
 
