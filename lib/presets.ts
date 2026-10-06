@@ -297,6 +297,10 @@ export const TOOL_DEFAULTS: Record<ToolId, ToolPresetConfig> = {
     defaultPresetId: "numbers-1-10",
     presetIds: [],
   },
+  "raffle-generator": {
+    defaultPresetId: "sample-names",
+    presetIds: [],
+  },
 };
 
 export function getPresetById(id: string): WheelPreset | undefined {

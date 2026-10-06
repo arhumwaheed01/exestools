@@ -60,13 +60,17 @@ export default function AboutPage() {
           , a{" "}
           <Link href="/random-team-generator" className="font-semibold text-accent hover:underline">
             random team generator
-          </Link>{" "}
-          and a{" "}
+          </Link>
+          , a{" "}
           <Link
             href="/secret-santa-generator"
             className="font-semibold text-accent hover:underline"
           >
             Secret Santa generator
+          </Link>{" "}
+          and a{" "}
+          <Link href="/raffle-generator" className="font-semibold text-accent hover:underline">
+            raffle generator
           </Link>
           . They run in your browser, with no account to create and nothing to install. ExesTools is
           not affiliated with the reverse-engineering forum that has a similar name.
@@ -122,6 +126,12 @@ export default function AboutPage() {
             then shuffles with the same secure generator until everyone has someone they&apos;re
             allowed to draw. For heavily restricted lists it falls back to a backtracking search.
             Nobody can draw themselves.
+          </p>
+          <p className="mt-2">
+            The raffle generator draws one ticket at a time from the tickets still in the draw, with
+            the same secure generator, so someone with three tickets is exactly three times as likely
+            as someone with one to win that pick. By default, a winner&apos;s other tickets leave the
+            draw, so nobody wins twice.
           </p>
         </section>
 

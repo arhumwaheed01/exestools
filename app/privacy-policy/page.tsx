@@ -40,8 +40,8 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-lg font-bold text-foreground">Who we are</h2>
           <p className="mt-2">
             ExesTools operates free browser-based decision tools at https://www.exestools.com,
-            including a spinner wheel, a random team generator and a Secret Santa generator. For
-            privacy questions, email{" "}
+            including a spinner wheel, a random team generator, a Secret Santa generator and a raffle
+            generator. For privacy questions, email{" "}
             <a
               href={`mailto:${siteConfig.contactEmail}`}
               className="font-semibold text-accent hover:underline"
@@ -65,6 +65,11 @@ export default function PrivacyPolicyPage() {
             that browser tab&apos;s session storage so a refresh still works; closing the tab clears
             it.
           </p>
+          <p className="mt-2">
+            Raffle entries, settings and your latest draw are also saved in local storage on your
+            device. When you open a raffle result link, its contents are kept in that browser
+            tab&apos;s session storage so a refresh still works; closing the tab clears it.
+          </p>
         </section>
 
         <section>
@@ -81,6 +86,12 @@ export default function PrivacyPolicyPage() {
             loads. Their contents are scrambled so they aren&apos;t readable at a glance, but this is
             not encryption: anyone with a link can open it, including the organizer.
           </p>
+          <p className="mt-2">
+            Raffle result links start with #d= and carry the draw record: the winners&apos; and
+            alternates&apos; names or ticket labels, prizes, counts and draw code, but not the full
+            entry list. The page removes this part from the address bar as soon as it loads. Anyone
+            with a result link can see the names in it.
+          </p>
         </section>
 
         <section>
@@ -95,10 +106,10 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-lg font-bold text-foreground">Analytics (Google Analytics 4)</h2>
           <p className="mt-2">
             We use Google Analytics 4 (measurement ID G-DJKH68VDEJ) to understand aggregate traffic
-            and product usage (for example page views and events like spin, share, preset load, and
-            Secret Santa draws, link copies and reveals — counts only, never names, event names or
-            notes). We do not send your wheel choice text or names to Analytics, and the page address
-            we measure does not include the shared list.
+            and product usage (for example page views and events like spin, share, preset load,
+            Secret Santa draws, link copies and reveals, and raffle draws and exports — counts only,
+            never names, event names, prizes or notes). We do not send your wheel choice text or
+            names to Analytics, and the page address we measure does not include the shared list.
           </p>
           <p className="mt-2">
             Google Consent Mode v2 is enabled. For visitors in the European Economic Area, the United

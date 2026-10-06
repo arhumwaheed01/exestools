@@ -60,7 +60,7 @@ const FAQS = [
   },
   {
     q: "Can I use it for a raffle or giveaway?",
-    a: "Yes for a simple name draw: paste entrant names, leave remove-winner on, and spin once per prize so each winner leaves the wheel. For prize-themed slices or stream giveaways, use the [prize wheel]. For numbered tickets, use the random number wheel with No repeats.",
+    a: "Yes for a simple name draw: paste entrant names, leave remove-winner on, and spin once per prize so each winner leaves the wheel. For prize-themed slices or stream giveaways, use the [prize wheel]. For numbered tickets, multiple tickets per person, or several winners in one draw, use the [raffle generator].",
   },
 ];
 
@@ -155,11 +155,12 @@ export default async function RandomNamePickerPage({ searchParams }: PageProps) 
             <Link href="/prize-wheel" className="font-semibold text-accent hover:underline">
               prize wheel
             </Link>{" "}
-            is built for that. For numbered tickets, use the{" "}
-            <Link href="/random-number-wheel" className="font-semibold text-accent hover:underline">
-              random number wheel
-            </Link>{" "}
-            with No repeats.
+            is built for that. For ticket raffles (numbered tickets, people with several tickets, or
+            many winners at once), use the{" "}
+            <Link href="/raffle-generator" className="font-semibold text-accent hover:underline">
+              raffle generator
+            </Link>
+            .
           </li>
           <li>
             <span className="font-semibold text-foreground">Workshops and facilitation.</span>{" "}

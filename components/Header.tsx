@@ -9,7 +9,10 @@ import { siteConfig } from "@/lib/seo";
 import { TOOLS } from "@/lib/tools";
 
 const NAV = [
-  ...TOOLS.map((t) => ({ href: t.path, label: t.navLabel })),
+  ...TOOLS.filter((t) => t.inHeaderNav !== false).map((t) => ({
+    href: t.path,
+    label: t.navLabel,
+  })),
   { href: "/about", label: "About" },
 ] as const;
 

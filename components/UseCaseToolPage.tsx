@@ -20,6 +20,7 @@ const FAQ_LINK_HREFS: Record<string, string> = {
   "multi-option decision wheel": "/",
   "prize wheel": "/prize-wheel",
   "How ExesTools picks a result": "/about#how-it-works",
+  "raffle generator": "/raffle-generator",
 };
 
 function faqPlainText(answer: string): string {
@@ -47,7 +48,10 @@ function FaqAnswer({ text }: { text: string }) {
 }
 
 type Props = {
-  toolId: Exclude<ToolId, "home" | "random-team-generator" | "secret-santa-generator">;
+  toolId: Exclude<
+    ToolId,
+    "home" | "random-team-generator" | "secret-santa-generator" | "raffle-generator"
+  >;
   title: string;
   intro: ReactNode;
   /** Optional H2 under intro (kw-map packs). */

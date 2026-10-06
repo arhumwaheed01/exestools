@@ -94,9 +94,28 @@ body {
   animation: ssRevealIn 0.28s ease-out;
 }
 
+.rf-reveal-anim {
+  animation: ssRevealIn 0.28s ease-out both;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .ss-reveal-anim {
+  .ss-reveal-anim,
+  .rf-reveal-anim {
     animation: none;
+  }
+}
+
+@media print {
+  /* Raffle: hide page copy + tool UI; show only the record <pre> */
+  body:has(.raffle-tool-wrap) main > div > *:not(.raffle-tool-wrap) {
+    display: none !important;
+  }
+  .raffle-tool > *:not(pre) {
+    display: none !important;
+  }
+  .raffle-tool > pre {
+    display: block !important;
+    color: #111;
   }
 }
 

@@ -40,7 +40,7 @@ const FAQS = [
   },
   {
     q: "Can I spin for prizes or for entrant names?",
-    a: 'Both. Use the Prize rewards or Stream giveaway example to spin for a prize, or Entrant names to draw a winner from a list of people. To draw several winners, turn on "Remove winner after spin" so nobody wins twice.',
+    a: 'Both. Use the Prize rewards or Stream giveaway example to spin for a prize, or Entrant names to draw a winner from a list of people. To draw several winners, turn on "Remove winner after spin" so nobody wins twice. If some entrants have more than one ticket, use the [raffle generator].',
   },
   {
     q: "Can I use it for an Instagram, TikTok, or Facebook giveaway?",
@@ -79,7 +79,12 @@ export default async function PrizeWheelPage({ searchParams }: PageProps) {
           <li>Press SPIN where everyone can see it, or record your screen.</li>
           <li>
             Drawing more than one winner? Turn on &quot;Remove winner after spin&quot; so each winner
-            leaves the wheel.
+            leaves the wheel. For a ticket raffle with hundreds of numbers, people with several
+            tickets, or a written record, use the{" "}
+            <Link href="/raffle-generator" className="font-semibold text-accent hover:underline">
+              raffle generator
+            </Link>
+            .
           </li>
           <li>Press Copy share link so others can open the same wheel.</li>
         </ol>

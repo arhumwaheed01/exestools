@@ -10,11 +10,13 @@ const RELATED: Record<ToolId, { href: string; label: string }[]> = {
     { href: "/random-team-generator", label: "Random team generator" },
     { href: "/secret-santa-generator", label: "Secret Santa generator" },
     { href: "/random-number-wheel", label: "Random number wheel" },
+    { href: "/raffle-generator", label: "Raffle generator" },
   ],
   "random-name-picker": [
     { href: "/classroom-spinner", label: "Classroom / student spinner" },
     { href: "/random-team-generator", label: "Random team generator" },
     { href: "/secret-santa-generator", label: "Secret Santa generator (gift exchange)" },
+    { href: "/raffle-generator", label: "Raffle generator" },
     { href: "/", label: "Free spinner wheel" },
     { href: "/yes-no-wheel", label: "Yes or no wheel" },
     { href: "/prize-wheel", label: "Prize / giveaway wheel" },
@@ -31,6 +33,7 @@ const RELATED: Record<ToolId, { href: string; label: string }[]> = {
     { href: "/random-name-picker", label: "Pick a winner by name" },
     { href: "/classroom-spinner", label: "Classroom spinner" },
     { href: "/yes-no-wheel", label: "Yes or no wheel" },
+    { href: "/raffle-generator", label: "Raffle generator (tickets & multiple winners)" },
     { href: "/", label: "Spinner wheel home" },
   ],
   "yes-no-wheel": [
@@ -57,6 +60,13 @@ const RELATED: Record<ToolId, { href: string; label: string }[]> = {
     { href: "/classroom-spinner", label: "Classroom spinner" },
     { href: "/prize-wheel", label: "Prize wheel" },
     { href: "/random-team-generator", label: "Random team generator" },
+    { href: "/raffle-generator", label: "Raffle generator" },
+  ],
+  "raffle-generator": [
+    { href: "/prize-wheel", label: "Prize wheel (spin for a prize on screen)" },
+    { href: "/random-name-picker", label: "Random name picker" },
+    { href: "/random-number-wheel", label: "Random number wheel" },
+    { href: "/", label: "Free spinner wheel" },
   ],
 };
 

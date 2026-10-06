@@ -17,6 +17,7 @@ const META =
 const FAQ_LINK_HREFS: Record<string, string> = {
   "How ExesTools picks a result": "/about#how-it-works",
   "prize wheel": "/prize-wheel",
+  "raffle generator": "/raffle-generator",
 };
 
 function FaqAnswer({ text }: { text: string }) {
@@ -82,7 +83,7 @@ const FAQS = [
   },
   {
     q: "Can I use it for a raffle?",
-    a: "Yes, if your tickets are numbered: set Min and Max to your ticket range and switch on No repeats. If your entries are names, use the [prize wheel] instead.",
+    a: "Yes, for up to 1,000 numbered tickets: set Min and Max to your ticket range and switch on No repeats. For bigger ranges, names with several tickets each, or several winners and alternates in one draw, use the [raffle generator]. To spin for names on a wheel, use the [prize wheel].",
   },
 ] as const;
 
@@ -200,9 +201,10 @@ export default async function RandomNumberWheelPage({ searchParams }: PageProps)
             </li>
             <li>
               Numbered raffle tickets. Set Min and Max to the first and last ticket numbers, switch
-              on No repeats, and spin once per prize. If your entries are names, use the{" "}
-              <Link href="/prize-wheel" className="font-semibold text-accent hover:underline">
-                prize wheel
+              on No repeats, and spin once per prize. For more than 1,000 tickets, unsold numbers to
+              leave out, several winners in one go, or a written record, use the{" "}
+              <Link href="/raffle-generator" className="font-semibold text-accent hover:underline">
+                raffle generator
               </Link>
               .
             </li>

@@ -6,13 +6,16 @@ export type ToolId =
   | "yes-no-wheel"
   | "random-team-generator"
   | "secret-santa-generator"
-  | "random-number-wheel";
+  | "random-number-wheel"
+  | "raffle-generator";
 
 export type ToolDef = {
   id: ToolId;
   path: string;
   navLabel: string;
   footerLabel: string;
+  /** When false, omit from primary header (footer + tool links still show it). Default true. */
+  inHeaderNav?: boolean;
 };
 
 /** Single source for nav / footer tool links (About & Contact stay separate). */
@@ -60,6 +63,14 @@ export const TOOLS: ToolDef[] = [
     navLabel: "Numbers",
     footerLabel: "Number Wheel",
   },
+  {
+    id: "raffle-generator",
+    path: "/raffle-generator",
+    navLabel: "Raffle",
+    footerLabel: "Raffle Generator",
+    // 11 header items wrap between 1024–1280px; keep Raffle in footer + tool links only.
+    inHeaderNav: false,
+  },
 ];
 
 export function cleanPathFor(toolId: ToolId): string {
@@ -76,6 +87,7 @@ export function isWheelTool(toolId: ToolId): boolean {
   return (
     toolId !== "random-team-generator" &&
     toolId !== "random-number-wheel" &&
-    toolId !== "secret-santa-generator"
+    toolId !== "secret-santa-generator" &&
+    toolId !== "raffle-generator"
   );
 }

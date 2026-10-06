@@ -488,6 +488,7 @@ export function SpinnerWheel({
                     { href: "/random-team-generator", label: "Team generator" },
                     { href: "/secret-santa-generator", label: "Secret Santa" },
                     { href: "/random-number-wheel", label: "Number wheel" },
+                    { href: "/raffle-generator", label: "Raffle generator" },
                   ]
                 : undefined
             }
