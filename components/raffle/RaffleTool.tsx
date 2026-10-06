@@ -270,6 +270,9 @@ export function RaffleTool() {
 
   const issuesId = useId();
   const resultsHeadingRef = useRef<HTMLHeadingElement>(null);
+  const drawButtonRef = useRef<HTMLButtonElement>(null);
+  const listInputRef = useRef<HTMLTextAreaElement>(null);
+  const rangeStartRef = useRef<HTMLInputElement>(null);
   const statusTimer = useRef(0);
   const saveTimer = useRef(0);
   const shareTracked = useRef(false);
@@ -706,7 +709,13 @@ export function RaffleTool() {
         if (a) parts.push(`${a} alternate${a === 1 ? "" : "s"}`);
         announce(`${parts.join(" and ")} drawn. Draw code ${meta.code}.`);
       }
-      requestAnimationFrame(() => resultsHeadingRef.current?.focus());
+      const planned = winners + alternates;
+      const done = nextPicks.length >= planned;
+      // All at once → results heading. One at a time → stay on Draw until complete.
+      requestAnimationFrame(() => {
+        if (reveal === "all" || done) resultsHeadingRef.current?.focus();
+        else drawButtonRef.current?.focus();
+      });
     },
     [applyPicks, frozenEntrants, entrants, prizes, mode, announce, reveal, winners, alternates],
   );
@@ -985,6 +994,7 @@ export function RaffleTool() {
                   Names, emails or ticket numbers. Paste a spreadsheet column if that&apos;s easier.
                 </p>
                 <textarea
+                  ref={listInputRef}
                   id="rf-list"
                   value={listText}
                   rows={10}
@@ -1089,7 +1099,7 @@ export function RaffleTool() {
                 ) : null}
                 {countHintText ? <p className="mt-2 text-xs text-muted">{countHintText}</p> : null}
                 {parsed.overLimit ? (
-                  <p className="mt-2 text-sm text-red-600" role="status">
+                  <p className="mt-2 text-sm text-red-600">
                     {overLimitMessage(parsed.totalTickets)}
                   </p>
                 ) : null}
@@ -1099,7 +1109,7 @@ export function RaffleTool() {
                       <li key={i}>{msg}</li>
                     ))}
                     {issueMsgs.length > 5 ? (
-                      <li>…and {issueMsgs.length - 5} more</li>
+                      <li>…and {issueMsgs.length - 5} more.</li>
                     ) : null}
                   </ul>
                 ) : null}
@@ -1112,6 +1122,7 @@ export function RaffleTool() {
                       First ticket
                     </label>
                     <input
+                      ref={rangeStartRef}
                       id="rf-start"
                       type="number"
                       inputMode="numeric"
@@ -1195,12 +1206,10 @@ export function RaffleTool() {
                 ) : null}
                 {rangeLive ? <p className="text-sm text-muted">{rangeLive}</p> : null}
                 {rangeErr ? (
-                  <p className="text-sm text-red-600" role="status">
-                    {rangeErr}
-                  </p>
+                  <p className="text-sm text-red-600">{rangeErr}</p>
                 ) : null}
                 {rangeInvalidExcludes ? (
-                  <p className="text-sm text-amber-700 dark:text-amber-200" role="status">
+                  <p className="text-sm text-amber-700 dark:text-amber-200">
                     {rangeInvalidExcludes}
                   </p>
                 ) : null}
@@ -1378,11 +1387,10 @@ export function RaffleTool() {
           ) : null}
 
           {drawComplete ? (
-            <p className="text-sm font-semibold text-muted" role="status">
-              Draw complete.
-            </p>
+            <p className="text-sm font-semibold text-muted">Draw complete.</p>
           ) : (
             <button
+              ref={drawButtonRef}
               type="button"
               disabled={
                 Boolean(drawDisabledReason) ||
@@ -1476,9 +1484,14 @@ export function RaffleTool() {
         danger={confirm === "edit-entries"}
         onCancel={() => setConfirm(null)}
         onConfirm={() => {
+          const kind = confirm;
           clearDraw();
           setConfirm(null);
-          if (confirm === "edit-entries") announce("Draw cleared. You can edit the entries.");
+          if (kind === "edit-entries") announce("Draw cleared. You can edit the entries.");
+          window.setTimeout(() => {
+            if (mode === "list") listInputRef.current?.focus();
+            else rangeStartRef.current?.focus();
+          }, 50);
         }}
       />
     </div>
@@ -1506,6 +1519,29 @@ function ActionBtn({
   );
 }
 
+function rulesLine(r: DrawRecord): string {
+  const rules =
+    r.mode === "range"
+      ? ["each ticket can win only once"]
+      : [
+          r.allowRepeatWinners
+            ? "a person can win more than once (one prize per ticket)"
+            : "each person can win only once",
+        ];
+  if (r.mode === "list") {
+    if (r.multipleTickets) rules.push("multiple tickets per person on");
+    rules.push(
+      r.duplicates === "combine"
+        ? "repeated names combined into extra tickets"
+        : "repeated names ignored",
+    );
+  }
+  return `Rules: ${rules.join("; ")}`;
+}
+
+const TRANSPARENCY_NOTICE =
+  "This record is for transparency only. It isn't a certified, audited or legally compliant draw. Raffle and lottery laws vary by place; you're responsible for following the rules where you run your raffle.";
+
 function ResultsPanel({
   heading,
   headingRef,
@@ -1529,6 +1565,10 @@ function ResultsPanel({
   winners: number;
   hasPicks: boolean;
 }) {
+  const notice = (
+    <p className="mt-4 text-sm text-muted">{TRANSPARENCY_NOTICE}</p>
+  );
+
   if (!hasPicks) {
     return (
       <div>
@@ -1537,6 +1577,7 @@ function ResultsPanel({
           Winners appear here. Each pick takes one ticket at random from the tickets still in the
           draw.
         </p>
+        {notice}
       </div>
     );
   }
@@ -1554,7 +1595,9 @@ function ResultsPanel({
         {heading}
       </h2>
       {record?.title ? (
-        <p className="mt-1 text-sm text-muted">{record.title}</p>
+        <p className="mt-1 min-w-0 break-words text-sm text-muted [overflow-wrap:anywhere]">
+          {record.title}
+        </p>
       ) : null}
 
       <ol className="mt-4 space-y-3">
@@ -1589,7 +1632,7 @@ function ResultsPanel({
               const ent = displayEntrants[p.entrant];
               const ticketPart = mode === "list" ? ` · ticket #${p.ticket}` : "";
               return (
-                <li key={`a-${p.position}`} className="text-sm text-foreground">
+                <li key={`a-${p.position}`} className="min-w-0 text-sm text-foreground [overflow-wrap:anywhere]">
                   Alternate {p.position} · {ent?.label ?? "—"}
                   {ticketPart}
                 </li>
@@ -1599,11 +1642,7 @@ function ResultsPanel({
         </>
       ) : null}
 
-      <p className="mt-4 text-sm text-muted">
-        This record is for transparency only. It isn&apos;t a certified, audited or legally
-        compliant draw. Raffle and lottery laws vary by place; you&apos;re responsible for following
-        the rules where you run your raffle.
-      </p>
+      {notice}
     </div>
   );
 }
@@ -1620,7 +1659,11 @@ function SharedResultCard({
   return (
     <div className="mb-4 rounded-3xl border border-border bg-surface p-5 sm:p-6 print:hidden">
       <h2 className="text-lg font-bold text-foreground">Shared raffle result</h2>
-      {record.title ? <p className="mt-1 text-base font-semibold">{record.title}</p> : null}
+      {record.title ? (
+        <p className="mt-1 min-w-0 break-words text-base font-semibold [overflow-wrap:anywhere]">
+          {record.title}
+        </p>
+      ) : null}
       <p className="mt-2 text-sm text-muted">Draw code: {record.code}</p>
       <p className="text-sm text-muted">Drawn: {formatTimestamp(record.createdAt, record.tzOffsetMin)}</p>
       {record.mode === "range" && record.range ? (
@@ -1634,6 +1677,7 @@ function SharedResultCard({
           {record.entrants} names, {record.tickets} tickets
         </p>
       )}
+      <p className="text-sm text-muted">{rulesLine(record)}</p>
       <p className="text-sm text-muted">List fingerprint: {record.fingerprint}</p>
 
       <ol className="mt-4 space-y-2">
@@ -1650,8 +1694,8 @@ function SharedResultCard({
       {record.alternates.length > 0 ? (
         <ul className="mt-3 space-y-1">
           {record.alternates.map((a, i) => (
-            <li key={i} className="text-sm text-muted">
-              Alternate {i + 1}: {a.label}
+            <li key={i} className="min-w-0 text-sm text-foreground [overflow-wrap:anywhere]">
+              Alternate {i + 1} · {a.label}
               {a.ticket !== null ? ` · ticket #${a.ticket}` : ""}
             </li>
           ))}
