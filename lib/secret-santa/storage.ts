@@ -75,8 +75,25 @@ export function loadState(): SecretSantaState {
   }
 }
 
+function isEmptyState(state: SecretSantaState): boolean {
+  return (
+    state.participants.length === 0 &&
+    state.exclusions.length === 0 &&
+    !state.details.eventName &&
+    !state.details.budget &&
+    !state.details.date &&
+    !state.details.note &&
+    !state.singleCycle &&
+    !state.draw
+  );
+}
+
 export function saveState(state: SecretSantaState): void {
   try {
+    if (isEmptyState(state)) {
+      localStorage.removeItem(STORAGE_KEY);
+      return;
+    }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch {
     /* ignore quota / private mode */
