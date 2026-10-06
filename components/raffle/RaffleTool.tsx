@@ -271,6 +271,7 @@ export function RaffleTool() {
   const issuesId = useId();
   const resultsHeadingRef = useRef<HTMLHeadingElement>(null);
   const drawButtonRef = useRef<HTMLButtonElement>(null);
+  const extraAltButtonRef = useRef<HTMLButtonElement>(null);
   const listInputRef = useRef<HTMLTextAreaElement>(null);
   const rangeStartRef = useRef<HTMLInputElement>(null);
   const statusTimer = useRef(0);
@@ -808,6 +809,13 @@ export function RaffleTool() {
       const ticketPart = mode === "list" ? ` · ticket #${last.ticket}` : "";
       announce(`Alternate ${last.position}: ${ent.label}${ticketPart}.`);
       track("raffle_extra_alternate", { toolId: TOOL_ID, alternates: nextAlternates });
+      const canDrawMore =
+        nextAlternates < MAX_ALTERNATES &&
+        drawNext(holders, res.picks, "alternate", { allowRepeatWinners }).ok;
+      requestAnimationFrame(() => {
+        if (canDrawMore) extraAltButtonRef.current?.focus();
+        else resultsHeadingRef.current?.focus();
+      });
     });
   };
 
@@ -1011,11 +1019,11 @@ export function RaffleTool() {
                   onPaste={(e) => {
                     const el = e.currentTarget;
                     window.setTimeout(() => {
-                      announce(
-                        listSummary(
-                          parseEntries(el.value, { multipleTickets, duplicates }),
-                        ),
-                      );
+                      const p = parseEntries(el.value, { multipleTickets, duplicates });
+                      const parts = [listSummary(p)];
+                      const notice = duplicateNotice(p, duplicates);
+                      if (notice) parts.push(notice);
+                      announce(parts.join(" "));
                     }, 160);
                   }}
                   className="mt-2 w-full min-w-0 rounded-xl border border-border bg-background px-3 py-2 font-mono text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent [overflow-wrap:anywhere]"
@@ -1437,6 +1445,7 @@ export function RaffleTool() {
                 <ActionBtn label="Copy result link" onClick={copyResultLink} />
               ) : null}
               <ActionBtn
+                ref={extraAltButtonRef}
                 label="Draw another alternate"
                 onClick={runExtraAlternate}
                 disabled={!extraAlternateOk}
@@ -1502,13 +1511,16 @@ function ActionBtn({
   label,
   onClick,
   disabled,
+  ref,
 }: {
   label: string;
   onClick: () => void;
   disabled?: boolean;
+  ref?: React.Ref<HTMLButtonElement>;
 }) {
   return (
     <button
+      ref={ref}
       type="button"
       disabled={disabled}
       onClick={onClick}
