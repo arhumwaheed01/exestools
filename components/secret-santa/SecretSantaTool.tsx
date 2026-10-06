@@ -207,6 +207,9 @@ export function SecretSantaTool() {
     statusTimer.current = window.setTimeout(() => setStatus(""), 4000);
   }, []);
 
+  const skipCount = (n: number, singular: string, plural: string) =>
+    `Skipped ${n} ${n === 1 ? singular : plural}`;
+
   const persist = useCallback(
     (next: Partial<SecretSantaState> & { participants?: Participant[]; exclusions?: ExclusionRule[] }) => {
       window.clearTimeout(saveTimer.current);
@@ -367,9 +370,11 @@ export function SecretSantaTool() {
     );
     if (result.added.length === 0) {
       if (result.skippedDuplicates.length)
-        announce(`Skipped ${result.skippedDuplicates.length} duplicates.`);
+        announce(`${skipCount(result.skippedDuplicates.length, "duplicate", "duplicates")}.`);
       else if (result.skippedTooLong.length)
-        announce(`Skipped ${result.skippedTooLong.length} name over 40 characters.`);
+        announce(
+          `${skipCount(result.skippedTooLong.length, "name", "names")} over 40 characters.`,
+        );
       else if (result.skippedOverLimit.length)
         announce(`The list is full (50 people). ${result.skippedOverLimit.length} names weren't added.`);
       return;
@@ -397,11 +402,16 @@ export function SecretSantaTool() {
     setPasteText("");
     setPasteOpen(false);
     const parts: string[] = [];
-    if (result.added.length) parts.push(`Added ${result.added.length} names.`);
+    if (result.added.length)
+      parts.push(
+        `Added ${result.added.length} ${result.added.length === 1 ? "name" : "names"}.`,
+      );
     if (result.skippedDuplicates.length)
-      parts.push(`Skipped ${result.skippedDuplicates.length} duplicates.`);
+      parts.push(`${skipCount(result.skippedDuplicates.length, "duplicate", "duplicates")}.`);
     if (result.skippedTooLong.length)
-      parts.push(`Skipped ${result.skippedTooLong.length} name over 40 characters.`);
+      parts.push(
+        `${skipCount(result.skippedTooLong.length, "name", "names")} over 40 characters.`,
+      );
     if (result.skippedOverLimit.length)
       parts.push(
         `The list is full (50 people). ${result.skippedOverLimit.length} names weren't added.`,
@@ -718,7 +728,7 @@ export function SecretSantaTool() {
             >
               You&apos;re buying for
             </h3>
-            <p className="mt-1 break-words text-[28px] font-extrabold leading-tight text-foreground">
+            <p className="mt-1 min-w-0 text-[28px] font-extrabold leading-tight text-foreground [overflow-wrap:anywhere]">
               {reveal.r}
             </p>
             {reveal.b ? <p className="mt-3 text-sm text-muted">Budget: {reveal.b}</p> : null}
@@ -762,12 +772,12 @@ export function SecretSantaTool() {
   const locked = listLocked && Boolean(draw);
 
   return (
-    <div className="ss-tool">
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)]">
-        <div className="space-y-4 rounded-3xl border border-border bg-surface p-3 sm:p-5">
+    <div className="ss-tool min-w-0">
+      <div className="grid min-w-0 gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)]">
+        <div className="min-w-0 space-y-4 rounded-3xl border border-border bg-surface p-3 sm:p-5">
           {/* Participants */}
-          <section aria-labelledby="ss-who">
-            <div className="flex items-baseline justify-between gap-2">
+          <section aria-labelledby="ss-who" className="min-w-0">
+            <div className="flex min-w-0 items-baseline justify-between gap-2">
               <h2 id="ss-who" className="text-lg font-bold text-foreground">
                 Who&apos;s taking part
               </h2>
@@ -778,7 +788,7 @@ export function SecretSantaTool() {
 
             {!locked ? (
               <>
-                <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+                <div className="mt-3 flex min-w-0 flex-col gap-2 sm:flex-row">
                   <div className="min-w-0 flex-1">
                     <label htmlFor="ss-name" className="sr-only">
                       Name
@@ -858,7 +868,8 @@ export function SecretSantaTool() {
                 return (
                   <li
                     key={p.id}
-                    className={`flex items-center gap-2 rounded-xl border px-2 py-1.5 ${
+                    aria-invalid={isDup || undefined}
+                    className={`flex min-w-0 items-center gap-2 rounded-xl border px-2 py-1.5 ${
                       isDup ? "border-red-500" : "border-border"
                     }`}
                   >
@@ -877,7 +888,7 @@ export function SecretSantaTool() {
                         autoFocus
                       />
                     ) : (
-                      <span className="min-w-0 flex-1 break-words px-1 text-sm font-medium text-foreground">
+                      <span className="min-w-0 flex-1 px-1 text-sm font-medium text-foreground [overflow-wrap:anywhere]">
                         {p.name}
                       </span>
                     )}
@@ -889,7 +900,7 @@ export function SecretSantaTool() {
                             setEditingId(p.id);
                             setEditDraft(p.name);
                           }}
-                          className="inline-flex min-h-11 items-center px-2 text-xs font-semibold text-accent outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                          className="inline-flex min-h-11 shrink-0 items-center px-2 text-xs font-semibold text-accent outline-none focus-visible:ring-2 focus-visible:ring-accent"
                         >
                           Edit
                         </button>
@@ -898,7 +909,7 @@ export function SecretSantaTool() {
                           data-remove-id={p.id}
                           aria-label={`Remove ${p.name}`}
                           onClick={() => removePerson(p.id, nextId)}
-                          className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-muted outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
+                          className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-muted outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
                         >
                           ✕
                         </button>
@@ -1065,7 +1076,7 @@ export function SecretSantaTool() {
                 <input
                   id="ss-budget"
                   maxLength={30}
-                  placeholder="$25, £20 or A$30"
+                  placeholder="e.g. $25, £20 or A$30"
                   value={details.budget}
                   onChange={(e) => setDetails((d) => ({ ...d, budget: e.target.value }))}
                   className="mt-1 w-full min-h-11 rounded-xl border border-border bg-background px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-accent"
@@ -1104,8 +1115,8 @@ export function SecretSantaTool() {
           </details>
 
           {/* Options */}
-          <div className="flex items-start justify-between gap-3 rounded-2xl border border-border p-3">
-            <div>
+          <div className="flex min-w-0 items-start justify-between gap-3 rounded-2xl border border-border p-3">
+            <div className="min-w-0">
               <p className="text-sm font-semibold text-foreground">Single loop</p>
               <p className="mt-1 text-xs text-muted">
                 Everyone in one chain: A buys for B, B for C … and the last person for A. Stricter,
@@ -1115,6 +1126,7 @@ export function SecretSantaTool() {
             <button
               type="button"
               role="switch"
+              aria-label="Single loop"
               aria-checked={singleCycle}
               disabled={locked}
               onClick={() => setSingleCycle((v) => !v)}
@@ -1165,7 +1177,7 @@ export function SecretSantaTool() {
 
         {/* Links panel */}
         <div
-          className="ss-links-panel rounded-3xl border border-border bg-surface p-3 sm:p-5 lg:sticky lg:top-4 lg:self-start"
+          className="ss-links-panel min-w-0 rounded-3xl border border-border bg-surface p-3 sm:p-5 lg:sticky lg:top-4 lg:self-start"
           data-print="links"
         >
           {draw ? (
@@ -1187,9 +1199,9 @@ export function SecretSantaTool() {
                   return (
                     <li
                       key={p.id}
-                      className="flex flex-wrap items-center gap-2 rounded-xl border border-border px-3 py-2"
+                      className="flex min-w-0 flex-wrap items-center gap-2 rounded-xl border border-border px-3 py-2"
                     >
-                      <span className="min-w-0 flex-1 break-words text-sm font-semibold text-foreground">
+                      <span className="min-w-0 flex-1 text-sm font-semibold text-foreground [overflow-wrap:anywhere]">
                         {p.name}
                       </span>
                       <button
@@ -1263,14 +1275,15 @@ export function SecretSantaTool() {
                 </button>
               </div>
 
-              <div className="mt-5 flex items-start justify-between gap-3 rounded-2xl border border-border p-3 print:hidden">
-                <div>
+              <div className="mt-5 flex min-w-0 items-start justify-between gap-3 rounded-2xl border border-border p-3 print:hidden">
+                <div className="min-w-0">
                   <p className="text-sm font-semibold text-foreground">Show all matches</p>
                   <p className="mt-1 text-xs text-muted">Off by default. Not saved across reloads.</p>
                 </div>
                 <button
                   type="button"
                   role="switch"
+                  aria-label="Show all matches"
                   aria-checked={showMatches}
                   onClick={() => setShowMatches((v) => !v)}
                   className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-accent ${
@@ -1303,8 +1316,8 @@ export function SecretSantaTool() {
                         const receiver = receiverId ? byId.get(receiverId)?.name : "—";
                         return (
                           <tr key={p.id} className="border-b border-border/60">
-                            <td className="py-2 pr-2 break-words">{p.name}</td>
-                            <td className="py-2 break-words">{receiver}</td>
+                            <td className="max-w-0 py-2 pr-2 [overflow-wrap:anywhere]">{p.name}</td>
+                            <td className="max-w-0 py-2 [overflow-wrap:anywhere]">{receiver}</td>
                           </tr>
                         );
                       })}
@@ -1411,6 +1424,7 @@ export function SecretSantaTool() {
         danger
         onCancel={() => setConfirm(null)}
         onConfirm={() => {
+          window.clearTimeout(saveTimer.current);
           clearState();
           const empty = emptyState();
           setParticipants(empty.participants);
@@ -1421,9 +1435,11 @@ export function SecretSantaTool() {
           setListLocked(false);
           setShowMatches(false);
           setDrawError("");
+          setEventOpen(false);
           setConfirm(null);
           announce("Reset complete.");
-          nameInputRef.current?.focus();
+          // After dialog restores focus to the trigger, move to Name.
+          window.setTimeout(() => nameInputRef.current?.focus(), 50);
         }}
       />
       <ConfirmDialog

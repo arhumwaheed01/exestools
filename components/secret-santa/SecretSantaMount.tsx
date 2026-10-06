@@ -18,7 +18,7 @@ const SecretSantaTool = dynamic(
 /** Client tool with fixed min-height to avoid CLS. */
 export function SecretSantaMount() {
   return (
-    <div className="min-h-[560px] lg:min-h-[640px]">
+    <div className="min-h-[560px] min-w-0 lg:min-h-[640px]">
       <SecretSantaTool />
     </div>
   );

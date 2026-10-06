@@ -167,7 +167,7 @@ export default function SecretSantaGeneratorPage() {
           your browser.
         </p>
 
-        <div className="ss-tool-wrap mt-6">
+        <div className="ss-tool-wrap mt-6 min-w-0">
           <SecretSantaMount />
         </div>
 
@@ -315,8 +315,8 @@ export default function SecretSantaGeneratorPage() {
           <ul className="mt-3 list-disc space-y-3 pl-5">
             <li>
               <span className="font-semibold text-foreground">Set a budget range.</span>{" "}
-              &quot;20–30&quot; or &quot;£15–£20&quot; sets clearer expectations than a maximum
-              alone. The budget field is free text, so use your own currency.
+              {'"$20–$30"'} or {'"£15–£20"'} sets clearer expectations than a maximum alone.
+              The budget field is free text, so use your own currency.
             </li>
             <li>
               <span className="font-semibold text-foreground">Give budget ideas.</span> For small
