@@ -56,10 +56,17 @@ export default function AboutPage() {
           , a{" "}
           <Link href="/random-number-wheel" className="font-semibold text-accent hover:underline">
             random number wheel
-          </Link>{" "}
-          and a{" "}
+          </Link>
+          , a{" "}
           <Link href="/random-team-generator" className="font-semibold text-accent hover:underline">
             random team generator
+          </Link>{" "}
+          and a{" "}
+          <Link
+            href="/secret-santa-generator"
+            className="font-semibold text-accent hover:underline"
+          >
+            Secret Santa generator
           </Link>
           . They run in your browser, with no account to create and nothing to install. ExesTools is
           not affiliated with the reverse-engineering forum that has a similar name.
@@ -109,6 +116,12 @@ export default function AboutPage() {
             deals names into teams. Nothing is decided by how hard or how long the wheel spins. Each
             spin is independent, so streaks can happen by chance; switch on Remove winner if you
             want every name picked once before any repeats.
+          </p>
+          <p className="mt-2">
+            The Secret Santa generator first checks that a valid draw exists for your exclusions,
+            then shuffles with the same secure generator until everyone has someone they&apos;re
+            allowed to draw. For heavily restricted lists it falls back to a backtracking search.
+            Nobody can draw themselves.
           </p>
         </section>
 

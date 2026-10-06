@@ -136,6 +136,19 @@ export default async function RandomNamePickerPage({ searchParams }: PageProps) 
             song, or who tells a story. Turn remove-winner off if repeats are fine.
           </li>
           <li>
+            <span className="font-semibold text-foreground">White elephant turn order.</span> Paste
+            every player&apos;s name, leave remove-winner on, and spin until the wheel is empty. The
+            order names come off the wheel is the order people choose or steal gifts. Running a gift
+            exchange where everyone buys for one person instead? Use the{" "}
+            <Link
+              href="/secret-santa-generator"
+              className="font-semibold text-accent hover:underline"
+            >
+              Secret Santa generator
+            </Link>
+            .
+          </li>
+          <li>
             <span className="font-semibold text-foreground">Simple raffles and door prizes.</span>{" "}
             Paste entrant names, show the wheel where people can see it, and spin once per prize
             with remove-winner on. For prize lists or stream giveaways with themed slices, the{" "}

@@ -47,7 +47,7 @@ function FaqAnswer({ text }: { text: string }) {
 }
 
 type Props = {
-  toolId: Exclude<ToolId, "home" | "random-team-generator">;
+  toolId: Exclude<ToolId, "home" | "random-team-generator" | "secret-santa-generator">;
   title: string;
   intro: ReactNode;
   /** Optional H2 under intro (kw-map packs). */

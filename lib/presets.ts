@@ -289,6 +289,10 @@ export const TOOL_DEFAULTS: Record<ToolId, ToolPresetConfig> = {
     defaultPresetId: "classroom-students",
     presetIds: [],
   },
+  "secret-santa-generator": {
+    defaultPresetId: "sample-names",
+    presetIds: [],
+  },
   "random-number-wheel": {
     defaultPresetId: "numbers-1-10",
     presetIds: [],

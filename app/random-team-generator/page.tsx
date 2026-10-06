@@ -268,8 +268,11 @@ export default async function RandomTeamGeneratorPage({ searchParams }: PageProp
             It does not weight people by skill, keep partners apart with rules, or sync with Google
             Classroom or a grade book. Those jobs need other systems. ExesTools stays a fast,
             browser-only splitter: paste, choose a size, generate, share or print. For a private
-            gift exchange with exclusions, wait for the Secret Santa generator when it ships; for
-            one name at a time on a wheel, stay with the name picker or classroom spinner.
+            gift exchange with exclusions, use the{" "}
+            <Link href="/secret-santa-generator" className="font-semibold text-accent hover:underline">
+              Secret Santa generator
+            </Link>
+            ; for one name at a time on a wheel, stay with the name picker or classroom spinner.
           </p>
         </section>
 

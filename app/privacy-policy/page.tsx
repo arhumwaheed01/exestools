@@ -29,7 +29,7 @@ export default function PrivacyPolicyPage() {
       <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
         Privacy Policy
       </h1>
-      <p className="mt-2 text-sm text-muted">Last updated: October 5, 2026</p>
+      <p className="mt-2 text-sm text-muted">Last updated: October 6, 2026</p>
       <div className="mt-6 space-y-5 text-sm leading-relaxed text-muted sm:text-base">
         <p>
           This Privacy Policy explains how ExesTools (https://www.exestools.com) handles information
@@ -40,7 +40,8 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-lg font-bold text-foreground">Who we are</h2>
           <p className="mt-2">
             ExesTools operates free browser-based decision tools at https://www.exestools.com,
-            including a spinner wheel and a random team generator. For privacy questions, email{" "}
+            including a spinner wheel, a random team generator and a Secret Santa generator. For
+            privacy questions, email{" "}
             <a
               href={`mailto:${siteConfig.contactEmail}`}
               className="font-semibold text-accent hover:underline"
@@ -58,6 +59,12 @@ export default function PrivacyPolicyPage() {
             browser&apos;s local storage so your session can resume. We do not require an account.
             Clearing your browser data removes these items.
           </p>
+          <p className="mt-2">
+            Secret Santa names, exclusions, event details and your latest draw are also saved in
+            local storage on your device. When you open a Secret Santa link, its contents are kept in
+            that browser tab&apos;s session storage so a refresh still works; closing the tab clears
+            it.
+          </p>
         </section>
 
         <section>
@@ -67,6 +74,12 @@ export default function PrivacyPolicyPage() {
             sign (it starts with #w=). Browsers don&apos;t send that part of a link to our servers.
             Anyone with the link can see the list, so do not put sensitive personal data in
             shareable links. Older links that used ?c= still open for compatibility.
+          </p>
+          <p className="mt-2">
+            Secret Santa links work the same way: setup links start with #s= and personal reveal
+            links start with #r=. The page removes this part from the address bar as soon as it
+            loads. Their contents are scrambled so they aren&apos;t readable at a glance, but this is
+            not encryption: anyone with a link can open it, including the organizer.
           </p>
         </section>
 
@@ -82,9 +95,10 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-lg font-bold text-foreground">Analytics (Google Analytics 4)</h2>
           <p className="mt-2">
             We use Google Analytics 4 (measurement ID G-DJKH68VDEJ) to understand aggregate traffic
-            and product usage (for example page views and events like spin, share, and preset load).
-            We do not send your wheel choice text or names to Analytics, and the page address we
-            measure does not include the shared list.
+            and product usage (for example page views and events like spin, share, preset load, and
+            Secret Santa draws, link copies and reveals — counts only, never names, event names or
+            notes). We do not send your wheel choice text or names to Analytics, and the page address
+            we measure does not include the shared list.
           </p>
           <p className="mt-2">
             Google Consent Mode v2 is enabled. For visitors in the European Economic Area, the United

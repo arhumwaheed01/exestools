@@ -5,6 +5,7 @@ export type ToolId =
   | "prize-wheel"
   | "yes-no-wheel"
   | "random-team-generator"
+  | "secret-santa-generator"
   | "random-number-wheel";
 
 export type ToolDef = {
@@ -48,6 +49,12 @@ export const TOOLS: ToolDef[] = [
     footerLabel: "Team Generator",
   },
   {
+    id: "secret-santa-generator",
+    path: "/secret-santa-generator",
+    navLabel: "Secret Santa",
+    footerLabel: "Secret Santa",
+  },
+  {
     id: "random-number-wheel",
     path: "/random-number-wheel",
     navLabel: "Numbers",
@@ -66,5 +73,9 @@ export function defaultAutoRemoveWinner(toolId: ToolId): boolean {
 }
 
 export function isWheelTool(toolId: ToolId): boolean {
-  return toolId !== "random-team-generator" && toolId !== "random-number-wheel";
+  return (
+    toolId !== "random-team-generator" &&
+    toolId !== "random-number-wheel" &&
+    toolId !== "secret-santa-generator"
+  );
 }

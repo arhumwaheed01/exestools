@@ -13,7 +13,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       path.includes("spinner") ||
       path.includes("picker") ||
       path.includes("team") ||
-      path.includes("number");
+      path.includes("number") ||
+      path.includes("secret-santa");
     const date = LASTMOD[path] ?? "2026-09-26";
     return {
       url: `${siteConfig.url}${isHome ? "" : path}`,

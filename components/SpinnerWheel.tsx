@@ -486,6 +486,7 @@ export function SpinnerWheel({
                     { href: "/prize-wheel", label: "Prize wheel" },
                     { href: "/yes-no-wheel", label: "Yes or no wheel" },
                     { href: "/random-team-generator", label: "Team generator" },
+                    { href: "/secret-santa-generator", label: "Secret Santa" },
                     { href: "/random-number-wheel", label: "Number wheel" },
                   ]
                 : undefined

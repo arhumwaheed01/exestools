@@ -56,6 +56,48 @@ body {
     border: 1px solid #ccc;
     color: #111;
   }
+
+  /* Secret Santa: print links or slips only */
+  body[data-ss-print="links"] main > div > *:not(.ss-tool-wrap),
+  body[data-ss-print="links"] .ss-tool > *:not(.ss-links-panel),
+  body[data-ss-print="links"] .ss-tool .ss-links-panel > *:not(ul):not(h2):not(p) {
+    display: none !important;
+  }
+
+  body[data-ss-print="slips"] main > div > *:not(.ss-tool-wrap),
+  body[data-ss-print="slips"] .ss-tool > *:not(.ss-links-panel),
+  body[data-ss-print="slips"] .ss-links-panel > *:not([data-print="slips"]) {
+    display: none !important;
+  }
+
+  body[data-ss-print="slips"] .ss-slips {
+    display: block !important;
+  }
+
+  body[data-ss-print="slips"] table {
+    display: none !important;
+  }
+}
+
+@keyframes ssRevealIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.ss-reveal-anim {
+  animation: ssRevealIn 0.28s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ss-reveal-anim {
+    animation: none;
+  }
 }
 
 .confetti-piece {

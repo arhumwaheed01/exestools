@@ -8,11 +8,13 @@ const RELATED: Record<ToolId, { href: string; label: string }[]> = {
     { href: "/prize-wheel", label: "Prize wheel" },
     { href: "/yes-no-wheel", label: "Yes or no wheel" },
     { href: "/random-team-generator", label: "Random team generator" },
+    { href: "/secret-santa-generator", label: "Secret Santa generator" },
     { href: "/random-number-wheel", label: "Random number wheel" },
   ],
   "random-name-picker": [
     { href: "/classroom-spinner", label: "Classroom / student spinner" },
     { href: "/random-team-generator", label: "Random team generator" },
+    { href: "/secret-santa-generator", label: "Secret Santa generator (gift exchange)" },
     { href: "/", label: "Free spinner wheel" },
     { href: "/yes-no-wheel", label: "Yes or no wheel" },
     { href: "/prize-wheel", label: "Prize / giveaway wheel" },
@@ -40,8 +42,15 @@ const RELATED: Record<ToolId, { href: string; label: string }[]> = {
   "random-team-generator": [
     { href: "/classroom-spinner", label: "Classroom spinner (pick one student)" },
     { href: "/random-name-picker", label: "Random name picker" },
+    { href: "/secret-santa-generator", label: "Secret Santa generator" },
     { href: "/", label: "Spinner wheel" },
     { href: "/random-number-wheel", label: "Random number wheel" },
+  ],
+  "secret-santa-generator": [
+    { href: "/random-name-picker", label: "Random name picker (white elephant turn order)" },
+    { href: "/random-team-generator", label: "Random team generator" },
+    { href: "/", label: "Free spinner wheel" },
+    { href: "/prize-wheel", label: "Prize / giveaway wheel" },
   ],
   "random-number-wheel": [
     { href: "/", label: "Spinner wheel" },
