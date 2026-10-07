@@ -141,6 +141,16 @@ export default async function YesNoWheelPage({ searchParams }: PageProps) {
           </Link>{" "}
           on the homepage.
         </p>
+        <p>
+          Picking a person, not an answer? Use the{" "}
+          <Link
+            href="/random-name-picker"
+            className="font-semibold text-accent hover:underline"
+          >
+            random name picker
+          </Link>
+          .
+        </p>
       </GuideSection>
     </UseCaseToolPage>
   );

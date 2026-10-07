@@ -219,6 +219,33 @@ export default async function HomePage({ searchParams }: PageProps) {
               Small jobs. List the chores or tasks and spin to see which one gets done first, or who
               picks first.
             </li>
+            <li>
+              Planning a gift exchange? Use the{" "}
+              <Link
+                href="/secret-santa-generator"
+                className="font-semibold text-accent hover:underline"
+              >
+                Secret Santa generator with exclusions
+              </Link>
+              .
+            </li>
+            <li>
+              Need groups instead of one pick?{" "}
+              <Link
+                href="/random-team-generator"
+                className="font-semibold text-accent hover:underline"
+              >
+                Split a list into random groups or pairs
+              </Link>
+              .
+            </li>
+            <li>
+              Running a giveaway with prizes on screen? Use the{" "}
+              <Link href="/prize-wheel" className="font-semibold text-accent hover:underline">
+                prize wheel for giveaways
+              </Link>
+              .
+            </li>
           </ul>
         </section>
 

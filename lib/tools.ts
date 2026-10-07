@@ -68,8 +68,6 @@ export const TOOLS: ToolDef[] = [
     path: "/raffle-generator",
     navLabel: "Raffle",
     footerLabel: "Raffle Generator",
-    // 11 header items wrap between 1024–1280px; keep Raffle in footer + tool links only.
-    inHeaderNav: false,
   },
 ];
 

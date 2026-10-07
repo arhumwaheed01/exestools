@@ -188,7 +188,15 @@ export default async function RandomNumberWheelPage({ searchParams }: PageProps)
             <li>
               In the classroom. Give each student or desk a number and spin to call on someone, pick
               which question to answer first, or choose a page to read aloud. For quick math
-              warm-ups, spin twice and have the class add, subtract or multiply the two numbers.
+              warm-ups, spin twice and have the class add, subtract or multiply the two numbers. To
+              number students off into groups, use the{" "}
+              <Link
+                href="/random-team-generator"
+                className="font-semibold text-accent hover:underline"
+              >
+                random team generator
+              </Link>
+              .
             </li>
             <li>
               Board games. Tap 1–6 when a die goes missing. Each spin gives one number from 1 to 6

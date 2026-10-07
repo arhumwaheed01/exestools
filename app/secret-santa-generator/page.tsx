@@ -8,7 +8,7 @@ import { webAppLd } from "@/lib/seo/jsonld";
 const PAGE_URL = "https://www.exestools.com/secret-santa-generator";
 const TITLE = "Secret Santa Generator — Exclusions, No Email | ExesTools";
 const DESCRIPTION =
-  "Free Secret Santa generator with exclusions for couples. Draw names in your browser, then send each person a private reveal link. No email, no signup.";
+  "Free Secret Santa generator with exclusions for couples. Draw names in your browser, then send private links by text, WhatsApp or email. No signup.";
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -42,16 +42,39 @@ const FAQ = [
       "Yes. It's free with no account or signup, and nobody needs to give an email address. It runs in your browser, so there's nothing to install.",
   },
   {
+    q: "How does a Secret Santa generator work?",
+    a: "You add everyone's name and any exclusions, then press Draw names. The generator shuffles the group so that everyone gets exactly one person to buy for, nobody draws themselves, and every exclusion is respected. Each person then opens their own private link to see their match.",
+    aPlain:
+      "You add everyone's name and any exclusions, then press Draw names. The generator shuffles the group so that everyone gets exactly one person to buy for, nobody draws themselves, and every exclusion is respected. Each person then opens their own private link to see their match.",
+  },
+  {
     q: "Does it send emails to participants?",
     a: "No. ExesTools doesn't collect email addresses or send messages. You copy each person's private link and send it yourself, by text, chat, or your own email.",
     aPlain:
       "No. ExesTools doesn't collect email addresses or send messages. You copy each person's private link and send it yourself, by text, chat, or your own email.",
   },
   {
+    q: "Can I send Secret Santa names by WhatsApp or text message?",
+    a: "Yes. Copy each person's private link and send it in WhatsApp, a text message or any chat app. ExesTools doesn't need phone numbers or emails, and it doesn't send messages itself.",
+    aPlain:
+      "Yes. Copy each person's private link and send it in WhatsApp, a text message or any chat app. ExesTools doesn't need phone numbers or emails, and it doesn't send messages itself.",
+  },
+  {
     q: "How do I stop couples from drawing each other?",
     a: "Add an exclusion: pick both names and choose Neither draws the other. Use One-way if only one person should be blocked from drawing the other.",
     aPlain:
       "Add an exclusion: pick both names and choose Neither draws the other. Use One-way if only one person should be blocked from drawing the other.",
+  },
+  {
+    q: "How many people do I need for Secret Santa?",
+    a: "At least 3. This generator handles up to 50 people in one draw.",
+    aPlain: "At least 3. This generator handles up to 50 people in one draw.",
+  },
+  {
+    q: "Does Secret Santa work with an odd number of people?",
+    a: "Yes. Everyone gives one gift and gets one gift, so any group of 3 or more works. Only exclusions can block a draw in a small group.",
+    aPlain:
+      "Yes. Everyone gives one gift and gets one gift, so any group of 3 or more works. Only exclusions can block a draw in a small group.",
   },
   {
     q: "Why does it say no valid draw is possible?",
@@ -64,6 +87,18 @@ const FAQ = [
     a: "Only if they choose to. Matches stay hidden until you switch on Show all matches. Links are scrambled, not encrypted, so anyone holding a link, including the organizer, can open it.",
     aPlain:
       "Only if they choose to. Matches stay hidden until you switch on Show all matches. Links are scrambled, not encrypted, so anyone holding a link, including the organizer, can open it.",
+  },
+  {
+    q: "Can I run Secret Santa for a remote or long-distance group?",
+    a: "Yes. Send each link privately in chat or email. People open their own link from anywhere. Agree on a shipping deadline in the event note.",
+    aPlain:
+      "Yes. Send each link privately in chat or email. People open their own link from anywhere. Agree on a shipping deadline in the event note.",
+  },
+  {
+    q: "Is there a wish list?",
+    a: "No. ExesTools doesn't collect wish lists. Use the note in Event details to ask people to share gift ideas, or to set a theme.",
+    aPlain:
+      "No. ExesTools doesn't collect wish lists. Use the note in Event details to ask people to share gift ideas, or to set a theme.",
   },
   {
     q: "Are the names uploaded anywhere?",
@@ -267,6 +302,47 @@ export default function SecretSantaGeneratorPage() {
               Privacy Policy
             </Link>
             .
+          </p>
+        </section>
+
+        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            Send Secret Santa names by text or WhatsApp
+          </h2>
+          <p className="mt-3">
+            After you press Draw names, each person gets their own private link. Press Copy link next
+            to a name and paste it into a text message, WhatsApp, Messenger, Slack or your own email.
+            Send each link only to the person it belongs to. When they open it and tap Reveal, they
+            see who they&apos;re buying for, plus the budget, date and note you added. Nobody
+            else&apos;s match is shown. ExesTools never asks for phone numbers or email addresses and
+            never sends messages for you.
+          </p>
+        </section>
+
+        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            Kris Kringle, office and family gift exchanges
+          </h2>
+          <p className="mt-3">
+            The same draw works for a Kris Kringle in Australia or New Zealand, an office Secret
+            Santa, a family exchange or a class gift swap. Add up to 50 people. Use exclusions so
+            partners, housemates or siblings don&apos;t draw each other, and put the spending limit
+            and exchange date in Event details so everyone sees the same rules. For a remote team,
+            send the links in your team chat as direct messages. Everyone opens their own link,
+            wherever they are.
+          </p>
+        </section>
+
+        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            Secret Santa with an odd number of people
+          </h2>
+          <p className="mt-3">
+            Odd numbers are fine. Everyone buys one gift and receives one gift whether you have 5
+            people or 11, because each person is assigned someone to buy for. Nobody has to be split
+            into pairs. You need at least 3 people. Exclusions are what can make a draw impossible in
+            a small group. If that happens, the page tells you who is stuck so you can remove an
+            exclusion or add someone.
           </p>
         </section>
 

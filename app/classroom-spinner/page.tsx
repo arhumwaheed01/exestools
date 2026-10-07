@@ -140,6 +140,26 @@ export default async function ClassroomSpinnerPage({ searchParams }: PageProps) 
             </Link>{" "}
             with the random team generator.
           </li>
+          <li>
+            Need partners instead of one name? Use the{" "}
+            <Link
+              href="/random-team-generator#pairs"
+              className="font-semibold text-accent hover:underline"
+            >
+              random pair generator
+            </Link>
+            .
+          </li>
+          <li>
+            Planning a class gift swap? Try the{" "}
+            <Link
+              href="/secret-santa-generator"
+              className="font-semibold text-accent hover:underline"
+            >
+              Secret Santa generator
+            </Link>
+            .
+          </li>
         </ul>
       </GuideSection>
       <GuideSection title="Privacy for schools">

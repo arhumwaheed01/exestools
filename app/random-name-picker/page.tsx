@@ -60,7 +60,7 @@ const FAQS = [
   },
   {
     q: "Can I use it for a raffle or giveaway?",
-    a: "Yes for a simple name draw: paste entrant names, leave remove-winner on, and spin once per prize so each winner leaves the wheel. For prize-themed slices or stream giveaways, use the [prize wheel]. For numbered tickets, multiple tickets per person, or several winners in one draw, use the [raffle generator].",
+    a: "Yes for a simple name draw: paste entrant names, leave remove-winner on, and spin once per prize so each winner leaves the wheel. For prize-themed slices or stream giveaways, use the [prize wheel]. For numbered tickets, multiple tickets per person, or several winners in one draw, use the [raffle generator with multiple entries].",
   },
 ];
 

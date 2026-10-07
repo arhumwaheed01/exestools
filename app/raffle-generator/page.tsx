@@ -310,7 +310,14 @@ export default function RaffleGeneratorPage() {
             <li>
               <span className="font-semibold text-foreground">Office parties.</span> Draw door prizes
               from the guest list, and name the prizes so the record reads &quot;Gift card:
-              Priya&quot;.
+              Priya&quot;. For a gift exchange where everyone buys for someone, use the{" "}
+              <Link
+                href="/secret-santa-generator"
+                className="font-semibold text-accent hover:underline"
+              >
+                Secret Santa generator
+              </Link>
+              .
             </li>
             <li>
               <span className="font-semibold text-foreground">Clubs and teams.</span> Draw a

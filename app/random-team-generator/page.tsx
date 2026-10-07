@@ -9,23 +9,23 @@ type PageProps = {
   searchParams: Promise<{ preset?: string }>;
 };
 
-const TITLE = "Random Team Generator — Split Names into Groups";
+const TITLE = "Random Team Generator: Groups & Pairs from Names | ExesTools";
 const META =
-  "Paste names, choose the number of teams or people per team, and get balanced random groups. Make pairs, reshuffle, copy or share. Free, no signup.";
+  "Paste names and split them into random teams, groups or pairs. Choose the number of teams or people per team, reshuffle, print or share. Free, no signup.";
 
 export const metadata: Metadata = {
-  title: TITLE,
+  title: { absolute: TITLE },
   description: META,
   alternates: { canonical: absoluteUrl("/random-team-generator") },
   openGraph: {
-    title: `${TITLE} | ExesTools`,
+    title: TITLE,
     description: META,
     url: absoluteUrl("/random-team-generator"),
     images: [{ url: siteConfig.ogImagePath, width: 1200, height: 630, alt: "ExesTools" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${TITLE} | ExesTools`,
+    title: TITLE,
     description: META,
     images: [siteConfig.ogImagePath],
   },
@@ -64,12 +64,28 @@ const FAQS = [
     a: "It shuffles your whole list with a Fisher–Yates shuffle, using your browser's secure random number generator, then deals the names into teams one at a time. Every arrangement is equally likely, and nobody is placed on a team in advance. Learn more: [How ExesTools picks a result].",
   },
   {
+    q: "How do I make random partners for my class?",
+    a: "Paste your class list, tap Pairs, and press Generate teams. Every student gets a partner, and with an odd number one group has three. Press Reshuffle for a new set.",
+  },
+  {
+    q: "How do I shuffle names into groups?",
+    a: "Paste the names one per line, choose how many groups (or how many people per group), and press Generate teams. The list is shuffled and dealt out evenly.",
+  },
+  {
     q: "What happens if the names don't split evenly?",
     a: "Teams are kept as even as possible, so sizes never differ by more than one. For example, 11 names in 3 teams gives teams of 4, 4 and 3.",
   },
   {
     q: "Can I make random pairs?",
     a: 'Yes. Tap Pairs, or set People per team to 2. With an odd number of names, the extra person joins one pair to make a group of three. Switch on "Leave one person out" if you\'d rather they sit out.',
+  },
+  {
+    q: "Can I make groups of 3?",
+    a: "Yes. Set People per team to 3. If the class doesn't divide evenly, a few groups have one person fewer.",
+  },
+  {
+    q: "Will it avoid putting the same partners together next time?",
+    a: "No. Each split is independent and the tool doesn't keep a history of past pairs. If two people land together again, press Reshuffle.",
   },
   {
     q: "Can I share the teams with my group?",
@@ -152,7 +168,7 @@ export default async function RandomTeamGeneratorPage({ searchParams }: PageProp
 
       <header className="mb-3 max-w-3xl print:hidden">
         <h1 className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl lg:text-3xl">
-          Random team generator
+          Random team generator for groups and pairs
         </h1>
         <p className="mt-1 text-sm leading-relaxed text-muted sm:text-base">
           Paste one name per line, choose how many teams you need (or how many people per team), and
@@ -192,6 +208,49 @@ export default async function RandomTeamGeneratorPage({ searchParams }: PageProp
             The split runs entirely in your browser. Nothing about your roster is sent to ExesTools
             servers when you generate teams. A share link packs the list into the part of the URL
             after the # sign, so only people who receive that link can open the same result.
+          </p>
+        </section>
+
+        <section
+          id="classroom"
+          className="max-w-3xl scroll-mt-24 text-sm leading-relaxed text-muted sm:text-base"
+        >
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            Random groups for the classroom
+          </h2>
+          <p className="mt-3">
+            Paste your class list once, then set Number of teams for table groups or People per team
+            for groups of 3 or 4. Teams never differ by more than one student, so 26 students in
+            groups of 4 become five groups of 4 and two groups of 3. Show the result on your board,
+            press Print for a paper copy, or Copy share link to send the same groups to a
+            co-teacher. Your list stays in this browser, so it&apos;s there next lesson.
+          </p>
+        </section>
+
+        <section
+          id="pairs"
+          className="max-w-3xl scroll-mt-24 text-sm leading-relaxed text-muted sm:text-base"
+        >
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            Random pair generator for partner work
+          </h2>
+          <p className="mt-3">
+            For think-pair-share, lab partners, peer editing or reading buddies, tap{" "}
+            <span className="font-semibold text-foreground">Pairs</span> (or set People per team to
+            2) and press Generate teams. With an odd number of students, one pair becomes a group of
+            three so nobody is left out. Switch on{" "}
+            <span className="font-semibold text-foreground">Leave one person out</span> if you need
+            strict pairs. Press Reshuffle for new partners. Each reshuffle is a fresh random deal.
+            The tool doesn&apos;t remember earlier rounds, so the same two students can be paired
+            again.
+          </p>
+          <p className="mt-3">
+            <Link
+              href="/random-team-generator?preset=pairs"
+              className="font-semibold text-accent hover:underline"
+            >
+              Make random pairs →
+            </Link>
           </p>
         </section>
 

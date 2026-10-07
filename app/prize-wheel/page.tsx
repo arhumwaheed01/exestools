@@ -40,7 +40,7 @@ const FAQS = [
   },
   {
     q: "Can I spin for prizes or for entrant names?",
-    a: 'Both. Use the Prize rewards or Stream giveaway example to spin for a prize, or Entrant names to draw a winner from a list of people. To draw several winners, turn on "Remove winner after spin" so nobody wins twice. If some entrants have more than one ticket, use the [raffle generator].',
+    a: 'Both. Use the Prize rewards or Stream giveaway example to spin for a prize, or Entrant names to draw a winner from a list of people. To draw several winners, turn on "Remove winner after spin" so nobody wins twice. If some entrants have more than one ticket, use the [raffle generator with multiple entries].',
   },
   {
     q: "Can I use it for an Instagram, TikTok, or Facebook giveaway?",
