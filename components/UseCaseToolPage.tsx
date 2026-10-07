@@ -22,6 +22,8 @@ const FAQ_LINK_HREFS: Record<string, string> = {
   "How ExesTools picks a result": "/about#how-it-works",
   "raffle generator": "/raffle-generator",
   "raffle generator with multiple entries": "/raffle-generator",
+  "random number wheel": "/random-number-wheel",
+  "Secret Santa generator": "/secret-santa-generator",
 };
 
 function faqPlainText(answer: string): string {
