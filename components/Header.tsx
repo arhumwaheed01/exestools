@@ -32,14 +32,14 @@ export function Header() {
           <span className="text-lg">{siteConfig.name}</span>
         </Link>
 
-        <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Primary">
+        <nav className="hidden min-w-0 flex-1 items-center justify-end gap-0.5 lg:flex" aria-label="Primary">
           {NAV.map((item) => {
             const active = pathname === item.href;
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`rounded-lg px-2.5 py-2 text-sm font-semibold transition outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+                className={`whitespace-nowrap rounded-lg px-1.5 py-1.5 text-xs font-semibold transition outline-none focus-visible:ring-2 focus-visible:ring-accent xl:px-2 xl:text-sm ${
                   active
                     ? "bg-surface-2 text-accent"
                     : "text-muted hover:bg-surface hover:text-foreground"
@@ -51,7 +51,7 @@ export function Header() {
           })}
           <Link
             href="/contact"
-            className="ml-2 rounded-xl bg-accent-strong px-3.5 py-2 text-sm font-semibold text-slate-950 hover:bg-accent outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="ml-1 whitespace-nowrap rounded-xl bg-accent-strong px-3 py-1.5 text-xs font-semibold text-slate-950 hover:bg-accent outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background xl:ml-2 xl:px-3.5 xl:py-2 xl:text-sm"
           >
             Contact
           </Link>

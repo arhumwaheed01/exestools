@@ -20,11 +20,11 @@ export type ToolDef = {
 
 /** Single source for nav / footer tool links (About & Contact stay separate). */
 export const TOOLS: ToolDef[] = [
-  { id: "home", path: "/", navLabel: "Spinner Wheel", footerLabel: "Spinner Wheel" },
+  { id: "home", path: "/", navLabel: "Spinner", footerLabel: "Spinner Wheel" },
   {
     id: "random-name-picker",
     path: "/random-name-picker",
-    navLabel: "Name Picker",
+    navLabel: "Names",
     footerLabel: "Name Picker",
   },
   {
@@ -36,13 +36,13 @@ export const TOOLS: ToolDef[] = [
   {
     id: "prize-wheel",
     path: "/prize-wheel",
-    navLabel: "Prize Wheel",
+    navLabel: "Prize",
     footerLabel: "Prize Wheel",
   },
   {
     id: "yes-no-wheel",
     path: "/yes-no-wheel",
-    navLabel: "Yes / No",
+    navLabel: "Yes/No",
     footerLabel: "Yes / No",
   },
   {
