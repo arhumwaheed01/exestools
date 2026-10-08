@@ -53,7 +53,7 @@ export function StaticWheelPreview({ choices, className = "" }: Props) {
 
   return (
     <div
-      className={`aspect-square w-full max-w-[420px] ${className}`}
+      className={`aspect-square w-full max-w-[min(420px,100%)] ${className}`}
       style={{ aspectRatio: "1 / 1" }}
     >
       <svg

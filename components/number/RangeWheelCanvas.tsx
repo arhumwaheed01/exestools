@@ -25,7 +25,7 @@ export function RangeWheelCanvas({ pool, rotation, ariaLabel, className = "" }: 
 
     const paint = () => {
       const dpr = Math.max(1, window.devicePixelRatio || 1);
-      const css = Math.min(420, wrap.clientWidth || 420);
+      const css = Math.max(1, Math.floor(wrap.getBoundingClientRect().width) || wrap.clientWidth || 280);
       canvas.style.width = `${css}px`;
       canvas.style.height = `${css}px`;
       canvas.width = Math.round(css * dpr);
@@ -116,7 +116,7 @@ export function RangeWheelCanvas({ pool, rotation, ariaLabel, className = "" }: 
   return (
     <div
       ref={wrapRef}
-      className={`relative mx-auto aspect-square h-full w-full max-w-[420px] ${className}`}
+      className={`relative mx-auto aspect-square w-full max-w-[min(420px,100%)] ${className}`}
       style={{ aspectRatio: "1 / 1" }}
     >
       <div
@@ -132,9 +132,7 @@ export function RangeWheelCanvas({ pool, rotation, ariaLabel, className = "" }: 
       </div>
       <canvas
         ref={canvasRef}
-        width={420}
-        height={420}
-        className="relative z-[1] block h-full w-full drop-shadow-xl"
+        className="relative z-[1] block h-full w-full max-w-full drop-shadow-xl"
         role="img"
         aria-label={ariaLabel}
       />

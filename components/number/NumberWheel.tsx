@@ -410,15 +410,15 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
   const previewLabels = Array.from({ length: 10 }, (_, i) => String(i + 1));
 
   return (
-    <div>
+    <div className="w-full min-w-0 max-w-full">
       {!ready ? (
-        <div className="min-h-[520px]">
+        <div className="min-h-[520px] w-full min-w-0">
           <StaticWheelPreview choices={previewLabels} />
           <p className="mt-2 text-center text-sm text-muted">10 numbers on the wheel: 1 to 10.</p>
         </div>
       ) : null}
 
-      <div className={ready ? "" : "hidden"} aria-hidden={!ready}>
+      <div className={ready ? "w-full min-w-0" : "hidden"} aria-hidden={!ready}>
         {sharedMode ? (
           <div className="mb-3 flex flex-wrap items-center gap-2 rounded-xl border border-accent/40 bg-surface px-3 py-2 text-sm">
             <span className="text-muted">You&apos;re viewing a shared range.</span>
@@ -439,8 +439,8 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
           </div>
         ) : null}
 
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
-          <div className="flex flex-col items-center">
+        <div className="grid w-full min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
+          <div className="flex w-full min-w-0 flex-col items-center">
             <RangeWheelCanvas pool={pool} rotation={rotation} ariaLabel={ariaLabel} />
             <p
               className="mt-3 min-h-[1.25rem] text-center text-sm font-medium text-muted"
@@ -482,7 +482,7 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
             )}
           </div>
 
-          <div className="space-y-4">
+          <div className="min-w-0 space-y-4">
             <div className="rounded-2xl border border-border bg-surface p-4">
               <h2 className="text-base font-bold text-foreground">Quick range</h2>
               <div className="mt-3 flex flex-wrap gap-2">

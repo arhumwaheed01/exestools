@@ -58,7 +58,7 @@ export function WinnerModal({
           }}
         >
           <motion.div
-            className="relative w-full max-w-md overflow-hidden rounded-3xl border border-border bg-surface p-6 text-center shadow-2xl sm:p-8"
+            className="relative mx-auto w-full max-w-[min(28rem,calc(100vw-2rem))] overflow-hidden rounded-3xl border border-border bg-surface p-6 text-center shadow-2xl sm:p-8"
             initial={reduceMotion ? false : { opacity: 0, scale: 0.92, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={reduceMotion ? undefined : { opacity: 0, scale: 0.96 }}

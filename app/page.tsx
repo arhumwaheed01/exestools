@@ -249,6 +249,126 @@ export default async function HomePage({ searchParams }: PageProps) {
           </ul>
         </section>
 
+        <section id="which-tool" className="max-w-3xl scroll-mt-24">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+            Which ExesTools tool should I use?
+          </h2>
+          <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
+            All nine tools pick at random with the same secure generator, but each one is set up for
+            a different job. Pick the one that matches what you&apos;re doing:
+          </p>
+          <div className="mt-4 overflow-x-auto">
+            <table className="w-full min-w-[18rem] border-collapse text-left text-sm leading-relaxed">
+              <thead>
+                <tr className="border-b border-border">
+                  <th className="py-2 pr-3 font-semibold text-foreground">You want to…</th>
+                  <th className="py-2 pr-3 font-semibold text-foreground">Use</th>
+                  <th className="py-2 font-semibold text-foreground">Why this one</th>
+                </tr>
+              </thead>
+              <tbody className="text-muted">
+                <tr className="border-b border-border/60 align-top">
+                  <td className="py-2.5 pr-3">
+                    Choose between a few options, like where to eat or what to do
+                  </td>
+                  <td className="py-2.5 pr-3 font-semibold text-foreground">
+                    <Link href="/" className="text-accent hover:underline">
+                      Spinner wheel
+                    </Link>{" "}
+                    (this page)
+                  </td>
+                  <td className="py-2.5">Up to 60 options, example wheels, share link</td>
+                </tr>
+                <tr className="border-b border-border/60 align-top">
+                  <td className="py-2.5 pr-3">
+                    Pick a person from a list for meetings, parties or turn order
+                  </td>
+                  <td className="py-2.5 pr-3 font-semibold text-foreground">
+                    <Link href="/random-name-picker" className="text-accent hover:underline">
+                      Random name picker
+                    </Link>
+                  </td>
+                  <td className="py-2.5">Name-focused presets and a &quot;no repeats&quot; round</td>
+                </tr>
+                <tr className="border-b border-border/60 align-top">
+                  <td className="py-2.5 pr-3">Call on students fairly in class</td>
+                  <td className="py-2.5 pr-3 font-semibold text-foreground">
+                    <Link href="/classroom-spinner" className="text-accent hover:underline">
+                      Classroom spinner
+                    </Link>
+                  </td>
+                  <td className="py-2.5">
+                    Remove-winner is on by default so everyone gets a turn; roster stays in your
+                    browser
+                  </td>
+                </tr>
+                <tr className="border-b border-border/60 align-top">
+                  <td className="py-2.5 pr-3">Show a giveaway or prize spin on screen</td>
+                  <td className="py-2.5 pr-3 font-semibold text-foreground">
+                    <Link href="/prize-wheel" className="text-accent hover:underline">
+                      Prize wheel
+                    </Link>
+                  </td>
+                  <td className="py-2.5">Prize and stream presets, tips for running a fair giveaway</td>
+                </tr>
+                <tr className="border-b border-border/60 align-top">
+                  <td className="py-2.5 pr-3">Get a quick yes, no or maybe</td>
+                  <td className="py-2.5 pr-3 font-semibold text-foreground">
+                    <Link href="/yes-no-wheel" className="text-accent hover:underline">
+                      Yes or no wheel
+                    </Link>
+                  </td>
+                  <td className="py-2.5">Two- or three-way wheel, running tally, coin-toss mode</td>
+                </tr>
+                <tr className="border-b border-border/60 align-top">
+                  <td className="py-2.5 pr-3">Pick a number from any range, or call bingo</td>
+                  <td className="py-2.5 pr-3 font-semibold text-foreground">
+                    <Link href="/random-number-wheel" className="text-accent hover:underline">
+                      Random number wheel
+                    </Link>
+                  </td>
+                  <td className="py-2.5">Ranges up to 1,000 numbers, no-repeat draws, bingo letters</td>
+                </tr>
+                <tr className="border-b border-border/60 align-top">
+                  <td className="py-2.5 pr-3">Split a list into teams, groups or pairs</td>
+                  <td className="py-2.5 pr-3 font-semibold text-foreground">
+                    <Link href="/random-team-generator" className="text-accent hover:underline">
+                      Random team generator
+                    </Link>
+                  </td>
+                  <td className="py-2.5">Set team count or team size, then print or share</td>
+                </tr>
+                <tr className="border-b border-border/60 align-top">
+                  <td className="py-2.5 pr-3">Run a gift exchange</td>
+                  <td className="py-2.5 pr-3 font-semibold text-foreground">
+                    <Link href="/secret-santa-generator" className="text-accent hover:underline">
+                      Secret Santa generator
+                    </Link>
+                  </td>
+                  <td className="py-2.5">
+                    Exclusions for couples and private reveal links, no emails needed
+                  </td>
+                </tr>
+                <tr className="align-top">
+                  <td className="py-2.5 pr-3">Draw raffle winners from tickets</td>
+                  <td className="py-2.5 pr-3 font-semibold text-foreground">
+                    <Link href="/raffle-generator" className="text-accent hover:underline">
+                      Raffle generator
+                    </Link>
+                  </td>
+                  <td className="py-2.5">
+                    Multiple tickets per person, alternates and a downloadable draw record
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-4 text-sm leading-relaxed text-muted sm:text-base">
+            Not sure? Start with the spinner wheel. You can paste the same list into any other tool
+            later.
+          </p>
+        </section>
+
         <RelatedTools toolId="home" />
 
         <section className="max-w-3xl" aria-labelledby="faq-heading">

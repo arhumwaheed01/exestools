@@ -9,7 +9,7 @@ type PageProps = {
 
 const TITLE = "Prize Wheel Spinner for Giveaways (Free Online) | ExesTools";
 const META =
-  "Free prize wheel spinner for giveaways, events and classrooms. Add prizes or entrant names, spin to win where everyone can see, and share your wheel. No signup.";
+  "Free prize wheel spinner for giveaways, events and classrooms. Add prizes or entrant names, spin where everyone can see, and share your wheel. No signup.";
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -35,7 +35,7 @@ const FAQS = [
     a: "Short, clear prizes that suit your audience, like gift cards or discount codes for an online giveaway, shout-outs on a stream, or homework passes in class. See the ideas above, or load one of the example wheels and edit it.",
   },
   {
-    q: "Can I use the prize wheel as a spin to win game at an event?",
+    q: "Can I use the prize wheel at an event or booth?",
     a: "Yes. Open it on any laptop or screen, add your prizes one per line, and let each visitor press SPIN. It's free with no signup. You supply the real prizes.",
   },
   {
@@ -107,7 +107,7 @@ export default async function PrizeWheelPage({ searchParams }: PageProps) {
       faqs={FAQS}
       schemaName="Prize Wheel Spinner"
       schemaDescription={META}
-      schemaAlternateName={["Prize wheel for giveaways", "Spin to win wheel"]}
+      schemaAlternateName={["Prize wheel for giveaways", "Event prize wheel"]}
       schemaFeatureList={[
         "Up to 60 prizes or names",
         "Remove winner after spin",
@@ -172,9 +172,9 @@ export default async function PrizeWheelPage({ searchParams }: PageProps) {
           wheels and edit the list.
         </p>
       </GuideSection>
-      <GuideSection title="Spin to win at events, booths and shops">
+      <GuideSection title="Prize spins at events, booths and shops">
         <p>
-          Use the prize wheel as a spin-to-win game at a trade show booth, school fair, fundraiser,
+          Use the prize wheel as a prize-spin game at a trade show booth, school fair, fundraiser,
           office party or shop counter. Open it on a laptop or a screen the visitor can see, and let
           them press SPIN.
         </p>

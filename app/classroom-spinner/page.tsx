@@ -173,6 +173,37 @@ export default async function ClassroomSpinnerPage({ searchParams }: PageProps) 
           </li>
         </ul>
       </GuideSection>
+      <GuideSection title="A 5-minute cold-call routine that stays fair">
+        <ol className="list-decimal space-y-2 pl-5">
+          <li>
+            Before class, paste your roster and press{" "}
+            <span className="font-semibold text-foreground">Copy</span> so the full list is on your
+            clipboard.
+          </li>
+          <li>
+            Ask the question first, give 5–10 seconds of think time,{" "}
+            <em>then</em> press SPIN. Everyone prepares, not just the student who gets picked.
+          </li>
+          <li>
+            Leave{" "}
+            <span className="font-semibold text-foreground">Remove winner after spin</span> on. A
+            picked student leaves the wheel, so nobody is called twice before everyone has had a
+            turn.
+          </li>
+          <li>
+            If a student is absent, delete their line instead of spinning again. It keeps the odds
+            equal for everyone else.
+          </li>
+          <li>
+            At the end of the round the wheel is empty. Paste the roster back in to start a new
+            round.
+          </li>
+        </ol>
+        <p>
+          Why it works: students can see the pick isn&apos;t the teacher choosing, and remove-winner
+          guarantees everyone gets one turn per round.
+        </p>
+      </GuideSection>
       <GuideSection title="Privacy for schools">
         <p>
           Your class list is saved only in this browser on this device. Student names are not sent

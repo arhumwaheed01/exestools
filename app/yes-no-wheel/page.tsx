@@ -307,6 +307,13 @@ export default async function YesNoWheelPage({ searchParams }: PageProps) {
           </Link>
           .
         </p>
+        <p>
+          Not sure which ExesTools page fits your job? See{" "}
+          <Link href="/#which-tool" className="font-semibold text-accent hover:underline">
+            which tool should I use
+          </Link>{" "}
+          on the homepage.
+        </p>
       </GuideSection>
     </UseCaseToolPage>
   );

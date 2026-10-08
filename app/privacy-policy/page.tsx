@@ -29,7 +29,7 @@ export default function PrivacyPolicyPage() {
       <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
         Privacy Policy
       </h1>
-      <p className="mt-2 text-sm text-muted">Last updated: October 6, 2026</p>
+      <p className="mt-2 text-sm text-muted">Last updated: October 8, 2026</p>
       <div className="mt-6 space-y-5 text-sm leading-relaxed text-muted sm:text-base">
         <p>
           This Privacy Policy explains how ExesTools (https://www.exestools.com) handles information
@@ -205,20 +205,22 @@ export default function PrivacyPolicyPage() {
             Your consent choices (EEA, UK and Switzerland)
           </h2>
           <p className="mt-2">
-            If you visit from the European Economic Area, the United Kingdom or Switzerland, we use
-            Google&apos;s Funding Choices consent messaging (certified under the IAB Transparency and
-            Consent Framework) to ask for your consent before cookies or similar storage are used for
-            personalized ads, where the law requires it. If you don&apos;t consent, Google may show
-            non-personalized or limited ads instead. When Google serves that message on this site,
-            you can make or change your choice in the dialog it shows. You can also control or clear
-            cookies in your browser settings, or email{" "}
+            If you visit from the European Economic Area, the United Kingdom or Switzerland, ads on
+            ExesTools use Google&apos;s consent management platform (Google&apos;s European
+            regulations message, a CMP certified under the IAB Transparency and Consent Framework).
+            When this message is shown, it asks for your consent before cookies or similar storage
+            are used for personalized ads. If you don&apos;t consent, or if no consent has been
+            collected, Google may show only non-personalized or limited ads. Until you make a choice,
+            our Google Consent Mode defaults deny advertising and analytics storage in these regions.
+            You can change your choice at any time from the message&apos;s settings link, clear
+            cookies in your browser, or email{" "}
             <a
               href={`mailto:${siteConfig.contactEmail}`}
               className="font-semibold text-accent hover:underline"
             >
               {siteConfig.contactEmail}
-            </a>{" "}
-            with privacy questions.
+            </a>
+            .
           </p>
           <p className="mt-2">
             We do not use the names or options you type into the tools for advertising, and we do
@@ -229,9 +231,11 @@ export default function PrivacyPolicyPage() {
         <section>
           <h2 className="text-lg font-bold text-foreground">Children</h2>
           <p className="mt-2">
-            The Spinner Wheel is a general-purpose tool. Teachers and parents should follow their
-            own policies when using class lists. We do not knowingly collect personal information
-            from children through accounts, because we do not offer accounts.
+            ExesTools is designed for adults — teachers, parents, event hosts and organizers — and is
+            not directed to children under 13. We do not offer accounts and we do not knowingly
+            collect personal information from children. Names typed into a tool stay in your browser
+            unless you choose to share a link. If you are a teacher, follow your school&apos;s policy
+            on student data and consider using first names or initials.
           </p>
         </section>
 
