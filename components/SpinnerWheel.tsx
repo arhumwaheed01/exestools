@@ -65,8 +65,12 @@ export function SpinnerWheel({
   const [autoRemove, setAutoRemove] = useState(() => defaultAutoRemoveWinner(toolId));
   const [ready, setReady] = useState(false);
   const [showNextSteps, setShowNextSteps] = useState(false);
+  /** Yes/No page only: spin result tallies (session state, not persisted). */
+  const [tally, setTally] = useState<Record<string, { label: string; count: number }>>({});
 
   const spinningRef = useRef(false);
+  const spinRef = useRef<() => void>(() => {});
+  const showTally = toolId === "yes-no-wheel";
   const rotationRef = useRef(0);
   const rafRef = useRef(0);
   const audioCtxRef = useRef<AudioContext | null>(null);
@@ -198,6 +202,17 @@ export function SpinnerWheel({
       playTick();
       track("spin", { toolId, count: choices.length });
 
+      if (showTally && name) {
+        const key = name.toLocaleLowerCase();
+        setTally((prev) => {
+          const existing = prev[key];
+          return {
+            ...prev,
+            [key]: { label: existing?.label ?? name, count: (existing?.count ?? 0) + 1 },
+          };
+        });
+      }
+
       if (autoRemove && name && allowSaveRef.current) {
         const next = choices.filter((c) => c !== name);
         setText(choicesToText(next));
@@ -206,7 +221,7 @@ export function SpinnerWheel({
         setText(choicesToText(next));
       }
     },
-    [choices, playTick, autoRemove, toolId],
+    [choices, playTick, autoRemove, toolId, showTally],
   );
 
   const spin = useCallback(() => {
@@ -236,6 +251,48 @@ export function SpinnerWheel({
     };
     rafRef.current = requestAnimationFrame(tick);
   }, [choices, finishSpin, reduceMotion]);
+
+  spinRef.current = spin;
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!(e.ctrlKey || e.metaKey) || e.key !== "Enter") return;
+      const t = e.target as HTMLElement | null;
+      const tag = t?.tagName;
+      if (tag === "TEXTAREA" || tag === "INPUT" || t?.isContentEditable) return;
+      if (spinningRef.current) return;
+      e.preventDefault();
+      spinRef.current();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  const tallyLine = useMemo(() => {
+    if (!showTally) return "";
+    const onWheel = new Set(choices.map((c) => c.toLocaleLowerCase()));
+    const parts: string[] = [];
+    for (const label of ["Yes", "No", "Maybe"] as const) {
+      const key = label.toLocaleLowerCase();
+      if (!onWheel.has(key)) continue;
+      parts.push(`${label}: ${tally[key]?.count ?? 0}`);
+    }
+    const preferred = new Set(["yes", "no", "maybe"]);
+    if (parts.length === 0) {
+      for (const c of choices) {
+        if (parts.length >= 6) break;
+        const key = c.toLocaleLowerCase();
+        parts.push(`${c}: ${tally[key]?.count ?? 0}`);
+      }
+    } else {
+      for (const [key, entry] of Object.entries(tally)) {
+        if (preferred.has(key)) continue;
+        if (parts.length >= 6) break;
+        parts.push(`${entry.label}: ${entry.count}`);
+      }
+    }
+    return parts.slice(0, 6).join(" · ");
+  }, [showTally, choices, tally]);
 
   const onTextChange = (raw: string) => {
     if (spinningRef.current) return;
@@ -405,6 +462,20 @@ export function SpinnerWheel({
             }}
             onToggleSound={onToggleSound}
           />
+          {showTally ? (
+            <div className="mt-3 flex min-h-[2.75rem] flex-col items-center justify-center gap-1">
+              <p className="text-center text-sm font-semibold text-foreground" aria-live="polite">
+                {tallyLine || "Counts appear after each spin"}
+              </p>
+              <button
+                type="button"
+                onClick={() => setTally({})}
+                className="text-xs font-semibold text-accent hover:underline outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
+              >
+                Reset counts
+              </button>
+            </div>
+          ) : null}
           <label className="mt-3 flex min-h-11 cursor-pointer items-center justify-center gap-2 text-sm text-foreground">
             <input
               type="checkbox"

@@ -9,7 +9,7 @@ type PageProps = {
 
 const TITLE = "Prize Wheel Spinner for Giveaways (Free Online) | ExesTools";
 const META =
-  "Free prize wheel spinner for giveaways, classrooms and streams. Add prizes or entrant names, spin where everyone can see, and share your wheel. No signup.";
+  "Free prize wheel spinner for giveaways, events and classrooms. Add prizes or entrant names, spin to win where everyone can see, and share your wheel. No signup.";
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -33,6 +33,14 @@ const FAQS = [
   {
     q: "What should I put on a prize wheel?",
     a: "Short, clear prizes that suit your audience, like gift cards or discount codes for an online giveaway, shout-outs on a stream, or homework passes in class. See the ideas above, or load one of the example wheels and edit it.",
+  },
+  {
+    q: "Can I use the prize wheel as a spin to win game at an event?",
+    a: "Yes. Open it on any laptop or screen, add your prizes one per line, and let each visitor press SPIN. It's free with no signup. You supply the real prizes.",
+  },
+  {
+    q: "What are the odds on a prize wheel?",
+    a: "Every slice is the same size, so each prize has a 1 in N chance, where N is the number of slices. With 8 prizes, each has a 1 in 8 (12.5%) chance.",
   },
   {
     q: "How many prizes or names can I add?",
@@ -97,8 +105,16 @@ export default async function PrizeWheelPage({ searchParams }: PageProps) {
       title="Prize wheel for giveaways"
       intro="Add your prizes, one per line, and spin the wheel where everyone can see it. Start from the Prize rewards list, or switch to Stream giveaway, Classroom rewards, or Entrant names to draw a winner by name. Free, no signup."
       faqs={FAQS}
-      schemaName="Online Prize Wheel"
+      schemaName="Prize Wheel Spinner"
       schemaDescription={META}
+      schemaAlternateName={["Prize wheel for giveaways", "Spin to win wheel"]}
+      schemaFeatureList={[
+        "Up to 60 prizes or names",
+        "Remove winner after spin",
+        "Copy share link",
+        "Sound on/off",
+        "No signup",
+      ]}
       initialEncoded={typeof sp.c === "string" ? sp.c : null}
       initialPresetQuery={typeof sp.preset === "string" ? sp.preset : null}
     >
@@ -154,6 +170,40 @@ export default async function PrizeWheelPage({ searchParams }: PageProps) {
           <span className="font-semibold text-foreground">Stream giveaway</span> or{" "}
           <span className="font-semibold text-foreground">Classroom rewards</span> under Example
           wheels and edit the list.
+        </p>
+      </GuideSection>
+      <GuideSection title="Spin to win at events, booths and shops">
+        <p>
+          Use the prize wheel as a spin-to-win game at a trade show booth, school fair, fundraiser,
+          office party or shop counter. Open it on a laptop or a screen the visitor can see, and let
+          them press SPIN.
+        </p>
+        <ul className="list-disc space-y-2 pl-5">
+          <li>
+            Mix big and small prizes: &quot;Free coffee&quot;, &quot;10% off&quot;,
+            &quot;Sticker&quot;, &quot;Mystery box&quot;.
+          </li>
+          <li>
+            Add &quot;Try again&quot; or &quot;No prize&quot; slices to make the wheel last longer.
+            Each slice has an equal chance, so 2 &quot;No prize&quot; slices on a 10-slice wheel give
+            a 2 in 10 chance of no prize.
+          </li>
+          <li>
+            Each prize has a 1 in N chance, where N is the number of slices. To make a prize more
+            likely, add it more than once on separate lines with different labels (for example
+            &quot;Sticker&quot; and &quot;Sticker 2&quot;), because exact duplicates are skipped.
+          </li>
+          <li>The wheel picks the prize. You hand out the real rewards.</li>
+        </ul>
+        <h3 className="text-lg font-bold tracking-tight text-foreground">
+          Who wins vs. what they win
+        </h3>
+        <p>
+          Two spins work well together. First, pick the person with the{" "}
+          <Link href="/random-name-picker" className="font-semibold text-accent hover:underline">
+            random name picker
+          </Link>{" "}
+          (or put entrant names on this wheel). Then spin a prize list to see what they win.
         </p>
       </GuideSection>
       <GuideSection title="Spin for a prize or pick a winner by name">

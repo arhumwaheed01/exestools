@@ -43,7 +43,7 @@ export const TOOLS: ToolDef[] = [
     id: "yes-no-wheel",
     path: "/yes-no-wheel",
     navLabel: "Yes/No",
-    footerLabel: "Yes / No",
+    footerLabel: "Yes or No Wheel",
   },
   {
     id: "random-team-generator",

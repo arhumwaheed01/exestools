@@ -5,11 +5,15 @@ export function webAppLd({
   name,
   description,
   category = "UtilitiesApplication",
+  alternateName,
+  featureList,
 }: {
   path: string;
   name: string;
   description: string;
   category?: string;
+  alternateName?: string[];
+  featureList?: string[];
 }) {
   const url = `https://www.exestools.com${path === "/" ? "/" : path}`;
   return {
@@ -17,6 +21,7 @@ export function webAppLd({
     "@type": "WebApplication",
     "@id": `${url === "https://www.exestools.com/" ? "https://www.exestools.com/" : url}#app`,
     name,
+    ...(alternateName?.length ? { alternateName } : {}),
     url,
     applicationCategory: category,
     operatingSystem: "Any",
@@ -24,6 +29,7 @@ export function webAppLd({
     isAccessibleForFree: true,
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     description,
+    ...(featureList?.length ? { featureList } : {}),
     publisher: { "@id": "https://www.exestools.com/#organization" },
   };
 }

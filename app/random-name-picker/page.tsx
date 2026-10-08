@@ -151,11 +151,12 @@ export default async function RandomNamePickerPage({ searchParams }: PageProps) 
           <li>
             <span className="font-semibold text-foreground">Simple raffles and door prizes.</span>{" "}
             Paste entrant names, show the wheel where people can see it, and spin once per prize
-            with remove-winner on. For prize lists or stream giveaways with themed slices, the{" "}
+            with remove-winner on. Want to spin for rewards instead of names? Use the{" "}
             <Link href="/prize-wheel" className="font-semibold text-accent hover:underline">
-              prize wheel
-            </Link>{" "}
-            is built for that. For ticket raffles (numbered tickets, people with several tickets, or
+              prize wheel spinner
+            </Link>
+            . For prize lists or stream giveaways with themed slices, that same tool is built for
+            that. For ticket raffles (numbered tickets, people with several tickets, or
             many winners at once), use the{" "}
             <Link href="/raffle-generator" className="font-semibold text-accent hover:underline">
               raffle generator

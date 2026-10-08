@@ -149,7 +149,11 @@ export default async function RandomNumberWheelPage({ searchParams }: PageProps)
           Pick a range, press SPIN, and the wheel stops on a random whole number. Use a quick range
           like 1–10, 1–100 or 1–1000, or type your own Min and Max. Switch on No repeats to draw each
           number only once, for bingo, numbered raffle tickets, or calling on numbered seats. It&apos;s
-          free, and there&apos;s no signup.
+          free, and there&apos;s no signup. Need a quick two-way answer instead? Try the{" "}
+          <Link href="/yes-no-wheel" className="font-semibold text-accent hover:underline">
+            yes or no wheel
+          </Link>
+          .
         </p>
       </header>
 

@@ -336,7 +336,7 @@ export default function RaffleGeneratorPage() {
             winners at once, or a record to keep. To spin for one prize at a time on a wheel everyone
             can watch, use the{" "}
             <Link href="/prize-wheel" className="font-semibold text-accent hover:underline">
-              prize wheel
+              prize wheel spinner
             </Link>
             . To pick names one by one from a short list, use the{" "}
             <Link href="/random-name-picker" className="font-semibold text-accent hover:underline">

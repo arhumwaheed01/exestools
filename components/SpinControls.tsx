@@ -32,6 +32,9 @@ export function SpinControls({
       >
         {spinning ? "Spinning…" : "SPIN"}
       </button>
+      <p className="text-center text-xs text-muted">
+        Tip: press Ctrl + Enter (⌘ + Enter on Mac) to spin.
+      </p>
       <div className="flex items-center gap-2">
         <button
           type="button"

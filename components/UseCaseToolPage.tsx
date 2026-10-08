@@ -67,6 +67,8 @@ type Props = {
   schemaName: string;
   schemaDescription: string;
   schemaCategory?: string;
+  schemaAlternateName?: string[];
+  schemaFeatureList?: string[];
 };
 
 export function UseCaseToolPage({
@@ -82,6 +84,8 @@ export function UseCaseToolPage({
   schemaName,
   schemaDescription,
   schemaCategory = "UtilitiesApplication",
+  schemaAlternateName,
+  schemaFeatureList,
 }: Props) {
   const path = `/${toolId}`;
   const faqLd = {
@@ -99,6 +103,8 @@ export function UseCaseToolPage({
     name: schemaName,
     description: schemaDescription,
     category: schemaCategory,
+    alternateName: schemaAlternateName,
+    featureList: schemaFeatureList,
   });
 
   const crumbLd = {

@@ -9,7 +9,7 @@ type PageProps = {
 
 const TITLE = "Yes or No Wheel – Free Yes No Spinner | ExesTools";
 const META =
-  "Spin a free yes or no wheel for a quick answer. Add Maybe for a three-way pick, use Quick decide, or toss a coin with Heads / Tails. No account needed.";
+  "Spin a free yes or no wheel for a 50/50 answer. Add Maybe for a three-way pick, count your results, or toss a coin with Heads / Tails. No account needed.";
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -33,6 +33,10 @@ const FAQS = [
   {
     q: "Is the yes or no wheel random?",
     a: "Yes. Each spin gives Yes and No the same chance, using your browser's built-in random number generator. Streaks, like three Yeses in a row, are normal with real randomness. Learn more: [How ExesTools picks a result].",
+  },
+  {
+    q: "What are the odds on a yes or no wheel?",
+    a: "With Yes and No only, each answer has a 1 in 2 (50%) chance on every spin. Add Maybe and each of the three answers has a 1 in 3 chance.",
   },
   {
     q: "What does Maybe mean on the yes no wheel?",
@@ -102,6 +106,15 @@ export default async function YesNoWheelPage({ searchParams }: PageProps) {
       faqs={FAQS}
       schemaName="Yes or No Wheel"
       schemaDescription={META}
+      schemaAlternateName={["Yes No Spinner", "Yes or No Spinner", "Yes No Maybe Wheel"]}
+      schemaFeatureList={[
+        "Yes / No / Maybe modes",
+        "Quick decide",
+        "Heads / Tails coin toss",
+        "Results counter",
+        "Copy share link",
+        "No signup",
+      ]}
       initialEncoded={typeof sp.c === "string" ? sp.c : null}
       initialPresetQuery={typeof sp.preset === "string" ? sp.preset : null}
     >
@@ -180,6 +193,38 @@ export default async function YesNoWheelPage({ searchParams }: PageProps) {
           and No.
         </p>
       </GuideSection>
+      <GuideSection title="Yes or no odds">
+        <div className="overflow-x-auto">
+          <table className="w-full max-w-lg border-collapse text-left text-sm">
+            <thead>
+              <tr className="border-b border-border">
+                <th className="py-2 pr-4 font-semibold text-foreground">Wheel</th>
+                <th className="py-2 font-semibold text-foreground">Chance of each answer</th>
+              </tr>
+            </thead>
+            <tbody className="text-muted">
+              <tr className="border-b border-border/60">
+                <td className="py-2 pr-4 text-foreground">Yes / No</td>
+                <td className="py-2">1 in 2 (50%)</td>
+              </tr>
+              <tr className="border-b border-border/60">
+                <td className="py-2 pr-4 text-foreground">Yes / No / Maybe</td>
+                <td className="py-2">1 in 3 (about 33.3%)</td>
+              </tr>
+              <tr>
+                <td className="py-2 pr-4 text-foreground">Heads / Tails</td>
+                <td className="py-2">1 in 2 (50%)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          Every slice is the same size, so each answer has the same chance on every spin. Spins are
+          independent. After three Nos in a row, the next spin is still 50/50. Over 10 spins you
+          won&apos;t always get exactly 5 Yes and 5 No, because short runs are normal. Use the
+          counter under the wheel to see your own split.
+        </p>
+      </GuideSection>
       <GuideSection title="How to ask a good yes-or-no question">
         <p>The wheel can only help if the question has a clear yes and a clear no. A few tips:</p>
         <ul className="list-disc space-y-2 pl-5">
@@ -252,6 +297,13 @@ export default async function YesNoWheelPage({ searchParams }: PageProps) {
             className="font-semibold text-accent hover:underline"
           >
             random name picker
+          </Link>
+          .
+        </p>
+        <p>
+          Spinning for rewards? Use the{" "}
+          <Link href="/prize-wheel" className="font-semibold text-accent hover:underline">
+            prize wheel
           </Link>
           .
         </p>

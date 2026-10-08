@@ -160,6 +160,17 @@ export default async function ClassroomSpinnerPage({ searchParams }: PageProps) 
             </Link>
             .
           </li>
+          <li>
+            For a quick class vote, spin the{" "}
+            <Link href="/yes-no-wheel" className="font-semibold text-accent hover:underline">
+              yes or no wheel
+            </Link>
+            . For reward days, use the{" "}
+            <Link href="/prize-wheel" className="font-semibold text-accent hover:underline">
+              classroom prize wheel
+            </Link>
+            .
+          </li>
         </ul>
       </GuideSection>
       <GuideSection title="Privacy for schools">
