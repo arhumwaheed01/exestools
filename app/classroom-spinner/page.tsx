@@ -195,8 +195,8 @@ export default async function ClassroomSpinnerPage({ searchParams }: PageProps) 
             equal for everyone else.
           </li>
           <li>
-            At the end of the round the wheel is empty. Paste the roster back in to start a new
-            round.
+            When one name is left, SPIN switches off — that student goes last. Paste the roster back
+            in to start a new round.
           </li>
         </ol>
         <p>

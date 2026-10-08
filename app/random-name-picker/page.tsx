@@ -212,11 +212,11 @@ export default async function RandomNamePickerPage({ searchParams }: PageProps) 
       <GuideSection title="Using the name picker for stand-ups and meeting order">
         <p>
           Paste the team list once. It stays in this browser, so tomorrow&apos;s stand-up starts with
-          one click. Turn on{" "}
-          <span className="font-semibold text-foreground">Remove winner after spin</span> and spin
-          until the wheel is empty: the order names come off is your speaking order. If someone joins
-          late, add their name as a new line. Duplicate lines are skipped, so two people called Alex
-          need an initial (Alex P., Alex R.).
+          one click. Keep{" "}
+          <span className="font-semibold text-foreground">Remove winner after spin</span> on and spin
+          until one name is left: the order names come off is your speaking order, and the last name
+          on the wheel goes last. If someone joins late, add their name as a new line. Duplicate
+          lines are skipped, so two people called Alex need an initial (Alex P., Alex R.).
         </p>
       </GuideSection>
 

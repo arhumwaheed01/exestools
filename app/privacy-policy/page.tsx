@@ -212,8 +212,8 @@ export default function PrivacyPolicyPage() {
             are used for personalized ads. If you don&apos;t consent, or if no consent has been
             collected, Google may show only non-personalized or limited ads. Until you make a choice,
             our Google Consent Mode defaults deny advertising and analytics storage in these regions.
-            You can change your choice at any time from the message&apos;s settings link, clear
-            cookies in your browser, or email{" "}
+            You can reset your choice at any time by clearing cookies for this site in your browser,
+            or email{" "}
             <a
               href={`mailto:${siteConfig.contactEmail}`}
               className="font-semibold text-accent hover:underline"
