@@ -137,9 +137,10 @@ export default async function RandomNamePickerPage({ searchParams }: PageProps) 
           </li>
           <li>
             <span className="font-semibold text-foreground">White elephant turn order.</span> Paste
-            every player&apos;s name, leave remove-winner on, and spin until the wheel is empty. The
-            order names come off the wheel is the order people choose or steal gifts. Running a gift
-            exchange where everyone buys for one person instead? Use the{" "}
+            every player&apos;s name, leave remove-winner on, and spin until one name is left. The
+            order names come off the wheel is the order people choose or steal gifts, and the last
+            name goes last. Running a gift exchange where everyone buys for one person instead? Use
+            the{" "}
             <Link
               href="/secret-santa-generator"
               className="font-semibold text-accent hover:underline"
