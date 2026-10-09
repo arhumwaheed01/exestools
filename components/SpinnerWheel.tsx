@@ -21,6 +21,7 @@ import { HistoryRow } from "@/components/tools/HistoryRow";
 import { ResultReveal } from "@/components/tools/ResultReveal";
 import { ThemeChips } from "@/components/tools/ThemeChips";
 import { ToolConfetti } from "@/components/tools/Confetti";
+import { YesNoTally } from "@/components/tools/YesNoTally";
 import { encodeShareHash, readShareFromLocation } from "@/lib/share-codec";
 import {
   defaultChoicesForTool,
@@ -211,7 +212,11 @@ export function SpinnerWheel({
       setWinnerIndex(idx);
       setRevealOpen(Boolean(name));
       setSpinning(false);
-      sound.chime();
+      if (toolId === "prize-wheel") {
+        sound.fanfare();
+      } else {
+        sound.chime();
+      }
       setConfettiFire((n) => n + 1);
       if (name) setHistory((h) => [name, ...h].slice(0, 5));
       try {
@@ -243,6 +248,7 @@ export function SpinnerWheel({
   const spin = useCallback(() => {
     if (spinningRef.current || choices.length < 2) return;
     sound.unlock();
+    if (toolId === "prize-wheel" && !reduceMotion) sound.drumroll(1200);
     setRevealOpen(false);
     setWinner(null);
     setWinnerIndex(null);
@@ -284,7 +290,7 @@ export function SpinnerWheel({
       }
     };
     rafRef.current = requestAnimationFrame(tick);
-  }, [choices, finishSpin, reduceMotion, sound, spinLength]);
+  }, [choices, finishSpin, reduceMotion, sound, spinLength, toolId]);
 
   spinRef.current = spin;
 
@@ -308,32 +314,6 @@ export function SpinnerWheel({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
-
-  const tallyLine = useMemo(() => {
-    if (!showTally) return "";
-    const onWheel = new Set(choices.map((c) => c.toLocaleLowerCase()));
-    const parts: string[] = [];
-    for (const label of ["Yes", "No", "Maybe"] as const) {
-      const key = label.toLocaleLowerCase();
-      if (!onWheel.has(key)) continue;
-      parts.push(`${label}: ${tally[key]?.count ?? 0}`);
-    }
-    const preferred = new Set(["yes", "no", "maybe"]);
-    if (parts.length === 0) {
-      for (const c of choices) {
-        if (parts.length >= 6) break;
-        const key = c.toLocaleLowerCase();
-        parts.push(`${c}: ${tally[key]?.count ?? 0}`);
-      }
-    } else {
-      for (const [key, entry] of Object.entries(tally)) {
-        if (preferred.has(key)) continue;
-        if (parts.length >= 6) break;
-        parts.push(`${entry.label}: ${entry.count}`);
-      }
-    }
-    return parts.slice(0, 6).join(" · ");
-  }, [showTally, choices, tally]);
 
   const onTextChange = (raw: string) => {
     if (spinningRef.current) return;
@@ -533,6 +513,20 @@ export function SpinnerWheel({
           <ResultReveal
             open={revealOpen}
             value={winner}
+            label={
+              toolId === "prize-wheel"
+                ? "Prize"
+                : toolId === "yes-no-wheel"
+                  ? "Result"
+                  : "Winner"
+            }
+            variant={
+              toolId === "prize-wheel"
+                ? "prize"
+                : toolId === "yes-no-wheel"
+                  ? "yesno"
+                  : "default"
+            }
             showRemove={!autoRemove}
             onSpinAgain={() => {
               setRevealOpen(false);
@@ -548,18 +542,7 @@ export function SpinnerWheel({
           />
           <HistoryRow items={history} onClear={() => setHistory([])} />
           {showTally ? (
-            <div className="mt-3 flex min-h-[2.75rem] flex-col items-center justify-center gap-1">
-              <p className="text-center text-sm font-semibold text-foreground" aria-live="polite">
-                {tallyLine || "Counts appear after each spin"}
-              </p>
-              <button
-                type="button"
-                onClick={() => setTally({})}
-                className="text-xs font-semibold text-accent hover:underline outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
-              >
-                Reset counts
-              </button>
-            </div>
+            <YesNoTally choices={choices} tally={tally} onReset={() => setTally({})} />
           ) : null}
           <label className="mt-3 flex min-h-11 cursor-pointer items-center justify-center gap-2 text-sm text-foreground">
             <input

@@ -66,3 +66,78 @@
     animation: none;
   }
 }
+
+/* Prize gift ribbon (CSS only) */
+.et-prize-ribbon {
+  width: 3.5rem;
+  height: 3.5rem;
+  margin-inline: auto;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border-radius: 0.75rem;
+  position: relative;
+  box-shadow: inset 0 0 0 2px rgb(255 255 255 / 0.35);
+}
+.et-prize-ribbon::before,
+.et-prize-ribbon::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+}
+.et-prize-ribbon::before {
+  width: 100%;
+  height: 0.55rem;
+  background: #db2777;
+}
+.et-prize-ribbon::after {
+  width: 0.55rem;
+  height: 100%;
+  background: #db2777;
+}
+
+/* Raffle ticket card */
+.et-ticket {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border, #334155);
+  background: color-mix(in srgb, var(--t-win, #0e7490) 12%, transparent);
+  overflow: hidden;
+}
+.et-ticket-stub {
+  display: grid;
+  place-items: center;
+  min-width: 3.25rem;
+  padding: 0.75rem 0.5rem;
+  background: var(--t-accent, #0891b2);
+  color: #0f172a;
+  font-weight: 800;
+  font-size: 0.75rem;
+  border-right: 2px dashed color-mix(in srgb, var(--t-accent, #0891b2) 40%, #fff);
+}
+.et-ticket-body {
+  padding: 0.75rem 0.75rem 0.75rem 0;
+  min-width: 0;
+}
+
+/* Team card stagger */
+@keyframes et-team-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.et-team-card {
+  animation: et-team-in 280ms ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .et-team-card {
+    animation: none;
+  }
+}

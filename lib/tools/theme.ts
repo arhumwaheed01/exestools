@@ -129,6 +129,9 @@ export function resolveToolTheme(
   if (choice !== "auto") return choice;
   if (toolKey === "classroom-spinner") return "classroom";
   if (toolKey === "prize-wheel") return "candy";
+  if (toolKey === "secret-santa-generator") return "festive";
+  if (toolKey === "random-team-generator") return "classroom";
+  if (toolKey === "raffle-generator") return "sunset";
   return "ocean";
 }
 

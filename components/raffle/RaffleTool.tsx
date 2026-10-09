@@ -41,7 +41,17 @@ import {
   saveState,
   type RaffleState,
 } from "@/lib/raffle/storage";
+import { ToolConfetti } from "@/components/tools/Confetti";
+import { ThemeChips } from "@/components/tools/ThemeChips";
 import { track } from "@/lib/track";
+import { useSound } from "@/lib/tools/sound";
+import {
+  loadToolTheme,
+  resolveToolTheme,
+  saveToolTheme,
+  type ToolThemeId,
+} from "@/lib/tools/theme";
+import "@/app/styles/tools-themes.css";
 
 const TOOL_ID = "raffle-generator";
 
@@ -267,6 +277,10 @@ export function RaffleTool() {
   const [fpUnavailable, setFpUnavailable] = useState(false);
   const [prizesOpen, setPrizesOpen] = useState(false);
   const [revealAnim, setRevealAnim] = useState<number[]>([]);
+  const [themeChoice, setThemeChoice] = useState<ToolThemeId>("auto");
+  const [confettiFire, setConfettiFire] = useState(0);
+  const sound = useSound();
+  const resolvedTheme = resolveToolTheme(themeChoice, TOOL_ID);
 
   const issuesId = useId();
   const resultsHeadingRef = useRef<HTMLHeadingElement>(null);
@@ -429,6 +443,7 @@ export function RaffleTool() {
     }
     setFpUnavailable(typeof crypto === "undefined" || !crypto.subtle);
     handleIncoming();
+    setThemeChoice(loadToolTheme(TOOL_ID));
     setReady(true);
 
     const onHash = () => handleIncoming();
@@ -723,6 +738,10 @@ export function RaffleTool() {
 
   const runDraw = () => {
     if (drawDisabledReason || drawing || shuffling) return;
+    sound.unlock();
+    if (reveal === "one" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      sound.drumroll(1400);
+    }
     setDrawError("");
 
     const isFirst = picks.length === 0;
@@ -750,6 +769,8 @@ export function RaffleTool() {
         }
         applyPicks(res.picks, meta!);
         setRevealAnim(res.picks.map((_, i) => i));
+        sound.fanfare();
+        setConfettiFire((n) => n + 1);
         trackDraw("success");
         setDrawing(false);
         const w = res.picks.filter((p) => p.kind === "winner").length;
@@ -780,7 +801,11 @@ export function RaffleTool() {
       const ent = entrants[last.entrant]!;
       setDrawing(false);
       if (isFirst) trackDraw("success");
-      playShuffle(ent.label, () => finishPick(res.picks, meta!));
+      playShuffle(ent.label, () => {
+        finishPick(res.picks, meta!);
+        sound.chime();
+        setConfettiFire((n) => n + 1);
+      });
     }, 0);
   };
 
@@ -933,7 +958,7 @@ export function RaffleTool() {
   const showResultLink = activeRecord && activeRecord.fingerprint !== "unavailable" && !fpUnavailable;
 
   return (
-    <div className="raffle-tool min-w-0">
+    <div className="raffle-tool min-w-0" data-tool-theme={resolvedTheme}>
       {shared?.kind === "invalid" ? (
         <div className="mb-4 rounded-3xl border border-border bg-surface p-5 sm:p-6">
           <p className="text-base text-foreground">
@@ -1394,24 +1419,37 @@ export function RaffleTool() {
             </p>
           ) : null}
 
+          <div className="print:hidden">
+            <p className="mb-2 text-xs font-bold uppercase tracking-wide text-muted">Theme</p>
+            <ThemeChips
+              value={themeChoice}
+              onChange={(next) => {
+                setThemeChoice(next);
+                saveToolTheme(TOOL_ID, next);
+              }}
+            />
+          </div>
+
           {drawComplete ? (
             <p className="text-sm font-semibold text-muted">Draw complete.</p>
           ) : (
-            <button
-              ref={drawButtonRef}
-              type="button"
-              disabled={
-                Boolean(drawDisabledReason) ||
-                drawing ||
-                shuffling ||
-                (locked && reveal === "all")
-              }
-              aria-describedby={drawDisabledReason ? "rf-draw-hint" : undefined}
-              onClick={runDraw}
-              className="inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-accent-strong px-4 text-sm font-bold text-slate-950 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
-            >
-              {drawing ? "Drawing…" : drawButtonLabel(reveal, winners, alternates, picks, prizes)}
-            </button>
+            <div className="sticky bottom-0 z-30 -mx-1 border-t border-border bg-surface/95 px-1 py-2 backdrop-blur sm:static sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
+              <button
+                ref={drawButtonRef}
+                type="button"
+                disabled={
+                  Boolean(drawDisabledReason) ||
+                  drawing ||
+                  shuffling ||
+                  (locked && reveal === "all")
+                }
+                aria-describedby={drawDisabledReason ? "rf-draw-hint" : undefined}
+                onClick={runDraw}
+                className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-accent-strong px-4 text-sm font-bold text-slate-950 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
+              >
+                {drawing ? "Drawing…" : drawButtonLabel(reveal, winners, alternates, picks, prizes)}
+              </button>
+            </div>
           )}
           {drawDisabledReason && !drawComplete ? (
             <p id="rf-draw-hint" className="text-xs text-muted">
@@ -1503,6 +1541,7 @@ export function RaffleTool() {
           }, 50);
         }}
       />
+      <ToolConfetti fire={confettiFire} />
     </div>
   );
 }
@@ -1617,20 +1656,29 @@ function ResultsPanel({
           const ent = displayEntrants[p.entrant];
           const pl = prizeLabel(p.position, prizes);
           const anim = revealAnim.includes(picks.indexOf(p));
+          const ticketNo = mode === "list" ? p.ticket : p.position;
           return (
             <li
               key={`w-${i}`}
-              className={`rounded-xl border border-border px-3 py-2 ${anim ? "rf-reveal-anim" : ""}`}
+              className={`et-ticket ${anim ? "rf-reveal-anim" : ""}`}
               style={anim ? { animationDelay: `${Math.min(i * 60, 1140)}ms` } : undefined}
             >
-              <span className="text-xs font-bold uppercase text-muted">#{p.position}</span>
-              <p className="text-xs text-muted">{pl}</p>
-              <p className="min-w-0 text-lg font-bold text-foreground [overflow-wrap:anywhere]">
-                {ent?.label ?? "—"}
-              </p>
-              {mode === "list" ? (
-                <p className="text-xs text-muted">ticket #{p.ticket}</p>
-              ) : null}
+              <div className="et-ticket-stub">#{String(ticketNo).padStart(2, "0")}</div>
+              <div className="et-ticket-body">
+                <p className="text-xs font-bold uppercase tracking-wide text-muted">{pl}</p>
+                <p className="min-w-0 text-lg font-bold text-foreground [overflow-wrap:anywhere]">
+                  {ent?.label ?? "—"}
+                </p>
+                {mode === "list" ? (
+                  <p className="text-xs text-muted">
+                    Ticket #{p.ticket} · drawn {i + 1} of {winnerPicks.length}
+                  </p>
+                ) : (
+                  <p className="text-xs text-muted">
+                    Drawn {i + 1} of {winnerPicks.length}
+                  </p>
+                )}
+              </div>
             </li>
           );
         })}

@@ -75,9 +75,26 @@ export function parseTeamNames(raw: string): ParsedTeamNames {
   return { names, overLimit, duplicateLabels, duplicateCount };
 }
 
+/** Fun default names when the organizer leaves team names blank. */
+export const FUN_TEAM_NAMES = [
+  "Blue Comets",
+  "Pink Pandas",
+  "Green Geckos",
+  "Orange Otters",
+  "Purple Foxes",
+  "Teal Tigers",
+  "Gold Hawks",
+  "Coral Crabs",
+  "Mint Moose",
+  "Sunny Sharks",
+  "Violet Vipers",
+  "Amber Owls",
+] as const;
+
 function teamLabel(i: number, custom: string[]): string {
   const customName = custom[i]?.trim();
-  return customName || `Team ${i + 1}`;
+  if (customName) return customName;
+  return FUN_TEAM_NAMES[i % FUN_TEAM_NAMES.length] ?? `Team ${i + 1}`;
 }
 
 function plural(count: number, one: string, many: string): string {

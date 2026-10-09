@@ -33,11 +33,16 @@ import {
   type SavedDraw,
   type SecretSantaState,
 } from "@/lib/secret-santa/storage";
+import { ToolConfetti } from "@/components/tools/Confetti";
 import { track } from "@/lib/track";
+import { useSound } from "@/lib/tools/sound";
+import { resolveToolTheme } from "@/lib/tools/theme";
 import { ConfirmDialog } from "./ConfirmDialog";
+import "@/app/styles/tools-themes.css";
 
 const TOOL_ID = "secret-santa-generator";
 const SITE_ORIGIN = "https://www.exestools.com";
+const SAMPLE_NAMES = ["Ava", "Noah", "Mia", "Liam", "Sophia"] as const;
 
 type ViewMode = "tool" | "reveal" | "reveal-bad";
 type ConfirmKind =
@@ -164,6 +169,9 @@ export function SecretSantaTool() {
   const [view, setView] = useState<ViewMode>("tool");
   const [reveal, setReveal] = useState<RevealPayload | null>(null);
   const [revealed, setRevealed] = useState(false);
+  const [confettiFire, setConfettiFire] = useState(0);
+  const sound = useSound();
+  const festiveTheme = resolveToolTheme("auto", TOOL_ID);
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [exclusions, setExclusions] = useState<ExclusionRule[]>([]);
   const [details, setDetails] = useState<EventDetails>({
@@ -540,6 +548,9 @@ export function SecretSantaTool() {
       setListLocked(true);
       setShowMatches(false);
       setDrawing(false);
+      sound.unlock();
+      sound.fanfare();
+      setConfettiFire((n) => n + 1);
       announce(`Names drawn for ${participants.length} people. Draw code ${nextDraw.code}.`);
       track("secret_santa_draw", {
         toolId: TOOL_ID,
@@ -657,7 +668,10 @@ export function SecretSantaTool() {
   };
 
   const onRevealTap = () => {
+    sound.unlock();
     setRevealed(true);
+    sound.fanfare();
+    setConfettiFire((n) => n + 1);
     requestAnimationFrame(() => revealHeadingRef.current?.focus());
     if (!revealTracked.current && reveal) {
       revealTracked.current = true;
@@ -668,6 +682,16 @@ export function SecretSantaTool() {
         has_note: reveal.n ? 1 : 0,
       });
     }
+  };
+
+  const loadSample = () => {
+    if (listLocked && draw) return;
+    const result = addNames([], [...SAMPLE_NAMES]);
+    setParticipants(result.added.map((name) => ({ id: randomId(), name })));
+    setExclusions([]);
+    setDraw(null);
+    setListLocked(false);
+    announce("Sample list loaded — add real names before you draw.");
   };
 
   if (!ready) {
@@ -699,10 +723,15 @@ export function SecretSantaTool() {
   if (view === "reveal" && reveal) {
     const eventTitle = reveal.e || "Secret Santa";
     return (
-      <div className="rounded-3xl border border-border bg-surface p-5 sm:p-8">
-        <p className="text-2xl" aria-hidden>
-          🎁
-        </p>
+      <div
+        className="relative overflow-hidden rounded-3xl border border-border bg-surface p-5 sm:p-8"
+        data-tool-theme={festiveTheme}
+        style={{
+          backgroundImage:
+            "radial-gradient(circle at 12% 18%, rgb(255 255 255 / 0.08) 0 2px, transparent 3px), radial-gradient(circle at 80% 30%, rgb(255 255 255 / 0.07) 0 1.5px, transparent 2px), radial-gradient(circle at 40% 75%, rgb(255 255 255 / 0.06) 0 2px, transparent 3px)",
+        }}
+      >
+        <div className="et-prize-ribbon mb-3" aria-hidden />
         <h2 className="mt-1 text-xl font-bold text-foreground">{eventTitle}</h2>
         <p className="mt-3 text-sm text-muted">
           Hi {reveal.g},
@@ -720,31 +749,38 @@ export function SecretSantaTool() {
             Tap to reveal who you&apos;re buying for
           </button>
         ) : (
-          <div className="ss-reveal-anim mt-6" aria-live="polite">
+          <div
+            className="ss-reveal-anim et-result-banner mt-6 rounded-2xl border border-border px-4 py-4"
+            style={{
+              background:
+                "linear-gradient(135deg, color-mix(in srgb, var(--t-win, #991b1b) 85%, #0f172a), color-mix(in srgb, var(--t-accent, #b91c1c) 55%, #14532d))",
+            }}
+            aria-live="polite"
+          >
             <h3
               ref={revealHeadingRef}
               tabIndex={-1}
-              className="text-sm font-semibold uppercase tracking-wide text-muted outline-none"
+              className="text-sm font-semibold uppercase tracking-wide text-cyan-200 outline-none"
             >
               You&apos;re buying for
             </h3>
-            <p className="mt-1 min-w-0 text-[28px] font-extrabold leading-tight text-foreground [overflow-wrap:anywhere]">
+            <p className="mt-1 min-w-0 text-[28px] font-extrabold leading-tight text-white [overflow-wrap:anywhere]">
               {reveal.r}
             </p>
-            {reveal.b ? <p className="mt-3 text-sm text-muted">Budget: {reveal.b}</p> : null}
+            {reveal.b ? <p className="mt-3 text-sm text-white/80">Budget: {reveal.b}</p> : null}
             {reveal.d ? (
-              <p className="mt-1 text-sm text-muted">
+              <p className="mt-1 text-sm text-white/80">
                 Exchange date: {formatExchangeDate(reveal.d)}
               </p>
             ) : null}
             {reveal.n ? (
-              <p className="mt-1 whitespace-pre-wrap text-sm text-muted">Note: {reveal.n}</p>
+              <p className="mt-1 whitespace-pre-wrap text-sm text-white/80">Note: {reveal.n}</p>
             ) : null}
-            <p className="mt-2 text-xs text-muted">Draw code {reveal.c}</p>
+            <p className="mt-2 text-xs text-white/70">Draw code {reveal.c}</p>
             <button
               type="button"
               onClick={() => setRevealed(false)}
-              className="mt-4 inline-flex min-h-11 items-center rounded-xl border border-border px-4 text-sm font-bold text-foreground outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
+              className="mt-4 inline-flex min-h-11 items-center rounded-xl border border-white/35 px-4 text-sm font-bold text-white outline-none hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white"
             >
               Hide again
             </button>
@@ -765,6 +801,7 @@ export function SecretSantaTool() {
         >
           Run your own Secret Santa
         </button>
+        <ToolConfetti fire={confettiFire} colors={["#b91c1c", "#15803d", "#fbbf24", "#fff"]} />
       </div>
     );
   }
@@ -772,7 +809,7 @@ export function SecretSantaTool() {
   const locked = listLocked && Boolean(draw);
 
   return (
-    <div className="ss-tool min-w-0">
+    <div className="ss-tool min-w-0" data-tool-theme={festiveTheme}>
       <div className="grid min-w-0 gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)]">
         <div className="min-w-0 space-y-4 rounded-3xl border border-border bg-surface p-3 sm:p-5">
           {/* Participants */}
@@ -822,13 +859,24 @@ export function SecretSantaTool() {
                     Add
                   </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setPasteOpen((v) => !v)}
-                  className="mt-2 text-sm font-semibold text-accent outline-none hover:underline focus-visible:ring-2 focus-visible:ring-accent"
-                >
-                  Paste a list
-                </button>
+                <div className="mt-2 flex flex-wrap gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setPasteOpen((v) => !v)}
+                    className="text-sm font-semibold text-accent outline-none hover:underline focus-visible:ring-2 focus-visible:ring-accent"
+                  >
+                    Paste a list
+                  </button>
+                  {participants.length === 0 ? (
+                    <button
+                      type="button"
+                      onClick={loadSample}
+                      className="text-sm font-semibold text-accent outline-none hover:underline focus-visible:ring-2 focus-visible:ring-accent"
+                    >
+                      Try a sample
+                    </button>
+                  ) : null}
+                </div>
                 {pasteOpen ? (
                   <div className="mt-2 space-y-2">
                     <label htmlFor="ss-paste" className="block text-xs text-muted">
@@ -1462,6 +1510,7 @@ export function SecretSantaTool() {
           setConfirm(null);
         }}
       />
+      <ToolConfetti fire={confettiFire} colors={["#b91c1c", "#15803d", "#fbbf24", "#fff"]} />
     </div>
   );
 }

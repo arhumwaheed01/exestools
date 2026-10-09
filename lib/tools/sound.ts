@@ -137,7 +137,40 @@ export function useSound() {
     }
   }, [enabled]);
 
-  return { enabled, setEnabled, ready, unlock, tick, chime, fanfare };
+  /** Filtered noise bursts (~1.5s) before prize/raffle reveals. */
+  const drumroll = useCallback((ms = 1500) => {
+    if (!enabled) return;
+    const ctx = getCtx(ctxRef);
+    if (!ctx) return;
+    try {
+      const duration = Math.min(2500, Math.max(400, ms)) / 1000;
+      const bufferSize = Math.floor(ctx.sampleRate * duration);
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        const t = i / ctx.sampleRate;
+        const envelope = Math.min(1, t * 4) * (1 - t / duration);
+        const pulse = Math.sin(t * Math.PI * 60) > 0.3 ? 1 : 0.15;
+        data[i] = (Math.random() * 2 - 1) * 0.12 * envelope * pulse;
+      }
+      const src = ctx.createBufferSource();
+      src.buffer = buffer;
+      const filter = ctx.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.frequency.value = 900;
+      filter.Q.value = 0.7;
+      const gain = ctx.createGain();
+      gain.gain.value = 0.35;
+      src.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+      src.start();
+    } catch {
+      /* ignore */
+    }
+  }, [enabled]);
+
+  return { enabled, setEnabled, ready, unlock, tick, chime, fanfare, drumroll };
 }
 
 export type SpinLength = "short" | "normal" | "long";

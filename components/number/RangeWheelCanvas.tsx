@@ -9,12 +9,19 @@ type Props = {
   rotation: number;
   ariaLabel: string;
   className?: string;
+  colors?: readonly string[];
 };
 
 const MIN_LABEL_DEG = 3;
 
 /** Number-wheel canvas with sparse labels on large ranges. */
-export function RangeWheelCanvas({ pool, rotation, ariaLabel, className = "" }: Props) {
+export function RangeWheelCanvas({
+  pool,
+  rotation,
+  ariaLabel,
+  className = "",
+  colors,
+}: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
 
@@ -73,7 +80,8 @@ export function RangeWheelCanvas({ pool, rotation, ariaLabel, className = "" }: 
         ctx.moveTo(0, 0);
         ctx.arc(0, 0, radius, start, end);
         ctx.closePath();
-        ctx.fillStyle = WHEEL_COLORS[i % WHEEL_COLORS.length]!;
+        const palette = colors?.length ? colors : WHEEL_COLORS;
+        ctx.fillStyle = palette[i % palette.length]!;
         ctx.fill();
         if (n <= 120) {
           ctx.strokeStyle = "rgba(255,255,255,0.45)";
@@ -111,7 +119,7 @@ export function RangeWheelCanvas({ pool, rotation, ariaLabel, className = "" }: 
     const ro = new ResizeObserver(() => paint());
     ro.observe(wrap);
     return () => ro.disconnect();
-  }, [pool, rotation]);
+  }, [pool, rotation, colors]);
 
   return (
     <div

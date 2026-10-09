@@ -2,8 +2,18 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { ThemeChips } from "@/components/tools/ThemeChips";
+import { ToolConfetti } from "@/components/tools/Confetti";
 import { encodeShareHash, readShareFromLocation } from "@/lib/share-codec";
 import { track } from "@/lib/track";
+import { useSound } from "@/lib/tools/sound";
+import {
+  loadToolTheme,
+  resolveToolTheme,
+  saveToolTheme,
+  segColor,
+  type ToolThemeId,
+} from "@/lib/tools/theme";
 import {
   MAX_PER_TEAM,
   MAX_TEAMS,
@@ -17,6 +27,7 @@ import {
   type TeamResult,
   type TeamSettings,
 } from "@/lib/teams";
+import "@/app/styles/tools-themes.css";
 
 const STORAGE_KEY = "exestools.spinner.v1.random-team-generator";
 const TOOL_ID = "random-team-generator" as const;
@@ -79,8 +90,12 @@ export function TeamGenerator({ initialPresetQuery = null }: Props) {
   const [toast, setToast] = useState("");
   const [clampNote, setClampNote] = useState("");
   const [ready, setReady] = useState(false);
+  const [themeChoice, setThemeChoice] = useState<ToolThemeId>("auto");
+  const [confettiFire, setConfettiFire] = useState(0);
+  const sound = useSound();
   const allowSaveRef = useRef(true);
   const toastTimer = useRef(0);
+  const resolvedTheme = resolveToolTheme(themeChoice, TOOL_ID);
 
   const parsed = useMemo(() => parseTeamNames(text), [text]);
   const names = parsed.names;
@@ -174,6 +189,7 @@ export function TeamGenerator({ initialPresetQuery = null }: Props) {
       track("preset_load", { toolId: TOOL_ID, preset: "pairs" });
     }
 
+    setThemeChoice(loadToolTheme(TOOL_ID));
     setReady(true);
   }, [initialPresetQuery]);
 
@@ -188,6 +204,7 @@ export function TeamGenerator({ initialPresetQuery = null }: Props) {
 
   const runGenerate = () => {
     if (!canGenerate) return;
+    sound.unlock();
     const nextSettings: TeamSettings = {
       mode,
       n: effectiveN,
@@ -196,6 +213,8 @@ export function TeamGenerator({ initialPresetQuery = null }: Props) {
     };
     const next = generateTeams(names, nextSettings);
     setResult(next);
+    sound.chime();
+    setConfettiFire((n) => n + 1);
     track("spin", {
       toolId: TOOL_ID,
       choiceCount: names.length,
@@ -284,7 +303,7 @@ export function TeamGenerator({ initialPresetQuery = null }: Props) {
       : null;
 
   return (
-    <div className="team-generator">
+    <div className="team-generator" data-tool-theme={resolvedTheme}>
       {sharedMode ? (
         <div className="mb-4 flex flex-wrap items-center gap-2 rounded-xl border border-accent/40 bg-surface-2 px-3 py-2.5 text-sm print:hidden">
           <p className="flex-1 text-muted">
@@ -465,14 +484,27 @@ export function TeamGenerator({ initialPresetQuery = null }: Props) {
             ) : null}
           </div>
 
-          <button
-            type="button"
-            disabled={!canGenerate}
-            onClick={runGenerate}
-            className="min-h-12 w-full rounded-xl bg-accent-strong px-4 py-3 text-base font-bold text-slate-950 hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-accent"
-          >
-            {result ? "Reshuffle" : "Generate teams"}
-          </button>
+          <div className="print:hidden">
+            <p className="mb-2 text-xs font-bold uppercase tracking-wide text-muted">Theme</p>
+            <ThemeChips
+              value={themeChoice}
+              onChange={(next) => {
+                setThemeChoice(next);
+                saveToolTheme(TOOL_ID, next);
+              }}
+            />
+          </div>
+
+          <div className="sticky bottom-0 z-30 -mx-1 border-t border-border bg-surface/95 px-1 py-2 backdrop-blur print:hidden sm:static sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
+            <button
+              type="button"
+              disabled={!canGenerate}
+              onClick={runGenerate}
+              className="min-h-12 w-full rounded-xl bg-accent-strong px-4 py-3 text-base font-bold text-slate-950 hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              {result ? "Reshuffle" : "Generate teams"}
+            </button>
+          </div>
 
           <p className="text-sm text-muted" aria-live="polite" role="status">
             {statusMessage}
@@ -496,22 +528,31 @@ export function TeamGenerator({ initialPresetQuery = null }: Props) {
                 <ActionBtn label="Print" onClick={() => window.print()} />
               </div>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 print:grid-cols-3">
-                {result.teams.map((team) => (
-                  <article
-                    key={team.name}
-                    className="rounded-2xl border border-border bg-surface p-4"
-                  >
-                    <h3 className="text-base font-bold text-foreground">
-                      {team.name}{" "}
-                      <span className="font-semibold text-muted">({team.members.length})</span>
-                    </h3>
-                    <ul className="mt-2 space-y-1 text-sm text-muted">
-                      {team.members.map((m, i) => (
-                        <li key={`${m}-${i}`}>{m}</li>
-                      ))}
-                    </ul>
-                  </article>
-                ))}
+                {result.teams.map((team, ti) => {
+                  const band = segColor(resolvedTheme, ti);
+                  return (
+                    <article
+                      key={`${team.name}-${ti}`}
+                      className="et-team-card overflow-hidden rounded-2xl border border-border bg-surface"
+                      style={{ animationDelay: `${Math.min(ti * 60, 360)}ms` }}
+                    >
+                      <header
+                        className="flex items-center justify-between gap-2 px-4 py-2.5 text-sm font-bold text-white"
+                        style={{ background: band }}
+                      >
+                        <span className="min-w-0 truncate">{team.name}</span>
+                        <span className="shrink-0 rounded-full bg-black/20 px-2 py-0.5 text-xs">
+                          {team.members.length}
+                        </span>
+                      </header>
+                      <ul className="space-y-1 px-4 py-3 text-sm text-foreground">
+                        {team.members.map((m, i) => (
+                          <li key={`${m}-${i}`}>• {m}</li>
+                        ))}
+                      </ul>
+                    </article>
+                  );
+                })}
               </div>
               {result.sitsOut ? (
                 <p className="mt-4 rounded-xl border border-border bg-surface-2 px-3 py-2 text-sm text-foreground">
@@ -535,6 +576,11 @@ export function TeamGenerator({ initialPresetQuery = null }: Props) {
           {toast}
         </p>
       ) : null}
+
+      <ToolConfetti
+        fire={confettiFire}
+        colors={Array.from({ length: 6 }, (_, i) => segColor(resolvedTheme, i))}
+      />
     </div>
   );
 }

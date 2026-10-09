@@ -6,7 +6,10 @@ import { Link2, Share2 } from "lucide-react";
 import { useReducedMotion } from "framer-motion";
 import { RangeWheelCanvas } from "@/components/number/RangeWheelCanvas";
 import { StaticWheelPreview } from "@/components/StaticWheelPreview";
-import { WinnerModal } from "@/components/WinnerModal";
+import { HistoryRow } from "@/components/tools/HistoryRow";
+import { ResultReveal } from "@/components/tools/ResultReveal";
+import { ThemeChips } from "@/components/tools/ThemeChips";
+import { ToolConfetti } from "@/components/tools/Confetti";
 import { encodeShareHash, readShareFromLocation } from "@/lib/share-codec";
 import {
   ALLOWED_NUMBER_PRESET_QUERY,
@@ -18,9 +21,17 @@ import {
   validate,
 } from "@/lib/range";
 import { randomInt } from "@/lib/random";
-import { loadPrefs, savePrefs } from "@/lib/spinner-storage";
 import { track } from "@/lib/track";
+import { useSound } from "@/lib/tools/sound";
+import {
+  loadToolTheme,
+  resolveToolTheme,
+  saveToolTheme,
+  segColor,
+  type ToolThemeId,
+} from "@/lib/tools/theme";
 import { easeOutCubic, targetRotationForIndex } from "@/lib/wheel";
+import "@/app/styles/tools-themes.css";
 
 const TOOL_ID = "random-number-wheel" as const;
 const STORAGE_KEY = "exestools.spinner.v1.random-number-wheel";
@@ -69,8 +80,7 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
   const [rotation, setRotation] = useState(0);
   const [spinning, setSpinning] = useState(false);
   const [winner, setWinner] = useState<string | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [soundEnabled, setSoundEnabled] = useState(false);
+  const [revealOpen, setRevealOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const [ready, setReady] = useState(false);
   const [sharedMode, setSharedMode] = useState(false);
@@ -78,13 +88,20 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
   const [liveResult, setLiveResult] = useState("");
   const [toast, setToast] = useState("");
   const [highlightReset, setHighlightReset] = useState(false);
+  const [themeChoice, setThemeChoice] = useState<ToolThemeId>("auto");
+  const [confettiFire, setConfettiFire] = useState(0);
 
+  const sound = useSound();
   const spinningRef = useRef(false);
   const rotationRef = useRef(0);
   const rafRef = useRef(0);
-  const audioCtxRef = useRef<AudioContext | null>(null);
   const allowSaveRef = useRef(true);
   const poolRef = useRef<number[]>([]);
+  const resolvedTheme = resolveToolTheme(themeChoice, TOOL_ID);
+  const themeColors = useMemo(
+    () => Array.from({ length: 8 }, (_, i) => segColor(resolvedTheme, i)),
+    [resolvedTheme],
+  );
 
   const validation = useMemo(() => validate(minRaw, maxRaw), [minRaw, maxRaw]);
   const min = validation.ok ? validation.min : 1;
@@ -110,6 +127,8 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
   useEffect(() => {
     rotationRef.current = rotation;
   }, [rotation]);
+
+  const spinRef = useRef<() => void>(() => {});
   useEffect(() => {
     spinningRef.current = spinning;
   }, [spinning]);
@@ -143,8 +162,7 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
   );
 
   useEffect(() => {
-    const prefs = loadPrefs();
-    setSoundEnabled(prefs.soundEnabled);
+    setThemeChoice(loadToolTheme(TOOL_ID));
 
     const fromHash = readShareFromLocation();
     const numExtra = fromHash?.extra?.num as NumSettings | undefined;
@@ -223,30 +241,6 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
     });
   }, [hydrated, validation.ok, min, max, noRepeat, bingoActive, drawn, history, persist]);
 
-  const playTick = useCallback(() => {
-    if (!soundEnabled) return;
-    try {
-      const Ctx =
-        window.AudioContext ||
-        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      if (!Ctx) return;
-      const ctx = audioCtxRef.current ?? new Ctx();
-      audioCtxRef.current = ctx;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = "triangle";
-      osc.frequency.value = 660;
-      gain.gain.value = 0.04;
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start();
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
-      osc.stop(ctx.currentTime + 0.09);
-    } catch {
-      /* ignore */
-    }
-  }, [soundEnabled]);
-
   const finishSpin = useCallback(
     (finalRotation: number, picked: number, poolLenAtSpin: number) => {
       setRotation(finalRotation);
@@ -255,10 +249,11 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
 
       const label = resultLabel(picked, bingoActive, min, max);
       setWinner(label);
-      setModalOpen(true);
+      setRevealOpen(true);
       setSpinning(false);
       setLiveResult(`Result: ${label}.`);
-      playTick();
+      sound.chime();
+      setConfettiFire((n) => n + 1);
       track("spin", {
         toolId: TOOL_ID,
         choiceCount: poolLenAtSpin,
@@ -269,12 +264,13 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
         setHighlightReset(true);
       }
     },
-    [bingoActive, min, max, noRepeat, playTick, rangeSize],
+    [bingoActive, min, max, noRepeat, sound, rangeSize],
   );
 
   const spin = useCallback(() => {
     const currentPool = poolRef.current;
     if (spinningRef.current || !validation.ok || currentPool.length < 1) return;
+    sound.unlock();
 
     const idx = randomInt(currentPool.length);
     const picked = currentPool[idx]!;
@@ -282,6 +278,7 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
 
     setStatusNote("");
     setHighlightReset(false);
+    setRevealOpen(false);
 
     if (reduceMotion) {
       finishSpin(rotationRef.current, picked, poolLenAtSpin);
@@ -293,12 +290,21 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
     const target = targetRotationForIndex(idx, currentPool.length, start);
     const duration = 4200 + Math.random() * 900;
     const t0 = performance.now();
+    let lastSeg = -1;
 
     const frame = (now: number) => {
       const t = Math.min(1, (now - t0) / duration);
       const eased = easeOutCubic(t);
       const rot = start + (target - start) * eased;
       setRotation(rot);
+      const seg = Math.floor(
+        (((-rot % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) /
+          ((Math.PI * 2) / Math.max(1, currentPool.length)),
+      );
+      if (seg !== lastSeg) {
+        lastSeg = seg;
+        sound.tick();
+      }
       if (t < 1) {
         rafRef.current = requestAnimationFrame(frame);
       } else {
@@ -306,7 +312,24 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
       }
     };
     rafRef.current = requestAnimationFrame(frame);
-  }, [validation.ok, reduceMotion, finishSpin]);
+  }, [validation.ok, reduceMotion, finishSpin, sound]);
+
+  spinRef.current = spin;
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement | null;
+      const tag = t?.tagName;
+      if (tag === "TEXTAREA" || tag === "INPUT" || t?.isContentEditable) return;
+      if (spinningRef.current) return;
+      if (e.code === "Space" || e.key === " ") {
+        e.preventDefault();
+        spinRef.current();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   const onChipClick = (chipId: string) => {
     if (spinning) return;
@@ -439,9 +462,17 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
           </div>
         ) : null}
 
-        <div className="grid w-full min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
+        <div
+          className="grid w-full min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]"
+          data-tool-theme={resolvedTheme}
+        >
           <div className="flex w-full min-w-0 flex-col items-center">
-            <RangeWheelCanvas pool={pool} rotation={rotation} ariaLabel={ariaLabel} />
+            <RangeWheelCanvas
+              pool={pool}
+              rotation={rotation}
+              ariaLabel={ariaLabel}
+              colors={themeColors}
+            />
             <p
               className="mt-3 min-h-[1.25rem] text-center text-sm font-medium text-muted"
               role="status"
@@ -451,40 +482,76 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
             <p className="sr-only" aria-live="polite">
               {liveResult}
             </p>
-            <div className="mt-2 flex flex-wrap items-center justify-center gap-2">
+            <div className="sticky bottom-0 z-30 mt-2 w-full max-w-sm border-t border-border bg-background/95 px-1 py-2 backdrop-blur sm:static sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
               <button
                 type="button"
                 disabled={!canSpin}
                 onClick={spin}
-                className="min-h-12 min-w-[8rem] rounded-2xl bg-accent-strong px-8 py-3 text-lg font-extrabold tracking-wide text-slate-950 shadow-lg hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40 outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                className="min-h-12 w-full rounded-2xl bg-accent-strong px-8 py-3 text-lg font-extrabold tracking-wide text-slate-950 shadow-lg hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40 outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
-                SPIN
-              </button>
-              <button
-                type="button"
-                disabled={spinning}
-                onClick={() => {
-                  const next = !soundEnabled;
-                  setSoundEnabled(next);
-                  savePrefs({ soundEnabled: next });
-                }}
-                className="min-h-11 rounded-xl border border-border bg-surface px-3 py-2 text-sm font-semibold outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              >
-                Sound: {soundEnabled ? "On" : "Off"}
+                {spinning ? "Spinning…" : "SPIN (Space)"}
               </button>
             </div>
-            {winner ? (
-              <p className="mt-4 text-center text-5xl font-extrabold tabular-nums text-foreground sm:text-6xl">
-                {winner}
-              </p>
-            ) : (
-              <p className="mt-4 text-center text-sm text-muted">Result shows here after you spin.</p>
-            )}
+            <button
+              type="button"
+              disabled={spinning}
+              onClick={() => {
+                sound.unlock();
+                sound.setEnabled(!sound.enabled);
+              }}
+              className="mt-2 min-h-11 rounded-xl border border-border bg-surface px-3 py-2 text-sm font-semibold outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              Sound: {sound.enabled ? "On" : "Off"}
+            </button>
+            <ResultReveal
+              open={revealOpen}
+              value={winner}
+              label="Number"
+              variant="number"
+              showRemove={false}
+              onSpinAgain={() => {
+                setRevealOpen(false);
+                spin();
+              }}
+              onShare={() => void copyShare()}
+              onClose={() => setRevealOpen(false)}
+            />
+            <HistoryRow
+              items={recent.map((n) =>
+                bingoActive ? formatBingoCall(n) : formatNumberLabel(n),
+              )}
+              onClear={() => setHistory([])}
+            />
+            {bingoActive && drawn.length > 0 ? (
+              <div className="mt-4 w-full max-w-sm">
+                <h2 className="text-center text-xs font-bold uppercase tracking-wide text-muted">
+                  Called board
+                </h2>
+                <div className="mt-2 grid grid-cols-5 gap-1.5">
+                  {[...drawn].reverse().slice(0, 15).map((n, i) => (
+                    <span
+                      key={`${n}-${i}`}
+                      className="grid aspect-square place-items-center rounded-full bg-[var(--t-accent,#0891b2)] text-xs font-bold text-slate-950"
+                    >
+                      {formatBingoCall(n)}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </div>
 
           <div className="min-w-0 space-y-4">
             <div className="rounded-2xl border border-border bg-surface p-4">
-              <h2 className="text-base font-bold text-foreground">Quick range</h2>
+              <p className="mb-2 text-xs font-bold uppercase tracking-wide text-muted">Theme</p>
+              <ThemeChips
+                value={themeChoice}
+                onChange={(next) => {
+                  setThemeChoice(next);
+                  saveToolTheme(TOOL_ID, next);
+                }}
+              />
+              <h2 className="mt-4 text-base font-bold text-foreground">Quick range</h2>
               <div className="mt-3 flex flex-wrap gap-2">
                 {RANGE_CHIPS.map((chip) => (
                   <button
@@ -608,23 +675,6 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-border bg-surface p-4">
-              <h2 className="text-base font-bold text-foreground">Recent results</h2>
-              {recent.length === 0 ? (
-                <p className="mt-2 text-sm text-muted">No draws yet.</p>
-              ) : (
-                <ul className="mt-3 flex flex-wrap gap-2">
-                  {recent.map((n, i) => (
-                    <li
-                      key={`${n}-${i}`}
-                      className="rounded-lg border border-border bg-surface-2 px-2.5 py-1 text-sm font-semibold tabular-nums"
-                    >
-                      {bingoActive ? formatBingoCall(n) : formatNumberLabel(n)}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
           </div>
         </div>
       </div>
@@ -638,17 +688,7 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
         </p>
       ) : null}
 
-      <WinnerModal
-        open={modalOpen}
-        winner={winner}
-        showRemoveContinue={false}
-        onClose={() => setModalOpen(false)}
-        onSpinAgain={() => {
-          setModalOpen(false);
-          spin();
-        }}
-        onRemoveWinner={() => setModalOpen(false)}
-      />
+      <ToolConfetti fire={confettiFire} colors={[...themeColors]} />
     </div>
   );
 }
