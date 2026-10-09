@@ -6,15 +6,16 @@ import { useReducedMotion } from "framer-motion";
 import { StaticWheelPreview } from "@/components/StaticWheelPreview";
 import { SpinControls } from "@/components/SpinControls";
 import { WheelCanvas } from "@/components/WheelCanvas";
-import { WinnerModal } from "@/components/WinnerModal";
+import { ResultReveal } from "@/components/tools/ResultReveal";
 import {
   classroomEmbedChoices,
   classroomEmbedTitle,
   type ClassroomEmbedSlug,
 } from "@/lib/classroom-embed";
 import { randomInt } from "@/lib/random";
-import { loadPrefs, savePrefs } from "@/lib/spinner-storage";
 import { track } from "@/lib/track";
+import { spinDurationMs, useSound, type SpinLength } from "@/lib/tools/sound";
+import { onSegColor, resolveToolTheme, segColor } from "@/lib/tools/theme";
 import {
   choicesToText,
   easeOutCubic,
@@ -22,6 +23,7 @@ import {
   targetRotationForIndex,
   winnerIndexAt,
 } from "@/lib/wheel";
+import "@/app/styles/tools-themes.css";
 
 type Props = {
   slug: ClassroomEmbedSlug;
@@ -39,21 +41,31 @@ export function ClassroomEmbedWheel({ slug }: Props) {
   const starter = useMemo(() => classroomEmbedChoices(slug), [slug]);
   const title = classroomEmbedTitle(slug);
   const reduceMotion = useReducedMotion();
+  const sound = useSound();
+  const resolvedTheme = resolveToolTheme("auto", "classroom-spinner");
+  const themeColors = useMemo(
+    () => Array.from({ length: 8 }, (_, i) => segColor(resolvedTheme, i)),
+    [resolvedTheme],
+  );
+  const themeLabels = useMemo(
+    () => Array.from({ length: 8 }, (_, i) => onSegColor(resolvedTheme, i)),
+    [resolvedTheme],
+  );
 
   const [text, setText] = useState(() => choicesToText(starter));
   const [rotation, setRotation] = useState(0);
   const [spinning, setSpinning] = useState(false);
   const [winner, setWinner] = useState<string | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [soundEnabled, setSoundEnabled] = useState(false);
+  const [revealOpen, setRevealOpen] = useState(false);
   const [autoRemove, setAutoRemove] = useState(true);
   const [ready, setReady] = useState(false);
   const [hydrated, setHydrated] = useState(false);
+  const [spinLength, setSpinLength] = useState<SpinLength>("normal");
 
   const spinningRef = useRef(false);
   const rotationRef = useRef(0);
   const rafRef = useRef(0);
-  const audioCtxRef = useRef<AudioContext | null>(null);
+  const lastSegRef = useRef(-1);
 
   const { choices } = useMemo(() => parseChoicesWithStats(text), [text]);
   const canSpin = choices.length >= 2 && !spinning;
@@ -81,9 +93,6 @@ export function ClassroomEmbedWheel({ slug }: Props) {
     } catch {
       /* ignore */
     }
-
-    const prefs = loadPrefs();
-    setSoundEnabled(prefs.soundEnabled);
 
     // Restore remove-winner progress for this embed slug only (browser session).
     // Never read share hashes or name query params.
@@ -119,39 +128,15 @@ export function ClassroomEmbedWheel({ slug }: Props) {
     }
   }, [choices, autoRemove, hydrated, slug]);
 
-  const playTick = useCallback(() => {
-    if (!soundEnabled) return;
-    try {
-      const Ctx =
-        window.AudioContext ||
-        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      if (!Ctx) return;
-      const ctx = audioCtxRef.current ?? new Ctx();
-      audioCtxRef.current = ctx;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = "triangle";
-      osc.frequency.value = 660;
-      gain.gain.value = 0.04;
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start();
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
-      osc.stop(ctx.currentTime + 0.09);
-    } catch {
-      /* ignore */
-    }
-  }, [soundEnabled]);
-
   const finishSpin = useCallback(
     (finalRotation: number) => {
       setRotation(finalRotation);
       const idx = winnerIndexAt(finalRotation, choices.length);
       const name = choices[idx] ?? null;
       setWinner(name);
-      setModalOpen(Boolean(name));
+      setRevealOpen(Boolean(name));
       setSpinning(false);
-      playTick();
+      sound.chime();
       track("spin", {
         toolId: "classroom-spinner",
         count: choices.length,
@@ -162,27 +147,35 @@ export function ClassroomEmbedWheel({ slug }: Props) {
         setText(choicesToText(choices.filter((c) => c !== name)));
       }
     },
-    [choices, playTick, autoRemove, slug],
+    [choices, autoRemove, slug, sound],
   );
 
   const spin = useCallback(() => {
     if (spinningRef.current || choices.length < 2) return;
-    setModalOpen(false);
+    sound.unlock();
+    setRevealOpen(false);
     setWinner(null);
     setSpinning(true);
+    lastSegRef.current = -1;
 
     const winnerIdx = randomInt(choices.length);
     const start = rotationRef.current;
-    const extra = reduceMotion ? 2 : 5 + randomInt(3);
+    const extra = reduceMotion ? 1 : 5 + randomInt(3);
     const end = targetRotationForIndex(winnerIdx, choices.length, start, extra);
-    const duration = reduceMotion ? 1200 : 4200 + randomInt(900);
+    const duration = spinDurationMs(spinLength, Boolean(reduceMotion));
     const t0 = performance.now();
 
     cancelAnimationFrame(rafRef.current);
     const tick = (now: number) => {
       const t = Math.min(1, (now - t0) / duration);
       const e = easeOutCubic(t);
-      setRotation(start + (end - start) * e);
+      const next = start + (end - start) * e;
+      setRotation(next);
+      const seg = winnerIndexAt(next, choices.length);
+      if (seg !== lastSegRef.current) {
+        lastSegRef.current = seg;
+        sound.tick();
+      }
       if (t < 1) {
         rafRef.current = requestAnimationFrame(tick);
       } else {
@@ -190,14 +183,14 @@ export function ClassroomEmbedWheel({ slug }: Props) {
       }
     };
     rafRef.current = requestAnimationFrame(tick);
-  }, [choices, finishSpin, reduceMotion]);
+  }, [choices, finishSpin, reduceMotion, sound, spinLength]);
 
   const resetStarter = () => {
     if (spinningRef.current) return;
     setText(choicesToText(starter));
     setRotation(0);
     setWinner(null);
-    setModalOpen(false);
+    setRevealOpen(false);
   };
 
   const wheelShellStyle = {
@@ -207,7 +200,7 @@ export function ClassroomEmbedWheel({ slug }: Props) {
   } as const;
 
   return (
-    <div className="mx-auto flex min-h-[100svh] max-w-lg flex-col px-3 py-3">
+    <div className="mx-auto flex min-h-[100svh] max-w-lg flex-col px-3 py-3" data-tool-theme={resolvedTheme}>
       <header className="mb-2 text-center">
         <p className="text-xs font-semibold uppercase tracking-wide text-accent">Classroom spinner</p>
         <h1 className="text-lg font-extrabold text-foreground sm:text-xl">{title}</h1>
@@ -224,26 +217,49 @@ export function ClassroomEmbedWheel({ slug }: Props) {
             />
           </div>
           <div className={`absolute inset-0 transition-opacity ${ready ? "opacity-100" : "opacity-0"}`}>
-            <WheelCanvas choices={choices} rotation={rotation} className="!max-w-none h-full" />
+            <WheelCanvas
+              choices={choices}
+              rotation={rotation}
+              colors={themeColors}
+              labelColors={themeLabels}
+              className="!max-w-none h-full"
+            />
           </div>
         </div>
 
         <SpinControls
           canSpin={canSpin}
           spinning={spinning}
-          soundEnabled={soundEnabled}
+          soundEnabled={sound.enabled}
           status={status}
+          spinLength={spinLength}
           onSpin={spin}
           onReset={() => {
             if (!spinning) setRotation(0);
           }}
           onToggleSound={() => {
-            setSoundEnabled((v) => {
-              const next = !v;
-              savePrefs({ soundEnabled: next });
-              return next;
-            });
+            sound.unlock();
+            sound.setEnabled(!sound.enabled);
           }}
+          onSpinLength={setSpinLength}
+        />
+
+        <ResultReveal
+          open={revealOpen}
+          value={winner}
+          showRemove={!autoRemove}
+          onSpinAgain={() => {
+            setRevealOpen(false);
+            spin();
+          }}
+          onRemove={() => {
+            if (!winner) return;
+            setText(choicesToText(choices.filter((c) => c !== winner)));
+            setRevealOpen(false);
+            setWinner(null);
+            setRotation(0);
+          }}
+          onClose={() => setRevealOpen(false)}
         />
 
         <label className="mt-3 flex min-h-11 cursor-pointer items-center justify-center gap-2 text-sm text-foreground">
@@ -279,24 +295,6 @@ export function ClassroomEmbedWheel({ slug }: Props) {
           ExesTools
         </Link>
       </p>
-
-      <WinnerModal
-        open={modalOpen}
-        winner={winner}
-        showRemoveContinue={!autoRemove}
-        onClose={() => setModalOpen(false)}
-        onSpinAgain={() => {
-          setModalOpen(false);
-          spin();
-        }}
-        onRemoveWinner={() => {
-          if (!winner) return;
-          setText(choicesToText(choices.filter((c) => c !== winner)));
-          setModalOpen(false);
-          setWinner(null);
-          setRotation(0);
-        }}
-      />
     </div>
   );
 }

@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import Link from "next/link";
 import { Link2, Share2 } from "lucide-react";
 import { useReducedMotion } from "framer-motion";
@@ -10,7 +17,10 @@ import { PresetSelector } from "@/components/PresetSelector";
 import { RelatedTools } from "@/components/RelatedTools";
 import { SpinControls } from "@/components/SpinControls";
 import { WheelCanvas } from "@/components/WheelCanvas";
-import { WinnerModal } from "@/components/WinnerModal";
+import { HistoryRow } from "@/components/tools/HistoryRow";
+import { ResultReveal } from "@/components/tools/ResultReveal";
+import { ThemeChips } from "@/components/tools/ThemeChips";
+import { ToolConfetti } from "@/components/tools/Confetti";
 import { encodeShareHash, readShareFromLocation } from "@/lib/share-codec";
 import {
   defaultChoicesForTool,
@@ -20,14 +30,22 @@ import {
 } from "@/lib/presets";
 import {
   decodeChoicesParam,
-  loadPrefs,
   loadSession,
-  savePrefs,
   saveSession,
 } from "@/lib/spinner-storage";
 import { randomInt, shuffle } from "@/lib/random";
 import { track } from "@/lib/track";
 import { cleanPathFor, defaultAutoRemoveWinner, type ToolId } from "@/lib/tools";
+import { spinDurationMs, useSound, type SpinLength } from "@/lib/tools/sound";
+import {
+  loadToolTheme,
+  onSegColor,
+  resolveToolTheme,
+  saveToolTheme,
+  segColor,
+  segColors,
+  type ToolThemeId,
+} from "@/lib/tools/theme";
 import {
   choicesToText,
   easeOutCubic,
@@ -35,6 +53,7 @@ import {
   targetRotationForIndex,
   winnerIndexAt,
 } from "@/lib/wheel";
+import "@/app/styles/tools-themes.css";
 
 type Props = {
   toolId: ToolId;
@@ -57,24 +76,41 @@ export function SpinnerWheel({
   const [rotation, setRotation] = useState(0);
   const [spinning, setSpinning] = useState(false);
   const [winner, setWinner] = useState<string | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [soundEnabled, setSoundEnabled] = useState(false);
+  const [winnerIndex, setWinnerIndex] = useState<number | null>(null);
+  const [revealOpen, setRevealOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const [toast, setToast] = useState("");
   const [sharedMode, setSharedMode] = useState(false);
   const [autoRemove, setAutoRemove] = useState(() => defaultAutoRemoveWinner(toolId));
   const [ready, setReady] = useState(false);
   const [showNextSteps, setShowNextSteps] = useState(false);
+  const [themeChoice, setThemeChoice] = useState<ToolThemeId>("auto");
+  const [spinLength, setSpinLength] = useState<SpinLength>("normal");
+  const [wheelTitle, setWheelTitle] = useState("");
+  const [history, setHistory] = useState<string[]>([]);
+  const [confettiFire, setConfettiFire] = useState(0);
   /** Yes/No page only: spin result tallies (session state, not persisted). */
   const [tally, setTally] = useState<Record<string, { label: string; count: number }>>({});
 
+  const sound = useSound();
   const spinningRef = useRef(false);
   const spinRef = useRef<() => void>(() => {});
   const showTally = toolId === "yes-no-wheel";
   const rotationRef = useRef(0);
   const rafRef = useRef(0);
-  const audioCtxRef = useRef<AudioContext | null>(null);
+  const lastSegRef = useRef(-1);
   const allowSaveRef = useRef(true);
+  const stageRef = useRef<HTMLDivElement>(null);
+
+  const resolvedTheme = resolveToolTheme(themeChoice, toolId);
+  const themeColors = useMemo(
+    () => Array.from({ length: 8 }, (_, i) => segColor(resolvedTheme, i)),
+    [resolvedTheme],
+  );
+  const themeLabels = useMemo(
+    () => Array.from({ length: 8 }, (_, i) => onSegColor(resolvedTheme, i)),
+    [resolvedTheme],
+  );
 
   const { choices, duplicatesSkipped, overLimit } = useMemo(
     () => parseChoicesWithStats(text),
@@ -97,9 +133,8 @@ export function SpinnerWheel({
   }, [spinning]);
 
   useEffect(() => {
-    const prefs = loadPrefs();
-    setSoundEnabled(prefs.soundEnabled);
     setAutoRemove(defaultAutoRemoveWinner(toolId));
+    setThemeChoice(loadToolTheme(toolId));
 
     // Hydrate: #w= → ?preset= → legacy ?c= → localStorage → default
     const fromHash = readShareFromLocation();
@@ -162,30 +197,6 @@ export function SpinnerWheel({
     saveSession(toolId, choices);
   }, [choices, hydrated, toolId]);
 
-  const playTick = useCallback(() => {
-    if (!soundEnabled) return;
-    try {
-      const Ctx =
-        window.AudioContext ||
-        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      if (!Ctx) return;
-      const ctx = audioCtxRef.current ?? new Ctx();
-      audioCtxRef.current = ctx;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = "triangle";
-      osc.frequency.value = 660;
-      gain.gain.value = 0.04;
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start();
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
-      osc.stop(ctx.currentTime + 0.09);
-    } catch {
-      /* ignore */
-    }
-  }, [soundEnabled]);
-
   const showToast = useCallback((msg: string) => {
     setToast(msg);
     window.setTimeout(() => setToast(""), 2200);
@@ -197,9 +208,17 @@ export function SpinnerWheel({
       const idx = winnerIndexAt(finalRotation, choices.length);
       const name = choices[idx] ?? null;
       setWinner(name);
-      setModalOpen(Boolean(name));
+      setWinnerIndex(idx);
+      setRevealOpen(Boolean(name));
       setSpinning(false);
-      playTick();
+      sound.chime();
+      setConfettiFire((n) => n + 1);
+      if (name) setHistory((h) => [name, ...h].slice(0, 5));
+      try {
+        if (navigator.vibrate && sound.enabled) navigator.vibrate(30);
+      } catch {
+        /* ignore */
+      }
       track("spin", { toolId, count: choices.length });
 
       if (showTally && name) {
@@ -213,56 +232,78 @@ export function SpinnerWheel({
         });
       }
 
-      if (autoRemove && name && allowSaveRef.current) {
-        const next = choices.filter((c) => c !== name);
-        setText(choicesToText(next));
-      } else if (autoRemove && name && !allowSaveRef.current) {
+      if (autoRemove && name) {
         const next = choices.filter((c) => c !== name);
         setText(choicesToText(next));
       }
     },
-    [choices, playTick, autoRemove, toolId, showTally],
+    [choices, autoRemove, toolId, showTally, sound],
   );
 
   const spin = useCallback(() => {
     if (spinningRef.current || choices.length < 2) return;
-    setModalOpen(false);
+    sound.unlock();
+    setRevealOpen(false);
     setWinner(null);
+    setWinnerIndex(null);
     setSpinning(true);
+    lastSegRef.current = -1;
 
     const winnerIdx = randomInt(choices.length);
     const start = rotationRef.current;
-    const extra = reduceMotion ? 2 : 5 + randomInt(3);
+    const extra = reduceMotion ? 1 : 5 + randomInt(3);
     const end = targetRotationForIndex(winnerIdx, choices.length, start, extra);
-    const duration = reduceMotion ? 1200 : 4200 + randomInt(900);
+    // Slight overshoot then settle (skipped under reduced motion)
+    const overshoot = reduceMotion ? 0 : (4 + randomInt(3)) * (Math.PI / 180);
+    const peak = end + overshoot;
+    const duration = spinDurationMs(spinLength, Boolean(reduceMotion));
+    const settleMs = reduceMotion ? 0 : 250;
     const t0 = performance.now();
 
     cancelAnimationFrame(rafRef.current);
     const tick = (now: number) => {
-      const t = Math.min(1, (now - t0) / duration);
-      const e = easeOutCubic(t);
-      const next = start + (end - start) * e;
-      setRotation(next);
-      if (t < 1) {
+      const elapsed = now - t0;
+      if (elapsed < duration) {
+        const t = Math.min(1, elapsed / duration);
+        const e = easeOutCubic(t);
+        const next = start + (peak - start) * e;
+        setRotation(next);
+        const seg = winnerIndexAt(next, choices.length);
+        if (seg !== lastSegRef.current) {
+          lastSegRef.current = seg;
+          sound.tick();
+        }
+        rafRef.current = requestAnimationFrame(tick);
+      } else if (settleMs && elapsed < duration + settleMs) {
+        const t = (elapsed - duration) / settleMs;
+        const next = peak + (end - peak) * easeOutCubic(Math.min(1, t));
+        setRotation(next);
         rafRef.current = requestAnimationFrame(tick);
       } else {
         finishSpin(end);
       }
     };
     rafRef.current = requestAnimationFrame(tick);
-  }, [choices, finishSpin, reduceMotion]);
+  }, [choices, finishSpin, reduceMotion, sound, spinLength]);
 
   spinRef.current = spin;
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (!(e.ctrlKey || e.metaKey) || e.key !== "Enter") return;
       const t = e.target as HTMLElement | null;
       const tag = t?.tagName;
       if (tag === "TEXTAREA" || tag === "INPUT" || t?.isContentEditable) return;
       if (spinningRef.current) return;
-      e.preventDefault();
-      spinRef.current();
+
+      if (e.code === "Space" || e.key === " ") {
+        e.preventDefault();
+        spinRef.current();
+        return;
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+        e.preventDefault();
+        spinRef.current();
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -310,7 +351,8 @@ export function SpinnerWheel({
     setText("");
     setRotation(0);
     setWinner(null);
-    setModalOpen(false);
+    setWinnerIndex(null);
+    setRevealOpen(false);
     setShowNextSteps(false);
     allowSaveRef.current = true;
     showToast("Cleared — add at least 2 choices to spin.");
@@ -354,22 +396,20 @@ export function SpinnerWheel({
     }
   };
 
-  const onToggleSound = () => {
-    setSoundEnabled((v) => {
-      const next = !v;
-      savePrefs({ soundEnabled: next });
-      return next;
-    });
-  };
-
   const onRemoveWinner = () => {
     if (!winner) return;
     const next = choices.filter((c) => c !== winner);
     setText(choicesToText(next));
-    setModalOpen(false);
+    setRevealOpen(false);
     setWinner(null);
+    setWinnerIndex(null);
     setRotation(0);
     setShowNextSteps(true);
+  };
+
+  const onThemeChange = (next: ToolThemeId) => {
+    setThemeChoice(next);
+    saveToolTheme(toolId, next);
   };
 
   const keepThisWheel = () => {
@@ -384,11 +424,14 @@ export function SpinnerWheel({
     setText(choicesToText(session?.choices?.length ? session.choices : defaults));
     setRotation(0);
     setWinner(null);
-    setModalOpen(false);
+    setWinnerIndex(null);
+    setRevealOpen(false);
     allowSaveRef.current = true;
     setSharedMode(false);
     showToast("Back to your saved wheel.");
   };
+
+  const themeVars = segColors(resolvedTheme);
 
   const wheelShellStyle = {
     aspectRatio: "1 / 1",
@@ -399,7 +442,16 @@ export function SpinnerWheel({
   } as const;
 
   return (
-    <div className="space-y-3">
+    <div
+      className="space-y-3"
+      data-tool-theme={resolvedTheme}
+      style={
+        {
+          "--t-accent": themeVars.accent,
+          "--t-win": themeVars.win,
+        } as CSSProperties
+      }
+    >
       {sharedMode ? (
         <div
           className="flex max-h-16 flex-wrap items-center gap-2 rounded-xl border border-accent/40 bg-surface-2 px-3 py-2 text-xs text-foreground sm:text-sm"
@@ -435,7 +487,10 @@ export function SpinnerWheel({
       ) : null}
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:items-start lg:gap-6">
-        <div className="rounded-3xl border border-border bg-surface p-3 sm:p-5">
+        <div className="rounded-3xl border border-border bg-surface p-3 sm:p-5" ref={stageRef}>
+          {wheelTitle ? (
+            <p className="mb-2 text-center text-sm font-bold text-muted">{wheelTitle}</p>
+          ) : null}
           <div className="relative mx-auto" style={wheelShellStyle}>
             <div
               className={`absolute inset-0 transition-opacity ${ready ? "pointer-events-none opacity-0" : "opacity-100"}`}
@@ -448,20 +503,50 @@ export function SpinnerWheel({
             <div
               className={`absolute inset-0 transition-opacity ${ready ? "opacity-100" : "opacity-0"}`}
             >
-              <WheelCanvas choices={choices} rotation={rotation} className="!max-w-none h-full" />
+              <WheelCanvas
+                choices={choices}
+                rotation={rotation}
+                colors={themeColors}
+                labelColors={themeLabels}
+                highlightIndex={revealOpen ? winnerIndex : null}
+                title={wheelTitle || undefined}
+                className="!max-w-none h-full"
+              />
             </div>
           </div>
           <SpinControls
             canSpin={canSpin}
             spinning={spinning}
-            soundEnabled={soundEnabled}
+            soundEnabled={sound.enabled}
             status={status}
+            spinLength={spinLength}
             onSpin={spin}
             onReset={() => {
               if (!spinning) setRotation(0);
             }}
-            onToggleSound={onToggleSound}
+            onToggleSound={() => {
+              sound.unlock();
+              sound.setEnabled(!sound.enabled);
+            }}
+            onSpinLength={setSpinLength}
           />
+          <ResultReveal
+            open={revealOpen}
+            value={winner}
+            showRemove={!autoRemove}
+            onSpinAgain={() => {
+              setRevealOpen(false);
+              setShowNextSteps(false);
+              spin();
+            }}
+            onRemove={onRemoveWinner}
+            onShare={() => void onShare()}
+            onClose={() => {
+              setRevealOpen(false);
+              setShowNextSteps(true);
+            }}
+          />
+          <HistoryRow items={history} onClear={() => setHistory([])} />
           {showTally ? (
             <div className="mt-3 flex min-h-[2.75rem] flex-col items-center justify-center gap-1">
               <p className="text-center text-sm font-semibold text-foreground" aria-live="polite">
@@ -501,7 +586,8 @@ export function SpinnerWheel({
                 setText(choicesToText(defaults));
                 setRotation(0);
                 setWinner(null);
-                setModalOpen(false);
+                setWinnerIndex(null);
+                setRevealOpen(false);
                 setShowNextSteps(false);
                 allowSaveRef.current = true;
                 setSharedMode(false);
@@ -538,6 +624,23 @@ export function SpinnerWheel({
             onRestoreDefaults={onRestoreDefaults}
             onCopy={() => void onCopy()}
           />
+          <div>
+            <p className="mb-2 text-xs font-bold uppercase tracking-wide text-muted">Theme</p>
+            <ThemeChips value={themeChoice} onChange={onThemeChange} />
+          </div>
+          <label className="block">
+            <span className="mb-1 block text-xs font-bold uppercase tracking-wide text-muted">
+              Wheel title (optional)
+            </span>
+            <input
+              type="text"
+              value={wheelTitle}
+              onChange={(e) => setWheelTitle(e.target.value.slice(0, 40))}
+              disabled={spinning}
+              placeholder="e.g. Lunch picker"
+              className="min-h-11 w-full rounded-xl border border-border bg-surface-2 px-3 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
+            />
+          </label>
           <p className="text-xs text-muted">
             Your list is saved in this browser. Share links carry the list inside the link, so anyone
             with the link can see it.{" "}
@@ -577,21 +680,7 @@ export function SpinnerWheel({
         </p>
       ) : null}
 
-      <WinnerModal
-        open={modalOpen}
-        winner={winner}
-        showRemoveContinue={!autoRemove}
-        onClose={() => {
-          setModalOpen(false);
-          setShowNextSteps(true);
-        }}
-        onSpinAgain={() => {
-          setModalOpen(false);
-          setShowNextSteps(false);
-          spin();
-        }}
-        onRemoveWinner={onRemoveWinner}
-      />
+      <ToolConfetti fire={confettiFire} colors={[...themeColors]} />
     </div>
   );
 }

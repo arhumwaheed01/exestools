@@ -1,0 +1,68 @@
+/* Shared tool themes — wheels, teams, raffle. Bingo card themes stay in bingo-themes.css. */
+
+[data-tool-theme] {
+  --t-accent: #0891b2;
+  --t-win: #0e7490;
+  --t-seg-1: #0e7490;
+  --t-seg-2: #0369a1;
+  --t-seg-3: #0284c7;
+  --t-seg-4: #0891b2;
+  --t-seg-5: #0d9488;
+  --t-seg-6: #14b8a6;
+  --t-seg-7: #06b6d4;
+  --t-seg-8: #38bdf8;
+}
+
+[data-tool-theme="ocean"] {
+  --t-accent: #0891b2;
+  --t-win: #0e7490;
+}
+[data-tool-theme="candy"] {
+  --t-accent: #db2777;
+  --t-win: #be185d;
+}
+[data-tool-theme="forest"] {
+  --t-accent: #15803d;
+  --t-win: #166534;
+}
+[data-tool-theme="sunset"] {
+  --t-accent: #ea580c;
+  --t-win: #c2410c;
+}
+[data-tool-theme="classroom"] {
+  --t-accent: #1d4ed8;
+  --t-win: #1e40af;
+}
+[data-tool-theme="festive"] {
+  --t-accent: #b91c1c;
+  --t-win: #991b1b;
+}
+[data-tool-theme="mono"] {
+  --t-accent: #475569;
+  --t-win: #334155;
+}
+[data-tool-theme="pastel"] {
+  --t-accent: #db2777;
+  --t-win: #9d174d;
+}
+
+@keyframes et-result-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.et-result-banner {
+  animation: et-result-in 280ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .et-result-banner {
+    animation: none;
+  }
+}

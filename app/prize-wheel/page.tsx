@@ -67,7 +67,7 @@ const FAQS = [
     a: "Only if you send them the share link. The link carries your list, so anyone with it can see the entries. Otherwise your list is saved in your own browser.",
   },
   {
-    q: 'What happens if the wheel lands on "Try again"?',
+    q: 'What happens if the wheel lands on "Bonus spin"?',
     a: "Whatever your rules say. Decide before the first spin, for example spin once more for the same person, and stick to it every time.",
   },
   {
@@ -88,7 +88,7 @@ const FAQS = [
   },
   {
     q: "How do I keep a giveaway fair?",
-    a: 'Publish your rules before you spin, let everyone see the full list of prizes or names, and explain any "Try again" slices up front. Every slice has the same chance on each spin. Learn more: [How ExesTools picks a result].',
+    a: 'Publish your rules before you spin, let everyone see the full list of prizes or names, and explain any "Bonus spin" slices up front. Every slice has the same chance on each spin. Learn more: [How ExesTools picks a result].',
   },
   {
     q: "Is this a certified lottery or raffle draw?",
@@ -141,7 +141,7 @@ export default async function PrizeWheelPage({ searchParams }: PageProps) {
         <p>
           Short, specific prizes work best, because every slice has to fit a few words and everyone
           should know what they&apos;d get. Mix one or two big prizes with several small ones, and
-          add a &quot;Try again&quot; or &quot;Extra spin&quot; slice only if you&apos;ve said
+          add a &quot;Bonus spin&quot; or &quot;No prize&quot; slice only if you&apos;ve said
           beforehand what it means.
         </p>
         <ul className="list-disc space-y-2 pl-5">
@@ -184,7 +184,7 @@ export default async function PrizeWheelPage({ searchParams }: PageProps) {
             &quot;Sticker&quot;, &quot;Mystery box&quot;.
           </li>
           <li>
-            Add &quot;Try again&quot; or &quot;No prize&quot; slices to make the wheel last longer.
+            Add &quot;Bonus spin&quot; or &quot;No prize&quot; slices to make the wheel last longer.
             Each slice has an equal chance, so 2 &quot;No prize&quot; slices on a 10-slice wheel give
             a 2 in 10 chance of no prize.
           </li>
@@ -275,7 +275,7 @@ export default async function PrizeWheelPage({ searchParams }: PageProps) {
         </p>
         <p>
           Either way, decide before the first spin what happens when the wheel lands on a slice like
-          &quot;Try again&quot; or &quot;Extra spin&quot;, and stick to it. Changing the rules after
+          &quot;Bonus spin&quot; or &quot;No prize&quot;, and stick to it. Changing the rules after
           a result is the quickest way to lose trust.
         </p>
         <p>
