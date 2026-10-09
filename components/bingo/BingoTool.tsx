@@ -52,7 +52,6 @@ import {
   type GridSize,
 } from "@/lib/bingo/list";
 import { PRESET_META } from "@/lib/bingo/preset-meta";
-import type { Preset } from "@/lib/bingo/presets";
 import { newSeed } from "@/lib/bingo/rng";
 import {
   HASH_KEY,
@@ -85,6 +84,19 @@ const BingoHostPanels = dynamic(
     loading: () => (
       <div
         className="min-h-[280px] animate-pulse rounded-3xl border border-border bg-surface p-5 print:hidden"
+        aria-hidden
+      />
+    ),
+  },
+);
+
+const BingoPlayerLinks = dynamic(
+  () => import("@/components/bingo/BingoPlayerLinks").then((m) => m.BingoPlayerLinks),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        className="mt-3 min-h-24 animate-pulse rounded-2xl border border-border p-3"
         aria-hidden
       />
     ),
@@ -461,7 +473,6 @@ export function BingoTool() {
   const [text, setText] = useState("");
   const [presetId, setPresetId] = useState<string | undefined>();
   const [presetHint, setPresetHint] = useState("");
-  const [presets, setPresets] = useState<Preset[] | null>(null);
   const [max, setMax] = useState(30);
   const [size, setSize] = useState<GridSize>(5);
   const [free, setFree] = useState(true);
@@ -499,7 +510,9 @@ export function BingoTool() {
   const saveTimer = useRef(0);
   const shareTracked = useRef(false);
   const callTrackedAt = useRef(0);
-  const presetsLoadRef = useRef<Promise<Preset[]> | null>(null);
+  const presetsLoadRef = useRef<Promise<typeof import("@/lib/bingo/presets")> | null>(
+    null,
+  );
 
   const listStatusId = useId();
   const makeDescId = useId();
@@ -545,46 +558,66 @@ export function BingoTool() {
     [buildConfig, title, subtitle],
   );
 
+  const buildStored = useCallback(
+    (called: string[] = caller.called): StoredBingo => ({
+      v: 1,
+      mode,
+      text: text.slice(0, 12_000),
+      presetId,
+      max,
+      size,
+      free,
+      count,
+      title,
+      subtitle,
+      paper,
+      perPage,
+      callSheet,
+      seed,
+      caller: { called },
+    }),
+    [
+      mode,
+      text,
+      presetId,
+      max,
+      size,
+      free,
+      count,
+      title,
+      subtitle,
+      paper,
+      perPage,
+      callSheet,
+      seed,
+      caller.called,
+    ],
+  );
+
   const persist = useCallback(() => {
     if (!hydrated) return;
     window.clearTimeout(saveTimer.current);
     saveTimer.current = window.setTimeout(() => {
-      const state: StoredBingo = {
-        v: 1,
-        mode,
-        text: text.slice(0, 12_000),
-        presetId,
-        max,
-        size,
-        free,
-        count,
-        title,
-        subtitle,
-        paper,
-        perPage,
-        callSheet,
-        seed,
-        caller: { called: caller.called },
-      };
-      saveStoredBingo(state);
+      saveStoredBingo(buildStored());
     }, 300);
-  }, [
-    hydrated,
-    mode,
-    text,
-    presetId,
-    max,
-    size,
-    free,
-    count,
-    title,
-    subtitle,
-    paper,
-    perPage,
-    callSheet,
-    seed,
-    caller.called,
-  ]);
+  }, [hydrated, buildStored]);
+
+  const storedSnapshotRef = useRef<StoredBingo>(buildStored());
+  storedSnapshotRef.current = buildStored();
+  const hydratedRef = useRef(hydrated);
+  hydratedRef.current = hydrated;
+
+  /** Sync write — used after Call next / Undo so a fast reload can't drop the last call. */
+  const persistNow = useCallback(
+    (called?: string[]) => {
+      if (!hydrated) return;
+      window.clearTimeout(saveTimer.current);
+      const next = buildStored(called);
+      storedSnapshotRef.current = next;
+      saveStoredBingo(next);
+    },
+    [hydrated, buildStored],
+  );
 
   useEffect(() => {
     if (!hydrated) return;
@@ -592,7 +625,14 @@ export function BingoTool() {
   }, [hydrated, persist]);
 
   useEffect(() => {
+    const flush = () => {
+      if (!hydratedRef.current) return;
+      window.clearTimeout(saveTimer.current);
+      saveStoredBingo(storedSnapshotRef.current);
+    };
+    window.addEventListener("pagehide", flush);
     return () => {
+      window.removeEventListener("pagehide", flush);
       window.clearTimeout(saveTimer.current);
     };
   }, []);
@@ -861,20 +901,12 @@ export function BingoTool() {
 
   const makeDisabled = Boolean(notEnoughHint) || (mode === "words" && parsed.items.length === 0);
 
-  const ensurePresets = (): Promise<Preset[]> => {
-    if (presets) return Promise.resolve(presets);
-    if (!presetsLoadRef.current) {
-      presetsLoadRef.current = import("@/lib/bingo/presets").then((m) => {
-        setPresets(m.PRESETS);
-        return m.PRESETS;
-      });
-    }
-    return presetsLoadRef.current;
-  };
-
+  /** Full theme lists load on first chip click only (keeps initial JS light). */
   const loadPreset = async (id: string) => {
-    const mod = await import("@/lib/bingo/presets");
-    setPresets(mod.PRESETS);
+    if (!presetsLoadRef.current) {
+      presetsLoadRef.current = import("@/lib/bingo/presets");
+    }
+    const mod = await presetsLoadRef.current;
     const p = mod.presetById(id);
     if (!p) return;
     const current = text.trim();
@@ -977,6 +1009,7 @@ export function BingoTool() {
       return;
     }
     setCaller(state);
+    persistNow(state.called);
     const label = formatCall(call, mode);
     setCallerAnnounce(label);
     const n = state.called.length;
@@ -988,7 +1021,9 @@ export function BingoTool() {
   const onUndoCall = () => {
     if (!caller.called.length) return;
     const last = caller.called[caller.called.length - 1]!;
-    setCaller(undoLast(caller));
+    const next = undoLast(caller);
+    setCaller(next);
+    persistNow(next.called);
     announce(`Took back ${formatCall(last, mode)}.`);
     setCallerAnnounce("");
   };
@@ -1196,10 +1231,7 @@ export function BingoTool() {
                     <button
                       key={p.id}
                       type="button"
-                      onClick={() => {
-                        void ensurePresets();
-                        void loadPreset(p.id);
-                      }}
+                      onClick={() => void loadPreset(p.id)}
                       className="inline-flex min-h-11 items-center rounded-xl border border-border px-3 text-xs font-bold outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
                     >
                       {p.label}
@@ -1579,54 +1611,15 @@ export function BingoTool() {
               </div>
 
               {playerLinksOpen ? (
-                <div className="mt-3 space-y-2 rounded-2xl border border-border p-3">
-                  <p className="text-xs text-muted">
-                    Each link opens one card. Anyone with a link can see that card, so send
-                    each link to one person.
-                  </p>
-                  <div className="flex flex-wrap items-end gap-2">
-                    <div>
-                      <label htmlFor="bg-plink" className="text-xs text-muted">
-                        Card
-                      </label>
-                      <select
-                        id="bg-plink"
-                        value={playerCardN}
-                        onChange={(e) => setPlayerCardN(Number(e.target.value))}
-                        className="mt-1 block min-h-11 rounded-xl border border-border bg-background px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                      >
-                        {cards.map((c) => (
-                          <option key={c.number} value={c.number}>
-                            {c.number}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => void copyPlayerLink(playerCardN)}
-                      className="inline-flex min-h-11 items-center rounded-xl border border-border px-3 text-xs font-bold outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
-                    >
-                      Copy link
-                    </button>
-                    {"share" in navigator ? (
-                      <button
-                        type="button"
-                        onClick={() => void copyPlayerLink(playerCardN, true)}
-                        className="inline-flex min-h-11 items-center rounded-xl border border-border px-3 text-xs font-bold outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
-                      >
-                        Share
-                      </button>
-                    ) : null}
-                    <button
-                      type="button"
-                      onClick={() => void copyAllPlayerLinks()}
-                      className="inline-flex min-h-11 items-center rounded-xl border border-border px-3 text-xs font-bold outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
-                    >
-                      Copy all links
-                    </button>
-                  </div>
-                </div>
+                <BingoPlayerLinks
+                  cards={cards}
+                  playerCardN={playerCardN}
+                  setPlayerCardN={setPlayerCardN}
+                  onCopyLink={() => void copyPlayerLink(playerCardN)}
+                  onShareLink={() => void copyPlayerLink(playerCardN, true)}
+                  onCopyAll={() => void copyAllPlayerLinks()}
+                  canShare={typeof navigator !== "undefined" && "share" in navigator}
+                />
               ) : null}
 
               <p className="mt-2 text-xs text-muted">
@@ -1655,34 +1648,43 @@ export function BingoTool() {
           </div>
         </div>
 
-        <BingoHostPanels
-          mode={mode}
-          title={title}
-          subtitle={subtitle}
-          seed={seed}
-          cards={cards}
-          gridSize={gridSize}
-          caller={caller}
-          currentCall={currentCall}
-          finished={finished}
-          callerAnnounce={callerAnnounce}
-          callNextRef={callNextRef}
-          checkResultRef={checkResultRef}
-          checkSelectId={checkSelectId}
-          checkN={checkN}
-          setCheckN={setCheckN}
-          pattern={pattern}
-          setPattern={setPattern}
-          checkMsg={checkMsg}
-          checkHighlight={checkHighlight}
-          checkCardData={checkCardData}
-          checkMarks={checkMarks}
-          onCallNext={onCallNext}
-          onUndoCall={onUndoCall}
-          onCopyCalled={() => void onCopyCalled()}
-          onNewGame={onNewGame}
-          onCheck={onCheck}
-        />
+        {cards.length > 0 ? (
+          <BingoHostPanels
+            mode={mode}
+            title={title}
+            subtitle={subtitle}
+            seed={seed}
+            cards={cards}
+            gridSize={gridSize}
+            caller={caller}
+            currentCall={currentCall}
+            finished={finished}
+            callerAnnounce={callerAnnounce}
+            callNextRef={callNextRef}
+            checkResultRef={checkResultRef}
+            checkSelectId={checkSelectId}
+            checkN={checkN}
+            setCheckN={setCheckN}
+            pattern={pattern}
+            setPattern={setPattern}
+            checkMsg={checkMsg}
+            checkHighlight={checkHighlight}
+            checkCardData={checkCardData}
+            checkMarks={checkMarks}
+            onCallNext={onCallNext}
+            onUndoCall={onUndoCall}
+            onCopyCalled={() => void onCopyCalled()}
+            onNewGame={onNewGame}
+            onCheck={onCheck}
+          />
+        ) : (
+          <div className="min-w-0 rounded-3xl border border-border bg-surface p-3 sm:p-5 print:hidden lg:sticky lg:top-4 lg:self-start">
+            <h2 className="text-lg font-bold text-foreground">Caller</h2>
+            <p className="mt-2 text-sm text-muted">
+              Make your cards first. The caller and card checker open here.
+            </p>
+          </div>
+        )}
       </div>
 
       <div role="status" aria-live="polite" className="sr-only">

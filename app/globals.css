@@ -32,6 +32,11 @@ body {
 }
 
 @media print {
+  html {
+    color-scheme: light !important;
+    background: #fff !important;
+  }
+
   header,
   footer,
   .print\:hidden,

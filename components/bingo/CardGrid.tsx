@@ -308,10 +308,10 @@ export function CardGrid({
           Set {seed}
         </span>
         {!compact ? (
-          <>
+          <span className="hidden min-[400px]:inline whitespace-nowrap">
             {" · "}
-            <span className="break-all">exestools.com/bingo-card-generator</span>
-          </>
+            exestools.com/bingo-card-generator
+          </span>
         ) : null}
       </p>
     </article>

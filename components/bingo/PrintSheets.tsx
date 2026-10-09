@@ -128,6 +128,7 @@ function PrintCard({
                 return (
                   <td
                     key={c}
+                    role="gridcell"
                     style={{
                       border: "1px solid #000",
                       width: `${100 / size}%`,
@@ -137,6 +138,7 @@ function PrintCard({
                       fontSize: `${pt}pt`,
                       lineHeight: 1.15,
                       overflowWrap: "break-word",
+                      wordBreak: "normal",
                       hyphens: "auto",
                       padding: "1mm",
                       background: isFree ? "#f0f0f0" : "#fff",
@@ -295,6 +297,7 @@ export function PrintSheets({
     const paperSize = paper === "letter" ? "letter" : "A4";
     style.textContent = `
 @media print {
+  html { color-scheme: light !important; background: #fff !important; }
   @page { size: ${paperSize} portrait; margin: 10mm; }
   body > *:not(#${PRINT_ROOT_ID}) { display: none !important; }
   #${PRINT_ROOT_ID} { display: block !important; }
@@ -302,6 +305,13 @@ export function PrintSheets({
   .bingo-sheet.per-2 { grid-template-rows: 1fr 1fr; }
   .bingo-sheet.per-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
   .bingo-card { break-inside: avoid; border: 2px solid #000; color: #000; background: #fff; }
+  .bingo-sheet.per-4 .bingo-card [role=gridcell],
+  .bingo-sheet.per-4 .bingo-card td {
+    font-size: 8.5pt !important;
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+    hyphens: auto;
+  }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 `;
