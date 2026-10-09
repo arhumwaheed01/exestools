@@ -174,7 +174,9 @@ export function PrintSheets({
     border-radius: 4mm;
     box-shadow: none !important;
   }
-  .bingo-sheet.per-2 .bingo-card { max-height: 48vh; }
+  .bingo-sheet.per-2 .bingo-card {
+    max-height: ${paper === "letter" ? "4.9in" : "48vh"};
+  }
   .bingo-sheet.per-4 .bingo-card .bc-title { font-size: 14pt !important; }
   .bingo-sheet.per-4 .bingo-card .bc-letter { font-size: 16pt !important; }
   .bingo-sheet.per-4 .bingo-card .bc-cell,
@@ -182,8 +184,10 @@ export function PrintSheets({
     font-size: 8.5pt !important;
     overflow-wrap: normal !important;
     word-break: keep-all !important;
-    hyphens: manual !important;
+    hyphens: auto !important;
   }
+  .bingo-card .bc-band { display: block !important; }
+  .bingo-card .bc-foot { display: block !important; }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 `;

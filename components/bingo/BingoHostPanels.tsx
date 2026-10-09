@@ -183,7 +183,7 @@ export function BingoHostPanels({
         {recent.length > 0 ? (
           <ul className="mt-3 flex flex-wrap items-center justify-center gap-2">
             {recent.map((c, i) => {
-              const opacity = [0.85, 0.7, 0.55, 0.4, 0.4][i] ?? 0.4;
+              const opacity = [0.95, 0.85, 0.78, 0.72, 0.7][i] ?? 0.7;
               const color = ballColorForCall(c, mode);
               if (mode === "bingo75") {
                 return (

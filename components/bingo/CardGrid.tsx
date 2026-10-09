@@ -21,36 +21,30 @@ export function longestItemLength(cells: readonly Cell[]): number {
   return max;
 }
 
+/** Length bucket for CSS -- short / mid / long word sizing. */
+export function longestBucket(longest: number): "short" | "mid" | "long" {
+  if (longest >= 16) return "long";
+  if (longest >= 9) return "mid";
+  return "short";
+}
+
 /**
- * Screen font steps by longest item. One size smaller when any word is 9+ chars
- * so labels stay inside the cell without mid-word breaks.
+ * Screen font steps by longest item. Floor ~11px; CSS [data-longest] also clamps.
  */
 export function cellFontClass(longest: number, size: GridSize = 5): string {
-  // Base steps, then drop one rung when longest ≥ 9
   const drop = longest >= 9 ? 1 : 0;
   const step = (n: number) => Math.min(3, n + drop);
-  const steps5 = [
-    "text-[clamp(.95rem,3.8vw,1.15rem)]",
-    "text-sm",
-    "text-xs",
-    "text-[11px]",
+  const steps = [
+    "text-[clamp(11px,3.8vw,1.15rem)]",
+    "text-[clamp(11px,3.2vw,0.95rem)]",
+    "text-[clamp(10.5px,2.8vw,0.8rem)]",
+    "text-[clamp(10px,2.4vw,0.7rem)]",
   ] as const;
-  const stepsOther = [
-    "text-[clamp(.95rem,3.8vw,1.15rem)]",
-    "text-sm",
-    "text-xs",
-    "text-[11px]",
-  ] as const;
-  if (size === 5) {
-    if (longest <= 8) return steps5[step(0)]!;
-    if (longest <= 16) return steps5[step(1)]!;
-    if (longest <= 28) return steps5[step(2)]!;
-    return steps5[3]!;
-  }
-  if (longest <= 8) return stepsOther[step(0)]!;
-  if (longest <= 16) return stepsOther[step(1)]!;
-  if (longest <= 28) return stepsOther[step(2)]!;
-  return stepsOther[3]!;
+  void size;
+  if (longest <= 8) return steps[step(0)]!;
+  if (longest <= 16) return steps[step(1)]!;
+  if (longest <= 28) return steps[step(2)]!;
+  return steps[3]!;
 }
 
 /** Print font in pt; never below 9. */
@@ -141,7 +135,7 @@ function CellInner({
   const isFree = !placeholder && cell === null;
   const label = cellLabel(cell);
   const win = highlight ? "bc-win-cell" : "";
-  const base = `bc-cell relative aspect-square grid min-h-11 min-w-0 place-items-center overflow-hidden rounded-md p-1 text-center font-semibold leading-tight outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bc-cell)] ${
+  const base = `bc-cell relative aspect-square grid min-h-11 min-w-0 place-items-center rounded-md p-1 text-center font-semibold leading-tight outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bc-cell)] ${
     placeholder
       ? "bc-cell-empty border border-dashed border-[var(--bc-line)] bg-transparent text-[var(--bc-line)]"
       : isFree
@@ -251,6 +245,7 @@ export function CardGrid({
   const labelId = useId();
   const longest = longestItemLength(card.cells);
   const font = cellFontClass(longest, size);
+  const longestAttr = longestBucket(longest);
   const highlight = new Set(highlightCells ?? []);
   const [focusIdx, setFocusIdx] = useState(0);
   const cellRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -319,6 +314,7 @@ export function CardGrid({
       lang="en"
       data-theme={theme}
       data-size={size}
+      data-longest={longestAttr}
       className={`bingo-card relative mx-auto w-full max-w-[min(100%,28rem)] min-w-0 rounded-[1.75rem] bg-[var(--bc-frame)] p-2.5 shadow-[0_12px_28px_-12px_rgb(15_23_42/0.45)] sm:p-3 dark:shadow-[0_14px_36px_-12px_rgb(0_0_0/0.7)] ${
         deal ? "bc-deal" : ""
       } ${className}`}
@@ -410,7 +406,9 @@ export function CardGrid({
           <>
             Card {card.number}
             {" · "}
-            <span aria-label={`Set code ${seedSpoken}`}>Set {seed}</span>
+            <span className="bc-foot-set" aria-label={`Set code ${seedSpoken}`}>
+              Set {seed}
+            </span>
             {!compact ? (
               <span className="hidden min-[400px]:inline whitespace-nowrap">
                 {" · "}

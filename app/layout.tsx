@@ -79,7 +79,7 @@ export default async function RootLayout({
           <Script
             id="adsense-loader"
             async
-            strategy="afterInteractive"
+            strategy="lazyOnload"
             crossOrigin="anonymous"
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
           />

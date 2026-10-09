@@ -1,9 +1,9 @@
 import Script from "next/script";
-import { GoogleAnalytics } from "@next/third-parties/google";
 import { CONSENT_DENIED_REGIONS, GA_MEASUREMENT_ID } from "@/lib/analytics";
 
 /**
  * Consent Mode v2 defaults (before gtag config) + Google Analytics tag.
+ * Consent defaults stay early; the GA library loads lazyOnload so tool JS paints first.
  * EEA/UK/CH: analytics + ads denied until Google's CMP updates consent.
  * Elsewhere: analytics granted; ads denied by default (CMP / AdSense may update).
  */
@@ -42,7 +42,23 @@ gtag('consent', 'default', {
           `.trim(),
         }}
       />
-      <GoogleAnalytics gaId={GA_MEASUREMENT_ID} />
+      <Script
+        id="ga-gtag-js"
+        src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+        strategy="lazyOnload"
+      />
+      <Script
+        id="ga-config"
+        strategy="lazyOnload"
+        dangerouslySetInnerHTML={{
+          __html: `
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GA_MEASUREMENT_ID}');
+          `.trim(),
+        }}
+      />
     </>
   );
 }

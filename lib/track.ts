@@ -2,8 +2,14 @@
  * Phase 2 GA4 helper. Never send choice text / PII in props.
  * Events: spin, preset_load, share_create, share_open, return_visit, entries_edited.
  */
-import { sendGAEvent } from "@next/third-parties/google";
 import { GA_MEASUREMENT_ID } from "@/lib/analytics";
+
+declare global {
+  interface Window {
+    dataLayer?: unknown[];
+    gtag?: (...args: unknown[]) => void;
+  }
+}
 
 export function track(event: string, props: Record<string, unknown> = {}): void {
   if (!GA_MEASUREMENT_ID) return;
@@ -17,7 +23,13 @@ export function track(event: string, props: Record<string, unknown> = {}): void 
         safe[k] = v;
       }
     }
-    sendGAEvent("event", event, safe);
+    // Consent snippet defines gtag beforeInteractive; events queue until gtag.js loads.
+    window.dataLayer = window.dataLayer || [];
+    if (typeof window.gtag === "function") {
+      window.gtag("event", event, safe);
+    } else {
+      window.dataLayer.push({ event, ...safe });
+    }
   } catch {
     /* ignore */
   }

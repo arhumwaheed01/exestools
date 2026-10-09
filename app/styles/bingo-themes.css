@@ -237,28 +237,47 @@
   }
 }
 
-/* Cell text: no mid-word shatter; size from container queries */
+/* Cell text: no mid-word shatter; size from container + word length */
 .bingo-card .bc-cell {
   container-type: size;
-  overflow: hidden;
   overflow-wrap: normal;
   word-break: keep-all;
-  hyphens: manual;
+  hyphens: auto;
+  -webkit-hyphens: auto;
 }
 
 .bingo-card .bc-cell-label {
   max-width: 100%;
-  overflow: hidden;
   overflow-wrap: normal;
   word-break: keep-all;
-  hyphens: manual;
-  font-size: clamp(9px, 13cqi, 16px);
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  font-size: clamp(11px, 13cqi, 16px);
   line-height: 1.15;
+  /* Last resort only — prefer smaller type + soft hyphens */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bingo-card[data-longest="mid"] .bc-cell-label {
+  font-size: clamp(10.5px, 11cqi, 14px);
+}
+
+.bingo-card[data-longest="long"] .bc-cell-label {
+  font-size: clamp(10px, 9.5cqi, 12px);
 }
 
 .bingo-card .bc-foot {
   color: var(--bc-band-ink);
   opacity: 1;
+}
+
+.bingo-card .bc-foot-set {
+  white-space: nowrap;
 }
 
 /* Ink saver print — outlines only, no solid fills */
@@ -286,7 +305,10 @@
 
 .bingo-print-mono .bc-band {
   background: transparent !important;
-  border-bottom: 2pt solid #000;
+  outline: 1.5pt solid #000;
+  outline-offset: -1.5pt;
+  border: none !important;
+  border-bottom: none !important;
   color: #000 !important;
 }
 
@@ -309,6 +331,15 @@
 }
 
 @media print {
+  /* Global print CSS hides <header>/<footer>; keep the title band + set code. */
+  .bingo-card .bc-band {
+    display: block !important;
+  }
+
+  .bingo-card .bc-foot {
+    display: block !important;
+  }
+
   .bingo-card {
     max-width: none !important;
     box-shadow: none !important;
