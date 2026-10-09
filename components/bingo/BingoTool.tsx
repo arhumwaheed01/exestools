@@ -1497,7 +1497,7 @@ export function BingoTool() {
                       seed={seed}
                     />
                   </div>
-                  <div className="mt-2 flex flex-wrap items-center justify-center gap-2">
+                  <div className="relative z-10 mt-3 flex flex-wrap items-center justify-center gap-2">
                     <button
                       type="button"
                       disabled={previewIdx <= 0}
