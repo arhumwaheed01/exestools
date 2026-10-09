@@ -1,0 +1,300 @@
+/* Bingo card themes — imported only by /bingo-card-generator (~2 KB). */
+
+.bingo-card {
+  --bc-band: #0e7490;
+  --bc-band-ink: #ffffff;
+  --bc-letter-1: #0e7490;
+  --bc-letter-2: #0e7490;
+  --bc-letter-3: #0e7490;
+  --bc-letter-4: #0e7490;
+  --bc-letter-5: #0e7490;
+  --bc-frame: #0e7490;
+  --bc-cell: #ffffff;
+  --bc-cell-ink: #0f172a;
+  --bc-line: #cbd5e1;
+  --bc-free: #cffafe;
+  --bc-free-ink: #155e75;
+  --bc-dauber: rgb(6 182 212 / 0.55);
+  --print-line: #9ca3af;
+}
+
+.bingo-card[data-theme="classic"] {
+  --bc-band: #0e7490;
+  --bc-band-ink: #fff;
+  --bc-letter-1: #0e7490;
+  --bc-letter-2: #0e7490;
+  --bc-letter-3: #0e7490;
+  --bc-letter-4: #0e7490;
+  --bc-letter-5: #0e7490;
+  --bc-frame: #0e7490;
+  --bc-cell: #fff;
+  --bc-cell-ink: #0f172a;
+  --bc-line: #cbd5e1;
+  --bc-free: #cffafe;
+  --bc-free-ink: #155e75;
+  --bc-dauber: rgb(6 182 212 / 0.55);
+}
+
+.bingo-card[data-theme="festive"] {
+  --bc-band: #b91c1c;
+  --bc-band-ink: #fff;
+  --bc-letter-1: #b91c1c;
+  --bc-letter-2: #15803d;
+  --bc-letter-3: #b91c1c;
+  --bc-letter-4: #15803d;
+  --bc-letter-5: #b91c1c;
+  --bc-frame: #b91c1c;
+  --bc-cell: #fffdf7;
+  --bc-cell-ink: #1c1917;
+  --bc-line: #e7d8c9;
+  --bc-free: #dcfce7;
+  --bc-free-ink: #166534;
+  --bc-dauber: rgb(220 38 38 / 0.5);
+}
+
+.bingo-card[data-theme="spooky"] {
+  --bc-band: #6b21a8;
+  --bc-band-ink: #fff;
+  --bc-letter-1: #c2410c;
+  --bc-letter-2: #6b21a8;
+  --bc-letter-3: #c2410c;
+  --bc-letter-4: #6b21a8;
+  --bc-letter-5: #c2410c;
+  --bc-frame: #6b21a8;
+  --bc-cell: #fff7ed;
+  --bc-cell-ink: #1c1917;
+  --bc-line: #fed7aa;
+  --bc-free: #ffedd5;
+  --bc-free-ink: #9a3412;
+  --bc-dauber: rgb(234 88 12 / 0.5);
+}
+
+.bingo-card[data-theme="pastel"] {
+  --bc-band: #f9a8d4;
+  --bc-band-ink: #500724;
+  --bc-letter-1: #f9a8d4;
+  --bc-letter-2: #a5f3fc;
+  --bc-letter-3: #fde68a;
+  --bc-letter-4: #c4b5fd;
+  --bc-letter-5: #bbf7d0;
+  --bc-frame: #f9a8d4;
+  --bc-cell: #fff;
+  --bc-cell-ink: #1e293b;
+  --bc-line: #fbcfe8;
+  --bc-free: #fdf2f8;
+  --bc-free-ink: #9d174d;
+  --bc-dauber: rgb(236 72 153 / 0.45);
+}
+
+.bingo-card[data-theme="classroom"] {
+  --bc-band: #1d4ed8;
+  --bc-band-ink: #fff;
+  --bc-letter-1: #b91c1c;
+  --bc-letter-2: #b45309;
+  --bc-letter-3: #15803d;
+  --bc-letter-4: #1d4ed8;
+  --bc-letter-5: #6d28d9;
+  --bc-frame: #1d4ed8;
+  --bc-cell: #fff;
+  --bc-cell-ink: #0f172a;
+  --bc-line: #bfdbfe;
+  --bc-free: #fef9c3;
+  --bc-free-ink: #854d0e;
+  --bc-dauber: rgb(37 99 235 / 0.45);
+}
+
+.bingo-card[data-theme="harvest"] {
+  --bc-band: #9a3412;
+  --bc-band-ink: #fff;
+  --bc-letter-1: #9a3412;
+  --bc-letter-2: #9a3412;
+  --bc-letter-3: #9a3412;
+  --bc-letter-4: #9a3412;
+  --bc-letter-5: #9a3412;
+  --bc-frame: #9a3412;
+  --bc-cell: #fffbeb;
+  --bc-cell-ink: #292524;
+  --bc-line: #fde68a;
+  --bc-free: #fef3c7;
+  --bc-free-ink: #92400e;
+  --bc-dauber: rgb(217 119 6 / 0.5);
+}
+
+.bingo-card[data-theme="party"] {
+  --bc-band: #be185d;
+  --bc-band-ink: #fff;
+  --bc-letter-1: #be185d;
+  --bc-letter-2: #7c3aed;
+  --bc-letter-3: #0369a1;
+  --bc-letter-4: #047857;
+  --bc-letter-5: #b45309;
+  --bc-frame: #be185d;
+  --bc-cell: #fff;
+  --bc-cell-ink: #111827;
+  --bc-line: #fbcfe8;
+  --bc-free: #fae8ff;
+  --bc-free-ink: #86198f;
+  --bc-dauber: rgb(168 85 247 / 0.45);
+}
+
+.bingo-card[data-theme="trip"] {
+  --bc-band: #047857;
+  --bc-band-ink: #fff;
+  --bc-letter-1: #047857;
+  --bc-letter-2: #047857;
+  --bc-letter-3: #047857;
+  --bc-letter-4: #047857;
+  --bc-letter-5: #047857;
+  --bc-frame: #047857;
+  --bc-cell: #f8fafc;
+  --bc-cell-ink: #0f172a;
+  --bc-line: #a7f3d0;
+  --bc-free: #d1fae5;
+  --bc-free-ink: #065f46;
+  --bc-dauber: rgb(16 185 129 / 0.5);
+}
+
+/* Pastel letter tiles use dark ink */
+.bingo-card[data-theme="pastel"] .bc-letter {
+  color: #500724;
+}
+
+@keyframes bc-stamp {
+  0% {
+    transform: scale(1.6) rotate(-12deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(0.92) rotate(3deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+
+.bc-dauber {
+  animation: bc-stamp 220ms cubic-bezier(0.2, 0.9, 0.3, 1.3) both;
+}
+
+@keyframes bc-pop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.5;
+  }
+  70% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.bc-pop {
+  animation: bc-pop 260ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+
+@keyframes bc-deal {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.bc-deal {
+  animation: bc-deal 300ms ease-out both;
+}
+
+@keyframes bc-glow {
+  0%,
+  100% {
+    outline-color: var(--bc-band);
+  }
+  50% {
+    outline-color: color-mix(in srgb, var(--bc-band), white 35%);
+  }
+}
+
+.bc-win-cell {
+  outline: 3px solid var(--bc-band);
+  outline-offset: -3px;
+  animation: bc-glow 600ms ease-in-out 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bc-dauber,
+  .bc-pop,
+  .bc-deal {
+    animation: none;
+  }
+  .bc-win-cell {
+    animation: none;
+  }
+}
+
+/* Ink saver print */
+.bingo-print-mono.bingo-card,
+.bingo-print-mono .bingo-card {
+  --bc-band: #ffffff;
+  --bc-band-ink: #000000;
+  --bc-letter-1: #ffffff;
+  --bc-letter-2: #ffffff;
+  --bc-letter-3: #ffffff;
+  --bc-letter-4: #ffffff;
+  --bc-letter-5: #ffffff;
+  --bc-frame: #000000;
+  --bc-cell: #ffffff;
+  --bc-cell-ink: #000000;
+  --bc-line: #000000;
+  --bc-free: #ffffff;
+  --bc-free-ink: #000000;
+  --bc-dauber: transparent;
+  --print-line: #000000;
+}
+
+.bingo-print-mono .bc-band {
+  background: #fff !important;
+  border-bottom: 2pt solid #000;
+  color: #000 !important;
+}
+
+.bingo-print-mono .bc-letter {
+  background: #fff !important;
+  color: #000 !important;
+  border: 1.5pt solid #000;
+  box-shadow: none !important;
+}
+
+.bingo-print-mono .bc-free-icon {
+  fill: none !important;
+  stroke: #000;
+  stroke-width: 1.5;
+}
+
+@media print {
+  .bingo-card {
+    box-shadow: none !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .bingo-card .bc-grid {
+    gap: 0;
+    background: none;
+  }
+
+  .bingo-card .bc-cell,
+  .bingo-card .bc-letter {
+    border: 0.75pt solid var(--print-line, #9ca3af);
+    border-radius: 0;
+  }
+
+  .bingo-card .bc-dauber {
+    display: none !important;
+  }
+}

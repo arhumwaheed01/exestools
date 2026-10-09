@@ -4,6 +4,7 @@ import { BingoMount } from "@/components/bingo/BingoMount";
 import { RelatedTools } from "@/components/RelatedTools";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { webAppLd } from "@/lib/seo/jsonld";
+import "./bingo-themes.css";
 
 const PAGE_URL = "https://www.exestools.com/bingo-card-generator";
 const TITLE = "Bingo Card Generator — Free Printable Cards | ExesTools";

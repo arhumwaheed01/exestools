@@ -11,6 +11,8 @@ import {
   type ReactNode,
 } from "react";
 import { CardGrid } from "@/components/bingo/CardGrid";
+import { PreviewCard } from "@/components/bingo/PreviewCard";
+import { ThemePicker } from "@/components/bingo/ThemePicker";
 import {
   calledListText,
   drawNext,
@@ -53,6 +55,7 @@ import {
 } from "@/lib/bingo/list";
 import { PRESET_META } from "@/lib/bingo/preset-meta";
 import { newSeed } from "@/lib/bingo/rng";
+import { EXAMPLE_PREVIEW_ITEMS } from "@/lib/bingo/example-preview";
 import {
   HASH_KEY,
   clearHashHandoff,
@@ -62,8 +65,15 @@ import {
   loadStoredBingo,
   saveMark,
   saveStoredBingo,
+  type PrintInk,
   type StoredBingo,
 } from "@/lib/bingo/storage";
+import {
+  THEMES,
+  resolveTheme,
+  type ThemeChoice,
+  type ThemeId,
+} from "@/lib/bingo/themes";
 import {
   checkCard,
   evaluate,
@@ -71,6 +81,11 @@ import {
   type Pattern,
 } from "@/lib/bingo/win";
 import { track } from "@/lib/track";
+
+const Confetti = dynamic(
+  () => import("@/components/bingo/Confetti").then((m) => m.Confetti),
+  { ssr: false },
+);
 
 const PrintSheets = dynamic(
   () => import("@/components/bingo/PrintSheets").then((m) => m.PrintSheets),
@@ -129,7 +144,34 @@ function emptyBingo(): StoredBingo {
     paper: defaultPaper(),
     perPage: 2,
     callSheet: true,
+    theme: "auto",
+    printInk: "color",
   };
+}
+
+function StepBadge({ n }: { n: number }) {
+  return (
+    <span
+      aria-hidden
+      className="mr-2 inline-grid size-7 place-items-center rounded-full bg-accent text-sm font-black text-slate-950"
+    >
+      {n}
+    </span>
+  );
+}
+
+function tryVibrate(pattern: number | number[]) {
+  try {
+    if (
+      typeof navigator !== "undefined" &&
+      navigator.vibrate &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      navigator.vibrate(pattern);
+    }
+  } catch {
+    /* ignore */
+  }
 }
 
 function settingsFingerprint(s: {
@@ -333,9 +375,15 @@ function PlayerView({
 }) {
   const { set, card: cardNumber } = payload;
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const cardWrapRef = useRef<HTMLDivElement>(null);
   const [status, setStatus] = useState("");
+  const [banner, setBanner] = useState("");
+  const [winCells, setWinCells] = useState<number[]>([]);
+  const [confetti, setConfetti] = useState<"line" | "full" | null>(null);
   const tracked = useRef(false);
+  const celebrated = useRef<string>("");
 
+  const theme: ThemeId = set.theme ?? "classic";
   const result = useMemo(() => generateCards(set), [set]);
   const card = result.ok ? result.cards[cardNumber - 1] : null;
   const cellCount = set.size * set.size;
@@ -364,15 +412,33 @@ function PlayerView({
     if (!card || card.cells[index] === null) return;
     setMarks((prev) => {
       const next = [...prev];
-      next[index] = !next[index];
+      const marking = !next[index];
+      next[index] = marking;
       saveMark(set.seed, cardNumber, next);
-      const rep = evaluate(set.size, next.map((m, i) => m || card.cells[i] === null));
+      if (marking) tryVibrate(12);
+      const filled = next.map((m, i) => m || card.cells[i] === null);
+      const rep = evaluate(set.size, filled);
       if (rep.lines.length > 0 || rep.full) {
+        const key = rep.full
+          ? "full"
+          : rep.lines.map((l) => l.cells.join(",")).join("|");
         setStatus(
           `Line complete! Call "Bingo!" and show your card number: ${cardNumber}.`,
         );
+        setBanner(`BINGO! Line complete. Call it and show card ${cardNumber}.`);
+        const cells = rep.full
+          ? Array.from({ length: cellCount }, (_, i) => i)
+          : (rep.lines[0]?.cells ?? []);
+        setWinCells(cells);
+        if (celebrated.current !== key) {
+          celebrated.current = key;
+          setConfetti(rep.full ? "full" : "line");
+          tryVibrate([20, 40, 20]);
+        }
       } else {
         setStatus("");
+        setBanner("");
+        setWinCells([]);
       }
       return next;
     });
@@ -384,6 +450,9 @@ function PlayerView({
     setMarks(empty);
     clearMarks(set.seed, cardNumber);
     setStatus("Marks cleared.");
+    setBanner("");
+    setWinCells([]);
+    celebrated.current = "";
   };
 
   if (!result.ok || !card) {
@@ -422,7 +491,23 @@ function PlayerView({
         </span>
       </p>
 
-      <div className="mx-auto w-full max-w-[min(100%,28rem)] min-w-0">
+      {banner ? (
+        <div
+          className="bingo-card flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-[var(--bc-band)] px-4 py-3 text-[var(--bc-band-ink)]"
+          data-theme={theme}
+        >
+          <p className="text-lg font-extrabold">{banner}</p>
+          <button
+            type="button"
+            onClick={() => setBanner("")}
+            className="inline-flex min-h-11 items-center rounded-xl border border-white/40 px-3 text-xs font-bold outline-none focus-visible:ring-2 focus-visible:ring-white"
+          >
+            Keep playing
+          </button>
+        </div>
+      ) : null}
+
+      <div ref={cardWrapRef} className="mx-auto w-full max-w-[min(100%,30rem)] min-w-0">
         <CardGrid
           card={card}
           size={set.size}
@@ -430,9 +515,11 @@ function PlayerView({
           title={set.title}
           subtitle={set.subtitle}
           seed={set.seed}
+          theme={theme}
           interactive
           marks={marksWithFree}
           onToggle={toggle}
+          highlightCells={winCells}
         />
       </div>
 
@@ -460,7 +547,14 @@ function PlayerView({
       <div role="status" aria-live="polite" className="sr-only">
         {status}
       </div>
-      {status ? <p className="text-sm font-semibold text-foreground">{status}</p> : null}
+
+      {confetti ? (
+        <Confetti
+          burst={confetti}
+          anchor={cardWrapRef.current?.querySelector(".bingo-card") ?? null}
+          onDone={() => setConfetti(null)}
+        />
+      ) : null}
     </div>
   );
 }
@@ -482,6 +576,10 @@ export function BingoTool() {
   const [paper, setPaper] = useState<"a4" | "letter">("a4");
   const [perPage, setPerPage] = useState<2 | 4>(2);
   const [callSheet, setCallSheet] = useState(true);
+  const [themeChoice, setThemeChoice] = useState<ThemeChoice>("auto");
+  const [printInk, setPrintInk] = useState<PrintInk>("color");
+  const [previewOpen, setPreviewOpen] = useState(true);
+  const [dealAnim, setDealAnim] = useState(false);
   const [seed, setSeed] = useState<string | undefined>();
   const [cards, setCards] = useState<Card[]>([]);
   const [sameSquares, setSameSquares] = useState(false);
@@ -547,6 +645,11 @@ export function BingoTool() {
     [mode, size, freeEffective, count, parsed.items, max],
   );
 
+  const resolvedTheme = useMemo(
+    () => resolveTheme(themeChoice, { presetId, mode }),
+    [themeChoice, presetId, mode],
+  );
+
   const toSharedSet = useCallback(
     (useSeed: string): SharedSet => ({
       ...buildConfig(useSeed),
@@ -554,8 +657,9 @@ export function BingoTool() {
       ...(subtitle.trim()
         ? { subtitle: subtitle.slice(0, MAX_SUBTITLE_LENGTH) }
         : {}),
+      theme: resolveTheme(themeChoice, { presetId, mode }),
     }),
-    [buildConfig, title, subtitle],
+    [buildConfig, title, subtitle, themeChoice, presetId, mode],
   );
 
   const buildStored = useCallback(
@@ -573,6 +677,8 @@ export function BingoTool() {
       paper,
       perPage,
       callSheet,
+      theme: themeChoice,
+      printInk,
       seed,
       caller: { called },
     }),
@@ -589,6 +695,8 @@ export function BingoTool() {
       paper,
       perPage,
       callSheet,
+      themeChoice,
+      printInk,
       seed,
       caller.called,
     ],
@@ -678,6 +786,7 @@ export function BingoTool() {
       setSeed(shared.seed);
       setPresetId(undefined);
       setPresetHint("");
+      setThemeChoice(shared.theme ?? "classic");
       if (shared.mode === "words") {
         const t = (shared.items ?? []).join("\n");
         setText(t);
@@ -742,6 +851,8 @@ export function BingoTool() {
     setPaper(stored.paper);
     setPerPage(stored.perPage);
     setCallSheet(stored.callSheet);
+    setThemeChoice(stored.theme ?? "auto");
+    setPrintInk(stored.printInk ?? "color");
     setSeed(stored.seed);
 
     const hash = takeIncomingHash();
@@ -827,6 +938,7 @@ export function BingoTool() {
       items: opts.itemsN,
       preset: presetId ?? "custom",
       is_new_set: opts.isNew ? 1 : 0,
+      theme: resolveTheme(themeChoice, { presetId, mode }),
     });
   };
 
@@ -866,7 +978,17 @@ export function BingoTool() {
       `Made ${gen.cards.length} different cards. Set code ${nextSeed}.`,
     );
     trackGenerate("success", { isNew, cardsN: gen.cards.length, itemsN });
-    window.requestAnimationFrame(() => cardsHeadingRef.current?.focus());
+    setPreviewOpen(false);
+    setDealAnim(true);
+    window.setTimeout(() => setDealAnim(false), 350);
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.requestAnimationFrame(() => {
+      cardsHeadingRef.current?.focus();
+      cardsHeadingRef.current?.scrollIntoView({
+        behavior: reduceMotion ? "auto" : "smooth",
+        block: "start",
+      });
+    });
   };
 
   const onMakeCards = () => makeCards(false);
@@ -1097,6 +1219,8 @@ export function BingoTool() {
       per_page: perPage,
       cards: cards.length,
       call_sheet: callSheet ? 1 : 0,
+      theme: resolvedTheme,
+      print_ink: printInk,
     });
   };
 
@@ -1130,6 +1254,8 @@ export function BingoTool() {
     setPaper(fresh.paper);
     setPerPage(fresh.perPage);
     setCallSheet(true);
+    setThemeChoice("auto");
+    setPrintInk("color");
     setSeed(undefined);
     setCards([]);
     setSameSquares(false);
@@ -1187,14 +1313,24 @@ export function BingoTool() {
   }
 
   const gridSize = mode === "bingo75" ? 5 : size;
+  const showExamplePreview =
+    mode === "words" && !text.trim() && !seed && !cards.length;
+  const previewItems = showExamplePreview ? EXAMPLE_PREVIEW_ITEMS : parsed.items;
+  const previewTheme = showExamplePreview ? ("party" as ThemeId) : resolvedTheme;
+  const resolvedThemeLabel =
+    THEMES.find((t) => t.id === resolvedTheme)?.label ?? resolvedTheme;
+  const themeLabel =
+    themeChoice === "auto" ? `Auto · ${resolvedThemeLabel}` : resolvedThemeLabel;
 
   return (
     <div className="bingo-tool min-w-0">
       <div className="grid min-w-0 gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)]">
-        <div className="min-w-0 space-y-4 rounded-3xl border border-border bg-surface p-3 sm:p-5 print:hidden">
+        <div className="min-w-0 space-y-4 rounded-3xl border border-border bg-surface p-3 sm:p-5 print:hidden xl:grid xl:grid-cols-[minmax(0,1fr)_minmax(0,20rem)] xl:items-start xl:gap-5">
+          <div className="min-w-0 space-y-4 xl:col-start-1">
           {/* Your list */}
           <section aria-labelledby="bg-list" className="min-w-0">
             <h2 id="bg-list" className="text-lg font-bold text-foreground">
+              <StepBadge n={1} />
               Your list
             </h2>
 
@@ -1332,11 +1468,41 @@ export function BingoTool() {
                 </p>
               </div>
             ) : null}
+
+            <p className="mt-3 text-xs font-semibold text-muted">Card style</p>
+            <ThemePicker value={themeChoice} onChange={setThemeChoice} />
           </section>
+
+          {/* Live preview — between list and settings on smaller screens */}
+          <div className="min-w-0 xl:hidden">
+            {cards.length > 0 ? (
+              <button
+                type="button"
+                onClick={() => setPreviewOpen((v) => !v)}
+                className="mb-2 text-xs font-bold text-muted underline outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              >
+                {previewOpen ? "Hide preview" : "Show preview"}
+              </button>
+            ) : null}
+            {previewOpen || !cards.length ? (
+              <PreviewCard
+                mode={mode}
+                items={previewItems}
+                max={max}
+                size={gridSize}
+                free={freeEffective}
+                title={showExamplePreview ? "Birthday Party Bingo" : title}
+                subtitle={showExamplePreview ? "" : subtitle}
+                theme={previewTheme}
+                example={showExamplePreview}
+              />
+            ) : null}
+          </div>
 
           {/* Settings */}
           <section aria-labelledby="bg-settings" className="min-w-0">
             <h2 id="bg-settings" className="text-lg font-bold text-foreground">
+              <StepBadge n={2} />
               Card settings
             </h2>
 
@@ -1449,6 +1615,34 @@ export function BingoTool() {
               </div>
             </fieldset>
 
+            <fieldset className="mt-3">
+              <legend className="text-xs text-muted">Print colours</legend>
+              <div
+                role="radiogroup"
+                aria-label="Print colours"
+                className="mt-1 flex flex-wrap gap-2"
+              >
+                <RadioChip
+                  name="bg-ink"
+                  checked={printInk === "color"}
+                  onChange={() => setPrintInk("color")}
+                >
+                  Colour
+                </RadioChip>
+                <RadioChip
+                  name="bg-ink"
+                  checked={printInk === "mono"}
+                  onChange={() => setPrintInk("mono")}
+                >
+                  Ink saver (black & white)
+                </RadioChip>
+              </div>
+              <p className="mt-1 text-xs text-muted">
+                Ink saver prints outlines only, with no coloured fills. For colour, turn on
+                &quot;Background graphics&quot; in the print dialog.
+              </p>
+            </fieldset>
+
             <label className="mt-3 flex min-h-11 cursor-pointer items-center gap-2 text-sm">
               <input
                 type="checkbox"
@@ -1460,13 +1654,17 @@ export function BingoTool() {
             </label>
           </section>
 
-          <div>
+          <div className="sticky bottom-0 z-30 -mx-3 border-t border-border bg-surface/95 px-3 py-2.5 backdrop-blur pb-[max(.625rem,env(safe-area-inset-bottom))] sm:-mx-5 sm:px-5 lg:static lg:mx-0 lg:border-0 lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
+            <p className="mb-1.5 text-center text-xs text-muted lg:text-left">
+              <StepBadge n={3} />
+              {count} cards · {gridSize}×{gridSize} · {themeLabel}
+            </p>
             <button
               type="button"
               disabled={makeDisabled}
               aria-describedby={makeDisabled ? makeDescId : undefined}
               onClick={onMakeCards}
-              className="inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-accent-strong px-4 text-sm font-bold text-slate-950 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50 sm:w-auto"
+              className="inline-flex min-h-12 w-full items-center justify-center rounded-2xl bg-accent-strong px-4 text-base font-bold text-slate-950 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50 lg:w-auto lg:rounded-xl lg:text-sm"
             >
               Make cards
             </button>
@@ -1527,6 +1725,8 @@ export function BingoTool() {
                       title={title}
                       subtitle={subtitle}
                       seed={seed}
+                      theme={resolvedTheme}
+                      deal={dealAnim && previewIdx === 0}
                     />
                   </div>
                   <div className="relative z-10 mt-3 flex flex-wrap items-center justify-center gap-2">
@@ -1566,7 +1766,9 @@ export function BingoTool() {
                       title={title}
                       subtitle={subtitle}
                       seed={seed}
+                      theme={resolvedTheme}
                       compact
+                      deal={dealAnim && c.number === 1}
                     />
                   ))}
                 </div>
@@ -1646,6 +1848,22 @@ export function BingoTool() {
               </button>
             ) : null}
           </div>
+          </div>
+
+          {/* Desktop live preview */}
+          <div className="hidden min-w-0 xl:col-start-2 xl:row-span-full xl:block xl:sticky xl:top-20">
+            <PreviewCard
+              mode={mode}
+              items={previewItems}
+              max={max}
+              size={gridSize}
+              free={freeEffective}
+              title={showExamplePreview ? "Birthday Party Bingo" : title}
+              subtitle={showExamplePreview ? "" : subtitle}
+              theme={previewTheme}
+              example={showExamplePreview}
+            />
+          </div>
         </div>
 
         {cards.length > 0 ? (
@@ -1656,6 +1874,7 @@ export function BingoTool() {
             seed={seed}
             cards={cards}
             gridSize={gridSize}
+            theme={resolvedTheme}
             caller={caller}
             currentCall={currentCall}
             finished={finished}
@@ -1712,6 +1931,8 @@ export function BingoTool() {
           paper={paper}
           perPage={perPage}
           callSheet={callSheet}
+          theme={resolvedTheme}
+          printInk={printInk}
           callItems={
             mode === "words"
               ? parsed.items

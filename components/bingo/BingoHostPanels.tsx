@@ -1,7 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import type { RefObject } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type RefObject,
+} from "react";
 import { CardGrid } from "@/components/bingo/CardGrid";
 import { formatCall, type CallerState } from "@/lib/bingo/caller";
 import {
@@ -11,7 +17,63 @@ import {
   type Card,
 } from "@/lib/bingo/cards";
 import type { GridSize } from "@/lib/bingo/list";
+import { BALL_COLORS, type ThemeId } from "@/lib/bingo/themes";
 import { PATTERN_LABELS, type Pattern } from "@/lib/bingo/win";
+
+function ballColorForCall(call: string, mode: BingoMode): string {
+  if (mode !== "bingo75") return "var(--bc-band)";
+  const n = Number(call);
+  if (!Number.isFinite(n)) return BALL_COLORS[2];
+  const col = Math.min(4, Math.max(0, Math.floor((n - 1) / 15)));
+  return BALL_COLORS[col]!;
+}
+
+function CallBall({
+  call,
+  mode,
+  theme,
+}: {
+  call: string | null;
+  mode: BingoMode;
+  theme: ThemeId;
+}) {
+  const ball = call ? ballColorForCall(call, mode) : "var(--bc-band)";
+  if (!call) {
+    return (
+      <div className="mx-auto flex min-h-24 items-center justify-center rounded-3xl border border-dashed border-border px-6 text-sm text-muted">
+        Press Call next to start.
+      </div>
+    );
+  }
+
+  if (mode === "bingo75") {
+    const letter = letterFor(Number(call));
+    return (
+      <div
+        key={call}
+        className="bc-pop mx-auto grid size-36 place-items-center rounded-full sm:size-40"
+        style={{
+          background: `radial-gradient(circle at 35% 30%, #fff 0 18%, ${ball} 19% 100%)`,
+        }}
+      >
+        <div className="grid size-[62%] place-items-center rounded-full bg-white text-slate-900 shadow-inner">
+          <span className="text-sm font-black leading-none">{letter}</span>
+          <span className="text-5xl font-black tabular-nums leading-none">{call}</span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      key={call}
+      data-theme={theme}
+      className="bc-pop bingo-card mx-auto flex min-h-24 max-w-full items-center justify-center rounded-3xl bg-[var(--bc-band)] px-6 text-center text-[clamp(1.5rem,7vw,2.5rem)] font-extrabold text-[var(--bc-band-ink)]"
+    >
+      {call}
+    </div>
+  );
+}
 
 export function BingoHostPanels({
   mode,
@@ -20,6 +82,7 @@ export function BingoHostPanels({
   seed,
   cards,
   gridSize,
+  theme,
   caller,
   currentCall,
   finished,
@@ -47,6 +110,7 @@ export function BingoHostPanels({
   seed: string | undefined;
   cards: Card[];
   gridSize: GridSize;
+  theme: ThemeId;
   caller: CallerState;
   currentCall: string | null;
   finished: boolean;
@@ -68,46 +132,95 @@ export function BingoHostPanels({
   onNewGame: () => void;
   onCheck: () => void;
 }) {
+  const panelRef = useRef<HTMLElement>(null);
+  const [boardOpen, setBoardOpen] = useState(true);
+
+  useEffect(() => {
+    // Desktop: board open by default; collapse on narrow via CSS disclosure default
+    const mq = window.matchMedia("(min-width: 640px)");
+    setBoardOpen(mq.matches);
+    const fn = () => setBoardOpen(mq.matches);
+    mq.addEventListener("change", fn);
+    return () => mq.removeEventListener("change", fn);
+  }, []);
+
+  const recent = [...caller.called].slice(-6, -1).reverse(); // previous 5 (exclude current)
+
+  const onPanelKeyDown = (e: KeyboardEvent<HTMLElement>) => {
+    if (e.key !== " " && e.key !== "Enter") return;
+    const t = e.target as HTMLElement;
+    const tag = t.tagName;
+    if (tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA") return;
+    if (tag === "BUTTON" && t !== callNextRef.current) return;
+    if (t.isContentEditable) return;
+    e.preventDefault();
+    onCallNext();
+  };
+
   return (
     <div className="min-w-0 space-y-4 rounded-3xl border border-border bg-surface p-3 sm:p-5 lg:sticky lg:top-4 lg:self-start print:hidden">
-      <section aria-labelledby="bg-caller" className="min-w-0">
+      <section
+        ref={panelRef}
+        aria-labelledby="bg-caller"
+        className="bingo-card min-w-0 outline-none"
+        data-theme={theme}
+        tabIndex={-1}
+        onKeyDown={onPanelKeyDown}
+      >
         <h2 id="bg-caller" className="text-lg font-bold text-foreground">
           Caller
         </h2>
 
-        <div className="mt-3 min-h-[4.5rem] text-center">
-          {currentCall ? (
-            mode === "bingo75" ? (
-              <div className="flex items-center justify-center gap-2">
-                <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-accent-strong text-xl font-bold text-slate-950">
-                  {letterFor(Number(currentCall))}
-                </span>
-                <span className="text-5xl font-bold text-foreground">{currentCall}</span>
-              </div>
-            ) : (
-              <p className="wrap-break-word hyphens-auto text-5xl font-bold leading-tight text-foreground">
-                {currentCall}
-              </p>
-            )
-          ) : (
-            <p className="text-sm text-muted">Press Call next to start.</p>
-          )}
+        <div className="mt-4">
+          <CallBall call={currentCall} mode={mode} theme={theme} />
         </div>
-        <p className="mt-1 text-center text-sm text-muted">
+
+        <p className="mt-2 text-center text-sm text-muted">
           Called {caller.called.length} of {caller.pool.length || "—"}
         </p>
+
+        <h3 className="sr-only">Last 5</h3>
+        {recent.length > 0 ? (
+          <ul className="mt-3 flex flex-wrap items-center justify-center gap-2">
+            {recent.map((c, i) => {
+              const opacity = [0.85, 0.7, 0.55, 0.4, 0.4][i] ?? 0.4;
+              const color = ballColorForCall(c, mode);
+              if (mode === "bingo75") {
+                return (
+                  <li
+                    key={`${c}-${i}`}
+                    className="grid size-11 place-items-center rounded-full text-xs font-bold text-white"
+                    style={{ background: color, opacity }}
+                  >
+                    {letterFor(Number(c))}
+                    {c}
+                  </li>
+                );
+              }
+              return (
+                <li
+                  key={`${c}-${i}`}
+                  className="inline-flex min-h-9 items-center rounded-full px-3 text-sm font-semibold text-[var(--bc-band-ink)]"
+                  style={{ background: "var(--bc-band)", opacity }}
+                >
+                  {c}
+                </li>
+              );
+            })}
+          </ul>
+        ) : null}
 
         <div aria-live="assertive" aria-atomic="true" className="sr-only">
           {callerAnnounce}
         </div>
 
-        <div className="mt-3 flex flex-wrap gap-2">
+        <div className="mt-4 flex flex-wrap gap-2">
           <button
             ref={callNextRef}
             type="button"
             disabled={!cards.length || finished || caller.pool.length === 0}
             onClick={onCallNext}
-            className="inline-flex min-h-11 flex-1 items-center justify-center rounded-xl bg-accent-strong px-4 text-sm font-bold text-slate-950 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
+            className="inline-flex min-h-12 flex-1 items-center justify-center rounded-xl bg-accent-strong px-4 text-sm font-bold text-slate-950 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
           >
             Call next
           </button>
@@ -117,17 +230,7 @@ export function BingoHostPanels({
             onClick={onUndoCall}
             className="inline-flex min-h-11 items-center rounded-xl border border-border px-3 text-xs font-bold outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-40"
           >
-            Undo last call
-          </button>
-        </div>
-        <div className="mt-2 flex flex-wrap gap-2">
-          <button
-            type="button"
-            disabled={!caller.called.length}
-            onClick={onCopyCalled}
-            className="inline-flex min-h-11 items-center rounded-xl border border-border px-3 text-xs font-bold outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-40"
-          >
-            Copy called list
+            Undo
           </button>
           <button
             type="button"
@@ -138,6 +241,21 @@ export function BingoHostPanels({
             New game
           </button>
         </div>
+        <p className="mt-2 hidden text-xs text-muted pointer-fine:block">
+          <kbd className="rounded border border-border px-1 font-mono text-[10px]">Space</kbd>{" "}
+          calls next when the caller is focused
+        </p>
+
+        <div className="mt-2 flex flex-wrap gap-2">
+          <button
+            type="button"
+            disabled={!caller.called.length}
+            onClick={onCopyCalled}
+            className="inline-flex min-h-11 items-center rounded-xl border border-border px-3 text-xs font-bold outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-40"
+          >
+            Copy called list
+          </button>
+        </div>
 
         {finished && caller.pool.length > 0 ? (
           <p className="mt-2 text-sm text-muted">
@@ -146,7 +264,7 @@ export function BingoHostPanels({
         ) : null}
 
         {caller.called.length > 0 ? (
-          <ol reversed className="mt-3 max-h-40 list-decimal space-y-1 overflow-y-auto pl-5 text-sm">
+          <ol reversed className="mt-3 max-h-32 list-decimal space-y-1 overflow-y-auto pl-5 text-sm">
             {[...caller.called].reverse().map((c, i) => (
               <li key={`${c}-${i}`}>{formatCall(c, mode)}</li>
             ))}
@@ -154,30 +272,77 @@ export function BingoHostPanels({
         ) : null}
 
         {mode === "bingo75" ? (
-          <div
-            aria-hidden
-            className="mt-3 grid gap-1 text-[10px]"
-            style={{ gridTemplateColumns: "auto repeat(15, minmax(0, 1fr))" }}
-          >
-            {BINGO_LETTERS.map((letter, col) => {
-              const [lo, hi] = [col * 15 + 1, col * 15 + 15] as const;
-              return (
-                <div key={letter} className="contents">
-                  <div className="flex items-center font-bold">{letter}</div>
-                  {Array.from({ length: hi - lo + 1 }, (_, i) => lo + i).map((n) => {
-                    const called = caller.called.includes(String(n));
-                    return (
+          <div className="mt-3">
+            <button
+              type="button"
+              className="mb-2 text-xs font-bold text-muted underline outline-none focus-visible:ring-2 focus-visible:ring-accent sm:hidden"
+              onClick={() => setBoardOpen((v) => !v)}
+            >
+              {boardOpen ? "Hide board" : "Show board"}
+            </button>
+            {boardOpen ? (
+              <div
+                aria-hidden
+                className="grid gap-1 text-[10px] sm:text-xs"
+                style={{ gridTemplateColumns: "auto repeat(15, minmax(0, 1fr))" }}
+              >
+                {BINGO_LETTERS.map((letter, col) => {
+                  const [lo, hi] = [col * 15 + 1, col * 15 + 15] as const;
+                  const color = BALL_COLORS[col]!;
+                  return (
+                    <div key={letter} className="contents">
                       <div
-                        key={n}
-                        className={`flex aspect-square items-center justify-center rounded border border-border ${
-                          called ? "bg-accent-strong text-slate-950" : "bg-background"
-                        }`}
+                        className="flex items-center justify-center rounded px-1 font-black text-white"
+                        style={{ background: color }}
                       >
-                        {n}
+                        {letter}
                       </div>
-                    );
-                  })}
-                </div>
+                      {Array.from({ length: hi - lo + 1 }, (_, i) => lo + i).map((n) => {
+                        const called = caller.called.includes(String(n));
+                        const latest = currentCall === String(n);
+                        return (
+                          <div
+                            key={n}
+                            className={`grid aspect-square place-items-center rounded-full tabular-nums ${
+                              called
+                                ? "font-bold text-white"
+                                : "border border-border bg-surface text-muted"
+                            } ${latest ? "ring-2 ring-offset-2 ring-offset-surface" : ""}`}
+                            style={
+                              called
+                                ? {
+                                    background: color,
+                                    ...(latest ? { ["--tw-ring-color" as string]: color } : {}),
+                                  }
+                                : undefined
+                            }
+                          >
+                            {n}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                })}
+              </div>
+            ) : null}
+          </div>
+        ) : caller.pool.length > 0 ? (
+          <div aria-hidden className="mt-3 flex max-h-40 flex-wrap gap-1.5 overflow-y-auto">
+            {caller.pool.map((item) => {
+              const called = caller.called.includes(item);
+              return (
+                <span
+                  key={item}
+                  className={`inline-flex min-h-8 items-center rounded-full px-2 text-[11px] font-semibold ${
+                    called
+                      ? "bg-[var(--bc-band)] text-[var(--bc-band-ink)]"
+                      : "border border-border text-muted"
+                  }`}
+                >
+                  {called ? "✓ " : ""}
+                  {item}
+                </span>
               );
             })}
           </div>
@@ -270,6 +435,7 @@ export function BingoHostPanels({
               title={title}
               subtitle={subtitle}
               seed={seed}
+              theme={theme}
               marks={checkMarks}
               highlightCells={checkHighlight}
               compact

@@ -3,6 +3,7 @@
 // Cards are never stored — only settings + seed (regenerate) and player mark bitmasks.
 
 import { isValidSeed } from "./rng";
+import { isThemeChoice, type ThemeChoice } from "./themes";
 import { hexToMarks, marksToHex } from "./win";
 
 export const STORAGE_KEY = "exestools.bingo.v1";
@@ -14,6 +15,8 @@ export const MAX_MARK_ENTRIES = 200;
 
 /** Raw textarea cap from §5.1. */
 export const MAX_STORED_TEXT = 12_000;
+
+export type PrintInk = "color" | "mono";
 
 export interface StoredBingo {
   v: 1;
@@ -29,6 +32,10 @@ export interface StoredBingo {
   paper: "a4" | "letter";
   perPage: 2 | 4;
   callSheet: boolean;
+  /** Visual theme choice; missing → auto. */
+  theme?: ThemeChoice;
+  /** Print colours; missing → color. */
+  printInk?: PrintInk;
   seed?: string; // current set code
   caller?: { called: string[] };
 }
@@ -54,6 +61,8 @@ function isStoredBingo(x: unknown): x is StoredBingo {
   if (o.perPage !== 2 && o.perPage !== 4) return false;
   if (typeof o.callSheet !== "boolean") return false;
   if (o.presetId !== undefined && typeof o.presetId !== "string") return false;
+  if (o.theme !== undefined && !isThemeChoice(o.theme)) return false;
+  if (o.printInk !== undefined && o.printInk !== "color" && o.printInk !== "mono") return false;
   if (o.seed !== undefined && !isValidSeed(o.seed)) return false;
   if (o.caller !== undefined) {
     if (!o.caller || typeof o.caller !== "object") return false;

@@ -42,4 +42,10 @@ describe("codec", () => {
     const h = encodeSetHash({ ...set, items });
     expect(h.length).toBeLessThanOrEqual(MAX_HASH_LENGTH);
   });
+  it("round-trips an optional theme and treats missing theme as classic-compatible", () => {
+    const themed: SharedSet = { ...set, theme: "festive" };
+    expect(decodeSetHash(encodeSetHash(themed))).toEqual(themed);
+    const bare = decodeSetHash(encodeSetHash(set))!;
+    expect(bare.theme).toBeUndefined();
+  });
 });

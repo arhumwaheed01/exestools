@@ -2,21 +2,19 @@
 
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { CardGrid } from "@/components/bingo/CardGrid";
 import {
   BINGO_LETTERS,
-  FREE,
-  cellLabel,
   columnRange,
   type BingoMode,
   type Card,
-  type Cell,
 } from "@/lib/bingo/cards";
 import type { GridSize } from "@/lib/bingo/list";
-import { cellFontPt, longestItemLength } from "@/components/bingo/CardGrid";
+import type { ThemeId } from "@/lib/bingo/themes";
+import type { PrintInk } from "@/lib/bingo/storage";
 
 const PRINT_ROOT_ID = "bingo-print-root";
 
-/** Direct child of <body> so print CSS `body > *:not(#bingo-print-root)` works. */
 function ensurePrintRoot(): HTMLElement {
   let root = document.getElementById(PRINT_ROOT_ID);
   if (!root) {
@@ -28,179 +26,42 @@ function ensurePrintRoot(): HTMLElement {
   return root;
 }
 
-function PrintCard({
-  card,
-  size,
-  mode,
-  title,
-  subtitle,
-  seed,
-  cardMm,
-}: {
-  card: Card;
-  size: GridSize;
-  mode: BingoMode;
-  title: string;
-  subtitle: string;
-  seed: string;
-  cardMm: number;
-}) {
-  const longest = longestItemLength(card.cells);
-  const pt = cellFontPt(longest);
-
-  return (
-    <div
-      className="bingo-card"
-      style={{
-        width: `${cardMm}mm`,
-        maxWidth: "100%",
-        margin: "0 auto",
-        border: "2px solid #000",
-        color: "#000",
-        background: "#fff",
-        padding: "3mm",
-        boxSizing: "border-box",
-        display: "flex",
-        flexDirection: "column",
-        breakInside: "avoid",
-      }}
-    >
-      <div
-        style={{
-          textAlign: "center",
-          fontWeight: 700,
-          fontSize: "14pt",
-          lineHeight: 1.2,
-          overflowWrap: "break-word",
-          hyphens: "auto",
-        }}
-      >
-        {title || "Bingo"}
-      </div>
-      {subtitle ? (
-        <div
-          style={{
-            textAlign: "center",
-            fontSize: "10pt",
-            lineHeight: 1.2,
-            marginTop: "1mm",
-            overflowWrap: "break-word",
-            hyphens: "auto",
-          }}
-        >
-          {subtitle}
-        </div>
-      ) : null}
-
-      <table
-        style={{
-          width: "100%",
-          borderCollapse: "collapse",
-          marginTop: "2mm",
-          tableLayout: "fixed",
-        }}
-      >
-        {mode === "bingo75" ? (
-          <thead>
-            <tr>
-              {BINGO_LETTERS.map((letter) => (
-                <th
-                  key={letter}
-                  style={{
-                    border: "1px solid #000",
-                    padding: "1mm",
-                    fontSize: "11pt",
-                    fontWeight: 700,
-                  }}
-                >
-                  {letter}
-                </th>
-              ))}
-            </tr>
-          </thead>
-        ) : null}
-        <tbody>
-          {Array.from({ length: size }, (_, r) => (
-            <tr key={r}>
-              {Array.from({ length: size }, (_, c) => {
-                const cell = card.cells[r * size + c] as Cell;
-                const isFree = cell === null;
-                return (
-                  <td
-                    key={c}
-                    role="gridcell"
-                    style={{
-                      border: "1px solid #000",
-                      width: `${100 / size}%`,
-                      aspectRatio: "1",
-                      textAlign: "center",
-                      verticalAlign: "middle",
-                      fontSize: `${pt}pt`,
-                      lineHeight: 1.15,
-                      overflowWrap: "break-word",
-                      wordBreak: "normal",
-                      hyphens: "auto",
-                      padding: "1mm",
-                      background: isFree ? "#f0f0f0" : "#fff",
-                      fontWeight: isFree ? 700 : 400,
-                    }}
-                  >
-                    {isFree ? FREE : cellLabel(cell)}
-                  </td>
-                );
-              })}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <div
-        style={{
-          marginTop: "2mm",
-          textAlign: "center",
-          fontSize: "9pt",
-          fontFamily: "ui-monospace, monospace",
-        }}
-      >
-        Card {card.number} · Set {seed}
-      </div>
-    </div>
-  );
-}
-
 function CallSheet({
   mode,
   items,
   title,
+  theme,
+  mono,
 }: {
   mode: BingoMode;
   items: string[];
   title: string;
+  theme: ThemeId;
+  mono: boolean;
 }) {
-  if (mode === "bingo75") {
-    return (
-      <div
-        className="bingo-sheet"
-        style={{
-          breakAfter: "page",
-          padding: "4mm",
-          color: "#000",
-          background: "#fff",
-        }}
-      >
-        <h2 style={{ fontSize: "14pt", margin: "0 0 4mm" }}>{title} — call sheet</h2>
-        <div style={{ display: "grid", gap: "3mm" }}>
+  return (
+    <div
+      className={`bingo-sheet bingo-card ${mono ? "bingo-print-mono" : ""}`}
+      data-theme={theme}
+      style={{ breakAfter: "page", padding: "4mm" }}
+    >
+      <div className="bc-band rounded-t-[4mm] bg-[var(--bc-band)] px-4 py-3 text-center text-[var(--bc-band-ink)]">
+        <p className="text-[14pt] font-extrabold">{title} — call sheet</p>
+      </div>
+      {mode === "bingo75" ? (
+        <div style={{ display: "grid", gap: "3mm", marginTop: "4mm" }}>
           {BINGO_LETTERS.map((letter, col) => {
             const [lo, hi] = columnRange(col);
             return (
               <div key={letter}>
-                <div style={{ fontWeight: 700, marginBottom: "1mm" }}>{letter}</div>
+                <div style={{ fontWeight: 700, marginBottom: "1mm", color: "#000" }}>{letter}</div>
                 <div
                   style={{
                     display: "grid",
                     gridTemplateColumns: "repeat(15, minmax(0, 1fr))",
                     gap: "1mm",
                     fontSize: "9pt",
+                    color: "#000",
                   }}
                 >
                   {Array.from({ length: hi - lo + 1 }, (_, i) => lo + i).map((n) => (
@@ -220,28 +81,23 @@ function CallSheet({
             );
           })}
         </div>
-      </div>
-    );
-  }
-
-  return (
-    <div
-      className="bingo-sheet"
-      style={{
-        breakAfter: "page",
-        padding: "4mm",
-        color: "#000",
-        background: "#fff",
-      }}
-    >
-      <h2 style={{ fontSize: "14pt", margin: "0 0 4mm" }}>{title} — call sheet</h2>
-      <ol style={{ columns: 2, fontSize: "10pt", margin: 0, paddingLeft: "5mm" }}>
-        {items.map((item) => (
-          <li key={item} style={{ breakInside: "avoid", marginBottom: "1mm" }}>
-            {item}
-          </li>
-        ))}
-      </ol>
+      ) : (
+        <ol
+          style={{
+            columns: 3,
+            fontSize: "10pt",
+            margin: "4mm 0 0",
+            paddingLeft: "5mm",
+            color: "#000",
+          }}
+        >
+          {items.map((item) => (
+            <li key={item} style={{ breakInside: "avoid", marginBottom: "1mm" }}>
+              {item}
+            </li>
+          ))}
+        </ol>
+      )}
     </div>
   );
 }
@@ -257,6 +113,8 @@ export function PrintSheets({
   perPage,
   callSheet,
   callItems,
+  theme,
+  printInk,
   onDone,
 }: {
   cards: Card[];
@@ -269,10 +127,13 @@ export function PrintSheets({
   perPage: 2 | 4;
   callSheet: boolean;
   callItems: string[];
+  theme: ThemeId;
+  printInk: PrintInk;
   onDone: () => void;
 }) {
   const doneRef = useRef(false);
   const [root, setRoot] = useState<HTMLElement | null>(null);
+  const mono = printInk === "mono";
 
   useEffect(() => {
     setRoot(ensurePrintRoot());
@@ -301,17 +162,15 @@ export function PrintSheets({
   @page { size: ${paperSize} portrait; margin: 10mm; }
   body > *:not(#${PRINT_ROOT_ID}) { display: none !important; }
   #${PRINT_ROOT_ID} { display: block !important; }
-  .bingo-sheet { break-after: page; display: grid; gap: 8mm; }
+  .bingo-sheet { break-after: page; display: grid; gap: 8mm; align-content: start; }
   .bingo-sheet.per-2 { grid-template-rows: 1fr 1fr; }
   .bingo-sheet.per-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
-  .bingo-card { break-inside: avoid; border: 2px solid #000; color: #000; background: #fff; }
-  .bingo-sheet.per-4 .bingo-card [role=gridcell],
-  .bingo-sheet.per-4 .bingo-card td {
-    font-size: 8.5pt !important;
-    overflow-wrap: normal !important;
-    word-break: normal !important;
-    hyphens: auto;
-  }
+  .bingo-sheet .bingo-card { break-inside: avoid; max-width: 100%; width: ${
+    perPage === 2 ? "120mm" : "88mm"
+  }; margin: 0 auto; border-radius: 4mm; box-shadow: none !important; }
+  .bingo-sheet.per-4 .bingo-card .bc-title { font-size: 14pt !important; }
+  .bingo-sheet.per-4 .bingo-card .bc-letter { font-size: 16pt !important; }
+  .bingo-sheet.per-4 .bingo-card .bc-cell { font-size: 8.5pt !important; overflow-wrap: normal !important; word-break: normal !important; hyphens: auto; }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 `;
@@ -321,17 +180,16 @@ export function PrintSheets({
     const t = window.setTimeout(() => {
       window.print();
       finish();
-    }, 50);
+    }, 80);
 
     return () => {
       window.clearTimeout(t);
       window.removeEventListener("afterprint", after);
     };
-  }, [onDone, paper, root]);
+  }, [onDone, paper, perPage, root]);
 
   if (!root) return null;
 
-  const cardMm = perPage === 2 ? 120 : 88;
   const sheets: Card[][] = [];
   for (let i = 0; i < cards.length; i += perPage) {
     sheets.push(cards.slice(i, i + perPage));
@@ -342,20 +200,10 @@ export function PrintSheets({
       {sheets.map((sheet, si) => (
         <div
           key={si}
-          className={`bingo-sheet per-${perPage}`}
-          style={{
-            display: "grid",
-            gap: "8mm",
-            ...(perPage === 2
-              ? { gridTemplateRows: "1fr 1fr" }
-              : { gridTemplateColumns: "1fr 1fr", gridTemplateRows: "1fr 1fr" }),
-            breakAfter: "page",
-            minHeight: "80vh",
-            alignContent: "start",
-          }}
+          className={`bingo-sheet per-${perPage}${mono ? " bingo-print-mono" : ""}`}
         >
           {sheet.map((card) => (
-            <PrintCard
+            <CardGrid
               key={card.number}
               card={card}
               size={size}
@@ -363,13 +211,21 @@ export function PrintSheets({
               title={title}
               subtitle={subtitle}
               seed={seed}
-              cardMm={cardMm}
+              theme={theme}
+              compact
+              className={mono ? "bingo-print-mono" : ""}
             />
           ))}
         </div>
       ))}
       {callSheet ? (
-        <CallSheet mode={mode} items={callItems} title={title || "Bingo"} />
+        <CallSheet
+          mode={mode}
+          items={callItems}
+          title={title || "Bingo"}
+          theme={theme}
+          mono={mono}
+        />
       ) : null}
     </>,
     root,

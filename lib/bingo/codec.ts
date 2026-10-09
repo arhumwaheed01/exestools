@@ -10,6 +10,7 @@ import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from
 import { isValidSeed } from "./rng";
 import { MAX_CARDS, MAX_ITEMS, MAX_ITEM_LENGTH, MAX_SUBTITLE_LENGTH, MAX_TITLE_LENGTH, normalizeItem, type GridSize } from "./list";
 import { NUMBERS_MAX_MAX, NUMBERS_MIN_MAX, type BingoMode, type CardSetConfig } from "./cards";
+import { THEME_FROM_WIRE, THEME_TO_WIRE, isThemeId, type ThemeId } from "./themes";
 
 export const SET_PREFIX = "#b=v1.";
 export const PLAYER_PREFIX = "#p=v1.";
@@ -18,6 +19,8 @@ export const MAX_HASH_LENGTH = 6000;
 export interface SharedSet extends CardSetConfig {
   title: string;
   subtitle?: string;
+  /** Resolved theme id for the card look. Omitted on old links → classic. */
+  theme?: ThemeId;
 }
 
 interface Wire {
@@ -32,12 +35,14 @@ interface Wire {
   i?: string[]; // items (words)
   x?: number; // max (numbers)
   k?: number; // player card number (player links only)
+  g?: string; // theme short code (optional; unknown/missing → classic)
 }
 
 const MODE_TO: Record<BingoMode, Wire["m"]> = { words: "w", bingo75: "s", numbers: "n" };
 const MODE_FROM: Record<Wire["m"], BingoMode> = { w: "words", s: "bingo75", n: "numbers" };
 
 function toWire(s: SharedSet, card?: number): Wire {
+  const theme = s.theme && isThemeId(s.theme) ? s.theme : undefined;
   return {
     v: 1,
     m: MODE_TO[s.mode],
@@ -50,6 +55,7 @@ function toWire(s: SharedSet, card?: number): Wire {
     ...(s.mode === "words" ? { i: s.items ?? [] } : {}),
     ...(s.mode === "numbers" ? { x: s.max } : {}),
     ...(card !== undefined ? { k: card } : {}),
+    ...(theme ? { g: THEME_TO_WIRE[theme] } : {}),
   };
 }
 
@@ -99,6 +105,9 @@ function fromWire(w: Wire): SharedSet | null {
     items = w.i;
   } else if (w.i !== undefined) return null;
   if (mode === "numbers" ? !isInt(w.x, NUMBERS_MIN_MAX, NUMBERS_MAX_MAX) : w.x !== undefined) return null;
+  // Optional theme: unknown/missing → omit (callers treat as classic).
+  const theme =
+    typeof w.g === "string" && THEME_FROM_WIRE[w.g] ? THEME_FROM_WIRE[w.g] : undefined;
   return {
     mode,
     size: w.z as GridSize,
@@ -109,6 +118,7 @@ function fromWire(w: Wire): SharedSet | null {
     ...(w.u ? { subtitle: w.u } : {}),
     ...(items ? { items } : {}),
     ...(mode === "numbers" ? { max: w.x } : {}),
+    ...(theme ? { theme } : {}),
   };
 }
 
