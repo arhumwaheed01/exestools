@@ -324,6 +324,17 @@ export default function RaffleGeneratorPage() {
               members&apos; prize or the winning 50/50 ticket, then share the result link in your
               group chat.
             </li>
+            <li>
+              <span className="font-semibold text-foreground">Prize draw at a bingo night.</span> Play
+              the games with cards from the{" "}
+              <Link
+                href="/bingo-card-generator"
+                className="font-semibold text-accent hover:underline"
+              >
+                bingo card generator
+              </Link>
+              , then draw door prizes here from everyone&apos;s ticket numbers.
+            </li>
           </ul>
         </section>
 

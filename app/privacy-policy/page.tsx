@@ -29,7 +29,7 @@ export default function PrivacyPolicyPage() {
       <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
         Privacy Policy
       </h1>
-      <p className="mt-2 text-sm text-muted">Last updated: October 8, 2026</p>
+      <p className="mt-2 text-sm text-muted">Last updated: October 9, 2026</p>
       <div className="mt-6 space-y-5 text-sm leading-relaxed text-muted sm:text-base">
         <p>
           This Privacy Policy explains how ExesTools (https://www.exestools.com) handles information
@@ -70,6 +70,12 @@ export default function PrivacyPolicyPage() {
             device. When you open a raffle result link, its contents are kept in that browser
             tab&apos;s session storage so a refresh still works; closing the tab clears it.
           </p>
+          <p className="mt-2">
+            The bingo card generator saves your list, card settings, set code and called list in
+            local storage on your device, and a player&apos;s marks on their own card in local storage
+            on their device. When you open a bingo link, its contents are kept in that tab&apos;s
+            session storage so a refresh still works.
+          </p>
         </section>
 
         <section>
@@ -92,6 +98,11 @@ export default function PrivacyPolicyPage() {
             entry list. The page removes this part from the address bar as soon as it loads. Anyone
             with a result link can see the names in it.
           </p>
+          <p className="mt-2">
+            Bingo set links start with #b= and player card links with #p=. They contain your list and
+            settings so the cards can be rebuilt; they aren&apos;t encrypted, so anyone with a link
+            can see them.
+          </p>
         </section>
 
         <section>
@@ -107,8 +118,9 @@ export default function PrivacyPolicyPage() {
           <p className="mt-2">
             We use Google Analytics 4 (measurement ID G-DJKH68VDEJ) to understand aggregate traffic
             and product usage (for example page views and events like spin, share, preset load,
-            Secret Santa draws, link copies and reveals, and raffle draws and exports — counts only,
-            never names, event names, prizes or notes). We do not send your wheel choice text or
+            Secret Santa draws, link copies and reveals, raffle draws and exports, and bingo card
+            generation, prints, link copies, calls and card checks — counts and settings only, never
+            names, event names, prizes, notes or your list). We do not send your wheel choice text or
             names to Analytics, and the page address we measure does not include the shared list.
           </p>
           <p className="mt-2">

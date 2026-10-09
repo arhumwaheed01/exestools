@@ -67,10 +67,17 @@ export default function AboutPage() {
             className="font-semibold text-accent hover:underline"
           >
             Secret Santa generator
-          </Link>{" "}
-          and a{" "}
+          </Link>
+          , a{" "}
           <Link href="/raffle-generator" className="font-semibold text-accent hover:underline">
             raffle generator
+          </Link>{" "}
+          and a{" "}
+          <Link
+            href="/bingo-card-generator"
+            className="font-semibold text-accent hover:underline"
+          >
+            bingo card generator
           </Link>
           . They run in your browser, with no account to create and nothing to install. ExesTools is
           not affiliated with the reverse-engineering forum that has a similar name.
@@ -132,6 +139,12 @@ export default function AboutPage() {
             the same secure generator, so someone with three tickets is exactly three times as likely
             as someone with one to win that pick. By default, a winner&apos;s other tickets leave the
             draw, so nobody wins twice.
+          </p>
+          <p className="mt-2">
+            The bingo card generator builds cards from a short set code, so the same code always makes
+            the same cards and every card in a set is checked to be different. Its caller uses the
+            browser&apos;s secure random number generator, separate from the set code, and never
+            repeats a call within a game.
           </p>
         </section>
 

@@ -301,6 +301,10 @@ export const TOOL_DEFAULTS: Record<ToolId, ToolPresetConfig> = {
     defaultPresetId: "sample-names",
     presetIds: [],
   },
+  "bingo-card-generator": {
+    defaultPresetId: "sample-names",
+    presetIds: [],
+  },
 };
 
 export function getPresetById(id: string): WheelPreset | undefined {

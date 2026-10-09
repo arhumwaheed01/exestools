@@ -560,6 +560,7 @@ export function SpinnerWheel({
                     { href: "/secret-santa-generator", label: "Secret Santa" },
                     { href: "/random-number-wheel", label: "Number wheel" },
                     { href: "/raffle-generator", label: "Raffle generator" },
+                    { href: "/bingo-card-generator", label: "Bingo cards" },
                   ]
                 : undefined
             }

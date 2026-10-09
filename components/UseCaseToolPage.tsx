@@ -24,6 +24,7 @@ const FAQ_LINK_HREFS: Record<string, string> = {
   "raffle generator with multiple entries": "/raffle-generator",
   "random number wheel": "/random-number-wheel",
   "Secret Santa generator": "/secret-santa-generator",
+  "bingo card generator": "/bingo-card-generator",
 };
 
 function faqPlainText(answer: string): string {
@@ -53,7 +54,11 @@ function FaqAnswer({ text }: { text: string }) {
 type Props = {
   toolId: Exclude<
     ToolId,
-    "home" | "random-team-generator" | "secret-santa-generator" | "raffle-generator"
+    | "home"
+    | "random-team-generator"
+    | "secret-santa-generator"
+    | "raffle-generator"
+    | "bingo-card-generator"
   >;
   title: string;
   intro: ReactNode;

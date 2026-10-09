@@ -171,6 +171,17 @@ export default async function ClassroomSpinnerPage({ searchParams }: PageProps) 
             </Link>
             .
           </li>
+          <li>
+            <span className="font-semibold text-foreground">Review games.</span> Spin to pick who
+            reads the next bingo call, then play sight word or times-table bingo with cards from the{" "}
+            <Link
+              href="/bingo-card-generator"
+              className="font-semibold text-accent hover:underline"
+            >
+              bingo card generator
+            </Link>
+            .
+          </li>
         </ul>
       </GuideSection>
       <GuideSection title="A 5-minute cold-call routine that stays fair">

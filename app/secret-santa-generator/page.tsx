@@ -381,6 +381,17 @@ export default function SecretSantaGeneratorPage() {
               to hand out; older students can get links. Follow your school&apos;s policy on student
               names; first names or initials are enough.
             </li>
+            <li>
+              <span className="font-semibold text-foreground">Holiday party games.</span> After the
+              name draw, play a round of Christmas bingo: the{" "}
+              <Link
+                href="/bingo-card-generator"
+                className="font-semibold text-accent hover:underline"
+              >
+                bingo card generator
+              </Link>{" "}
+              has a ready-made Christmas list you can edit and print.
+            </li>
           </ul>
         </section>
 

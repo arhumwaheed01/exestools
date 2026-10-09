@@ -18,6 +18,7 @@ const FAQ_LINK_HREFS: Record<string, string> = {
   "How ExesTools picks a result": "/about#how-it-works",
   "prize wheel": "/prize-wheel",
   "raffle generator": "/raffle-generator",
+  "bingo card generator": "/bingo-card-generator",
 };
 
 function FaqAnswer({ text }: { text: string }) {
@@ -79,7 +80,7 @@ const FAQS = [
   },
   {
     q: "Can I use it as a bingo number caller?",
-    a: "Yes, for a simple game. Tap 1–75, which also switches on No repeats, then turn on Show bingo letters to see calls like B 7 or O 68. Recent results lists your last 20 calls. You'll still need bingo cards for the players.",
+    a: "Yes, for a simple game. Tap 1–75, which also switches on No repeats, then turn on Show bingo letters to see calls like B 7 or O 68. Recent results lists your last 20 calls. For the players' cards, use the [bingo card generator].",
   },
   {
     q: "Can I use it for a raffle?",
@@ -209,7 +210,14 @@ export default async function RandomNumberWheelPage({ searchParams }: PageProps)
             <li>
               Bingo. Tap 1–75 for a simple US-style bingo caller. No repeats and bingo letters switch
               on, so each call looks like B 7 or O 68 and is never repeated. For 90-ball bingo, set
-              Min 1 and Max 90.
+              Min 1 and Max 90. To make the cards, use the{" "}
+              <Link
+                href="/bingo-card-generator"
+                className="font-semibold text-accent hover:underline"
+              >
+                bingo card generator
+              </Link>
+              : it prints 75-ball or word cards and has its own caller and card checker.
             </li>
             <li>
               Numbered raffle tickets. Set Min and Max to the first and last ticket numbers, switch

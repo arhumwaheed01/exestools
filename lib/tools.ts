@@ -7,7 +7,8 @@ export type ToolId =
   | "random-team-generator"
   | "secret-santa-generator"
   | "random-number-wheel"
-  | "raffle-generator";
+  | "raffle-generator"
+  | "bingo-card-generator";
 
 export type ToolDef = {
   id: ToolId;
@@ -69,6 +70,13 @@ export const TOOLS: ToolDef[] = [
     navLabel: "Raffle",
     footerLabel: "Raffle Generator",
   },
+  {
+    id: "bingo-card-generator",
+    path: "/bingo-card-generator",
+    navLabel: "Bingo",
+    footerLabel: "Bingo Cards",
+    inHeaderNav: false,
+  },
 ];
 
 export function cleanPathFor(toolId: ToolId): string {
@@ -86,6 +94,7 @@ export function isWheelTool(toolId: ToolId): boolean {
     toolId !== "random-team-generator" &&
     toolId !== "random-number-wheel" &&
     toolId !== "secret-santa-generator" &&
-    toolId !== "raffle-generator"
+    toolId !== "raffle-generator" &&
+    toolId !== "bingo-card-generator"
   );
 }

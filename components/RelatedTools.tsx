@@ -11,6 +11,7 @@ const RELATED: Record<ToolId, { href: string; label: string }[]> = {
     { href: "/secret-santa-generator", label: "Secret Santa generator" },
     { href: "/random-number-wheel", label: "Random number wheel" },
     { href: "/raffle-generator", label: "Raffle generator" },
+    { href: "/bingo-card-generator", label: "Bingo card generator" },
   ],
   "random-name-picker": [
     { href: "/classroom-spinner", label: "Classroom / student spinner" },
@@ -28,6 +29,7 @@ const RELATED: Record<ToolId, { href: string; label: string }[]> = {
     { href: "/", label: "All-purpose spinner wheel" },
     { href: "/yes-no-wheel", label: "Yes or no wheel" },
     { href: "/random-number-wheel", label: "Number wheel for math games" },
+    { href: "/bingo-card-generator", label: "Bingo card generator (sight words, math facts)" },
   ],
   "prize-wheel": [
     { href: "/random-name-picker", label: "Pick a winner by name" },
@@ -55,6 +57,7 @@ const RELATED: Record<ToolId, { href: string; label: string }[]> = {
     { href: "/random-team-generator", label: "Random team generator" },
     { href: "/", label: "Free spinner wheel" },
     { href: "/prize-wheel", label: "Prize / giveaway wheel" },
+    { href: "/bingo-card-generator", label: "Bingo card generator (holiday party games)" },
   ],
   "random-number-wheel": [
     { href: "/", label: "Spinner wheel" },
@@ -62,11 +65,21 @@ const RELATED: Record<ToolId, { href: string; label: string }[]> = {
     { href: "/prize-wheel", label: "Prize wheel" },
     { href: "/random-team-generator", label: "Random team generator" },
     { href: "/raffle-generator", label: "Raffle generator" },
+    { href: "/bingo-card-generator", label: "Bingo card generator" },
   ],
   "raffle-generator": [
     { href: "/prize-wheel", label: "Prize wheel (spin for a prize on screen)" },
     { href: "/random-name-picker", label: "Random name picker" },
     { href: "/random-number-wheel", label: "Random number wheel" },
+    { href: "/", label: "Free spinner wheel" },
+    { href: "/bingo-card-generator", label: "Bingo card generator" },
+  ],
+  "bingo-card-generator": [
+    { href: "/random-number-wheel", label: "Random number wheel (1–75 bingo caller)" },
+    { href: "/classroom-spinner", label: "Classroom spinner" },
+    { href: "/raffle-generator", label: "Raffle generator" },
+    { href: "/secret-santa-generator", label: "Secret Santa generator" },
+    { href: "/random-name-picker", label: "Random name picker" },
     { href: "/", label: "Free spinner wheel" },
   ],
 };
