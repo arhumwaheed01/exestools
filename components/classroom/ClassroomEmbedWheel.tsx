@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useReducedMotion } from "framer-motion";
 import { StaticWheelPreview } from "@/components/StaticWheelPreview";
-import { SpinControls } from "@/components/SpinControls";
+import { SpinControls, StickySpinButton } from "@/components/SpinControls";
 import { WheelCanvas } from "@/components/WheelCanvas";
 import { ResultReveal } from "@/components/tools/ResultReveal";
 import {
@@ -206,82 +206,91 @@ export function ClassroomEmbedWheel({ slug }: Props) {
         <h1 className="text-lg font-extrabold text-foreground sm:text-xl">{title}</h1>
       </header>
 
-      <div className="rounded-3xl border border-border bg-surface p-3 sm:p-4">
-        <div className="relative mx-auto" style={wheelShellStyle}>
-          <div
-            className={`absolute inset-0 transition-opacity ${ready ? "pointer-events-none opacity-0" : "opacity-100"}`}
-          >
-            <StaticWheelPreview
-              choices={choices.length ? choices : starter}
-              className="!max-w-none h-full"
-            />
+      <div className="flex flex-col">
+        <div className="rounded-3xl border border-border bg-surface p-3 sm:p-4">
+          <div className="relative mx-auto" style={wheelShellStyle}>
+            <div
+              className={`absolute inset-0 transition-opacity ${ready ? "pointer-events-none opacity-0" : "opacity-100"}`}
+            >
+              <StaticWheelPreview
+                choices={choices.length ? choices : starter}
+                className="!max-w-none h-full"
+              />
+            </div>
+            <div className={`absolute inset-0 transition-opacity ${ready ? "opacity-100" : "opacity-0"}`}>
+              <WheelCanvas
+                choices={choices}
+                rotation={rotation}
+                colors={themeColors}
+                labelColors={themeLabels}
+                className="!max-w-none h-full"
+              />
+            </div>
           </div>
-          <div className={`absolute inset-0 transition-opacity ${ready ? "opacity-100" : "opacity-0"}`}>
-            <WheelCanvas
-              choices={choices}
-              rotation={rotation}
-              colors={themeColors}
-              labelColors={themeLabels}
-              className="!max-w-none h-full"
+
+          <ResultReveal
+            open={revealOpen}
+            value={winner}
+            showRemove={!autoRemove}
+            onSpinAgain={() => {
+              setRevealOpen(false);
+              spin();
+            }}
+            onRemove={() => {
+              if (!winner) return;
+              setText(choicesToText(choices.filter((c) => c !== winner)));
+              setRevealOpen(false);
+              setWinner(null);
+              setRotation(0);
+            }}
+            onClose={() => setRevealOpen(false)}
+          />
+
+          <SpinControls
+            hideSpinButton
+            canSpin={canSpin}
+            spinning={spinning}
+            soundEnabled={sound.enabled}
+            status={status}
+            spinLength={spinLength}
+            onSpin={spin}
+            onReset={() => {
+              if (!spinning) setRotation(0);
+            }}
+            onToggleSound={() => {
+              sound.unlock();
+              sound.setEnabled(!sound.enabled);
+            }}
+            onSpinLength={setSpinLength}
+          />
+
+          <label className="mt-3 flex min-h-11 cursor-pointer items-center justify-center gap-2 text-sm text-foreground">
+            <input
+              type="checkbox"
+              checked={autoRemove}
+              onChange={(e) => setAutoRemove(e.target.checked)}
+              className="h-4 w-4 accent-cyan-500"
             />
+            Remove winner after spin (no repeats)
+          </label>
+
+          <div className="mt-3 flex justify-center">
+            <button
+              type="button"
+              disabled={spinning}
+              onClick={resetStarter}
+              className="inline-flex min-h-11 items-center rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm font-semibold text-foreground hover:bg-border disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              Reset starter list
+            </button>
           </div>
         </div>
-
-        <SpinControls
+        <StickySpinButton
+          placement="both"
           canSpin={canSpin}
           spinning={spinning}
-          soundEnabled={sound.enabled}
-          status={status}
-          spinLength={spinLength}
           onSpin={spin}
-          onReset={() => {
-            if (!spinning) setRotation(0);
-          }}
-          onToggleSound={() => {
-            sound.unlock();
-            sound.setEnabled(!sound.enabled);
-          }}
-          onSpinLength={setSpinLength}
         />
-
-        <ResultReveal
-          open={revealOpen}
-          value={winner}
-          showRemove={!autoRemove}
-          onSpinAgain={() => {
-            setRevealOpen(false);
-            spin();
-          }}
-          onRemove={() => {
-            if (!winner) return;
-            setText(choicesToText(choices.filter((c) => c !== winner)));
-            setRevealOpen(false);
-            setWinner(null);
-            setRotation(0);
-          }}
-          onClose={() => setRevealOpen(false)}
-        />
-
-        <label className="mt-3 flex min-h-11 cursor-pointer items-center justify-center gap-2 text-sm text-foreground">
-          <input
-            type="checkbox"
-            checked={autoRemove}
-            onChange={(e) => setAutoRemove(e.target.checked)}
-            className="h-4 w-4 accent-cyan-500"
-          />
-          Remove winner after spin (no repeats)
-        </label>
-
-        <div className="mt-3 flex justify-center">
-          <button
-            type="button"
-            disabled={spinning}
-            onClick={resetStarter}
-            className="inline-flex min-h-11 items-center rounded-lg border border-border bg-surface-2 px-3 py-2 text-xs font-semibold text-foreground hover:bg-border disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-accent"
-          >
-            Reset starter list
-          </button>
-        </div>
       </div>
 
       <p className="mt-auto pt-3 text-center text-xs text-muted">

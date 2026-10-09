@@ -15,11 +15,13 @@ import {
   type ToolThemeId,
 } from "@/lib/tools/theme";
 import {
+  FUN_TEAMS,
   MAX_PER_TEAM,
   MAX_TEAMS,
   TEAM_SAMPLE_NAMES,
   clampTeamN,
   formatTeamsPlain,
+  funTeamColor,
   generateTeams,
   parseTeamNames,
   teamsFromIndices,
@@ -27,6 +29,7 @@ import {
   type TeamResult,
   type TeamSettings,
 } from "@/lib/teams";
+import { labelInkForBg } from "@/lib/tools/contrast";
 import "@/app/styles/tools-themes.css";
 
 const STORAGE_KEY = "exestools.spinner.v1.random-team-generator";
@@ -529,7 +532,10 @@ export function TeamGenerator({ initialPresetQuery = null }: Props) {
               </div>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 print:grid-cols-3">
                 {result.teams.map((team, ti) => {
-                  const band = segColor(resolvedTheme, ti);
+                  const funIdx = FUN_TEAMS.findIndex((t) => t.name === team.name);
+                  const band =
+                    funIdx >= 0 ? funTeamColor(funIdx) : segColor(resolvedTheme, ti);
+                  const ink = labelInkForBg(band);
                   return (
                     <article
                       key={`${team.name}-${ti}`}
@@ -537,8 +543,8 @@ export function TeamGenerator({ initialPresetQuery = null }: Props) {
                       style={{ animationDelay: `${Math.min(ti * 60, 360)}ms` }}
                     >
                       <header
-                        className="flex items-center justify-between gap-2 px-4 py-2.5 text-sm font-bold text-white"
-                        style={{ background: band }}
+                        className="flex items-center justify-between gap-2 px-4 py-2.5 text-sm font-bold"
+                        style={{ background: band, color: ink }}
                       >
                         <span className="min-w-0 truncate">{team.name}</span>
                         <span className="shrink-0 rounded-full bg-black/20 px-2 py-0.5 text-xs">

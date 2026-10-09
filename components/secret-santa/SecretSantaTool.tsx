@@ -1196,15 +1196,17 @@ export function SecretSantaTool() {
             </p>
           ) : null}
 
-          <button
-            type="button"
-            disabled={Boolean(drawDisabledReason) || drawing || locked}
-            aria-describedby={drawDisabledReason ? "ss-draw-hint" : undefined}
-            onClick={() => runDraw(false)}
-            className="inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-accent-strong px-4 text-sm font-bold text-slate-950 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
-          >
-            {drawing ? "Drawing…" : "Draw names"}
-          </button>
+          <div className="sticky bottom-0 z-30 -mx-1 border-t border-border bg-surface/95 px-1 py-2 backdrop-blur supports-[padding:max(0px)]:pb-[max(0.5rem,env(safe-area-inset-bottom))] sm:static sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none sm:supports-[padding:max(0px)]:pb-0">
+            <button
+              type="button"
+              disabled={Boolean(drawDisabledReason) || drawing || locked}
+              aria-describedby={drawDisabledReason ? "ss-draw-hint" : undefined}
+              onClick={() => runDraw(false)}
+              className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-accent-strong px-4 text-sm font-bold text-slate-950 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
+            >
+              {drawing ? "Drawing…" : "Draw names"}
+            </button>
+          </div>
           {drawDisabledReason ? (
             <p id="ss-draw-hint" className="text-xs text-muted">
               {drawDisabledReason}

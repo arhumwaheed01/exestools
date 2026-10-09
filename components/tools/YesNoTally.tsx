@@ -70,7 +70,7 @@ export function YesNoTally({
         <button
           type="button"
           onClick={onReset}
-          className="text-xs font-semibold text-accent underline outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="inline-flex min-h-11 items-center px-2 text-sm font-semibold text-accent underline outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           Reset counts
         </button>

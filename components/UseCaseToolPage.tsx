@@ -136,12 +136,23 @@ export function UseCaseToolPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(crumbLd) }}
       />
 
-      <nav className="mb-2 text-xs font-semibold text-muted" aria-label="Breadcrumb">
-        <Link href="/" className="text-accent hover:underline">
-          Home
-        </Link>
-        <span className="mx-1.5">→</span>
-        <span className="text-foreground">{breadcrumbLabel}</span>
+      <nav className="mb-2 text-sm font-semibold" aria-label="Breadcrumb">
+        <ol className="flex flex-wrap items-center gap-1.5">
+          <li>
+            <Link
+              href="/"
+              className="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
+            >
+              Home
+            </Link>
+          </li>
+          <li aria-hidden className="text-muted">
+            →
+          </li>
+          <li className="text-foreground" aria-current="page">
+            {breadcrumbLabel}
+          </li>
+        </ol>
       </nav>
 
       <header className="mb-3 max-w-3xl">

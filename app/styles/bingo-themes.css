@@ -252,23 +252,23 @@
   word-break: keep-all;
   hyphens: auto;
   -webkit-hyphens: auto;
-  font-size: clamp(11px, 13cqi, 16px);
-  line-height: 1.15;
-  /* Last resort only — prefer smaller type + soft hyphens */
+  font-size: clamp(11px, 12cqi, 16px);
+  line-height: 1.12;
+  /* Up to 3 lines — no ellipsis clip; type shrinks via data-longest */
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   line-clamp: 3;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow: visible;
+  text-overflow: clip;
 }
 
 .bingo-card[data-longest="mid"] .bc-cell-label {
-  font-size: clamp(10.5px, 11cqi, 14px);
+  font-size: clamp(10px, 10cqi, 13px);
 }
 
 .bingo-card[data-longest="long"] .bc-cell-label {
-  font-size: clamp(10px, 9.5cqi, 12px);
+  font-size: clamp(9px, 8.5cqi, 11px);
 }
 
 .bingo-card .bc-foot {

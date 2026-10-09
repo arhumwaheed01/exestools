@@ -6,6 +6,7 @@ import { Link2, Share2 } from "lucide-react";
 import { useReducedMotion } from "framer-motion";
 import { RangeWheelCanvas } from "@/components/number/RangeWheelCanvas";
 import { StaticWheelPreview } from "@/components/StaticWheelPreview";
+import { StickySpinButton } from "@/components/SpinControls";
 import { HistoryRow } from "@/components/tools/HistoryRow";
 import { ResultReveal } from "@/components/tools/ResultReveal";
 import { ThemeChips } from "@/components/tools/ThemeChips";
@@ -22,7 +23,7 @@ import {
 } from "@/lib/range";
 import { randomInt } from "@/lib/random";
 import { track } from "@/lib/track";
-import { useSound } from "@/lib/tools/sound";
+import { spinDurationMs, useSound, type SpinLength } from "@/lib/tools/sound";
 import {
   loadToolTheme,
   resolveToolTheme,
@@ -90,6 +91,7 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
   const [highlightReset, setHighlightReset] = useState(false);
   const [themeChoice, setThemeChoice] = useState<ToolThemeId>("auto");
   const [confettiFire, setConfettiFire] = useState(0);
+  const [spinLength, setSpinLength] = useState<SpinLength>("normal");
 
   const sound = useSound();
   const spinningRef = useRef(false);
@@ -288,7 +290,7 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
     setSpinning(true);
     const start = rotationRef.current;
     const target = targetRotationForIndex(idx, currentPool.length, start);
-    const duration = 4200 + Math.random() * 900;
+    const duration = spinDurationMs(spinLength, Boolean(reduceMotion));
     const t0 = performance.now();
     let lastSeg = -1;
 
@@ -312,7 +314,7 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
       }
     };
     rafRef.current = requestAnimationFrame(frame);
-  }, [validation.ok, reduceMotion, finishSpin, sound]);
+  }, [validation.ok, reduceMotion, finishSpin, sound, spinLength]);
 
   spinRef.current = spin;
 
@@ -482,27 +484,6 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
             <p className="sr-only" aria-live="polite">
               {liveResult}
             </p>
-            <div className="sticky bottom-0 z-30 mt-2 w-full max-w-sm border-t border-border bg-background/95 px-1 py-2 backdrop-blur sm:static sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
-              <button
-                type="button"
-                disabled={!canSpin}
-                onClick={spin}
-                className="min-h-12 w-full rounded-2xl bg-accent-strong px-8 py-3 text-lg font-extrabold tracking-wide text-slate-950 shadow-lg hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40 outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              >
-                {spinning ? "Spinning…" : "SPIN (Space)"}
-              </button>
-            </div>
-            <button
-              type="button"
-              disabled={spinning}
-              onClick={() => {
-                sound.unlock();
-                sound.setEnabled(!sound.enabled);
-              }}
-              className="mt-2 min-h-11 rounded-xl border border-border bg-surface px-3 py-2 text-sm font-semibold outline-none focus-visible:ring-2 focus-visible:ring-accent"
-            >
-              Sound: {sound.enabled ? "On" : "Off"}
-            </button>
             <ResultReveal
               open={revealOpen}
               value={winner}
@@ -516,6 +497,55 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
               onShare={() => void copyShare()}
               onClose={() => setRevealOpen(false)}
             />
+            <StickySpinButton
+              placement="inline-desktop"
+              canSpin={canSpin}
+              spinning={spinning}
+              onSpin={spin}
+            />
+            <div
+              role="radiogroup"
+              aria-label="Spin length"
+              className="mt-2 flex flex-wrap items-center justify-center gap-2"
+            >
+              {(
+                [
+                  ["short", "Short"],
+                  ["normal", "Normal"],
+                  ["long", "Long"],
+                ] as const
+              ).map(([id, label]) => (
+                <label
+                  key={id}
+                  className={`inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-full border px-4 text-sm font-bold outline-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-accent ${
+                    spinLength === id
+                      ? "border-accent bg-accent/10 text-foreground"
+                      : "border-border text-muted hover:bg-surface-2"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="num-spin-length"
+                    className="sr-only"
+                    checked={spinLength === id}
+                    onChange={() => setSpinLength(id)}
+                  />
+                  {label}
+                </label>
+              ))}
+            </div>
+            <button
+              type="button"
+              disabled={spinning}
+              onClick={() => {
+                sound.unlock();
+                sound.setEnabled(!sound.enabled);
+              }}
+              aria-pressed={sound.enabled}
+              className="mt-2 min-h-11 rounded-xl border border-border bg-surface px-3 py-2 text-sm font-semibold outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              Sound: {sound.enabled ? "On" : "Off"}
+            </button>
             <HistoryRow
               items={recent.map((n) =>
                 bingoActive ? formatBingoCall(n) : formatNumberLabel(n),
@@ -581,7 +611,7 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
                     onKeyDown={(e) => {
                       if (e.key === "Enter") onMinMaxCommit();
                     }}
-                    className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 font-mono text-sm outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    className="mt-1 min-h-11 w-full rounded-lg border border-border bg-background px-3 py-2 font-mono text-sm outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   />
                 </label>
                 <label className="block text-sm">
@@ -598,7 +628,7 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
                     onKeyDown={(e) => {
                       if (e.key === "Enter") onMinMaxCommit();
                     }}
-                    className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 font-mono text-sm outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    className="mt-1 min-h-11 w-full rounded-lg border border-border bg-background px-3 py-2 font-mono text-sm outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   />
                 </label>
               </div>
@@ -681,13 +711,19 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
 
       {toast ? (
         <p
-          className="fixed bottom-4 left-1/2 z-40 -translate-x-1/2 rounded-full bg-accent-strong px-4 py-2 text-xs font-semibold text-slate-950 shadow-lg"
+          className="fixed bottom-20 left-1/2 z-40 -translate-x-1/2 rounded-full bg-accent-strong px-4 py-2 text-xs font-semibold text-slate-950 shadow-lg sm:bottom-4"
           role="status"
         >
           {toast}
         </p>
       ) : null}
 
+      <StickySpinButton
+        placement="fixed-mobile"
+        canSpin={canSpin}
+        spinning={spinning}
+        onSpin={spin}
+      />
       <ToolConfetti fire={confettiFire} colors={[...themeColors]} />
     </div>
   );

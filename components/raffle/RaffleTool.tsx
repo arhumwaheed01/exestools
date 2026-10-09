@@ -1433,7 +1433,7 @@ export function RaffleTool() {
           {drawComplete ? (
             <p className="text-sm font-semibold text-muted">Draw complete.</p>
           ) : (
-            <div className="sticky bottom-0 z-30 -mx-1 border-t border-border bg-surface/95 px-1 py-2 backdrop-blur sm:static sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
+            <div className="sticky bottom-0 z-30 -mx-1 border-t border-border bg-surface/95 px-1 py-2 backdrop-blur supports-[padding:max(0px)]:pb-[max(0.5rem,env(safe-area-inset-bottom))] lg:hidden">
               <button
                 ref={drawButtonRef}
                 type="button"
@@ -1458,8 +1458,25 @@ export function RaffleTool() {
           ) : null}
         </div>
 
-        {/* Results */}
+        {/* Results — Draw stays at top of this sticky column on desktop */}
         <div className="min-w-0 rounded-3xl border border-border bg-surface p-3 sm:p-5 lg:sticky lg:top-4 lg:self-start print:hidden">
+          {!drawComplete ? (
+            <button
+              type="button"
+              disabled={
+                Boolean(drawDisabledReason) ||
+                drawing ||
+                shuffling ||
+                (locked && reveal === "all")
+              }
+              onClick={runDraw}
+              className="mb-4 hidden min-h-12 w-full items-center justify-center rounded-xl bg-accent-strong px-4 text-sm font-bold text-slate-950 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50 lg:inline-flex"
+            >
+              {drawing ? "Drawing…" : drawButtonLabel(reveal, winners, alternates, picks, prizes)}
+            </button>
+          ) : (
+            <p className="mb-3 hidden text-sm font-semibold text-muted lg:block">Draw complete.</p>
+          )}
           <ResultsPanel
             heading={resultsHeading}
             headingRef={resultsHeadingRef}
@@ -1671,11 +1688,11 @@ function ResultsPanel({
                 </p>
                 {mode === "list" ? (
                   <p className="text-xs text-muted">
-                    Ticket #{p.ticket} · drawn {i + 1} of {winnerPicks.length}
+                    Ticket #{p.ticket} · drawn {i + 1} of {winners}
                   </p>
                 ) : (
                   <p className="text-xs text-muted">
-                    Drawn {i + 1} of {winnerPicks.length}
+                    Drawn {i + 1} of {winners}
                   </p>
                 )}
               </div>
