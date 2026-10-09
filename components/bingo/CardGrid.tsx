@@ -20,8 +20,14 @@ export function longestItemLength(cells: readonly Cell[]): number {
   return max;
 }
 
-/** Screen font steps by longest item (§4.5). */
-export function cellFontClass(longest: number): string {
+/** Screen font steps by longest item (§4.5). One step smaller for 5×5 under 400px. */
+export function cellFontClass(longest: number, size: GridSize = 5): string {
+  if (size === 5) {
+    if (longest <= 8) return "text-sm max-[399px]:text-xs sm:text-base";
+    if (longest <= 16) return "text-xs max-[399px]:text-[11px]";
+    if (longest <= 28) return "text-[11px] max-[399px]:text-[10px]";
+    return "text-[11px] max-[399px]:text-[10px]";
+  }
   if (longest <= 8) return "text-base sm:text-lg";
   if (longest <= 16) return "text-sm";
   if (longest <= 28) return "text-xs";
@@ -60,7 +66,7 @@ function CellInner({
   const isFree = cell === null;
   const label = cellLabel(cell);
   const base =
-    "relative flex aspect-square min-h-0 min-w-0 items-center justify-center border border-foreground/70 p-0.5 text-center leading-tight break-words [overflow-wrap:anywhere] hyphens-auto";
+    "relative flex aspect-square min-h-0 min-w-0 items-center justify-center border border-foreground/70 p-0.5 text-center leading-tight wrap-break-word hyphens-auto";
   const freeBg = isFree ? "bg-accent/15" : "";
   const markedBg = marked && !isFree ? "bg-surface-2" : "";
   const hlRing = highlight ? "ring-2 ring-inset ring-accent-strong" : "";
@@ -137,7 +143,7 @@ export function CardGrid({
 }) {
   const labelId = useId();
   const longest = longestItemLength(card.cells);
-  const font = cellFontClass(longest);
+  const font = cellFontClass(longest, size);
   const highlight = new Set(highlightCells ?? []);
   const [focusIdx, setFocusIdx] = useState(0);
   const cellRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -200,13 +206,13 @@ export function CardGrid({
 
   return (
     <article
-      className={`bingo-card flex min-w-0 flex-col border-2 border-foreground bg-background text-foreground ${
+      className={`bingo-card flex h-auto min-w-0 flex-col border-2 border-foreground bg-background text-foreground ${
         compact ? "p-2" : "p-3 sm:p-4"
       } ${className}`}
     >
       <h3
         id={labelId}
-        className={`min-w-0 break-words text-center font-bold leading-tight ${
+        className={`min-w-0 wrap-break-word text-center font-bold leading-tight hyphens-auto ${
           compact ? "text-sm" : "text-base sm:text-lg"
         }`}
       >
@@ -214,7 +220,7 @@ export function CardGrid({
       </h3>
       {subtitle ? (
         <p
-          className={`mt-0.5 min-w-0 break-words text-center leading-tight text-muted ${
+          className={`mt-0.5 min-w-0 wrap-break-word text-center leading-tight text-muted hyphens-auto ${
             compact ? "text-[11px]" : "text-xs sm:text-sm"
           }`}
         >
@@ -225,8 +231,7 @@ export function CardGrid({
       <div
         role="grid"
         aria-labelledby={labelId}
-        aria-label={`Bingo card ${card.number}, ${title || "Bingo"}`}
-        className="mt-2 flex w-full min-w-0 flex-1 flex-col"
+        className="mt-2 flex w-full min-w-0 flex-col"
       >
         {mode === "bingo75" ? (
           <div

@@ -15,12 +15,11 @@ const BingoTool = dynamic(
   },
 );
 
-/** Client tool with fixed min-height to avoid CLS. */
+/** Client tool with fixed min-height to avoid CLS. Print root is appended to document.body. */
 export function BingoMount() {
   return (
     <div className="min-h-[620px] min-w-0">
       <BingoTool />
-      <div id="bingo-print-root" className="hidden print:block" />
     </div>
   );
 }

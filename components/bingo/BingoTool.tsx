@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import dynamic from "next/dynamic";
 import {
   useCallback,
   useEffect,
@@ -11,7 +11,6 @@ import {
   type ReactNode,
 } from "react";
 import { CardGrid } from "@/components/bingo/CardGrid";
-import { PrintSheets } from "@/components/bingo/PrintSheets";
 import {
   calledListText,
   drawNext,
@@ -23,13 +22,11 @@ import {
   type CallerState,
 } from "@/lib/bingo/caller";
 import {
-  BINGO_LETTERS,
   NUMBERS_MAX_MAX,
   NUMBERS_MIN_MAX,
   callPool,
   cardErrorMessage,
   generateCards,
-  letterFor,
   type BingoMode,
   type Card,
   type CardSetConfig,
@@ -54,7 +51,8 @@ import {
   parseList,
   type GridSize,
 } from "@/lib/bingo/list";
-import { PRESETS, presetById, presetText } from "@/lib/bingo/presets";
+import { PRESET_META } from "@/lib/bingo/preset-meta";
+import type { Preset } from "@/lib/bingo/presets";
 import { newSeed } from "@/lib/bingo/rng";
 import {
   HASH_KEY,
@@ -68,13 +66,30 @@ import {
   type StoredBingo,
 } from "@/lib/bingo/storage";
 import {
-  PATTERN_LABELS,
   checkCard,
   evaluate,
   winMessage,
   type Pattern,
 } from "@/lib/bingo/win";
 import { track } from "@/lib/track";
+
+const PrintSheets = dynamic(
+  () => import("@/components/bingo/PrintSheets").then((m) => m.PrintSheets),
+  { ssr: false },
+);
+
+const BingoHostPanels = dynamic(
+  () => import("@/components/bingo/BingoHostPanels").then((m) => m.BingoHostPanels),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        className="min-h-[280px] animate-pulse rounded-3xl border border-border bg-surface p-5 print:hidden"
+        aria-hidden
+      />
+    ),
+  },
+);
 
 const TOOL_ID = "bingo-card-generator";
 
@@ -440,10 +455,13 @@ function PlayerView({
 
 export function BingoTool() {
   const [ready, setReady] = useState(false);
+  /** True only after localStorage (and cards/caller) have been applied — gates autosave. */
+  const [hydrated, setHydrated] = useState(false);
   const [mode, setMode] = useState<BingoMode>("words");
   const [text, setText] = useState("");
   const [presetId, setPresetId] = useState<string | undefined>();
   const [presetHint, setPresetHint] = useState("");
+  const [presets, setPresets] = useState<Preset[] | null>(null);
   const [max, setMax] = useState(30);
   const [size, setSize] = useState<GridSize>(5);
   const [free, setFree] = useState(true);
@@ -481,6 +499,7 @@ export function BingoTool() {
   const saveTimer = useRef(0);
   const shareTracked = useRef(false);
   const callTrackedAt = useRef(0);
+  const presetsLoadRef = useRef<Promise<Preset[]> | null>(null);
 
   const listStatusId = useId();
   const makeDescId = useId();
@@ -527,6 +546,7 @@ export function BingoTool() {
   );
 
   const persist = useCallback(() => {
+    if (!hydrated) return;
     window.clearTimeout(saveTimer.current);
     saveTimer.current = window.setTimeout(() => {
       const state: StoredBingo = {
@@ -549,6 +569,7 @@ export function BingoTool() {
       saveStoredBingo(state);
     }, 300);
   }, [
+    hydrated,
     mode,
     text,
     presetId,
@@ -566,9 +587,44 @@ export function BingoTool() {
   ]);
 
   useEffect(() => {
-    if (!ready) return;
+    if (!hydrated) return;
     persist();
-  }, [ready, persist]);
+  }, [hydrated, persist]);
+
+  useEffect(() => {
+    return () => {
+      window.clearTimeout(saveTimer.current);
+    };
+  }, []);
+
+  const restoreCardsFromStored = (stored: StoredBingo) => {
+    if (!stored.seed) return;
+    const cfg: CardSetConfig = {
+      mode: stored.mode,
+      size: stored.mode === "bingo75" ? 5 : stored.size,
+      free: stored.free && canHaveFree(stored.size),
+      count: stored.count,
+      seed: stored.seed,
+      ...(stored.mode === "words" ? { items: parseList(stored.text).items } : {}),
+      ...(stored.mode === "numbers" ? { max: stored.max } : {}),
+    };
+    const gen = generateCards(cfg);
+    if (!gen.ok) return;
+    setCards(gen.cards);
+    setSameSquares(gen.sameSquaresOnEveryCard);
+    setGeneratedFp(
+      settingsFingerprint({
+        mode: stored.mode,
+        text: stored.text,
+        max: stored.max,
+        size: stored.mode === "bingo75" ? 5 : stored.size,
+        free: stored.free && canHaveFree(stored.size),
+        count: stored.count,
+      }),
+    );
+    const pool = callPool(cfg);
+    setCaller(restoreCaller(pool, stored.caller?.called));
+  };
 
   const applySharedSet = useCallback(
     (shared: SharedSet, announceOpen = true) => {
@@ -662,6 +718,7 @@ export function BingoTool() {
       } else {
         announce("This player link looks incomplete or damaged.");
       }
+      setHydrated(true);
       setReady(true);
       return;
     }
@@ -695,42 +752,17 @@ export function BingoTool() {
             shareTracked.current = true;
             track("share_open", { toolId: TOOL_ID, via: "hash" });
           }
+        } else if (stored.seed) {
+          restoreCardsFromStored(stored);
         }
       }
+      setHydrated(true);
       setReady(true);
       return;
     }
 
-    // Restore cards from stored seed
-    if (stored.seed) {
-      const cfg: CardSetConfig = {
-        mode: stored.mode,
-        size: stored.mode === "bingo75" ? 5 : stored.size,
-        free: stored.free && canHaveFree(stored.size),
-        count: stored.count,
-        seed: stored.seed,
-        ...(stored.mode === "words" ? { items: parseList(stored.text).items } : {}),
-        ...(stored.mode === "numbers" ? { max: stored.max } : {}),
-      };
-      const gen = generateCards(cfg);
-      if (gen.ok) {
-        setCards(gen.cards);
-        setSameSquares(gen.sameSquaresOnEveryCard);
-        setGeneratedFp(
-          settingsFingerprint({
-            mode: stored.mode,
-            text: stored.text,
-            max: stored.max,
-            size: stored.mode === "bingo75" ? 5 : stored.size,
-            free: stored.free && canHaveFree(stored.size),
-            count: stored.count,
-          }),
-        );
-        const pool = callPool(cfg);
-        setCaller(restoreCaller(pool, stored.caller?.called));
-      }
-    }
-
+    restoreCardsFromStored(stored);
+    setHydrated(true);
     setReady(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- mount only
   }, []);
@@ -829,15 +861,28 @@ export function BingoTool() {
 
   const makeDisabled = Boolean(notEnoughHint) || (mode === "words" && parsed.items.length === 0);
 
-  const loadPreset = (id: string) => {
-    const p = presetById(id);
+  const ensurePresets = (): Promise<Preset[]> => {
+    if (presets) return Promise.resolve(presets);
+    if (!presetsLoadRef.current) {
+      presetsLoadRef.current = import("@/lib/bingo/presets").then((m) => {
+        setPresets(m.PRESETS);
+        return m.PRESETS;
+      });
+    }
+    return presetsLoadRef.current;
+  };
+
+  const loadPreset = async (id: string) => {
+    const mod = await import("@/lib/bingo/presets");
+    setPresets(mod.PRESETS);
+    const p = mod.presetById(id);
     if (!p) return;
     const current = text.trim();
-    const matchesPreset = PRESETS.some((x) => presetText(x) === current);
+    const matchesPreset = mod.PRESETS.some((x) => mod.presetText(x) === current);
     if (current && !matchesPreset) {
       if (!window.confirm(`Replace your list with the ${p.label} theme?`)) return;
     }
-    setText(presetText(p));
+    setText(mod.presetText(p));
     setTitle(p.title);
     setSize(p.size);
     setFree(p.free);
@@ -849,7 +894,11 @@ export function BingoTool() {
   };
 
   const onModeChange = (next: BingoMode) => {
+    if (next === mode) return;
     setMode(next);
+    setTitle("Bingo");
+    setPresetId(undefined);
+    setPresetHint("");
     if (next === "bingo75") {
       setSize(5);
       setFree(true);
@@ -1143,11 +1192,14 @@ export function BingoTool() {
               <>
                 <p className="mt-3 text-xs font-semibold text-muted">Start from a theme</p>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  {PRESETS.map((p) => (
+                  {PRESET_META.map((p) => (
                     <button
                       key={p.id}
                       type="button"
-                      onClick={() => loadPreset(p.id)}
+                      onClick={() => {
+                        void ensurePresets();
+                        void loadPreset(p.id);
+                      }}
                       className="inline-flex min-h-11 items-center rounded-xl border border-border px-3 text-xs font-bold outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
                     >
                       {p.label}
@@ -1435,7 +1487,7 @@ export function BingoTool() {
 
               {!showAll && previewCard ? (
                 <div className="mt-3 min-w-0">
-                  <div className="mx-auto w-full max-w-[min(100%,28rem)] min-w-0 aspect-square">
+                  <div className="mx-auto w-full max-w-[min(100%,28rem)] min-w-0">
                     <CardGrid
                       card={previewCard}
                       size={gridSize}
@@ -1443,7 +1495,6 @@ export function BingoTool() {
                       title={title}
                       subtitle={subtitle}
                       seed={seed}
-                      className="h-full"
                     />
                   </div>
                   <div className="mt-2 flex flex-wrap items-center justify-center gap-2">
@@ -1604,223 +1655,34 @@ export function BingoTool() {
           </div>
         </div>
 
-        {/* Right column: Caller + Check */}
-        <div className="min-w-0 space-y-4 rounded-3xl border border-border bg-surface p-3 sm:p-5 lg:sticky lg:top-4 lg:self-start print:hidden">
-          <section aria-labelledby="bg-caller" className="min-w-0">
-            <h2 id="bg-caller" className="text-lg font-bold text-foreground">
-              Caller
-            </h2>
-
-            <div className="mt-3 min-h-[4.5rem] text-center">
-              {currentCall ? (
-                mode === "bingo75" ? (
-                  <div className="flex items-center justify-center gap-2">
-                    <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-accent-strong text-xl font-bold text-slate-950">
-                      {letterFor(Number(currentCall))}
-                    </span>
-                    <span className="text-5xl font-bold text-foreground">{currentCall}</span>
-                  </div>
-                ) : (
-                  <p className="break-words text-5xl font-bold leading-tight text-foreground [overflow-wrap:anywhere]">
-                    {currentCall}
-                  </p>
-                )
-              ) : (
-                <p className="text-sm text-muted">Press Call next to start.</p>
-              )}
-            </div>
-            <p className="mt-1 text-center text-sm text-muted">
-              Called {caller.called.length} of {caller.pool.length || "—"}
-            </p>
-
-            <div
-              aria-live="assertive"
-              aria-atomic="true"
-              className="sr-only"
-            >
-              {callerAnnounce}
-            </div>
-
-            <div className="mt-3 flex flex-wrap gap-2">
-              <button
-                ref={callNextRef}
-                type="button"
-                disabled={!cards.length || finished || caller.pool.length === 0}
-                onClick={onCallNext}
-                className="inline-flex min-h-11 flex-1 items-center justify-center rounded-xl bg-accent-strong px-4 text-sm font-bold text-slate-950 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
-              >
-                Call next
-              </button>
-              <button
-                type="button"
-                disabled={!caller.called.length}
-                onClick={onUndoCall}
-                className="inline-flex min-h-11 items-center rounded-xl border border-border px-3 text-xs font-bold outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-40"
-              >
-                Undo last call
-              </button>
-            </div>
-            <div className="mt-2 flex flex-wrap gap-2">
-              <button
-                type="button"
-                disabled={!caller.called.length}
-                onClick={() => void onCopyCalled()}
-                className="inline-flex min-h-11 items-center rounded-xl border border-border px-3 text-xs font-bold outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-40"
-              >
-                Copy called list
-              </button>
-              <button
-                type="button"
-                disabled={!cards.length}
-                onClick={onNewGame}
-                className="inline-flex min-h-11 items-center rounded-xl border border-border px-3 text-xs font-bold outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-40"
-              >
-                New game
-              </button>
-            </div>
-
-            {finished && caller.pool.length > 0 ? (
-              <p className="mt-2 text-sm text-muted">
-                Everything has been called. Start a new game to play again.
-              </p>
-            ) : null}
-
-            {caller.called.length > 0 ? (
-              <ol reversed className="mt-3 max-h-40 list-decimal space-y-1 overflow-y-auto pl-5 text-sm">
-                {[...caller.called].reverse().map((c, i) => (
-                  <li key={`${c}-${i}`}>{formatCall(c, mode)}</li>
-                ))}
-              </ol>
-            ) : null}
-
-            {mode === "bingo75" ? (
-              <div
-                aria-hidden
-                className="mt-3 grid gap-1 text-[10px]"
-                style={{ gridTemplateColumns: "auto repeat(15, minmax(0, 1fr))" }}
-              >
-                {BINGO_LETTERS.map((letter, col) => {
-                  const [lo, hi] = [
-                    col * 15 + 1,
-                    col * 15 + 15,
-                  ] as const;
-                  return (
-                    <div key={letter} className="contents">
-                      <div className="flex items-center font-bold">{letter}</div>
-                      {Array.from({ length: hi - lo + 1 }, (_, i) => lo + i).map((n) => {
-                        const called = caller.called.includes(String(n));
-                        return (
-                          <div
-                            key={n}
-                            className={`flex aspect-square items-center justify-center rounded border border-border ${
-                              called ? "bg-accent-strong text-slate-950" : "bg-background"
-                            }`}
-                          >
-                            {n}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  );
-                })}
-              </div>
-            ) : null}
-
-            <p className="mt-3 text-xs text-muted">
-              Prefer a spinning wheel on a big screen? Use the{" "}
-              <Link
-                href="/random-number-wheel"
-                className="font-semibold text-foreground underline outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              >
-                random number wheel
-              </Link>{" "}
-              with 1–75.
-            </p>
-          </section>
-
-          <section aria-labelledby="bg-check" className="min-w-0 border-t border-border pt-4">
-            <h2 id="bg-check" className="text-lg font-bold text-foreground">
-              Check a card
-            </h2>
-
-            <div className="mt-3 flex flex-wrap gap-3">
-              <div>
-                <label htmlFor="bg-check-n" className="text-xs text-muted">
-                  Card number
-                </label>
-                <input
-                  id="bg-check-n"
-                  type="number"
-                  inputMode="numeric"
-                  min={1}
-                  max={cards.length || 1}
-                  value={checkN}
-                  disabled={!cards.length}
-                  onChange={(e) => {
-                    const n = Number(e.target.value);
-                    if (!Number.isFinite(n)) return;
-                    setCheckN(Math.min(cards.length || 1, Math.max(1, Math.round(n))));
-                  }}
-                  className="mt-1 block w-20 min-h-11 rounded-xl border border-border bg-background px-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
-                />
-              </div>
-              <div className="min-w-0 flex-1">
-                <label htmlFor={checkSelectId} className="text-xs text-muted">
-                  Pattern
-                </label>
-                <select
-                  id={checkSelectId}
-                  value={pattern}
-                  disabled={!cards.length}
-                  onChange={(e) => setPattern(e.target.value as Pattern)}
-                  className="mt-1 w-full min-h-11 rounded-xl border border-border bg-background px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
-                >
-                  {(Object.keys(PATTERN_LABELS) as Pattern[]).map((p) => (
-                    <option key={p} value={p}>
-                      {PATTERN_LABELS[p]}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              disabled={!cards.length || !caller.called.length}
-              onClick={onCheck}
-              className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-border px-4 text-sm font-bold outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
-            >
-              Check
-            </button>
-
-            {checkMsg ? (
-              <p
-                ref={checkResultRef}
-                tabIndex={-1}
-                role="status"
-                className="mt-2 text-sm font-semibold text-foreground outline-none"
-              >
-                {checkMsg}
-              </p>
-            ) : null}
-
-            {checkCardData && seed && checkMsg ? (
-              <div className="mx-auto mt-3 w-full max-w-[min(100%,28rem)] min-w-0">
-                <CardGrid
-                  card={checkCardData}
-                  size={gridSize}
-                  mode={mode}
-                  title={title}
-                  subtitle={subtitle}
-                  seed={seed}
-                  marks={checkMarks}
-                  highlightCells={checkHighlight}
-                  compact
-                />
-              </div>
-            ) : null}
-          </section>
-        </div>
+        <BingoHostPanels
+          mode={mode}
+          title={title}
+          subtitle={subtitle}
+          seed={seed}
+          cards={cards}
+          gridSize={gridSize}
+          caller={caller}
+          currentCall={currentCall}
+          finished={finished}
+          callerAnnounce={callerAnnounce}
+          callNextRef={callNextRef}
+          checkResultRef={checkResultRef}
+          checkSelectId={checkSelectId}
+          checkN={checkN}
+          setCheckN={setCheckN}
+          pattern={pattern}
+          setPattern={setPattern}
+          checkMsg={checkMsg}
+          checkHighlight={checkHighlight}
+          checkCardData={checkCardData}
+          checkMarks={checkMarks}
+          onCallNext={onCallNext}
+          onUndoCall={onUndoCall}
+          onCopyCalled={() => void onCopyCalled()}
+          onNewGame={onNewGame}
+          onCheck={onCheck}
+        />
       </div>
 
       <div role="status" aria-live="polite" className="sr-only">

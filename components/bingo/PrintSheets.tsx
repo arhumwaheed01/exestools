@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
   BINGO_LETTERS,
@@ -13,6 +13,20 @@ import {
 } from "@/lib/bingo/cards";
 import type { GridSize } from "@/lib/bingo/list";
 import { cellFontPt, longestItemLength } from "@/components/bingo/CardGrid";
+
+const PRINT_ROOT_ID = "bingo-print-root";
+
+/** Direct child of <body> so print CSS `body > *:not(#bingo-print-root)` works. */
+function ensurePrintRoot(): HTMLElement {
+  let root = document.getElementById(PRINT_ROOT_ID);
+  if (!root) {
+    root = document.createElement("div");
+    root.id = PRINT_ROOT_ID;
+    root.setAttribute("class", "hidden print:block");
+    document.body.appendChild(root);
+  }
+  return root;
+}
 
 function PrintCard({
   card,
@@ -57,7 +71,8 @@ function PrintCard({
           fontWeight: 700,
           fontSize: "14pt",
           lineHeight: 1.2,
-          wordBreak: "break-word",
+          overflowWrap: "break-word",
+          hyphens: "auto",
         }}
       >
         {title || "Bingo"}
@@ -69,7 +84,8 @@ function PrintCard({
             fontSize: "10pt",
             lineHeight: 1.2,
             marginTop: "1mm",
-            wordBreak: "break-word",
+            overflowWrap: "break-word",
+            hyphens: "auto",
           }}
         >
           {subtitle}
@@ -120,7 +136,8 @@ function PrintCard({
                       verticalAlign: "middle",
                       fontSize: `${pt}pt`,
                       lineHeight: 1.15,
-                      wordBreak: "break-word",
+                      overflowWrap: "break-word",
+                      hyphens: "auto",
                       padding: "1mm",
                       background: isFree ? "#f0f0f0" : "#fff",
                       fontWeight: isFree ? 700 : 400,
@@ -253,19 +270,20 @@ export function PrintSheets({
   onDone: () => void;
 }) {
   const doneRef = useRef(false);
+  const [root, setRoot] = useState<HTMLElement | null>(null);
+
   useEffect(() => {
+    setRoot(ensurePrintRoot());
+  }, []);
+
+  useEffect(() => {
+    if (!root) return;
     doneRef.current = false;
     const finish = () => {
       if (doneRef.current) return;
       doneRef.current = true;
       onDone();
     };
-
-    const root = document.getElementById("bingo-print-root");
-    if (!root) {
-      finish();
-      return;
-    }
 
     const styleId = "bingo-page-size";
     let style = document.getElementById(styleId) as HTMLStyleElement | null;
@@ -278,8 +296,8 @@ export function PrintSheets({
     style.textContent = `
 @media print {
   @page { size: ${paperSize} portrait; margin: 10mm; }
-  body > *:not(#bingo-print-root) { display: none !important; }
-  #bingo-print-root { display: block !important; }
+  body > *:not(#${PRINT_ROOT_ID}) { display: none !important; }
+  #${PRINT_ROOT_ID} { display: block !important; }
   .bingo-sheet { break-after: page; display: grid; gap: 8mm; }
   .bingo-sheet.per-2 { grid-template-rows: 1fr 1fr; }
   .bingo-sheet.per-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
@@ -292,7 +310,6 @@ export function PrintSheets({
     window.addEventListener("afterprint", after);
     const t = window.setTimeout(() => {
       window.print();
-      // Some browsers don't fire afterprint; print() is blocking when the dialog closes.
       finish();
     }, 50);
 
@@ -300,12 +317,8 @@ export function PrintSheets({
       window.clearTimeout(t);
       window.removeEventListener("afterprint", after);
     };
-  }, [onDone, paper]);
+  }, [onDone, paper, root]);
 
-  const root =
-    typeof document !== "undefined"
-      ? document.getElementById("bingo-print-root")
-      : null;
   if (!root) return null;
 
   const cardMm = perPage === 2 ? 120 : 88;
