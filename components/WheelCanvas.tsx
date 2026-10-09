@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { truncateLabel, WHEEL_COLORS, sliceAngle } from "@/lib/wheel";
+import { normalizeAngle, WHEEL_COLORS, sliceAngle } from "@/lib/wheel";
 
 type Props = {
   choices: string[];
@@ -102,23 +102,40 @@ export function WheelCanvas({
           ctx.stroke();
         }
 
+        // Label along the radius, upright on both halves, inset so hub/rim don't clip.
         const mid = start + slice / 2;
+        const world = normalizeAngle(mid + rotation);
+        const flip = world > Math.PI / 2 && world < (Math.PI * 3) / 2;
+        const labelR = radius * (n <= 6 ? 0.62 : 0.68);
+        // Chord width at label radius, with padding — keep text inside the wedge.
+        const maxW = Math.max(28, 2 * labelR * Math.sin(slice / 2) * 0.78);
+
         ctx.save();
         ctx.rotate(mid);
-        // Flip labels on the left half for readability
-        const deg = ((mid + rotation) * 180) / Math.PI;
-        const norm = ((deg % 360) + 360) % 360;
-        const flip = norm > 90 && norm < 270;
         if (flip) ctx.rotate(Math.PI);
-        ctx.textAlign = flip ? "left" : "right";
+        ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillStyle = labels?.[i % labels.length] ?? "#ffffff";
-        const fontSize = Math.max(11, Math.min(18, radius / (n > 10 ? 9 : 7)));
+        ctx.shadowColor = "rgba(0,0,0,0.35)";
+        ctx.shadowBlur = 2;
+
+        let fontSize = Math.max(12, Math.min(20, radius / (n > 10 ? 8.5 : 6.5)));
+        let text = choices[i]!.trim();
         ctx.font = `700 ${fontSize}px system-ui, sans-serif`;
-        ctx.shadowColor = "rgba(0,0,0,0.25)";
-        ctx.shadowBlur = 3;
-        const maxChars = n > 14 ? 12 : 18;
-        ctx.fillText(truncateLabel(choices[i]!, maxChars), flip ? -(radius - 14) : radius - 14, 0);
+        while (fontSize > 11 && ctx.measureText(text).width > maxW) {
+          fontSize -= 1;
+          ctx.font = `700 ${fontSize}px system-ui, sans-serif`;
+        }
+        if (ctx.measureText(text).width > maxW) {
+          // Ellipsis to fit the wedge
+          while (text.length > 1 && ctx.measureText(`${text}…`).width > maxW) {
+            text = text.slice(0, -1);
+          }
+          text = text.length < choices[i]!.trim().length ? `${text}…` : text;
+        }
+        // Local +x points outward before flip; after flip it points inward.
+        // Centered at ±labelR keeps the string in the middle of the slice.
+        ctx.fillText(text, flip ? -labelR : labelR, 0);
         ctx.restore();
       }
       ctx.restore();
