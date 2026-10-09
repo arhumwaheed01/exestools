@@ -863,7 +863,7 @@ export function SecretSantaTool() {
                   <button
                     type="button"
                     onClick={() => setPasteOpen((v) => !v)}
-                    className="text-sm font-semibold text-accent outline-none hover:underline focus-visible:ring-2 focus-visible:ring-accent"
+                    className="inline-flex min-h-11 items-center px-2 text-sm font-semibold text-accent outline-none hover:underline focus-visible:ring-2 focus-visible:ring-accent"
                   >
                     Paste a list
                   </button>
@@ -871,7 +871,7 @@ export function SecretSantaTool() {
                     <button
                       type="button"
                       onClick={loadSample}
-                      className="text-sm font-semibold text-accent outline-none hover:underline focus-visible:ring-2 focus-visible:ring-accent"
+                      className="inline-flex min-h-11 items-center px-2 text-sm font-semibold text-accent outline-none hover:underline focus-visible:ring-2 focus-visible:ring-accent"
                     >
                       Try a sample
                     </button>
@@ -1178,15 +1178,19 @@ export function SecretSantaTool() {
               aria-checked={singleCycle}
               disabled={locked}
               onClick={() => setSingleCycle((v) => !v)}
-              className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50 ${
-                singleCycle ? "bg-accent-strong" : "bg-border"
-              }`}
+              className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
             >
               <span
-                className={`inline-block h-5 w-5 rounded-full bg-white transition ${
-                  singleCycle ? "translate-x-6" : "translate-x-1"
+                className={`relative inline-flex h-7 w-12 items-center rounded-full ${
+                  singleCycle ? "bg-accent-strong" : "bg-border"
                 }`}
-              />
+              >
+                <span
+                  className={`inline-block h-5 w-5 rounded-full bg-white transition ${
+                    singleCycle ? "translate-x-6" : "translate-x-1"
+                  }`}
+                />
+              </span>
             </button>
           </div>
 
@@ -1218,7 +1222,7 @@ export function SecretSantaTool() {
               type="button"
               onClick={() => setConfirm("clear-list")}
               disabled={locked || participants.length === 0}
-              className="text-xs font-semibold text-muted outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-40"
+              className="inline-flex min-h-11 items-center px-2 text-xs font-semibold text-muted outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-40"
             >
               Clear list
             </button>

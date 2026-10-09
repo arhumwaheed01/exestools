@@ -468,7 +468,7 @@ export function TeamGenerator({ initialPresetQuery = null }: Props) {
           <div>
             <button
               type="button"
-              className="text-sm font-semibold text-accent hover:underline"
+              className="inline-flex min-h-11 items-center px-2 text-sm font-semibold text-accent hover:underline outline-none focus-visible:ring-2 focus-visible:ring-accent"
               onClick={() => setShowTeamNames((v) => !v)}
             >
               {showTeamNames ? "Hide team names" : "Optional team names"}

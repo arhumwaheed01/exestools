@@ -159,7 +159,10 @@ export default async function RandomTeamGeneratorPage({ searchParams }: PageProp
       />
 
       <nav className="mb-2 text-xs font-semibold text-muted print:hidden" aria-label="Breadcrumb">
-        <Link href="/" className="text-accent hover:underline">
+        <Link
+          href="/"
+          className="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent"
+        >
           Home
         </Link>
         <span className="mx-1.5">→</span>

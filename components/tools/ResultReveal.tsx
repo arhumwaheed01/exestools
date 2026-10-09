@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type RefObject } from "react";
 
 type Variant = "default" | "yesno" | "prize" | "number";
 
@@ -15,6 +15,8 @@ type Props = {
   onRemove?: () => void;
   onShare?: () => void;
   onClose?: () => void;
+  /** Focused after Esc / dismiss closes the banner. */
+  spinBtnRef?: RefObject<HTMLButtonElement | null>;
 };
 
 /** Inline celebrate banner (no page blackout). Esc closes and focuses Spin again. */
@@ -29,6 +31,7 @@ export function ResultReveal({
   onRemove,
   onShare,
   onClose,
+  spinBtnRef,
 }: Props) {
   const spinAgainRef = useRef<HTMLButtonElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -45,12 +48,12 @@ export function ResultReveal({
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== "Escape") return;
       e.preventDefault();
-      // Close first; parent onClose should move focus to SPIN / Spin again.
       onClose?.();
+      window.setTimeout(() => spinBtnRef?.current?.focus(), 0);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
+  }, [open, onClose, spinBtnRef]);
 
   if (!open || !value) return null;
 
@@ -94,7 +97,10 @@ export function ResultReveal({
         {onClose ? (
           <button
             type="button"
-            onClick={onClose}
+            onClick={() => {
+              onClose();
+              window.setTimeout(() => spinBtnRef?.current?.focus(), 0);
+            }}
             className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg text-white/80 outline-none hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white"
             aria-label="Dismiss"
           >

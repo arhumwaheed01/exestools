@@ -99,6 +99,7 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
   const rafRef = useRef(0);
   const allowSaveRef = useRef(true);
   const poolRef = useRef<number[]>([]);
+  const spinBtnRef = useRef<HTMLButtonElement>(null);
   const resolvedTheme = resolveToolTheme(themeChoice, TOOL_ID);
   const themeColors = useMemo(
     () => Array.from({ length: 8 }, (_, i) => segColor(resolvedTheme, i)),
@@ -496,12 +497,14 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
               }}
               onShare={() => void copyShare()}
               onClose={() => setRevealOpen(false)}
+              spinBtnRef={spinBtnRef}
             />
             <StickySpinButton
               placement="inline-desktop"
               canSpin={canSpin}
               spinning={spinning}
               onSpin={spin}
+              buttonRef={spinBtnRef}
             />
             <div
               role="radiogroup"
@@ -544,7 +547,7 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
               aria-pressed={sound.enabled}
               className="mt-2 min-h-11 rounded-xl border border-border bg-surface px-3 py-2 text-sm font-semibold outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
-              Sound: {sound.enabled ? "On" : "Off"}
+              Sound {sound.enabled ? "on" : "off"}
             </button>
             <HistoryRow
               items={recent.map((n) =>
@@ -723,6 +726,7 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
         canSpin={canSpin}
         spinning={spinning}
         onSpin={spin}
+        buttonRef={spinBtnRef}
       />
       <ToolConfetti fire={confettiFire} colors={[...themeColors]} />
     </div>

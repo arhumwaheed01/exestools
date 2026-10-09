@@ -524,8 +524,8 @@ export function SpinnerWheel({
               onClose={() => {
                 setRevealOpen(false);
                 setShowNextSteps(true);
-                window.setTimeout(() => stickySpinRef.current?.focus(), 0);
               }}
+              spinBtnRef={stickySpinRef}
             />
             <HistoryRow
               items={history}

@@ -167,15 +167,19 @@ function Switch({
         aria-checked={checked}
         disabled={disabled}
         onClick={() => onChange(!checked)}
-        className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50 ${
-          checked ? "bg-accent-strong" : "bg-border"
-        }`}
+        className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
       >
         <span
-          className={`inline-block h-5 w-5 rounded-full bg-white transition ${
-            checked ? "translate-x-6" : "translate-x-1"
+          className={`relative inline-flex h-7 w-12 items-center rounded-full ${
+            checked ? "bg-accent-strong" : "bg-border"
           }`}
-        />
+        >
+          <span
+            className={`inline-block h-5 w-5 rounded-full bg-white transition ${
+              checked ? "translate-x-6" : "translate-x-1"
+            }`}
+          />
+        </span>
       </button>
     </div>
   );
@@ -1255,7 +1259,7 @@ export function RaffleTool() {
                 type="button"
                 aria-expanded={fpOpen}
                 onClick={() => setFpOpen((v) => !v)}
-                className="ml-2 text-xs font-semibold text-accent outline-none hover:underline focus-visible:ring-2 focus-visible:ring-accent"
+                className="ml-2 inline-flex min-h-11 items-center px-2 text-xs font-semibold text-accent outline-none hover:underline focus-visible:ring-2 focus-visible:ring-accent"
               >
                 What&apos;s this?
               </button>

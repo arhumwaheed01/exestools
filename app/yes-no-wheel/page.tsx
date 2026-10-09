@@ -122,10 +122,7 @@ export default async function YesNoWheelPage({ searchParams }: PageProps) {
         <ol className="list-decimal space-y-2 pl-5">
           <li>Think of a yes-or-no question.</li>
           <li>Press SPIN. The wheel lands on Yes or No.</li>
-          <li>
-            Spin again as often as you like. Leave &quot;Remove winner after spin&quot; off so both
-            answers stay on the wheel.
-          </li>
+          <li>Spin again as often as you like — both answers stay on the wheel.</li>
           <li>
             Want a Maybe? Choose Yes / No / Maybe. For a coin toss, choose Heads / Tails. Press Fresh
             wheel to go back to plain Yes and No.
@@ -145,8 +142,7 @@ export default async function YesNoWheelPage({ searchParams }: PageProps) {
             reinterpret the result afterwards.
           </li>
           <li>
-            Best of three. Spin three times and take the side that wins twice. Leave &quot;Remove
-            winner after spin&quot; off so both sides stay on the wheel.
+            Best of three. Spin three times and take the side that wins twice.
           </li>
           <li>
             Two options, not yes or no? Give each option a side, or type the two options in place of

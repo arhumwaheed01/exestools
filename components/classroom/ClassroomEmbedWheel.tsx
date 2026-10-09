@@ -66,6 +66,7 @@ export function ClassroomEmbedWheel({ slug }: Props) {
   const rotationRef = useRef(0);
   const rafRef = useRef(0);
   const lastSegRef = useRef(-1);
+  const spinBtnRef = useRef<HTMLButtonElement>(null);
 
   const { choices } = useMemo(() => parseChoicesWithStats(text), [text]);
   const canSpin = choices.length >= 2 && !spinning;
@@ -244,6 +245,7 @@ export function ClassroomEmbedWheel({ slug }: Props) {
               setRotation(0);
             }}
             onClose={() => setRevealOpen(false)}
+            spinBtnRef={spinBtnRef}
           />
 
           <SpinControls
@@ -290,6 +292,7 @@ export function ClassroomEmbedWheel({ slug }: Props) {
           canSpin={canSpin}
           spinning={spinning}
           onSpin={spin}
+          buttonRef={spinBtnRef}
         />
       </div>
 
