@@ -237,37 +237,69 @@
   }
 }
 
-/* Ink saver print */
+/* Cell text: no mid-word shatter; size from container queries */
+.bingo-card .bc-cell {
+  container-type: size;
+  overflow: hidden;
+  overflow-wrap: normal;
+  word-break: keep-all;
+  hyphens: manual;
+}
+
+.bingo-card .bc-cell-label {
+  max-width: 100%;
+  overflow: hidden;
+  overflow-wrap: normal;
+  word-break: keep-all;
+  hyphens: manual;
+  font-size: clamp(9px, 13cqi, 16px);
+  line-height: 1.15;
+}
+
+.bingo-card .bc-foot {
+  color: var(--bc-band-ink);
+  opacity: 1;
+}
+
+/* Ink saver print — outlines only, no solid fills */
 .bingo-print-mono.bingo-card,
 .bingo-print-mono .bingo-card {
-  --bc-band: #ffffff;
+  --bc-band: transparent;
   --bc-band-ink: #000000;
-  --bc-letter-1: #ffffff;
-  --bc-letter-2: #ffffff;
-  --bc-letter-3: #ffffff;
-  --bc-letter-4: #ffffff;
-  --bc-letter-5: #ffffff;
-  --bc-frame: #000000;
+  --bc-letter-1: transparent;
+  --bc-letter-2: transparent;
+  --bc-letter-3: transparent;
+  --bc-letter-4: transparent;
+  --bc-letter-5: transparent;
+  --bc-frame: transparent;
   --bc-cell: #ffffff;
   --bc-cell-ink: #000000;
   --bc-line: #000000;
-  --bc-free: #ffffff;
+  --bc-free: transparent;
   --bc-free-ink: #000000;
   --bc-dauber: transparent;
   --print-line: #000000;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 1.5pt solid #000 !important;
 }
 
 .bingo-print-mono .bc-band {
-  background: #fff !important;
+  background: transparent !important;
   border-bottom: 2pt solid #000;
   color: #000 !important;
 }
 
 .bingo-print-mono .bc-letter {
-  background: #fff !important;
+  background: transparent !important;
   color: #000 !important;
   border: 1.5pt solid #000;
   box-shadow: none !important;
+}
+
+.bingo-print-mono .bc-cell-free {
+  background: transparent !important;
+  border: 1.5pt solid #000 !important;
 }
 
 .bingo-print-mono .bc-free-icon {
@@ -278,6 +310,7 @@
 
 @media print {
   .bingo-card {
+    max-width: none !important;
     box-shadow: none !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;

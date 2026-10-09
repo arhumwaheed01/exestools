@@ -2,11 +2,30 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { CardGrid } from "@/components/bingo/CardGrid";
-import type { BingoMode, Card, Cell } from "@/lib/bingo/cards";
+import { columnRange, type BingoMode, type Card, type Cell } from "@/lib/bingo/cards";
 import { canHaveFree, type GridSize } from "@/lib/bingo/list";
 import type { ThemeId } from "@/lib/bingo/themes";
 
 const PREVIEW_SEED = "PREVIEW01";
+
+/** 75-ball preview: one sample from each real column range per row (not 1–24 in order). */
+function buildBingo75PreviewCells(free: boolean): Cell[] {
+  const freeIdx = free ? 12 : -1;
+  const cells: Cell[] = [];
+  for (let r = 0; r < 5; r++) {
+    for (let c = 0; c < 5; c++) {
+      const index = r * 5 + c;
+      if (index === freeIdx) {
+        cells.push(null);
+        continue;
+      }
+      const [lo] = columnRange(c);
+      // Distinct sample per row within the column band
+      cells.push(String(lo + r));
+    }
+  }
+  return cells;
+}
 
 function buildPreviewCells(
   items: string[],
@@ -15,16 +34,14 @@ function buildPreviewCells(
   mode: BingoMode,
   max: number,
 ): Cell[] {
+  if (mode === "bingo75") return buildBingo75PreviewCells(free);
+
   const freeIdx = free && canHaveFree(size) ? Math.floor((size * size) / 2) : -1;
   const need = size * size - (freeIdx >= 0 ? 1 : 0);
-  let pool: string[] = [];
-  if (mode === "bingo75") {
-    pool = Array.from({ length: 75 }, (_, i) => String(i + 1));
-  } else if (mode === "numbers") {
-    pool = Array.from({ length: Math.max(0, max) }, (_, i) => String(i + 1));
-  } else {
-    pool = items;
-  }
+  const pool =
+    mode === "numbers"
+      ? Array.from({ length: Math.max(0, max) }, (_, i) => String(i + 1))
+      : items;
   const cells: Cell[] = [];
   let i = 0;
   for (let n = 0; n < size * size; n++) {

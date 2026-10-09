@@ -51,9 +51,9 @@ function CallBall({
     return (
       <div
         key={call}
-        className="bc-pop mx-auto grid size-36 place-items-center rounded-full sm:size-40"
+        className="bc-pop relative mx-auto grid size-36 place-items-center rounded-full sm:size-40"
         style={{
-          background: `radial-gradient(circle at 35% 30%, #fff 0 18%, ${ball} 19% 100%)`,
+          background: `radial-gradient(circle at 22% 18%, rgb(255 255 255 / 0.35) 0 12%, ${ball} 13% 100%)`,
         }}
       >
         <div className="grid size-[62%] place-items-center rounded-full bg-white text-slate-900 shadow-inner">
@@ -264,7 +264,11 @@ export function BingoHostPanels({
         ) : null}
 
         {caller.called.length > 0 ? (
-          <ol reversed className="mt-3 max-h-32 list-decimal space-y-1 overflow-y-auto pl-5 text-sm">
+          <ol
+            reversed
+            className="mt-3 max-h-32 list-decimal space-y-1 overflow-x-visible overflow-y-auto text-sm"
+            style={{ paddingLeft: "calc(1.25rem + 2.5ch)" }}
+          >
             {[...caller.called].reverse().map((c, i) => (
               <li key={`${c}-${i}`}>{formatCall(c, mode)}</li>
             ))}

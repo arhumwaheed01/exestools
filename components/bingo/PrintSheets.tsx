@@ -162,15 +162,28 @@ export function PrintSheets({
   @page { size: ${paperSize} portrait; margin: 10mm; }
   body > *:not(#${PRINT_ROOT_ID}) { display: none !important; }
   #${PRINT_ROOT_ID} { display: block !important; }
-  .bingo-sheet { break-after: page; display: grid; gap: 8mm; align-content: start; }
+  .bingo-sheet { break-after: page; display: grid; gap: 6mm; align-content: start; page-break-inside: avoid; }
   .bingo-sheet.per-2 { grid-template-rows: 1fr 1fr; }
   .bingo-sheet.per-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
-  .bingo-sheet .bingo-card { break-inside: avoid; max-width: 100%; width: ${
-    perPage === 2 ? "120mm" : "88mm"
-  }; margin: 0 auto; border-radius: 4mm; box-shadow: none !important; }
+  .bingo-sheet .bingo-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    max-width: none !important;
+    width: ${perPage === 2 ? "120mm" : "88mm"};
+    margin: 0 auto;
+    border-radius: 4mm;
+    box-shadow: none !important;
+  }
+  .bingo-sheet.per-2 .bingo-card { max-height: 48vh; }
   .bingo-sheet.per-4 .bingo-card .bc-title { font-size: 14pt !important; }
   .bingo-sheet.per-4 .bingo-card .bc-letter { font-size: 16pt !important; }
-  .bingo-sheet.per-4 .bingo-card .bc-cell { font-size: 8.5pt !important; overflow-wrap: normal !important; word-break: normal !important; hyphens: auto; }
+  .bingo-sheet.per-4 .bingo-card .bc-cell,
+  .bingo-sheet.per-4 .bingo-card .bc-cell-label {
+    font-size: 8.5pt !important;
+    overflow-wrap: normal !important;
+    word-break: keep-all !important;
+    hyphens: manual !important;
+  }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 `;

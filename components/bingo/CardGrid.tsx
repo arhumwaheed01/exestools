@@ -15,24 +15,42 @@ import type { ThemeId } from "@/lib/bingo/themes";
 export function longestItemLength(cells: readonly Cell[]): number {
   let max = 0;
   for (const c of cells) {
-    if (c === null) continue;
+    if (c === null || c === "") continue;
     max = Math.max(max, [...c].length);
   }
   return max;
 }
 
-/** Screen font steps by longest item on this card. */
+/**
+ * Screen font steps by longest item. One size smaller when any word is 9+ chars
+ * so labels stay inside the cell without mid-word breaks.
+ */
 export function cellFontClass(longest: number, size: GridSize = 5): string {
+  // Base steps, then drop one rung when longest ≥ 9
+  const drop = longest >= 9 ? 1 : 0;
+  const step = (n: number) => Math.min(3, n + drop);
+  const steps5 = [
+    "text-[clamp(.95rem,3.8vw,1.15rem)]",
+    "text-sm",
+    "text-xs",
+    "text-[11px]",
+  ] as const;
+  const stepsOther = [
+    "text-[clamp(.95rem,3.8vw,1.15rem)]",
+    "text-sm",
+    "text-xs",
+    "text-[11px]",
+  ] as const;
   if (size === 5) {
-    if (longest <= 8) return "text-[clamp(.95rem,3.8vw,1.15rem)] max-[399px]:text-[11px]";
-    if (longest <= 16) return "text-sm max-[399px]:text-xs";
-    if (longest <= 28) return "text-xs max-[399px]:text-[11px]";
-    return "text-[11px] max-[399px]:text-[10px]";
+    if (longest <= 8) return steps5[step(0)]!;
+    if (longest <= 16) return steps5[step(1)]!;
+    if (longest <= 28) return steps5[step(2)]!;
+    return steps5[3]!;
   }
-  if (longest <= 8) return "text-[clamp(.95rem,3.8vw,1.15rem)]";
-  if (longest <= 16) return "text-sm";
-  if (longest <= 28) return "text-xs";
-  return "text-[11px]";
+  if (longest <= 8) return stepsOther[step(0)]!;
+  if (longest <= 16) return stepsOther[step(1)]!;
+  if (longest <= 28) return stepsOther[step(2)]!;
+  return stepsOther[3]!;
 }
 
 /** Print font in pt; never below 9. */
@@ -74,7 +92,14 @@ function FreeGlyph({ kind }: { kind: FreeIcon }) {
   }
   if (kind === "snowflake") {
     return (
-      <svg aria-hidden className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
+      <svg
+        aria-hidden
+        className={common}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.75"
+      >
         <path d="M12 2v20M4.5 6.5l15 11M19.5 6.5l-15 11M2 12h20" strokeLinecap="round" />
       </svg>
     );
@@ -113,17 +138,16 @@ function CellInner({
   onKeyDown?: (e: React.KeyboardEvent) => void;
   placeholder?: boolean;
 }) {
-  const isFree = cell === null;
+  const isFree = !placeholder && cell === null;
   const label = cellLabel(cell);
   const win = highlight ? "bc-win-cell" : "";
-  const base =
-    `bc-cell relative aspect-square grid min-h-11 min-w-0 place-items-center rounded-md p-1 text-center font-semibold leading-tight wrap-break-word hyphens-auto outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bc-cell)] ${
-      placeholder
-        ? "border border-dashed border-[var(--bc-line)] bg-transparent text-[var(--bc-line)]"
-        : isFree
-          ? "bg-[var(--bc-free)] text-[var(--bc-free-ink)]"
-          : "bg-[var(--bc-cell)] text-[var(--bc-cell-ink)]"
-    }`;
+  const base = `bc-cell relative aspect-square grid min-h-11 min-w-0 place-items-center overflow-hidden rounded-md p-1 text-center font-semibold leading-tight outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bc-cell)] ${
+    placeholder
+      ? "bc-cell-empty border border-dashed border-[var(--bc-line)] bg-transparent text-[var(--bc-line)]"
+      : isFree
+        ? "bc-cell-free bg-[var(--bc-free)] text-[var(--bc-free-ink)]"
+        : "bg-[var(--bc-cell)] text-[var(--bc-cell-ink)]"
+  }`;
 
   const body: ReactNode = placeholder ? (
     <span className="text-lg font-bold text-[var(--bc-line)]" aria-hidden>
@@ -136,9 +160,9 @@ function CellInner({
     </span>
   ) : (
     <span
-      className={`relative z-10 line-clamp-4 max-w-full wrap-break-word hyphens-auto ${
-        marked ? "font-extrabold" : ""
-      } ${isNumber ? "tabular-nums text-[clamp(1.1rem,5.5vw,1.6rem)] font-bold" : font}`}
+      className={`bc-cell-label relative z-10 max-w-full ${marked ? "font-extrabold" : ""} ${
+        isNumber ? "tabular-nums font-bold" : font
+      }`}
     >
       {label}
     </span>
@@ -160,6 +184,8 @@ function CellInner({
       </>
     ) : null;
 
+  const ariaLabel = placeholder ? "Empty square" : isFree ? "FREE" : marked ? `${label}, marked` : label;
+
   if (interactive) {
     return (
       <button
@@ -167,19 +193,11 @@ function CellInner({
         type="button"
         tabIndex={tabIndex}
         aria-pressed={marked}
-        aria-label={
-          placeholder
-            ? "Empty square"
-            : isFree
-              ? "Free square, marked"
-              : marked
-                ? `${label}, marked`
-                : label
-        }
+        aria-label={ariaLabel}
         onClick={isFree || placeholder ? undefined : onClick}
         onKeyDown={onKeyDown}
         disabled={placeholder}
-        className={`${base} ${font} w-full ${win}`}
+        className={`${base} w-full ${win}`}
       >
         {dauber}
         {body}
@@ -188,12 +206,7 @@ function CellInner({
   }
 
   return (
-    <div
-      aria-label={
-        placeholder ? "Empty square" : isFree ? "Free square, marked" : label
-      }
-      className={`${base} ${font} ${win}`}
-    >
+    <div aria-label={ariaLabel} className={`${base} ${win}`}>
       {dauber}
       {body}
     </div>
@@ -230,9 +243,7 @@ export function CardGrid({
   onToggle?: (index: number) => void;
   highlightCells?: readonly number[];
   compact?: boolean;
-  /** Provisional preview — no set code shown as real. */
   preview?: boolean;
-  /** Empty-state example ribbon. */
   example?: boolean;
   className?: string;
   deal?: boolean;
@@ -340,53 +351,59 @@ export function CardGrid({
           gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))`,
         }}
       >
-        {showBingoRow
-          ? BINGO_LETTERS.map((letter, i) => (
+        {showBingoRow ? (
+          <div role="row" className="contents">
+            {BINGO_LETTERS.map((letter, i) => (
               <span
                 key={letter}
                 role="columnheader"
-                className={`bc-letter col-span-1 grid aspect-[1/0.8] place-items-center rounded-lg font-black text-white shadow-[inset_0_-3px_0_rgb(0_0_0/0.18)] text-[clamp(1.25rem,6vw,2rem)] ${
+                className={`bc-letter grid aspect-[1/0.8] place-items-center rounded-lg font-black text-white shadow-[inset_0_-3px_0_rgb(0_0_0/0.18)] text-[clamp(1.25rem,6vw,2rem)] ${
                   theme === "pastel" ? "text-[#500724]" : ""
                 }`}
                 style={{ background: `var(--bc-letter-${i + 1})` }}
               >
                 {letter}
               </span>
-            ))
-          : null}
+            ))}
+          </div>
+        ) : null}
 
-        {rows.map((r) =>
-          Array.from({ length: size }, (_, c) => {
-            const index = r * size + c;
-            const cell = card.cells[index] ?? "";
-            const isFree = cell === null;
-            const isPlaceholder = cell === "";
-            const marked = isFree || Boolean(marks?.[index]);
-            return (
-              <div key={index} role="gridcell" className="min-h-0 min-w-0">
-                <CellInner
-                  cell={isPlaceholder ? "_" : cell}
-                  marked={marked}
-                  highlight={highlight.has(index)}
-                  font={font}
-                  isNumber={isNumber && !isFree && !isPlaceholder}
-                  freeIcon={freeIcon}
-                  interactive={interactive}
-                  tabIndex={interactive && focusIdx === index ? 0 : -1}
-                  buttonRef={(el) => {
-                    cellRefs.current[index] = el;
-                  }}
-                  onClick={() => onToggle?.(index)}
-                  onKeyDown={(e) => onKeyDown(e, index)}
-                  placeholder={isPlaceholder}
-                />
-              </div>
-            );
-          }),
-        )}
+        {rows.map((r) => (
+          <div key={r} role="row" className="contents">
+            {Array.from({ length: size }, (_, c) => {
+              const index = r * size + c;
+              const raw = card.cells[index];
+              // null = FREE. Do NOT coalesce null → "" (that was the empty "?" bug).
+              const isFree = raw === null;
+              const isPlaceholder = raw === undefined || raw === "";
+              const cell: Cell = isPlaceholder ? "" : raw!;
+              const marked = isFree || Boolean(marks?.[index]);
+              return (
+                <div key={index} role="gridcell" className="min-h-0 min-w-0">
+                  <CellInner
+                    cell={isFree ? null : isPlaceholder ? "" : cell}
+                    marked={marked}
+                    highlight={highlight.has(index)}
+                    font={font}
+                    isNumber={isNumber && !isFree && !isPlaceholder}
+                    freeIcon={freeIcon}
+                    interactive={interactive}
+                    tabIndex={interactive && focusIdx === index ? 0 : -1}
+                    buttonRef={(el) => {
+                      cellRefs.current[index] = el;
+                    }}
+                    onClick={() => onToggle?.(index)}
+                    onKeyDown={(e) => onKeyDown(e, index)}
+                    placeholder={isPlaceholder}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        ))}
       </div>
 
-      <footer className="bc-foot pt-1.5 text-center font-mono text-[10px] text-[var(--bc-band-ink)]/85">
+      <footer className="bc-foot pt-1.5 text-center font-mono text-[10px] text-[var(--bc-band-ink)]">
         {preview ? (
           <>Preview</>
         ) : (
