@@ -29,16 +29,16 @@ export function longestBucket(longest: number): "short" | "mid" | "long" {
 }
 
 /**
- * Screen font steps by longest item. Floor ~7px; CSS [data-longest] also clamps.
+ * Screen font steps by longest item. Floor ~6px; CSS [data-longest] also clamps.
  */
 export function cellFontClass(longest: number, size: GridSize = 5): string {
   const drop = longest >= 9 ? 1 : 0;
   const step = (n: number) => Math.min(3, n + drop);
   const steps = [
-    "text-[clamp(7px,3.8vw,1.15rem)]",
-    "text-[clamp(7px,3.2vw,0.95rem)]",
-    "text-[clamp(7px,2.8vw,0.8rem)]",
-    "text-[clamp(7px,2.4vw,0.7rem)]",
+    "text-[clamp(6px,3.8vw,1.15rem)]",
+    "text-[clamp(6px,3.2vw,0.95rem)]",
+    "text-[clamp(6px,2.8vw,0.8rem)]",
+    "text-[clamp(6px,2.4vw,0.7rem)]",
   ] as const;
   void size;
   if (longest <= 8) return steps[step(0)]!;
@@ -135,7 +135,7 @@ function CellInner({
   const isFree = !placeholder && cell === null;
   const label = cellLabel(cell);
   const win = highlight ? "bc-win-cell" : "";
-  const base = `bc-cell relative aspect-square grid min-h-11 min-w-0 place-items-center rounded-md p-1 text-center font-semibold leading-tight outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bc-cell)] ${
+  const base = `bc-cell relative aspect-square grid min-h-11 min-w-0 place-items-center rounded-md p-0.5 min-[360px]:p-1 text-center font-semibold leading-tight outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bc-cell)] ${
     placeholder
       ? "bc-cell-empty border border-dashed border-[var(--bc-line)] bg-transparent text-[var(--bc-line)]"
       : isFree

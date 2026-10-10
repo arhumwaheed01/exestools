@@ -60,7 +60,7 @@ Candy cane
 Reindeer
 Stocking
 Wreath
-Gingerbread house
+Ginger­bread house
 Mistletoe
 Sleigh
 Elf

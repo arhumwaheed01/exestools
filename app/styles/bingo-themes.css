@@ -252,7 +252,7 @@
   word-break: keep-all;
   hyphens: auto;
   -webkit-hyphens: auto;
-  font-size: clamp(7px, 12cqi, 16px);
+  font-size: clamp(6px, 12cqi, 16px);
   line-height: 1.12;
   /* Up to 3 lines — clip without ellipsis (line-clamp forces …) */
   display: block;
@@ -262,11 +262,23 @@
 }
 
 .bingo-card[data-longest="mid"] .bc-cell-label {
-  font-size: clamp(7px, 10cqi, 13px);
+  font-size: clamp(6px, 10cqi, 13px);
 }
 
 .bingo-card[data-longest="long"] .bc-cell-label {
-  font-size: clamp(7px, 8cqi, 10px);
+  font-size: clamp(6px, 8cqi, 10px);
+}
+
+@media (max-width: 359px) {
+  .bingo-card .bc-cell-label {
+    font-size: clamp(6px, 11cqi, 14px);
+  }
+  .bingo-card[data-longest="mid"] .bc-cell-label {
+    font-size: clamp(6px, 9cqi, 11px);
+  }
+  .bingo-card[data-longest="long"] .bc-cell-label {
+    font-size: clamp(6px, 7.5cqi, 9px);
+  }
 }
 
 .bingo-card .bc-foot {

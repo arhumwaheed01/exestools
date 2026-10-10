@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type RefObject } from "react";
+import { focusVisibleSpinButton } from "@/components/SpinControls";
 
 type Variant = "default" | "yesno" | "prize" | "number";
 
@@ -15,7 +16,7 @@ type Props = {
   onRemove?: () => void;
   onShare?: () => void;
   onClose?: () => void;
-  /** Focused after Esc / dismiss closes the banner. */
+  /** Fallback ref; focus prefers the visible sticky SPIN (`data-et-spin`). */
   spinBtnRef?: RefObject<HTMLButtonElement | null>;
 };
 
@@ -35,6 +36,7 @@ export function ResultReveal({
 }: Props) {
   const spinAgainRef = useRef<HTMLButtonElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
+  const wasOpenRef = useRef(false);
 
   useEffect(() => {
     if (!open || !value) return;
@@ -43,17 +45,34 @@ export function ResultReveal({
     return () => window.clearTimeout(t);
   }, [open, value]);
 
+  // After the banner unmounts, move focus to the visible SPIN (double rAF beats body fallback).
+  useEffect(() => {
+    const wasOpen = wasOpenRef.current;
+    wasOpenRef.current = open;
+    if (!wasOpen || open) return;
+
+    let raf2 = 0;
+    const raf1 = window.requestAnimationFrame(() => {
+      raf2 = window.requestAnimationFrame(() => {
+        focusVisibleSpinButton(spinBtnRef);
+      });
+    });
+    return () => {
+      window.cancelAnimationFrame(raf1);
+      window.cancelAnimationFrame(raf2);
+    };
+  }, [open, spinBtnRef]);
+
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== "Escape") return;
       e.preventDefault();
       onClose?.();
-      window.setTimeout(() => spinBtnRef?.current?.focus(), 0);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open, onClose, spinBtnRef]);
+  }, [open, onClose]);
 
   if (!open || !value) return null;
 
@@ -97,10 +116,7 @@ export function ResultReveal({
         {onClose ? (
           <button
             type="button"
-            onClick={() => {
-              onClose();
-              window.setTimeout(() => spinBtnRef?.current?.focus(), 0);
-            }}
+            onClick={onClose}
             className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg text-white/80 outline-none hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white"
             aria-label="Dismiss"
           >
