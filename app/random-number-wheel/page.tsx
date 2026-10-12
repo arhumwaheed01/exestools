@@ -267,7 +267,12 @@ export default function RandomNumberWheelPage() {
           <h2 className="text-2xl font-bold tracking-tight text-foreground">
             Odds on a number wheel
           </h2>
-          <div className="mt-3 overflow-x-auto">
+          <div
+            className="mt-3 overflow-x-auto"
+            tabIndex={0}
+            role="region"
+            aria-label="Number wheel odds table"
+          >
             <table className="w-full min-w-[20rem] border-collapse text-left text-sm leading-relaxed">
               <thead>
                 <tr className="border-b border-border">

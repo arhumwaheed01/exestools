@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
+import { toolOpenGraph } from "@/lib/seo/jsonld";
 
 const META =
   "How ExesTools handles your lists, share links, analytics, advertising cookies and consent choices.";
@@ -9,12 +10,12 @@ export const metadata: Metadata = {
   title: "Privacy Policy",
   description: META,
   alternates: { canonical: absoluteUrl("/privacy-policy") },
-  openGraph: {
+  openGraph: toolOpenGraph({
     title: `Privacy Policy | ${siteConfig.name}`,
     description: META,
     url: absoluteUrl("/privacy-policy"),
-    images: [{ url: siteConfig.ogImagePath, width: 1200, height: 630, alt: "ExesTools" }],
-  },
+    imagePath: siteConfig.ogImagePath,
+  }),
   twitter: {
     card: "summary_large_image",
     title: `Privacy Policy | ${siteConfig.name}`,

@@ -8,6 +8,11 @@ import { TeamGeneratorMount } from "@/components/teams/TeamGeneratorMount";
 import { ALLOWED_NUMBER_PRESET_QUERY } from "@/lib/range";
 import type { ToolId } from "@/lib/tools";
 
+/** Empty shell only — never put a wheel/copy here (avoids duplicate crawl text). */
+function MountSlot({ className }: { className: string }) {
+  return <div className={className} aria-hidden />;
+}
+
 function SpinnerFromQuery({ toolId }: { toolId: ToolId }) {
   const sp = useSearchParams();
   const c = sp.get("c");
@@ -24,7 +29,7 @@ function SpinnerFromQuery({ toolId }: { toolId: ToolId }) {
 /** Client-reads `?c=` / `?preset=` so the server page can stay static. */
 export function QueryHydratedSpinner({ toolId }: { toolId: ToolId }) {
   return (
-    <Suspense fallback={<SpinnerMount toolId={toolId} />}>
+    <Suspense fallback={<MountSlot className="min-h-[520px]" />}>
       <SpinnerFromQuery toolId={toolId} />
     </Suspense>
   );
@@ -38,7 +43,7 @@ function TeamsFromQuery() {
 
 export function QueryHydratedTeams() {
   return (
-    <Suspense fallback={<TeamGeneratorMount />}>
+    <Suspense fallback={<MountSlot className="min-h-[1190px] lg:min-h-[800px]" />}>
       <TeamsFromQuery />
     </Suspense>
   );
@@ -53,7 +58,7 @@ function NumbersFromQuery() {
 
 export function QueryHydratedNumbers() {
   return (
-    <Suspense fallback={<NumberWheelMount />}>
+    <Suspense fallback={<MountSlot className="min-h-[640px] lg:min-h-[560px]" />}>
       <NumbersFromQuery />
     </Suspense>
   );

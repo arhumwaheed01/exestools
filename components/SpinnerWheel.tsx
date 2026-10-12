@@ -661,11 +661,11 @@ export function SpinnerWheel({
             ) : null}
           </div>
           <StickySpinButton
-            placement="inline-desktop"
             canSpin={canSpin}
             spinning={spinning}
             onSpin={spin}
             buttonRef={stickySpinRef}
+            anchorRef={stageRef}
           />
         </div>
 
@@ -729,15 +729,6 @@ export function SpinnerWheel({
           />
         </div>
       </div>
-
-      {/* Phone SPIN — fixed to the viewport so it stays while editing entries */}
-      <StickySpinButton
-        placement="fixed-mobile"
-        canSpin={canSpin}
-        spinning={spinning}
-        onSpin={spin}
-        buttonRef={stickySpinRef}
-      />
 
       {toast ? (
         <p

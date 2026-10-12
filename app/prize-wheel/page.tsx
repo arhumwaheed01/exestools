@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { GuideSection, UseCaseToolPage } from "@/components/UseCaseToolPage";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
+import { toolOpenGraph } from "@/lib/seo/jsonld";
 
 const TITLE = "Prize Wheel Spinner for Giveaways (Free Online) | ExesTools";
 const META =
@@ -11,12 +12,13 @@ export const metadata: Metadata = {
   title: { absolute: TITLE },
   description: META,
   alternates: { canonical: absoluteUrl("/prize-wheel") },
-  openGraph: {
+  openGraph: toolOpenGraph({
     title: TITLE,
     description: META,
     url: absoluteUrl("/prize-wheel"),
-    images: [{ url: siteConfig.ogImagePath, width: 1200, height: 630, alt: "ExesTools Spinner Wheel" }],
-  },
+    imagePath: siteConfig.ogImagePath,
+    imageAlt: "ExesTools Spinner Wheel",
+  }),
   twitter: {
     card: "summary_large_image",
     title: TITLE,

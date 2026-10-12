@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
+import { toolOpenGraph } from "@/lib/seo/jsonld";
 
 const CONTACT_TITLE = "Contact ExesTools — Bugs, Ideas and Privacy Questions";
 const CONTACT_META =
@@ -10,12 +11,12 @@ export const metadata: Metadata = {
   title: { absolute: CONTACT_TITLE },
   description: CONTACT_META,
   alternates: { canonical: absoluteUrl("/contact") },
-  openGraph: {
+  openGraph: toolOpenGraph({
     title: CONTACT_TITLE,
     description: CONTACT_META,
     url: absoluteUrl("/contact"),
-    images: [{ url: siteConfig.ogImagePath, width: 1200, height: 630, alt: "ExesTools" }],
-  },
+    imagePath: siteConfig.ogImagePath,
+  }),
   twitter: {
     card: "summary_large_image",
     title: CONTACT_TITLE,

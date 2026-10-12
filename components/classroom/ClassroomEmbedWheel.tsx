@@ -67,6 +67,7 @@ export function ClassroomEmbedWheel({ slug }: Props) {
   const rafRef = useRef(0);
   const lastSegRef = useRef(-1);
   const spinBtnRef = useRef<HTMLButtonElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
 
   const { choices } = useMemo(() => parseChoicesWithStats(text), [text]);
   const canSpin = choices.length >= 2 && !spinning;
@@ -208,7 +209,7 @@ export function ClassroomEmbedWheel({ slug }: Props) {
       </header>
 
       <div className="flex flex-col">
-        <div className="rounded-3xl border border-border bg-surface p-3 sm:p-4">
+        <div className="rounded-3xl border border-border bg-surface p-3 sm:p-4" ref={stageRef}>
           <div className="relative mx-auto" style={wheelShellStyle}>
             <div
               className={`absolute inset-0 transition-opacity ${ready ? "pointer-events-none opacity-0" : "opacity-100"}`}
@@ -288,11 +289,11 @@ export function ClassroomEmbedWheel({ slug }: Props) {
           </div>
         </div>
         <StickySpinButton
-          placement="both"
           canSpin={canSpin}
           spinning={spinning}
           onSpin={spin}
           buttonRef={spinBtnRef}
+          anchorRef={stageRef}
         />
       </div>
 

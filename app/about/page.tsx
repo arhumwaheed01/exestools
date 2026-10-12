@@ -1,27 +1,27 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
-import { aboutPageLd } from "@/lib/seo/jsonld";
+import { aboutPageLd, toolOpenGraph } from "@/lib/seo/jsonld";
+
+const ABOUT_DESC =
+  "Who builds ExesTools, how its free spinner wheel and random picker tools choose results, and why your lists stay in your browser.";
 
 export const metadata: Metadata = {
   title: {
     absolute: "About ExesTools | Free Spinner Wheel Tools",
   },
-  description:
-    "Who builds ExesTools, how its free spinner wheel and random picker tools choose results, and why your lists stay in your browser.",
+  description: ABOUT_DESC,
   alternates: { canonical: absoluteUrl("/about") },
-  openGraph: {
+  openGraph: toolOpenGraph({
     title: "About ExesTools",
-    description:
-      "Who builds ExesTools, how its free spinner wheel and random picker tools choose results, and why your lists stay in your browser.",
+    description: ABOUT_DESC,
     url: absoluteUrl("/about"),
-    images: [{ url: siteConfig.ogImagePath, width: 1200, height: 630, alt: "ExesTools" }],
-  },
+    imagePath: siteConfig.ogImagePath,
+  }),
   twitter: {
     card: "summary_large_image",
     title: "About ExesTools",
-    description:
-      "Who builds ExesTools, how its free spinner wheel and random picker tools choose results, and why your lists stay in your browser.",
+    description: ABOUT_DESC,
     images: [siteConfig.ogImagePath],
   },
 };

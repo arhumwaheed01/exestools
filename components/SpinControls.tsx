@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type Ref, type RefObject } from "react";
+import { useEffect, useState, type Ref, type RefObject } from "react";
 import { Volume2, VolumeX, RotateCcw } from "lucide-react";
 import type { SpinLength } from "@/lib/tools/sound";
 
@@ -19,6 +19,7 @@ type Props = {
   spinButtonRef?: Ref<HTMLButtonElement>;
 };
 
+/** @deprecated Kept for call-site compat. */
 type StickyPlacement = "fixed-mobile" | "inline-desktop" | "both";
 
 function assignRef(ref: Ref<HTMLButtonElement> | undefined, el: HTMLButtonElement | null) {
@@ -27,7 +28,7 @@ function assignRef(ref: Ref<HTMLButtonElement> | undefined, el: HTMLButtonElemen
   else (ref as RefObject<HTMLButtonElement | null>).current = el;
 }
 
-/** Focus the SPIN button that is actually visible (fixed mobile vs inline desktop). */
+/** Focus the visible SPIN CTA. */
 export function focusVisibleSpinButton(fallback?: RefObject<HTMLButtonElement | null>) {
   const nodes = document.querySelectorAll<HTMLButtonElement>("[data-et-spin]");
   for (const btn of nodes) {
@@ -39,68 +40,96 @@ export function focusVisibleSpinButton(fallback?: RefObject<HTMLButtonElement | 
   fallback?.current?.focus();
 }
 
-/** SPIN CTA — fixed on phones (viewport), inline under the wheel from sm up. */
+/**
+ * SPIN CTA — centered under the wheel.
+ * On phones: sticks to the bottom while the spinner is off-screen; returns under the
+ * spinner when it scrolls back into view. Desktop: always centered under the wheel.
+ */
 export function StickySpinButton({
   canSpin,
   spinning,
   onSpin,
   buttonRef,
-  placement = "both",
+  placement: _placement = "both",
+  anchorRef,
 }: {
   canSpin: boolean;
   spinning: boolean;
   onSpin: () => void;
   buttonRef?: Ref<HTMLButtonElement>;
   placement?: StickyPlacement;
+  /** Wheel/stage element — when this leaves the viewport on mobile, SPIN docks to the bottom. */
+  anchorRef?: RefObject<HTMLElement | null>;
 }) {
-  const showFixed = placement === "fixed-mobile" || placement === "both";
-  const showInline = placement === "inline-desktop" || placement === "both";
-  const fixedEl = useRef<HTMLButtonElement | null>(null);
-  const inlineEl = useRef<HTMLButtonElement | null>(null);
+  void _placement;
+  const [docked, setDocked] = useState(false);
 
   useEffect(() => {
-    const sync = () => {
+    const anchor = anchorRef?.current;
+    if (!anchor) return;
+
+    const update = () => {
       const mobile = window.matchMedia("(max-width: 639px)").matches;
-      // Only claim the shared ref when this instance owns the visible CTA.
-      if (mobile && showFixed) assignRef(buttonRef, fixedEl.current);
-      else if (!mobile && showInline) assignRef(buttonRef, inlineEl.current);
+      if (!mobile) {
+        setDocked(false);
+        return;
+      }
+      const rect = anchor.getBoundingClientRect();
+      // Spinner still has a meaningful chunk on screen → keep SPIN under it.
+      const visible = rect.bottom > 80 && rect.top < window.innerHeight - 72;
+      setDocked(!visible);
     };
-    sync();
-    const mq = window.matchMedia("(max-width: 639px)");
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, [buttonRef, showFixed, showInline]);
+
+    update();
+    const io = new IntersectionObserver(update, {
+      root: null,
+      threshold: [0, 0.05, 0.15, 0.3],
+      rootMargin: "-72px 0px -72px 0px",
+    });
+    io.observe(anchor);
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      io.disconnect();
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, [anchorRef]);
+
+  const btnClass =
+    "inline-flex min-h-12 w-full max-w-xs items-center justify-center rounded-2xl bg-accent-strong px-8 text-lg font-extrabold tracking-wide text-slate-950 transition hover:bg-accent focus:outline-none focus-visible:ring-4 focus-visible:ring-accent/40 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-55";
 
   return (
     <>
-      {showFixed ? (
-        <>
-          <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 px-3 pt-2 backdrop-blur pb-[max(0.5rem,env(safe-area-inset-bottom))] sm:hidden print:hidden">
-            <button
-              ref={fixedEl}
-              type="button"
-              data-et-spin=""
-              onClick={onSpin}
-              disabled={!canSpin || spinning}
-              className="inline-flex min-h-12 w-full items-center justify-center rounded-2xl bg-accent-strong px-8 text-lg font-extrabold tracking-wide text-slate-950 transition hover:bg-accent focus:outline-none focus-visible:ring-4 focus-visible:ring-accent/40 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-55"
-              aria-busy={spinning}
-            >
-              {spinning ? "Spinning…" : "SPIN (Space)"}
-            </button>
-          </div>
-          <div className="h-16 sm:hidden print:hidden" aria-hidden />
-        </>
-      ) : null}
+      <div
+        className={`mt-3 flex w-full justify-center ${docked ? "invisible h-0 overflow-hidden m-0 p-0 sm:visible sm:h-auto sm:overflow-visible" : ""}`}
+        aria-hidden={docked ? true : undefined}
+      >
+        <button
+          ref={(el) => {
+            if (!docked) assignRef(buttonRef, el);
+          }}
+          type="button"
+          data-et-spin={docked ? undefined : ""}
+          onClick={onSpin}
+          disabled={canSpin === false || spinning}
+          tabIndex={docked ? -1 : undefined}
+          className={btnClass}
+          aria-busy={spinning}
+        >
+          {spinning ? "Spinning…" : "SPIN (Space)"}
+        </button>
+      </div>
 
-      {showInline ? (
-        <div className="mt-3 hidden w-full sm:block">
+      {docked ? (
+        <div className="fixed inset-x-0 bottom-0 z-40 flex justify-center border-t border-border bg-background/95 px-3 pt-2 backdrop-blur pb-[max(0.5rem,env(safe-area-inset-bottom))] sm:hidden print:hidden">
           <button
-            ref={inlineEl}
+            ref={(el) => assignRef(buttonRef, el)}
             type="button"
             data-et-spin=""
             onClick={onSpin}
-            disabled={!canSpin || spinning}
-            className="inline-flex min-h-12 w-full max-w-xs mx-auto items-center justify-center rounded-2xl bg-accent-strong px-8 text-lg font-extrabold tracking-wide text-slate-950 transition hover:bg-accent focus:outline-none focus-visible:ring-4 focus-visible:ring-accent/40 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-55"
+            disabled={canSpin === false || spinning}
+            className={btnClass}
             aria-busy={spinning}
           >
             {spinning ? "Spinning…" : "SPIN (Space)"}

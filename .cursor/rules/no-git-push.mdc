@@ -1,0 +1,10 @@
+---
+description: Never push to git unless the user explicitly asks
+alwaysApply: true
+---
+
+# No git push by default
+
+- Do **not** run `git push` (or any remote publish of commits) unless the user explicitly asks to push or deploy in that message.
+- Commits are still only when the user asks to commit (existing rule).
+- "Ship it", "make it live", or similar does **not** authorize a push by itself — ask first or wait for an explicit push/deploy request.

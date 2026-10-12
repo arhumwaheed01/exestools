@@ -100,6 +100,7 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
   const allowSaveRef = useRef(true);
   const poolRef = useRef<number[]>([]);
   const spinBtnRef = useRef<HTMLButtonElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const resolvedTheme = resolveToolTheme(themeChoice, TOOL_ID);
   const themeColors = useMemo(
     () => Array.from({ length: 8 }, (_, i) => segColor(resolvedTheme, i)),
@@ -469,12 +470,14 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
           data-tool-theme={resolvedTheme}
         >
           <div className="flex w-full min-w-0 flex-col items-center">
-            <RangeWheelCanvas
-              pool={pool}
-              rotation={rotation}
-              ariaLabel={ariaLabel}
-              colors={themeColors}
-            />
+            <div ref={stageRef} className="w-full max-w-sm">
+              <RangeWheelCanvas
+                pool={pool}
+                rotation={rotation}
+                ariaLabel={ariaLabel}
+                colors={themeColors}
+              />
+            </div>
             <p
               className="mt-3 min-h-[1.25rem] text-center text-sm font-medium text-muted"
               role="status"
@@ -498,11 +501,11 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
               spinBtnRef={spinBtnRef}
             />
             <StickySpinButton
-              placement="inline-desktop"
               canSpin={canSpin}
               spinning={spinning}
               onSpin={spin}
               buttonRef={spinBtnRef}
+              anchorRef={stageRef}
             />
             <div
               role="radiogroup"
@@ -719,13 +722,6 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
         </p>
       ) : null}
 
-      <StickySpinButton
-        placement="fixed-mobile"
-        canSpin={canSpin}
-        spinning={spinning}
-        onSpin={spin}
-        buttonRef={spinBtnRef}
-      />
       <ToolConfetti fire={confettiFire} colors={[...themeColors]} />
     </div>
   );

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { BingoMount } from "@/components/bingo/BingoMount";
 import { RelatedTools } from "@/components/RelatedTools";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
-import { webAppLd } from "@/lib/seo/jsonld";
+import { toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
 import "../styles/bingo-themes.css";
 
 const PAGE_URL = "https://www.exestools.com/bingo-card-generator";
@@ -15,12 +15,12 @@ export const metadata: Metadata = {
   title: { absolute: TITLE },
   description: DESCRIPTION,
   alternates: { canonical: PAGE_URL },
-  openGraph: {
+  openGraph: toolOpenGraph({
     title: TITLE,
     description: DESCRIPTION,
     url: PAGE_URL,
-    images: [{ url: siteConfig.ogImagePath, width: 1200, height: 630, alt: "ExesTools" }],
-  },
+    imagePath: siteConfig.ogImagePath,
+  }),
   twitter: {
     card: "summary_large_image",
     title: TITLE,
