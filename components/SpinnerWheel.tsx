@@ -56,6 +56,61 @@ import {
 } from "@/lib/wheel";
 import "@/app/styles/tools-themes.css";
 
+const CHOICES_HELP_BASE =
+  "Up to 60. Empty lines are ignored. Duplicate lines are skipped (capital letters don't count as different), so add an initial if two people share a name.";
+
+function choicesEditorLabels(toolId: ToolId): { heading: string; helpText: string } {
+  switch (toolId) {
+    case "home":
+      return {
+        heading: "Your options",
+        helpText: `One option per line, ${CHOICES_HELP_BASE}`,
+      };
+    case "random-name-picker":
+      return {
+        heading: "Your names",
+        helpText: `One name per line, ${CHOICES_HELP_BASE}`,
+      };
+    case "classroom-spinner":
+      return {
+        heading: "Your roster",
+        helpText: `One student name per line, ${CHOICES_HELP_BASE}`,
+      };
+    case "prize-wheel":
+      return {
+        heading: "Your prizes",
+        helpText: `One prize or reward per line, ${CHOICES_HELP_BASE}`,
+      };
+    case "yes-no-wheel":
+      return {
+        heading: "Your choices",
+        helpText: `One answer or option per line, ${CHOICES_HELP_BASE}`,
+      };
+    default:
+      return {
+        heading: "Your choices",
+        helpText: `One name or option per line, ${CHOICES_HELP_BASE}`,
+      };
+  }
+}
+
+function listSavedNote(toolId: ToolId): string {
+  switch (toolId) {
+    case "random-name-picker":
+      return "Your names are saved in this browser. Share links carry the list inside the link, so anyone with the link can see it.";
+    case "classroom-spinner":
+      return "Your roster is saved in this browser. Share links carry the list inside the link, so anyone with the link can see it.";
+    case "prize-wheel":
+      return "Your prize list is saved in this browser. Share links carry the list inside the link, so anyone with the link can see it.";
+    case "yes-no-wheel":
+      return "Your options are saved in this browser. Share links carry the list inside the link, so anyone with the link can see it.";
+    case "home":
+      return "Your options are saved in this browser. Share links carry the list inside the link, so anyone with the link can see it.";
+    default:
+      return "Your list is saved in this browser. Share links carry the list inside the link, so anyone with the link can see it.";
+  }
+}
+
 type Props = {
   toolId: ToolId;
   /** Legacy ?c= (read-only). */
@@ -97,6 +152,8 @@ export function SpinnerWheel({
   const spinningRef = useRef(false);
   const spinRef = useRef<() => void>(() => {});
   const showTally = toolId === "yes-no-wheel";
+  const editorLabels = useMemo(() => choicesEditorLabels(toolId), [toolId]);
+  const savedNote = useMemo(() => listSavedNote(toolId), [toolId]);
   const rotationRef = useRef(0);
   const rafRef = useRef(0);
   const lastSegRef = useRef(-1);
@@ -619,6 +676,8 @@ export function SpinnerWheel({
             disabled={spinning}
             duplicatesSkipped={duplicatesSkipped}
             overLimit={overLimit}
+            heading={editorLabels.heading}
+            helpText={editorLabels.helpText}
             onChange={onTextChange}
             onShuffle={onShuffle}
             onClear={onClear}
@@ -643,8 +702,7 @@ export function SpinnerWheel({
             />
           </label>
           <p className="text-xs text-muted">
-            Your list is saved in this browser. Share links carry the list inside the link, so anyone
-            with the link can see it.{" "}
+            {savedNote}{" "}
             <Link href="/privacy-policy" className="font-semibold text-accent hover:underline">
               Privacy Policy
             </Link>
@@ -664,7 +722,7 @@ export function SpinnerWheel({
                     { href: "/secret-santa-generator", label: "Secret Santa" },
                     { href: "/random-number-wheel", label: "Number wheel" },
                     { href: "/raffle-generator", label: "Raffle generator" },
-                    { href: "/bingo-card-generator", label: "Bingo cards" },
+                    { href: "/bingo-card-generator", label: "Bingo card generator" },
                   ]
                 : undefined
             }

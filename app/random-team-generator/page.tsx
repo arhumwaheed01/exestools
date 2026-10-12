@@ -1,28 +1,24 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { RelatedTools } from "@/components/RelatedTools";
-import { TeamGeneratorMount } from "@/components/teams/TeamGeneratorMount";
+import { QueryHydratedTeams } from "@/components/QueryHydratedMounts";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
-import { webAppLd } from "@/lib/seo/jsonld";
+import { toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
 
-type PageProps = {
-  searchParams: Promise<{ preset?: string }>;
-};
-
-const TITLE = "Random Team Generator: Groups & Pairs from Names | ExesTools";
+const TITLE = "Random Team Generator — Split Names into Groups | ExesTools";
 const META =
-  "Paste names and split them into random teams, groups or pairs. Choose the number of teams or people per team, reshuffle, print or share. Free, no signup.";
+  "Split names into random teams, groups or pairs. Choose the number of groups or people per group, reshuffle, print or share. Free, no account, list stays in browser.";
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
   description: META,
   alternates: { canonical: absoluteUrl("/random-team-generator") },
-  openGraph: {
+  openGraph: toolOpenGraph({
     title: TITLE,
     description: META,
     url: absoluteUrl("/random-team-generator"),
-    images: [{ url: siteConfig.ogImagePath, width: 1200, height: 630, alt: "ExesTools" }],
-  },
+    imagePath: siteConfig.ogImagePath,
+  }),
   twitter: {
     card: "summary_large_image",
     title: TITLE,
@@ -68,7 +64,7 @@ const FAQS = [
     a: "Paste your class list, tap Pairs, and press Generate teams. Every student gets a partner, and with an odd number one group has three. Press Reshuffle for a new set.",
   },
   {
-    q: "How do I shuffle names into groups?",
+    q: "How do I split or shuffle names into random groups?",
     a: "Paste the names one per line, choose how many groups (or how many people per group), and press Generate teams. The list is shuffled and dealt out evenly.",
   },
   {
@@ -109,14 +105,12 @@ const FAQS = [
   },
 ];
 
-export default async function RandomTeamGeneratorPage({ searchParams }: PageProps) {
-  const sp = await searchParams;
-  const preset = typeof sp.preset === "string" && sp.preset === "pairs" ? "pairs" : null;
-
+export default function RandomTeamGeneratorPage() {
   const appLd = webAppLd({
     path: "/random-team-generator",
     name: "Random Team Generator",
     description: META,
+    featureList: ["Number of teams or team size", "Pairs", "Reshuffle", "Print"],
   });
 
   const faqLd = {
@@ -171,7 +165,7 @@ export default async function RandomTeamGeneratorPage({ searchParams }: PageProp
 
       <header className="mb-3 max-w-3xl print:hidden">
         <h1 className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl lg:text-3xl">
-          Random team generator for groups and pairs
+          Random team generator: split names into groups
         </h1>
         <p className="mt-1 text-sm leading-relaxed text-muted sm:text-base">
           Paste one name per line, choose how many teams you need (or how many people per team), and
@@ -180,9 +174,40 @@ export default async function RandomTeamGeneratorPage({ searchParams }: PageProp
         </p>
       </header>
 
-      <TeamGeneratorMount initialPresetQuery={preset} />
+      <QueryHydratedTeams />
 
       <div className="mt-12 space-y-10 border-t border-border pt-10 print:hidden">
+        <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            Split a list of names into groups
+          </h2>
+          <p className="mt-3">You have two ways to split a list:</p>
+          <ul className="mt-3 list-disc space-y-3 pl-5">
+            <li>
+              <span className="font-semibold text-foreground">Number of teams.</span> You decide how
+              many groups you want, and the tool works out the size. For example, 30 names into 6
+              teams gives 6 groups of 5. 25 names into 4 teams gives 7, 6, 6, 6, because sizes never
+              differ by more than one.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">People per team.</span> You decide the
+              group size, and the tool works out how many groups. For example, 30 names with 3 per
+              team gives 10 groups of 3. Choose 2 per team, or open{" "}
+              <Link
+                href="/random-team-generator?preset=pairs"
+                className="font-semibold text-accent hover:underline"
+              >
+                pairs mode
+              </Link>
+              , to randomly pair names for partner work.
+            </li>
+          </ul>
+          <p className="mt-3">
+            Paste one name per line, pick a mode, and press Generate teams. Press Reshuffle for a new
+            random split, Print for a handout, or copy a share link.
+          </p>
+        </section>
+
         <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           <h2 className="text-xl font-bold tracking-tight text-foreground">
             How to make random teams

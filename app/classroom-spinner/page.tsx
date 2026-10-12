@@ -3,13 +3,9 @@ import Link from "next/link";
 import { GuideSection, UseCaseToolPage } from "@/components/UseCaseToolPage";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 
-type PageProps = {
-  searchParams: Promise<{ c?: string; preset?: string }>;
-};
-
 const TITLE = "Classroom Spinner Wheel — Random Student Picker";
 const META =
-  "Free classroom spinner & random student picker. Paste your roster, spin, optionally skip repeats. Lists stay in-browser.";
+  "Free classroom spinner & random student picker. Paste your roster, spin fairly—anxious students see it's not personal. Remove-winner optional. Lists stay in-browser.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -65,8 +61,7 @@ const FAQS = [
   },
 ];
 
-export default async function ClassroomSpinnerPage({ searchParams }: PageProps) {
-  const sp = await searchParams;
+export default function ClassroomSpinnerPage() {
   return (
     <UseCaseToolPage
       toolId="classroom-spinner"
@@ -78,8 +73,6 @@ export default async function ClassroomSpinnerPage({ searchParams }: PageProps) 
       schemaName="Classroom Spinner Wheel"
       schemaDescription={META}
       schemaCategory="EducationalApplication"
-      initialEncoded={typeof sp.c === "string" ? sp.c : null}
-      initialPresetQuery={typeof sp.preset === "string" ? sp.preset : null}
     >
       <GuideSection title="How to use the classroom spinner">
         <ol className="list-decimal space-y-2 pl-5">

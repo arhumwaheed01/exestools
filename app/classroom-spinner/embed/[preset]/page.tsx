@@ -10,8 +10,6 @@ import { absoluteUrl } from "@/lib/seo";
 
 type PageProps = {
   params: Promise<{ preset: string }>;
-  // Present so Next accepts the URL; values are intentionally ignored (no roster in query).
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
 export async function generateStaticParams() {

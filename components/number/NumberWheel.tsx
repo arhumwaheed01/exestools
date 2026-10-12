@@ -440,7 +440,6 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
       {!ready ? (
         <div className="min-h-[520px] w-full min-w-0">
           <StaticWheelPreview choices={previewLabels} />
-          <p className="mt-2 text-center text-sm text-muted">10 numbers on the wheel: 1 to 10.</p>
         </div>
       ) : null}
 
@@ -479,11 +478,10 @@ export function NumberWheel({ initialPresetQuery = null }: Props) {
             <p
               className="mt-3 min-h-[1.25rem] text-center text-sm font-medium text-muted"
               role="status"
+              aria-live="polite"
+              aria-atomic="true"
             >
-              {statusLine}
-            </p>
-            <p className="sr-only" aria-live="polite">
-              {liveResult}
+              {liveResult || statusLine}
             </p>
             <ResultReveal
               open={revealOpen}

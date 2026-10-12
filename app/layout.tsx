@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { headers } from "next/headers";
 import Script from "next/script";
-import { Footer } from "@/components/Footer";
+import { AppShell } from "@/components/AppShell";
 import { GoogleTag } from "@/components/GoogleTag";
-import { Header } from "@/components/Header";
+import { organizationLd } from "@/lib/seo/jsonld";
 import { siteConfig } from "@/lib/seo";
 import "./globals.css";
 
@@ -20,6 +19,9 @@ const geistMono = Geist_Mono({
 
 /** ca-pub-… from Vercel env. No ad units until approval (MD-05). */
 const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
+
+/** Prefer static HTML + ISR-friendly caching (P2-1). */
+export const dynamic = "force-static";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.domain),
@@ -57,11 +59,18 @@ export const metadata: Metadata = {
   other: ADSENSE_CLIENT ? { "google-adsense-account": ADSENSE_CLIENT } : {},
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const headerList = await headers();
-  const isEmbed = headerList.get("x-exestools-embed") === "1";
+  const adsense = ADSENSE_CLIENT ? (
+    <Script
+      id="adsense-loader"
+      async
+      strategy="lazyOnload"
+      crossOrigin="anonymous"
+      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+    />
+  ) : null;
 
   return (
     <html
@@ -70,20 +79,13 @@ export default async function RootLayout({
       style={{ colorScheme: "dark" }}
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">
-        {isEmbed ? null : <Header />}
-        <main className="flex-1">{children}</main>
-        {isEmbed ? null : <Footer />}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd()) }}
+        />
+        <AppShell adsense={adsense}>{children}</AppShell>
         {/* Embeds: no AdSense units; keep GA for aggregate embed_view / spin only */}
         <GoogleTag />
-        {!isEmbed && ADSENSE_CLIENT ? (
-          <Script
-            id="adsense-loader"
-            async
-            strategy="lazyOnload"
-            crossOrigin="anonymous"
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
-          />
-        ) : null}
       </body>
     </html>
   );

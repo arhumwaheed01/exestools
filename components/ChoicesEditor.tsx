@@ -14,7 +14,14 @@ type Props = {
   onClear: () => void;
   onRestoreDefaults: () => void;
   onCopy: () => void;
+  /** Visible label (styled as heading). Default: Your choices */
+  heading?: string;
+  /** Help line under the label. */
+  helpText?: string;
 };
+
+const DEFAULT_HELP =
+  "One name or option per line, up to 60. Empty lines are ignored. Duplicate lines are skipped (capital letters don't count as different), so add an initial if two people share a name.";
 
 export function ChoicesEditor({
   text,
@@ -27,17 +34,19 @@ export function ChoicesEditor({
   onClear,
   onRestoreDefaults,
   onCopy,
+  heading = "Your choices",
+  helpText = DEFAULT_HELP,
 }: Props) {
+  const labelId = "choices-label";
+
   return (
     <div className="flex h-full flex-col gap-3 rounded-2xl border border-border bg-surface p-4 sm:p-5">
       <div className="flex items-start justify-between gap-2">
         <div>
-          <h2 className="text-base font-bold text-foreground">Your choices</h2>
-          <p className="mt-0.5 text-xs text-muted">
-            One name or option per line, up to 60. Empty lines are ignored. Duplicate lines are
-            skipped (capital letters don&apos;t count as different), so add an initial if two people
-            share a name.
+          <p id={labelId} className="text-base font-bold text-foreground">
+            {heading}
           </p>
+          <p className="mt-0.5 text-xs text-muted">{helpText}</p>
         </div>
         <span className="shrink-0 rounded-full bg-surface-2 px-2.5 py-1 text-xs font-bold text-foreground">
           {count} {count === 1 ? "item" : "items"}
@@ -45,10 +54,11 @@ export function ChoicesEditor({
       </div>
 
       <label className="sr-only" htmlFor="choices-textarea">
-        Choices list
+        {heading}
       </label>
       <textarea
         id="choices-textarea"
+        aria-labelledby={labelId}
         value={text}
         disabled={disabled}
         onChange={(e) => onChange(e.target.value)}

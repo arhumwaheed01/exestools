@@ -4,21 +4,21 @@
  * Do not stamp every page with the build date.
  */
 export const LASTMOD: Record<string, string> = {
-  "/": "2026-10-09",
-  "/random-name-picker": "2026-10-08",
-  "/classroom-spinner": "2026-10-09",
-  "/prize-wheel": "2026-10-08",
-  "/yes-no-wheel": "2026-10-08",
-  "/random-team-generator": "2026-10-07",
-  "/secret-santa-generator": "2026-10-09",
-  "/random-number-wheel": "2026-10-09",
+  "/": "2026-10-12",
+  "/random-name-picker": "2026-10-12",
+  "/classroom-spinner": "2026-10-12",
+  "/prize-wheel": "2026-10-12",
+  "/yes-no-wheel": "2026-10-12",
+  "/random-team-generator": "2026-10-12",
+  "/secret-santa-generator": "2026-10-12",
+  "/random-number-wheel": "2026-10-12",
   "/raffle-generator": "2026-10-09",
   "/bingo-card-generator": "2026-10-09",
-  "/about": "2026-10-09",
-  "/contact": "2026-09-26",
+  "/about": "2026-10-12",
+  "/contact": "2026-10-12",
   "/privacy-policy": "2026-10-09",
-  "/terms": "2026-10-01",
-  "/dmca": "2026-09-24",
+  "/terms": "2026-10-12",
+  "/dmca": "2026-10-12",
 };
 
 /** IndexNow key (also served at /{key}.txt). */

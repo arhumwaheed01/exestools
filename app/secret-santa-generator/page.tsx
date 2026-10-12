@@ -118,6 +118,18 @@ const FAQ = [
     aPlain:
       "Not really. In White Elephant (also called a Yankee swap), nobody is assigned a person; players take turns picking or stealing gifts. For a random turn order, use the random name picker with remove-winner on.",
   },
+  {
+    q: "Can I stop people drawing the same person as last year?",
+    a: "Yes. Add a one-way exclusion: if Sam shouldn't draw Alex because they had Alex last year, block Sam from drawing Alex. Alex can still draw Sam unless you block that too. The generator doesn't remember past years—you add the rule each time you run a new draw.",
+    aPlain:
+      "Yes. Add a one-way exclusion: if Sam shouldn't draw Alex because they had Alex last year, block Sam from drawing Alex. Alex can still draw Sam unless you block that too. The generator doesn't remember past years—you add the rule each time you run a new draw.",
+  },
+  {
+    q: "How do I keep people in the same household apart?",
+    a: "Add a two-way exclusion (Neither draws the other) for each pair who live together—partners, siblings, or housemates—so nobody buys for someone in their own household. In bigger families you may need several exclusions, one per pair.",
+    aPlain:
+      "Add a two-way exclusion (Neither draws the other) for each pair who live together—partners, siblings, or housemates—so nobody buys for someone in their own household. In bigger families you may need several exclusions, one per pair.",
+  },
 ];
 
 function FaqAnswer({ text }: { text: string }) {
@@ -147,6 +159,12 @@ export default function SecretSantaGeneratorPage() {
     path: "/secret-santa-generator",
     name: "Secret Santa Generator",
     description: DESCRIPTION,
+    featureList: [
+      "Exclusions",
+      "Private reveal links",
+      "No email needed",
+      "Up to 50 names",
+    ],
   });
 
   const breadcrumbJsonLd = {

@@ -2,28 +2,26 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { GuideSection, UseCaseToolPage } from "@/components/UseCaseToolPage";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
+import { toolOpenGraph } from "@/lib/seo/jsonld";
 
-type PageProps = {
-  searchParams: Promise<{ c?: string; preset?: string }>;
-};
-
-const TITLE = "Random Name Picker Wheel (Free Online)";
+const TITLE = "Random Name Picker Online — Free Name Wheel | ExesTools";
 const META =
-  "Paste names and spin a free random name picker wheel. Fair picks for meetings, parties, and lists. Remove-winner option. No signup.";
+  "Pick a random name from your list in one spin. Free name picker wheel for up to 60 names, with remove-winner, share link and no account. List stays in your browser.";
 
 export const metadata: Metadata = {
-  title: TITLE,
+  title: { absolute: TITLE },
   description: META,
   alternates: { canonical: absoluteUrl("/random-name-picker") },
-  openGraph: {
-    title: `${TITLE} | ExesTools`,
+  openGraph: toolOpenGraph({
+    title: TITLE,
     description: META,
     url: absoluteUrl("/random-name-picker"),
-    images: [{ url: siteConfig.ogImagePath, width: 1200, height: 630, alt: "ExesTools Spinner Wheel" }],
-  },
+    imagePath: siteConfig.ogImagePath,
+    imageAlt: "ExesTools Spinner Wheel",
+  }),
   twitter: {
     card: "summary_large_image",
-    title: `${TITLE} | ExesTools`,
+    title: TITLE,
     description: META,
     images: [siteConfig.ogImagePath],
   },
@@ -59,24 +57,25 @@ const FAQS = [
     a: "No. This page picks one name at a time on a wheel. The [random team generator] splits a whole list into several groups in one step. Use the wheel when you need a speaking order or a single winner; use teams when you need many groups at once.",
   },
   {
-    q: "Can I use it for a raffle or giveaway?",
-    a: "Yes for a simple name draw: paste entrant names, leave remove-winner on, and spin once per prize so each winner leaves the wheel. For prize-themed slices or stream giveaways, use the [prize wheel]. For numbered tickets, multiple tickets per person, or several winners in one draw, use the [raffle generator with multiple entries].",
+    q: "How many names can I add?",
+    a: "Up to 60 names, one per line. Empty lines are ignored and duplicate lines are skipped. For bigger lists, or for people with more than one ticket, use the [raffle generator].",
+  },
+  {
+    q: "Can I use the name picker for a giveaway?",
+    a: "Yes, for a simple draw. Paste the entrant names, leave remove-winner on, and spin once per prize. For multiple entries per person or alternates, use the [raffle generator].",
   },
 ];
 
-export default async function RandomNamePickerPage({ searchParams }: PageProps) {
-  const sp = await searchParams;
+export default function RandomNamePickerPage() {
   return (
     <UseCaseToolPage
       toolId="random-name-picker"
       breadcrumbLabel="Random name picker"
       title="Random name picker wheel"
-      intro="Paste a list of names, one per line, and hit SPIN to pick one at random. Remove winner is on by default, so nobody is picked twice until you reset the list. Use it for meetings, parties, and deciding who goes first. Free, no signup."
+      intro="Paste your names, one per line, and press SPIN. The wheel picks one name at random, and every name has the same chance. Add up to 60 names. Switch on remove-winner to stop anyone being picked twice, then copy a share link so others can open the same wheel. It's free and needs no account, and your list stays in this browser."
       faqs={FAQS}
       schemaName="Random Name Picker Wheel"
       schemaDescription={META}
-      initialEncoded={typeof sp.c === "string" ? sp.c : null}
-      initialPresetQuery={typeof sp.preset === "string" ? sp.preset : null}
     >
       <GuideSection title="How to pick a name">
         <ol className="list-decimal space-y-2 pl-5">
@@ -170,6 +169,35 @@ export default async function RandomNamePickerPage({ searchParams }: PageProps) 
             contact. Copy share link if a co-facilitator needs the same list on another device.
           </li>
         </ul>
+      </GuideSection>
+
+      <GuideSection title="Pick a giveaway winner from names">
+        <ol className="list-decimal space-y-2 pl-5">
+          <li>
+            Copy the entrant names from your comments, form or sign-up sheet and paste them in, one
+            per line. Duplicate lines are skipped, so each person is on the wheel once.
+          </li>
+          <li>
+            Switch on Remove winner after spin, so a winner can&apos;t be drawn again for the next
+            prize.
+          </li>
+          <li>Spin on screen or record the spin, and spin once per prize.</li>
+          <li>
+            Need people to have more than one entry, or a winner plus alternates? Use the{" "}
+            <Link href="/raffle-generator" className="font-semibold text-accent hover:underline">
+              raffle generator
+            </Link>
+            . Want prizes on the slices instead of names? Use the{" "}
+            <Link href="/prize-wheel" className="font-semibold text-accent hover:underline">
+              prize wheel
+            </Link>
+            .
+          </li>
+        </ol>
+        <p className="mt-3">
+          Follow the rules of the platform you&apos;re running the giveaway on. ExesTools is a free
+          random picker, not a certified drawing service.
+        </p>
       </GuideSection>
 
       <GuideSection title="Random name picker with no repeats">

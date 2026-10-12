@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { RelatedTools } from "@/components/RelatedTools";
-import { SpinnerMount } from "@/components/SpinnerMount";
+import { QueryHydratedSpinner } from "@/components/QueryHydratedMounts";
 import { absoluteUrl } from "@/lib/seo";
 import { webAppLd } from "@/lib/seo/jsonld";
 import type { ToolId } from "@/lib/tools";
@@ -67,8 +67,6 @@ type Props = {
   children: ReactNode;
   faqs: FaqItem[];
   breadcrumbLabel: string;
-  initialEncoded?: string | null;
-  initialPresetQuery?: string | null;
   schemaName: string;
   schemaDescription: string;
   schemaCategory?: string;
@@ -84,8 +82,6 @@ export function UseCaseToolPage({
   children,
   faqs,
   breadcrumbLabel,
-  initialEncoded = null,
-  initialPresetQuery = null,
   schemaName,
   schemaDescription,
   schemaCategory = "UtilitiesApplication",
@@ -169,11 +165,7 @@ export function UseCaseToolPage({
         ) : null}
       </header>
 
-      <SpinnerMount
-        toolId={toolId}
-        initialEncoded={initialEncoded}
-        initialPresetQuery={initialPresetQuery}
-      />
+      <QueryHydratedSpinner toolId={toolId} />
 
       <div className="mt-12 space-y-10 border-t border-border pt-10">
         <div className="max-w-3xl space-y-8 text-sm leading-relaxed text-muted sm:text-base">

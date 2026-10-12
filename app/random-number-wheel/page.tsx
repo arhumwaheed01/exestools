@@ -1,14 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { NumberWheelMount } from "@/components/number/NumberWheelMount";
+import { QueryHydratedNumbers } from "@/components/QueryHydratedMounts";
 import { RelatedTools } from "@/components/RelatedTools";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
-import { faqPageLd, webAppLd } from "@/lib/seo/jsonld";
-import { ALLOWED_NUMBER_PRESET_QUERY } from "@/lib/range";
-
-type PageProps = {
-  searchParams: Promise<{ preset?: string }>;
-};
+import { faqPageLd, toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
 
 const TITLE = "Random Number Wheel — Spin 1–100 or Any Range | ExesTools";
 const META =
@@ -47,12 +42,12 @@ export const metadata: Metadata = {
   },
   description: META,
   alternates: { canonical: absoluteUrl("/random-number-wheel") },
-  openGraph: {
+  openGraph: toolOpenGraph({
     title: TITLE,
     description: META,
     url: absoluteUrl("/random-number-wheel"),
-    images: [{ url: siteConfig.ogImagePath, width: 1200, height: 630, alt: "ExesTools" }],
-  },
+    imagePath: siteConfig.ogImagePath,
+  }),
   twitter: {
     card: "summary_large_image",
     title: TITLE,
@@ -67,16 +62,16 @@ const FAQS = [
     a: "Yes. Each whole number still on the wheel has the same chance on every spin. The pick comes from your browser's secure random number generator, and the wheel then stops on that number. Learn more: [How ExesTools picks a result].",
   },
   {
-    q: "How do I spin a number between 1 and 100?",
-    a: "Tap 1–100, then press SPIN. For any other range, type the lowest number in Min and the highest in Max.",
+    q: "How do I pick a random number between 1 and 100?",
+    a: "Tap the 1–100 quick range and press SPIN. Every number has a 1 in 100 chance on each spin.",
   },
   {
-    q: "Can I stop numbers from repeating?",
-    a: "Yes. Switch on No repeats. Each drawn number comes off the wheel until you press Reset draws, and when every number has been drawn, the wheel tells you and offers a reset.",
+    q: "Can I draw several numbers without repeats?",
+    a: "Yes. Switch on No repeats. Each drawn number leaves the wheel until you press Reset draws, and your last 20 results are listed under Recent results.",
   },
   {
-    q: "What's the largest range I can use?",
-    a: "Up to 1,000 numbers at once, for example 1–1000 or 500–1499. Negative numbers work too, like −10 to 10. On big ranges the wheel shows fewer labels so it stays readable, but every number is still in the draw.",
+    q: "What's the biggest range?",
+    a: "Up to 1,000 numbers in one range, such as 1–1000. Negative numbers work too.",
   },
   {
     q: "Can I use it as a bingo number caller?",
@@ -86,19 +81,26 @@ const FAQS = [
     q: "Can I use it for a raffle?",
     a: "Yes, for up to 1,000 numbered tickets: set Min and Max to your ticket range and switch on No repeats. For bigger ranges, names with several tickets each, or several winners and alternates in one draw, use the [raffle generator]. To spin for names on a wheel, use the [prize wheel].",
   },
+  {
+    q: "Can the same number come up twice in a row?",
+    a: "Yes, when No repeats is off. Each spin is independent, so on 1–10 the same number can land twice in a row about one time in ten. Switch on No repeats if each number should only appear once until you reset.",
+  },
+  {
+    q: "Do negative numbers work on the wheel?",
+    a: "Yes. Set a negative Min or Max—for example −10 to 10. The wheel picks one whole number at random from every number still in that range.",
+  },
+  {
+    q: "What happens when every number has been drawn?",
+    a: "With No repeats on, each result leaves the wheel until the range is empty. The tool then tells you and offers Reset draws so you can run the range again.",
+  },
 ] as const;
 
-export default async function RandomNumberWheelPage({ searchParams }: PageProps) {
-  const sp = await searchParams;
-  const preset =
-    typeof sp.preset === "string" && ALLOWED_NUMBER_PRESET_QUERY.has(sp.preset)
-      ? sp.preset
-      : null;
-
+export default function RandomNumberWheelPage() {
   const appLd = webAppLd({
     path: "/random-number-wheel",
     name: "Random Number Wheel",
     description: META,
+    featureList: ["Up to 1,000 numbers", "No-repeat draws", "Bingo letters"],
   });
 
   const crumbLd = {
@@ -147,18 +149,14 @@ export default async function RandomNumberWheelPage({ searchParams }: PageProps)
           Random number wheel
         </h1>
         <p className="mt-1 text-sm leading-relaxed text-muted sm:text-base">
-          Pick a range, press SPIN, and the wheel stops on a random whole number. Use a quick range
-          like 1–10, 1–100 or 1–1000, or type your own Min and Max. Switch on No repeats to draw each
-          number only once, for bingo, numbered raffle tickets, or calling on numbered seats. It&apos;s
-          free, and there&apos;s no signup. Need a quick two-way answer instead? Try the{" "}
-          <Link href="/yes-no-wheel" className="font-semibold text-accent hover:underline">
-            yes or no wheel
-          </Link>
-          .
+          Pick a range and press SPIN, and the wheel stops on a random whole number. Tap 1–10 or
+          1–100, or type any Min and Max for up to 1,000 numbers. Every number has the same chance.
+          Switch on No repeats to draw each number only once. On 1–75, bingo letters switch on too,
+          so calls read like B 7 or O 68.
         </p>
       </header>
 
-      <NumberWheelMount initialPresetQuery={preset} />
+      <QueryHydratedNumbers />
 
       <div className="mt-12 space-y-10 border-t border-border pt-10">
         <section className="max-w-3xl">
@@ -263,6 +261,74 @@ export default async function RandomNumberWheelPage({ searchParams }: PageProps)
               number is still in the draw.
             </p>
           </div>
+        </section>
+
+        <section className="max-w-3xl">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+            Odds on a number wheel
+          </h2>
+          <div className="mt-3 overflow-x-auto">
+            <table className="w-full min-w-[20rem] border-collapse text-left text-sm leading-relaxed">
+              <thead>
+                <tr className="border-b border-border">
+                  <th className="py-2 pr-3 font-semibold text-foreground">Range</th>
+                  <th className="py-2 pr-3 font-semibold text-foreground">Chance per spin</th>
+                  <th className="py-2 pr-3 font-semibold text-foreground">
+                    With No repeats: 2nd draw
+                  </th>
+                  <th className="py-2 font-semibold text-foreground">10th draw</th>
+                </tr>
+              </thead>
+              <tbody className="text-muted">
+                <tr className="border-b border-border/60 align-top">
+                  <td className="py-2.5 pr-3">1–6</td>
+                  <td className="py-2.5 pr-3">1 in 6 (about 16.7%)</td>
+                  <td className="py-2.5 pr-3">1 in 5</td>
+                  <td className="py-2.5">n/a</td>
+                </tr>
+                <tr className="border-b border-border/60 align-top">
+                  <td className="py-2.5 pr-3">1–10</td>
+                  <td className="py-2.5 pr-3">1 in 10 (10%)</td>
+                  <td className="py-2.5 pr-3">1 in 9</td>
+                  <td className="py-2.5">1 in 1 (last number)</td>
+                </tr>
+                <tr className="border-b border-border/60 align-top">
+                  <td className="py-2.5 pr-3">1–75 (bingo)</td>
+                  <td className="py-2.5 pr-3">1 in 75 (about 1.3%)</td>
+                  <td className="py-2.5 pr-3">1 in 74</td>
+                  <td className="py-2.5">1 in 66</td>
+                </tr>
+                <tr className="border-b border-border/60 align-top">
+                  <td className="py-2.5 pr-3">1–100</td>
+                  <td className="py-2.5 pr-3">1 in 100 (1%)</td>
+                  <td className="py-2.5 pr-3">1 in 99</td>
+                  <td className="py-2.5">1 in 91</td>
+                </tr>
+                <tr className="align-top">
+                  <td className="py-2.5 pr-3">1–1000</td>
+                  <td className="py-2.5 pr-3">1 in 1,000 (0.1%)</td>
+                  <td className="py-2.5 pr-3">1 in 999</td>
+                  <td className="py-2.5">1 in 991</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
+            With No repeats off, every spin is independent, so the odds stay the same as the first
+            column on every spin.
+          </p>
+        </section>
+
+        <section className="max-w-3xl">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+            Pick a number from 1 to 100
+          </h2>
+          <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
+            Tap 1–100 and press SPIN. Each number from 1 to 100 has a 1% chance. To draw several
+            different numbers, for example 5 winners from 100 tickets, switch on No repeats and spin
+            five times. Press Copy results to paste the list anywhere. For 90-ball bingo, set Min 1
+            and Max 90.
+          </p>
         </section>
 
         <section className="max-w-3xl" aria-labelledby="number-faq-heading">

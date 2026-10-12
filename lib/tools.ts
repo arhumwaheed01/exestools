@@ -75,7 +75,6 @@ export const TOOLS: ToolDef[] = [
     path: "/bingo-card-generator",
     navLabel: "Bingo",
     footerLabel: "Bingo Cards",
-    inHeaderNav: false,
   },
 ];
 

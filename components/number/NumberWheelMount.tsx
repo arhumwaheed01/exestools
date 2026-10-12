@@ -12,7 +12,6 @@ export function NumberWheelMount({ initialPresetQuery = null }: Props) {
     <div className="min-h-[640px] lg:min-h-[560px]">
       <div className="sr-only">
         <StaticWheelPreview choices={PREVIEW} />
-        <p>10 numbers on the wheel: 1 to 10.</p>
       </div>
       <NumberWheel initialPresetQuery={initialPresetQuery} />
     </div>

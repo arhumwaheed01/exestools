@@ -3,10 +3,6 @@ import Link from "next/link";
 import { GuideSection, UseCaseToolPage } from "@/components/UseCaseToolPage";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 
-type PageProps = {
-  searchParams: Promise<{ c?: string; preset?: string }>;
-};
-
 const TITLE = "Yes or No Wheel – Free Yes No Spinner | ExesTools";
 const META =
   "Spin a free yes or no wheel for a 50/50 answer. Add Maybe for a three-way pick, count your results, or toss a coin with Heads / Tails. No account needed.";
@@ -84,8 +80,7 @@ const FAQS = [
   },
 ];
 
-export default async function YesNoWheelPage({ searchParams }: PageProps) {
-  const sp = await searchParams;
+export default function YesNoWheelPage() {
   return (
     <UseCaseToolPage
       toolId="yes-no-wheel"
@@ -115,8 +110,6 @@ export default async function YesNoWheelPage({ searchParams }: PageProps) {
         "Copy share link",
         "No signup",
       ]}
-      initialEncoded={typeof sp.c === "string" ? sp.c : null}
-      initialPresetQuery={typeof sp.preset === "string" ? sp.preset : null}
     >
       <GuideSection title="How to spin Yes or No">
         <ol className="list-decimal space-y-2 pl-5">
@@ -128,6 +121,11 @@ export default async function YesNoWheelPage({ searchParams }: PageProps) {
             wheel to go back to plain Yes and No.
           </li>
         </ol>
+        <p className="mt-3">
+          With only Yes and No on the wheel, each answer has a 1 in 2 (50%) chance on every spin.
+          Spins don&apos;t affect the next odds—a long streak of Yes answers is unlikely but normal
+          with real randomness.
+        </p>
       </GuideSection>
       <GuideSection title="Flip a coin with the wheel">
         <p>

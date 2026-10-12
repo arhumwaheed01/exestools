@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { RelatedTools } from "@/components/RelatedTools";
-import { SpinnerMount } from "@/components/SpinnerMount";
+import { QueryHydratedSpinner } from "@/components/QueryHydratedMounts";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
-import { faqPageLd, siteGraphLd, webAppLd } from "@/lib/seo/jsonld";
-
-type PageProps = {
-  searchParams: Promise<{ c?: string; preset?: string }>;
-};
+import { faqPageLd, siteGraphLd, toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
 
 const HOME_TITLE = "Free Spinner Wheel Online — Spin & Decide | ExesTools";
 const HOME_META =
@@ -45,19 +41,13 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description: HOME_META,
     alternates: { canonical: absoluteUrl("/") },
-    openGraph: {
+    openGraph: toolOpenGraph({
       title: HOME_TITLE,
       description: HOME_META,
       url: absoluteUrl("/"),
-      images: [
-        {
-          url: siteConfig.ogImagePath,
-          width: 1200,
-          height: 630,
-          alt: "ExesTools Spinner Wheel",
-        },
-      ],
-    },
+      imagePath: siteConfig.ogImagePath,
+      imageAlt: "ExesTools Spinner Wheel",
+    }),
     twitter: {
       card: "summary_large_image",
       title: HOME_TITLE,
@@ -96,13 +86,13 @@ const HOME_FAQS = [
     q: "Can I spin a random letter?",
     a: 'Yes. Under Example wheels, tap Letters A–Z to load all 26 letters, or Word game letters for a 20-letter set without Q, U, V, X, Y and Z. Every letter on the wheel has the same chance. Switch on "Remove winner after spin" if you don\'t want the same letter twice in one game.',
   },
+  {
+    q: "Can I remove the winner after each spin?",
+    a: 'Yes. Switch on "Remove winner after spin (no repeats)" before you spin, or press Remove & continue when the result appears. The picked option leaves the wheel, so it can\'t come up again until you add it back.',
+  },
 ] as const;
 
-export default async function HomePage({ searchParams }: PageProps) {
-  const sp = await searchParams;
-  const encoded = typeof sp.c === "string" ? sp.c : null;
-  const preset = typeof sp.preset === "string" ? sp.preset : null;
-
+export default function HomePage() {
   const appLd = webAppLd({
     path: "/",
     name: "ExesTools Spinner Wheel",
@@ -135,7 +125,7 @@ export default async function HomePage({ searchParams }: PageProps) {
         </p>
       </header>
 
-      <SpinnerMount toolId="home" initialEncoded={encoded} initialPresetQuery={preset} />
+      <QueryHydratedSpinner toolId="home" />
 
       <div className="mt-12 space-y-10 border-t border-border pt-10">
         <section id="how-to" className="max-w-3xl">
@@ -170,6 +160,35 @@ export default async function HomePage({ searchParams }: PageProps) {
             wheel stops, the slice under the fixed pointer is the result. ExesTools picks the result
             with your browser&apos;s built-in random number generator and then turns the wheel so it
             stops on that slice, so what you see is always what was picked.
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
+            Because every slice is the same size, the same tool works as a wheel of names for turn
+            order, a decision wheel when you have several choices, or a quick random picker when you
+            want the spin to settle it instead of debating.
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
+            You may know it as a wheel of names, a decision wheel or a random picker wheel.
+            They&apos;re all the same idea. ExesTools has versions set up for{" "}
+            <Link href="/random-name-picker" className="font-semibold text-accent hover:underline">
+              names
+            </Link>
+            ,{" "}
+            <Link href="/classroom-spinner" className="font-semibold text-accent hover:underline">
+              classrooms
+            </Link>
+            ,{" "}
+            <Link href="/prize-wheel" className="font-semibold text-accent hover:underline">
+              prizes
+            </Link>
+            ,{" "}
+            <Link href="/yes-no-wheel" className="font-semibold text-accent hover:underline">
+              yes or no
+            </Link>{" "}
+            and{" "}
+            <Link href="/random-number-wheel" className="font-semibold text-accent hover:underline">
+              numbers
+            </Link>
+            .
           </p>
         </section>
 
@@ -254,8 +273,8 @@ export default async function HomePage({ searchParams }: PageProps) {
             Which ExesTools tool should I use?
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
-            All nine tools pick at random with the same secure generator, but each one is set up for
-            a different job. Pick the one that matches what you&apos;re doing:
+            All ten tools pick at random with the same secure generator, but each one is set up for a
+            different job. Pick the one that matches what you&apos;re doing:
           </p>
           <div className="mt-4 overflow-x-auto">
             <table className="w-full min-w-[18rem] border-collapse text-left text-sm leading-relaxed">
@@ -349,7 +368,7 @@ export default async function HomePage({ searchParams }: PageProps) {
                     Exclusions for couples and private reveal links, no emails needed
                   </td>
                 </tr>
-                <tr className="align-top">
+                <tr className="border-b border-border/60 align-top">
                   <td className="py-2.5 pr-3">Draw raffle winners from tickets</td>
                   <td className="py-2.5 pr-3 font-semibold text-foreground">
                     <Link href="/raffle-generator" className="text-accent hover:underline">
@@ -358,6 +377,18 @@ export default async function HomePage({ searchParams }: PageProps) {
                   </td>
                   <td className="py-2.5">
                     Multiple tickets per person, alternates and a downloadable draw record
+                  </td>
+                </tr>
+                <tr className="align-top">
+                  <td className="py-2.5 pr-3">Make printable bingo cards or play on phones</td>
+                  <td className="py-2.5 pr-3 font-semibold text-foreground">
+                    <Link href="/bingo-card-generator" className="text-accent hover:underline">
+                      Bingo card generator
+                    </Link>
+                  </td>
+                  <td className="py-2.5">
+                    Your own words or 1–75 numbers, up to 100 different cards, print or share a set
+                    link
                   </td>
                 </tr>
               </tbody>

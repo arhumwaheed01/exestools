@@ -3,10 +3,6 @@ import Link from "next/link";
 import { GuideSection, UseCaseToolPage } from "@/components/UseCaseToolPage";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 
-type PageProps = {
-  searchParams: Promise<{ c?: string; preset?: string }>;
-};
-
 const TITLE = "Prize Wheel Spinner for Giveaways (Free Online) | ExesTools";
 const META =
   "Free prize wheel spinner for giveaways, events and classrooms. Add prizes or entrant names, spin where everyone can see, and share your wheel. No signup.";
@@ -96,8 +92,7 @@ const FAQS = [
   },
 ];
 
-export default async function PrizeWheelPage({ searchParams }: PageProps) {
-  const sp = await searchParams;
+export default function PrizeWheelPage() {
   return (
     <UseCaseToolPage
       toolId="prize-wheel"
@@ -115,8 +110,6 @@ export default async function PrizeWheelPage({ searchParams }: PageProps) {
         "Sound on/off",
         "No signup",
       ]}
-      initialEncoded={typeof sp.c === "string" ? sp.c : null}
-      initialPresetQuery={typeof sp.preset === "string" ? sp.preset : null}
     >
       <GuideSection title="How to run a giveaway spin">
         <ol className="list-decimal space-y-2 pl-5">

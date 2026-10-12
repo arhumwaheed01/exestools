@@ -9,12 +9,26 @@ type Props = {
   onSelect: (preset: WheelPreset) => void;
   /** Homepage: soft-link owner tools instead of loading competing presets only */
   homeLinks?: { href: string; label: string }[];
+  heading?: string;
 };
 
-export function PresetSelector({ presets, disabled, onSelect, homeLinks }: Props) {
+export function PresetSelector({
+  presets,
+  disabled,
+  onSelect,
+  homeLinks,
+  heading = "Example wheels",
+}: Props) {
+  const headingId = "preset-wheels-label";
+
   return (
-    <div className="rounded-2xl border border-border bg-surface p-4">
-      <h2 className="text-base font-bold text-foreground">Example wheels</h2>
+    <div
+      className="rounded-2xl border border-border bg-surface p-4"
+      aria-labelledby={headingId}
+    >
+      <p id={headingId} className="text-base font-bold text-foreground">
+        {heading}
+      </p>
       <p className="mt-0.5 text-xs text-muted">Load a starter list, then customize freely.</p>
       <div className="mt-3 grid gap-2 sm:grid-cols-2">
         {presets.map((p) => (
