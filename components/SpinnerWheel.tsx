@@ -15,7 +15,7 @@ import { StaticWheelPreview } from "@/components/StaticWheelPreview";
 import { ChoicesEditor } from "@/components/ChoicesEditor";
 import { PresetSelector } from "@/components/PresetSelector";
 import { RelatedTools } from "@/components/RelatedTools";
-import { SpinControls, StickySpinButton } from "@/components/SpinControls";
+import { SpinControls } from "@/components/SpinControls";
 import { WheelCanvas } from "@/components/WheelCanvas";
 import { HistoryRow } from "@/components/tools/HistoryRow";
 import { ResultReveal } from "@/components/tools/ResultReveal";
@@ -590,7 +590,6 @@ export function SpinnerWheel({
               label={toolId === "classroom-spinner" ? "Picked so far" : undefined}
             />
             <SpinControls
-              hideSpinButton
               canSpin={canSpin}
               spinning={spinning}
               soundEnabled={sound.enabled}
@@ -605,6 +604,8 @@ export function SpinnerWheel({
                 sound.setEnabled(!sound.enabled);
               }}
               onSpinLength={setSpinLength}
+              spinButtonRef={stickySpinRef}
+              spinAnchorRef={stageRef}
             />
             {showTally ? (
               <YesNoTally choices={choices} tally={tally} onReset={() => setTally({})} />
@@ -660,13 +661,6 @@ export function SpinnerWheel({
               </div>
             ) : null}
           </div>
-          <StickySpinButton
-            canSpin={canSpin}
-            spinning={spinning}
-            onSpin={spin}
-            buttonRef={stickySpinRef}
-            anchorRef={stageRef}
-          />
         </div>
 
         <div className="flex flex-col gap-4">

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useReducedMotion } from "framer-motion";
 import { StaticWheelPreview } from "@/components/StaticWheelPreview";
-import { SpinControls, StickySpinButton } from "@/components/SpinControls";
+import { SpinControls } from "@/components/SpinControls";
 import { WheelCanvas } from "@/components/WheelCanvas";
 import { ResultReveal } from "@/components/tools/ResultReveal";
 import {
@@ -250,7 +250,6 @@ export function ClassroomEmbedWheel({ slug }: Props) {
           />
 
           <SpinControls
-            hideSpinButton
             canSpin={canSpin}
             spinning={spinning}
             soundEnabled={sound.enabled}
@@ -265,6 +264,8 @@ export function ClassroomEmbedWheel({ slug }: Props) {
               sound.setEnabled(!sound.enabled);
             }}
             onSpinLength={setSpinLength}
+            spinButtonRef={spinBtnRef}
+            spinAnchorRef={stageRef}
           />
 
           <label className="mt-3 flex min-h-11 cursor-pointer items-center justify-center gap-2 text-sm text-foreground">
@@ -288,13 +289,6 @@ export function ClassroomEmbedWheel({ slug }: Props) {
             </button>
           </div>
         </div>
-        <StickySpinButton
-          canSpin={canSpin}
-          spinning={spinning}
-          onSpin={spin}
-          buttonRef={spinBtnRef}
-          anchorRef={stageRef}
-        />
       </div>
 
       <p className="mt-auto pt-3 text-center text-xs text-muted">

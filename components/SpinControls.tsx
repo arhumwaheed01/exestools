@@ -17,6 +17,8 @@ type Props = {
   /** When true, omit the SPIN button (parent renders StickySpinButton). */
   hideSpinButton?: boolean;
   spinButtonRef?: Ref<HTMLButtonElement>;
+  /** Wheel stage — mobile docks SPIN while this is off-screen. */
+  spinAnchorRef?: RefObject<HTMLElement | null>;
 };
 
 /** @deprecated Kept for call-site compat. */
@@ -102,7 +104,7 @@ export function StickySpinButton({
   return (
     <>
       <div
-        className={`mt-3 flex w-full justify-center ${docked ? "invisible h-0 overflow-hidden m-0 p-0 sm:visible sm:h-auto sm:overflow-visible" : ""}`}
+        className={`mt-1 flex w-full justify-center sm:mt-0 ${docked ? "invisible h-0 overflow-hidden m-0 p-0 sm:visible sm:h-auto sm:overflow-visible" : ""}`}
         aria-hidden={docked ? true : undefined}
       >
         <button
@@ -152,18 +154,10 @@ export function SpinControls({
   onSpinLength,
   hideSpinButton = false,
   spinButtonRef,
+  spinAnchorRef,
 }: Props) {
   return (
-    <div className="mt-5 flex flex-col items-center gap-3">
-      {!hideSpinButton ? (
-        <StickySpinButton
-          canSpin={canSpin}
-          spinning={spinning}
-          onSpin={onSpin}
-          buttonRef={spinButtonRef}
-        />
-      ) : null}
-
+    <div className="mt-5 flex w-full flex-col items-center gap-3">
       <div
         role="radiogroup"
         aria-label="Spin length"
@@ -200,6 +194,18 @@ export function SpinControls({
         Tip: press <kbd className="rounded border border-border px-1 font-mono">Space</kbd> to
         spin when the wheel is focused.
       </p>
+
+      {!hideSpinButton ? (
+        <div className="w-full">
+          <StickySpinButton
+            canSpin={canSpin}
+            spinning={spinning}
+            onSpin={onSpin}
+            buttonRef={spinButtonRef}
+            anchorRef={spinAnchorRef}
+          />
+        </div>
+      ) : null}
 
       <div className="flex items-center gap-2">
         <button
