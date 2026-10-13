@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BingoMount } from "@/components/bingo/BingoMount";
+import PageMeta from "@/components/PageMeta";
 import { RelatedTools } from "@/components/RelatedTools";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
@@ -200,6 +201,7 @@ export default function BingoCardGeneratorPage() {
         <h1 className="mt-4 max-w-3xl text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
           Bingo card generator
         </h1>
+        <PageMeta updated="2026-10-13" />
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           Make printable bingo cards from your own word list or classic 1–75 numbers. Choose a 3×3,
           4×4 or 5×5 grid, add a FREE centre square, and make up to 100 different cards in one set.
@@ -361,16 +363,6 @@ export default function BingoCardGeneratorPage() {
               classroom spinner
             </Link>{" "}
             pairs well with a bingo lesson.
-          </p>
-          <p className="mt-3">
-            More classroom and party setups are in{" "}
-            <Link
-              href="/guides/bingo-games-for-classrooms-and-parties"
-              className="font-semibold text-accent hover:underline"
-            >
-              bingo game ideas for classrooms and parties
-            </Link>
-            .
           </p>
         </section>
 

@@ -132,63 +132,31 @@ export default function YesNoWheelPage() {
       </GuideSection>
       <GuideSection title="Flip a coin with the wheel">
         <p>
-          Tap Heads / Tails and press SPIN. It&apos;s the same 50/50 spin as Yes / No with different
-          labels, so it works anywhere you&apos;d toss a coin: deciding who goes first in a game, who
-          picks the movie, or which of two options to try. It also helps on a video call when
-          everyone needs to see the same result.
+          Tap Heads / Tails and press SPIN for the same 50/50 spin with different labels—useful for
+          who goes first, who picks the movie, or a shared result on a video call. Call your side
+          before you spin, or run best of three. For two custom options, type them in place of Heads
+          and Tails under Your choices.
         </p>
-        <p className="font-semibold text-foreground">A few tips:</p>
-        <ul className="list-disc space-y-2 pl-5">
-          <li>
-            Call it before you spin. Say &quot;Heads, we go to the park&quot; out loud, so nobody can
-            reinterpret the result afterwards.
-          </li>
-          <li>
-            Best of three. Spin three times and take the side that wins twice.
-          </li>
-          <li>
-            Two options, not yes or no? Give each option a side, or type the two options in place of
-            Heads and Tails under Your choices.
-          </li>
-        </ul>
       </GuideSection>
       <GuideSection title="When a yes-or-no spin helps">
         <p>
           A quick spin works best for small choices where either answer is fine: whether to order
           dessert, go for a run now or later, or take the scenic route. It&apos;s also a neutral way
-          to break a tie between two people, because nobody controls the outcome.
-        </p>
-        <p>
-          It can also show you what you want. Before you spin, pick which answer means what. When the
-          wheel stops, notice your first reaction. If you feel relieved, go with it. If you&apos;re
-          disappointed and want to spin again, you probably wanted the other answer all along.
-        </p>
-        <p>
-          For decisions about health, money, legal matters or anything hard to undo, don&apos;t leave
-          it to a wheel. Take your time and get advice from someone qualified.
+          to break a tie between two people, because nobody controls the outcome. For health, money,
+          legal matters or anything hard to undo, take your time and get advice from someone
+          qualified instead.
         </p>
       </GuideSection>
       <GuideMarkdown content={YES_NO_DECISION.content} />
       <GuideSection title="Yes, No or Maybe?">
         <p>
-          The standard wheel has two slices, so Yes and No each have an even chance. Tap{" "}
-          <span className="font-semibold text-foreground">Yes / No / Maybe</span> to add a third
-          slice, and each answer then has a one-in-three chance. Maybe is useful when &quot;not
-          now&quot; is a real option, like whether to reply to a message tonight or buy something
-          today.
-        </p>
-        <p>
-          Decide what Maybe means before you spin, or it just puts the question off. Good rules:
-          &quot;Maybe means ask me again tomorrow&quot;, &quot;Maybe means we each name one reason
-          and decide together&quot;, or &quot;Maybe means spin Yes / No once more&quot;.
-        </p>
-        <p>
-          If you want more than an answer, try{" "}
-          <span className="font-semibold text-foreground">Quick decide</span>. Its slices are actions
-          rather than answers: do it, wait, ask someone, or skip. It&apos;s handy for small tasks you
-          keep putting off. You can also edit any slice under Your choices, for example &quot;Yes,
-          today&quot; and &quot;No, next week&quot;, and press{" "}
-          <span className="font-semibold text-foreground">Fresh wheel</span> to go back to plain Yes
+          Tap <span className="font-semibold text-foreground">Yes / No / Maybe</span> to add a third
+          slice (one-in-three odds each). Decide what Maybe means before you spin—for example
+          &quot;ask again tomorrow&quot; or &quot;spin Yes / No once more&quot;. For actions instead
+          of answers, try{" "}
+          <span className="font-semibold text-foreground">Quick decide</span> (do it, wait, ask
+          someone, or skip). Edit any slice under Your choices, and press{" "}
+          <span className="font-semibold text-foreground">Fresh wheel</span> to return to plain Yes
           and No.
         </p>
       </GuideSection>
@@ -225,63 +193,35 @@ export default function YesNoWheelPage() {
         </p>
       </GuideSection>
       <GuideSection title="How to ask a good yes-or-no question">
-        <p>The wheel can only help if the question has a clear yes and a clear no. A few tips:</p>
-        <ul className="list-disc space-y-2 pl-5">
-          <li>
-            <span className="font-semibold text-foreground">Make it one decision.</span> &quot;Should
-            I go to the gym tonight?&quot; works. &quot;Should I go to the gym or cook or call
-            Sam?&quot; doesn&apos;t. For that, use the{" "}
-            <Link href="/" className="font-semibold text-accent hover:underline">
-              multi-option wheel
-            </Link>
-            .
-          </li>
-          <li>
-            <span className="font-semibold text-foreground">Put &quot;yes&quot; on the action.</span>{" "}
-            Phrase it so Yes means doing something, which makes the result easy to act on.
-          </li>
-          <li>
-            <span className="font-semibold text-foreground">Set a time.</span> &quot;Tonight&quot; or
-            &quot;this weekend&quot; stops you arguing with the answer later.
-          </li>
-          <li>
-            <span className="font-semibold text-foreground">Agree on the rules first.</span> In a
-            group, say out loud what Yes and No mean, and whether it&apos;s one spin or best of
-            three.
-          </li>
-          <li>
-            <span className="font-semibold text-foreground">Only ask what you&apos;ll accept.</span>{" "}
-            If either answer would make you unhappy, the question isn&apos;t ready for a wheel yet.
-          </li>
-        </ul>
+        <p>
+          Keep it to one decision with a clear Yes and No. &quot;Should I go to the gym tonight?&quot;
+          works; three options at once belong on the{" "}
+          <Link href="/" className="font-semibold text-accent hover:underline">
+            multi-option wheel
+          </Link>
+          . Put Yes on the action, add a time window if it helps, and only spin when you&apos;ll
+          accept either answer. In a group, say out loud what Yes and No mean before anyone presses
+          SPIN.
+        </p>
       </GuideSection>
       <GuideSection title="Beyond Yes/No">
         <p>
-          Need to choose among food, activities, or other open lists? Go to the{" "}
+          For open lists use the{" "}
           <Link href="/" className="font-semibold text-accent hover:underline">
-            Multi-option decision wheel
-          </Link>{" "}
-          on the homepage.
-        </p>
-        <p>
-          Picking a person, not an answer? Use the{" "}
+            multi-option decision wheel
+          </Link>
+          ; for a person, the{" "}
           <Link
             href="/random-name-picker"
             className="font-semibold text-accent hover:underline"
           >
             random name picker
           </Link>
-          .
-        </p>
-        <p>
-          Spinning for rewards? Use the{" "}
+          ; for rewards, the{" "}
           <Link href="/prize-wheel" className="font-semibold text-accent hover:underline">
             prize wheel
           </Link>
-          .
-        </p>
-        <p>
-          Not sure which ExesTools page fits your job? See{" "}
+          . Or see{" "}
           <Link href="/#which-tool" className="font-semibold text-accent hover:underline">
             which tool should I use
           </Link>{" "}

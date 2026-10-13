@@ -32,7 +32,7 @@ A rules post that heads off most disputes covers these points:
 - **How winners are contacted and how long they have to reply.** 48 or 72 hours is common. Say whether you will draw a replacement if they don't respond.
 - **What you will publish.** A first name or handle is usually enough. Never promise to publish personal details.
 
-[SCREENSHOT: A sample giveaway rules post next to the ExesTools prize wheel with "Entrant names" loaded, showing the rules and the wheel side by side.]
+![The ExesTools prize wheel with Entrant names loaded for drawing a giveaway winner.](/guides/how-to-run-a-fair-online-giveaway/1.png)
 
 ## Step 2: Collect and clean the entry list
 
@@ -63,7 +63,7 @@ If someone earned three entries, a wheel can't show that, because duplicate line
 
 Some hosts draw the winner first, then spin a second wheel of prizes to see what they get. That works well on streams. Load **Prize rewards** or **Stream giveaway** on the prize wheel and edit the list. Remember every slice has the same chance, so a gift card and a sticker are equally likely. Plan your budget around that.
 
-[SCREENSHOT: The raffle generator with three entrants marked "x3", "x1" and "x2" and the count line showing names and tickets.]
+![The ExesTools raffle generator with entrants Alex x3, Blake x1 and Casey x2 for multiple tickets per person.](/guides/how-to-run-a-fair-online-giveaway/2.png)
 
 ## Step 4: Do the draw where people can see it
 

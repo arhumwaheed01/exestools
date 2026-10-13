@@ -76,6 +76,7 @@ export default function RandomNamePickerPage() {
       faqs={FAQS}
       schemaName="Random Name Picker Wheel"
       schemaDescription={META}
+      pageUpdated="2026-10-13"
     >
       <GuideSection title="How to pick a name">
         <ol className="list-decimal space-y-2 pl-5">

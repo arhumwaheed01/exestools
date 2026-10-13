@@ -33,7 +33,7 @@ Some teachers like a reminder card taped next to the keyboard, especially in the
 > **End of the day**
 > - Shared computer? Press **Clear all**.
 
-[SCREENSHOT: The printed routine card taped beside a classroom keyboard, with the classroom spinner open on the screen behind it.]
+![The ExesTools classroom spinner with a class roster and Remove winner after spin switched on.](/tools/classroom-spinner/1.png)
 
 ## Using the spinner with a seating chart
 

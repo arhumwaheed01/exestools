@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
@@ -100,6 +101,26 @@ export function GuideMarkdown({ content, routineCardAside }: Props) {
     code: ({ children }) => (
       <code className="rounded bg-surface-2 px-1 py-0.5 text-sm text-foreground">{children}</code>
     ),
+    img: ({ src, alt }) => {
+      if (!src || typeof src !== "string") return null;
+      const isLocal = src.startsWith("/");
+      if (!isLocal) {
+        return (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={src} alt={alt ?? ""} className="my-6 h-auto w-full max-w-3xl rounded-xl border border-border" />
+        );
+      }
+      return (
+        <Image
+          src={src}
+          alt={alt ?? ""}
+          width={1280}
+          height={900}
+          className="my-6 h-auto w-full max-w-3xl rounded-xl border border-border"
+          sizes="(max-width: 768px) 100vw, 768px"
+        />
+      );
+    },
   };
 
   return (

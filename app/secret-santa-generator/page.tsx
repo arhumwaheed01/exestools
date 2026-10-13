@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import PageMeta from "@/components/PageMeta";
 import { RelatedTools } from "@/components/RelatedTools";
 import { SecretSantaMount } from "@/components/secret-santa/SecretSantaMount";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
@@ -213,23 +214,13 @@ export default function SecretSantaGeneratorPage() {
         <h1 className="mt-4 max-w-3xl text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
           Secret Santa generator with exclusions
         </h1>
+        <PageMeta updated="2026-10-13" />
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           Add everyone&apos;s name, mark any couples who shouldn&apos;t draw each other, and press
           Draw names. Each person gets their own private link that shows only who they&apos;re buying
           for. It&apos;s free, nobody needs an account or an email address, and the draw happens in
           your browser.
         </p>
-        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          For budgets, house rules and what to do when someone draws their partner, see{" "}
-          <Link
-            href="/guides/secret-santa-rules-and-budget-ideas"
-            className="font-semibold text-accent hover:underline"
-          >
-            Secret Santa rules and gift exchange ideas
-          </Link>
-          .
-        </p>
-
         <div className="ss-tool-wrap mt-6 min-w-0">
           <SecretSantaMount />
         </div>

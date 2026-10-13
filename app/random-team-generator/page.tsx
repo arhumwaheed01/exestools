@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import PageMeta from "@/components/PageMeta";
 import { RelatedTools } from "@/components/RelatedTools";
 import { QueryHydratedTeams } from "@/components/QueryHydratedMounts";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
@@ -167,6 +168,7 @@ export default function RandomTeamGeneratorPage() {
         <h1 className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl lg:text-3xl">
           Random team generator: split names into groups
         </h1>
+        <PageMeta updated="2026-10-13" />
         <p className="mt-1 text-sm leading-relaxed text-muted sm:text-base">
           Paste one name per line, choose how many teams you need (or how many people per team), and
           press Generate teams. Names are shuffled and dealt out so team sizes never differ by more
@@ -327,16 +329,6 @@ export default function RandomTeamGeneratorPage() {
             The generator does not know who is strong at math or who should not sit together. It
             shuffles the full list, then deals names into teams like dealing cards, so every fair
             arrangement is equally likely.
-          </p>
-          <p className="mt-3">
-            For more on size balance, odd rosters and when to reshuffle, read{" "}
-            <Link
-              href="/guides/how-to-make-balanced-random-teams"
-              className="font-semibold text-accent hover:underline"
-            >
-              how to make balanced random teams
-            </Link>
-            .
           </p>
           <p className="mt-3">
             Odd counts are normal. Eleven people into three teams becomes 4, 4, and 3. With Pairs

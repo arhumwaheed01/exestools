@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import PageMeta from "@/components/PageMeta";
 import { RelatedTools } from "@/components/RelatedTools";
 import { RaffleMount } from "@/components/raffle/RaffleMount";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
@@ -162,6 +163,7 @@ export default function RaffleGeneratorPage() {
         <h1 className="mt-4 max-w-3xl text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
           Raffle generator and winner picker
         </h1>
+        <PageMeta updated="2026-10-13" />
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           Paste your entrants or set a ticket number range, choose how many winners you need, and
           press Draw. People with more tickets get more chances, nobody wins twice unless you allow

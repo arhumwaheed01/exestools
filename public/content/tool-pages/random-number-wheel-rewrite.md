@@ -62,7 +62,7 @@ This is a good way to show a class how unlikely a jackpot is. The number of diff
 
 For a reading game, a "random page" writing prompt or picking where to start revising, set the range to the pages that actually have content. A novel with 312 pages whose first chapter starts on page 9 should be set to Min 9 and Max 312, so the front matter never comes up. Leave No repeats on if you're running a whole lesson of random-page prompts and don't want to repeat one.
 
-[SCREENSHOT: The random number wheel with Min 9 and Max 312, No repeats on, and five results listed under Recent results.]
+![The ExesTools random number wheel with a result shown and range controls on the right.](/tools/random-number-wheel/1.png)
 
 ## A higher-or-lower game that teaches strategy
 

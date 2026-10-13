@@ -35,7 +35,7 @@ Browsers give JavaScript two common sources of random numbers.
 
 I looked through the code that ships on ExesTools to describe this accurately. The function that makes every pick uses `crypto.getRandomValues`, and if that function isn't available, it stops with an error rather than quietly falling back to something weaker. `Math.random()` does appear in the site, but only for cosmetic things: how long the spin animation runs within the Short, Normal or Long setting you choose, the texture of the spin sound, and the little celebration effect after a result. None of those can change which option is picked, because the pick has already been made.
 
-[SCREENSHOT: The spinner wheel with the Spin length options (Short, Normal, Long) visible, captioned "Spin length changes the animation, not the odds."]
+![The ExesTools spinner wheel with Spin length options Short, Normal and Long visible. Spin length changes the animation, not the odds.](/guides/how-random-is-a-spinner-wheel/1.png)
 
 ## Getting from a random number to a fair pick
 
