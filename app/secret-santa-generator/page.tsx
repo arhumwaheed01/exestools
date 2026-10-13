@@ -219,6 +219,16 @@ export default function SecretSantaGeneratorPage() {
           for. It&apos;s free, nobody needs an account or an email address, and the draw happens in
           your browser.
         </p>
+        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
+          For budgets, house rules and what to do when someone draws their partner, see{" "}
+          <Link
+            href="/guides/secret-santa-rules-and-budget-ideas"
+            className="font-semibold text-accent hover:underline"
+          >
+            Secret Santa rules and gift exchange ideas
+          </Link>
+          .
+        </p>
 
         <div className="ss-tool-wrap mt-6 min-w-0">
           <SecretSantaMount />

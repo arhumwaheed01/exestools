@@ -259,6 +259,16 @@ export default function PrizeWheelPage() {
           case anyone asks later.
         </p>
         <p>
+          For a step-by-step checklist on rules, entry lists and no-shows, see{" "}
+          <Link
+            href="/guides/how-to-run-a-fair-online-giveaway"
+            className="font-semibold text-accent hover:underline"
+          >
+            how to run a fair online giveaway
+          </Link>
+          .
+        </p>
+        <p>
           In class, keep the rewards small, like extra reading time or picking the class song, and
           let students see the list before you spin. Turn on &quot;Remove winner after spin&quot; if
           each student should win only once, and paste the full list back in for the next round. If

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import PageMeta from "@/components/PageMeta";
 import { RelatedTools } from "@/components/RelatedTools";
 import { QueryHydratedSpinner } from "@/components/QueryHydratedMounts";
 import { absoluteUrl } from "@/lib/seo";
@@ -72,6 +73,8 @@ type Props = {
   schemaCategory?: string;
   schemaAlternateName?: string[];
   schemaFeatureList?: string[];
+  /** ISO date shown in the byline under the H1. */
+  pageUpdated?: string;
 };
 
 export function UseCaseToolPage({
@@ -87,6 +90,7 @@ export function UseCaseToolPage({
   schemaCategory = "UtilitiesApplication",
   schemaAlternateName,
   schemaFeatureList,
+  pageUpdated,
 }: Props) {
   const path = `/${toolId}`;
   const faqLd = {
@@ -163,6 +167,7 @@ export function UseCaseToolPage({
             {sectionHeading}
           </h2>
         ) : null}
+        {pageUpdated ? <PageMeta updated={pageUpdated} /> : null}
       </header>
 
       <QueryHydratedSpinner toolId={toolId} />

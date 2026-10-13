@@ -1,11 +1,12 @@
 import type { MetadataRoute } from "next";
+import { getPublishedGuides } from "@/lib/guides";
 import { siteConfig } from "@/lib/seo";
 import { LASTMOD } from "@/lib/seo/lastmod";
 
 const routes = Object.keys(LASTMOD);
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return routes.map((path) => {
+  const staticEntries: MetadataRoute.Sitemap = routes.map((path) => {
     const isHome = path === "/";
     const isTool =
       path === "/" ||
@@ -24,4 +25,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: isHome ? 1 : isTool ? 0.85 : 0.5,
     };
   });
+
+  const publishedGuides = getPublishedGuides();
+  const guidesHubDate =
+    publishedGuides[0]?.frontmatter.updated ?? LASTMOD["/"] ?? "2026-10-13";
+
+  const guideEntries: MetadataRoute.Sitemap = [
+    {
+      url: `${siteConfig.url}/guides`,
+      lastModified: new Date(`${guidesHubDate}T00:00:00.000Z`),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    ...publishedGuides.map((g) => ({
+      url: `${siteConfig.url}/guides/${g.slug}`,
+      lastModified: new Date(`${g.frontmatter.updated}T00:00:00.000Z`),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
+  ];
+
+  return [...staticEntries, ...guideEntries];
 }

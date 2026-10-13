@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import PageMeta from "@/components/PageMeta";
+import { GuideMarkdown } from "@/components/guides/GuideMarkdown";
 import { QueryHydratedNumbers } from "@/components/QueryHydratedMounts";
 import { RelatedTools } from "@/components/RelatedTools";
+import { loadToolPageMarkdown } from "@/lib/toolPageMarkdown";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { faqPageLd, toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
+
+const NUMBER_WHEEL_REWRITE = loadToolPageMarkdown("random-number-wheel-rewrite.md");
 
 const TITLE = "Random Number Wheel — Spin 1–100 or Any Range | ExesTools";
 const META =
@@ -95,6 +100,8 @@ const FAQS = [
   },
 ] as const;
 
+const ALL_FAQS = [...FAQS, ...NUMBER_WHEEL_REWRITE.faqs];
+
 export default function RandomNumberWheelPage() {
   const appLd = webAppLd({
     path: "/random-number-wheel",
@@ -125,7 +132,7 @@ export default function RandomNumberWheelPage() {
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageLd([...FAQS])) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageLd([...ALL_FAQS])) }}
       />
       <script
         type="application/ld+json"
@@ -154,6 +161,7 @@ export default function RandomNumberWheelPage() {
           Switch on No repeats to draw each number only once. On 1–75, bingo letters switch on too,
           so calls read like B 7 or O 68.
         </p>
+        <PageMeta updated="2026-10-13" />
       </header>
 
       <QueryHydratedNumbers />
@@ -336,12 +344,14 @@ export default function RandomNumberWheelPage() {
           </p>
         </section>
 
+        <GuideMarkdown content={NUMBER_WHEEL_REWRITE.content} />
+
         <section className="max-w-3xl" aria-labelledby="number-faq-heading">
           <h2 id="number-faq-heading" className="text-2xl font-bold tracking-tight text-foreground">
             Frequently asked questions
           </h2>
           <div className="mt-6 space-y-3">
-            {FAQS.map((item) => (
+            {ALL_FAQS.map((item) => (
               <details
                 key={item.q}
                 className="group rounded-2xl border border-border bg-surface px-4 py-3 open:border-accent/40"

@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { GuideMarkdown } from "@/components/guides/GuideMarkdown";
 import { GuideSection, UseCaseToolPage } from "@/components/UseCaseToolPage";
+import { loadToolPageMarkdown } from "@/lib/toolPageMarkdown";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph } from "@/lib/seo/jsonld";
+
+const CLASSROOM_REWRITE = loadToolPageMarkdown("classroom-spinner-rewrite.md");
 
 const TITLE = "Classroom Spinner Wheel — Random Student Picker";
 const META =
@@ -63,6 +67,8 @@ const FAQS = [
   },
 ];
 
+const ALL_FAQS = [...CLASSROOM_REWRITE.faqs, ...FAQS];
+
 export default function ClassroomSpinnerPage() {
   return (
     <UseCaseToolPage
@@ -71,7 +77,8 @@ export default function ClassroomSpinnerPage() {
       title="Classroom spinner wheel"
       sectionHeading="Random student picker for fair turn-taking"
       intro="Paste your class list, one name per line, and hit SPIN to call on a student at random. Remove winner is on by default, so every student gets a turn before anyone repeats. Free for teachers, no signup, and your roster stays in this browser."
-      faqs={FAQS}
+      faqs={ALL_FAQS}
+      pageUpdated="2026-10-13"
       schemaName="Classroom Spinner Wheel"
       schemaDescription={META}
       schemaCategory="EducationalApplication"
@@ -209,7 +216,18 @@ export default function ClassroomSpinnerPage() {
           Why it works: students can see the pick isn&apos;t the teacher choosing, and remove-winner
           guarantees everyone gets one turn per round.
         </p>
+        <p>
+          For a longer walkthrough on keeping cold calls fair, see{" "}
+          <Link
+            href="/guides/cold-calling-students-fairly"
+            className="font-semibold text-accent hover:underline"
+          >
+            fair ways to call on students
+          </Link>
+          .
+        </p>
       </GuideSection>
+      <GuideMarkdown content={CLASSROOM_REWRITE.content} routineCardAside />
       <GuideSection title="Privacy for schools">
         <p>
           Your class list is saved only in this browser on this device. Student names are not sent

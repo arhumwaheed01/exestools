@@ -2,8 +2,18 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { CLASSROOM_EMBED_CSP } from "@/lib/classroom-embed";
 
+const GONE = new Set(["/tools/jwt-decoder", "/tools/blog-title-generator"]);
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  if (GONE.has(pathname)) {
+    return new NextResponse("Gone", {
+      status: 410,
+      headers: { "X-Robots-Tag": "noindex" },
+    });
+  }
+
   const isClassroomEmbed = pathname.startsWith("/classroom-spinner/embed/");
 
   const requestHeaders = new Headers(request.headers);
@@ -25,5 +35,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/classroom-spinner/embed/:path*"],
+  matcher: ["/classroom-spinner/embed/:path*", "/tools/:path*"],
 };

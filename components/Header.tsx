@@ -13,6 +13,7 @@ const NAV = [
     href: t.path,
     label: t.navLabel,
   })),
+  { href: "/guides", label: "Guides" },
   { href: "/about", label: "About" },
 ] as const;
 

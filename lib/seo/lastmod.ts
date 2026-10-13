@@ -4,14 +4,14 @@
  * Do not stamp every page with the build date.
  */
 export const LASTMOD: Record<string, string> = {
-  "/": "2026-10-12",
+  "/": "2026-10-13",
   "/random-name-picker": "2026-10-12",
-  "/classroom-spinner": "2026-10-12",
+  "/classroom-spinner": "2026-10-13",
   "/prize-wheel": "2026-10-12",
-  "/yes-no-wheel": "2026-10-12",
+  "/yes-no-wheel": "2026-10-13",
   "/random-team-generator": "2026-10-12",
   "/secret-santa-generator": "2026-10-12",
-  "/random-number-wheel": "2026-10-12",
+  "/random-number-wheel": "2026-10-13",
   "/raffle-generator": "2026-10-09",
   "/bingo-card-generator": "2026-10-09",
   "/about": "2026-10-12",

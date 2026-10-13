@@ -14,6 +14,10 @@ const nextConfig: NextConfig = {
         destination: "/favicon.svg",
         permanent: false,
       },
+      { source: "/blog", destination: "/guides", permanent: true },
+      { source: "/blog/:slug", destination: "/guides/:slug", permanent: true },
+      { source: "/guide", destination: "/guides", permanent: true },
+      { source: "/guide/:slug", destination: "/guides/:slug", permanent: true },
     ];
   },
   async headers() {

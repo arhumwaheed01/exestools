@@ -362,6 +362,16 @@ export default function BingoCardGeneratorPage() {
             </Link>{" "}
             pairs well with a bingo lesson.
           </p>
+          <p className="mt-3">
+            More classroom and party setups are in{" "}
+            <Link
+              href="/guides/bingo-games-for-classrooms-and-parties"
+              className="font-semibold text-accent hover:underline"
+            >
+              bingo game ideas for classrooms and parties
+            </Link>
+            .
+          </p>
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">

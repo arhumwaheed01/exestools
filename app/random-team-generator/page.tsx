@@ -329,6 +329,16 @@ export default function RandomTeamGeneratorPage() {
             arrangement is equally likely.
           </p>
           <p className="mt-3">
+            For more on size balance, odd rosters and when to reshuffle, read{" "}
+            <Link
+              href="/guides/how-to-make-balanced-random-teams"
+              className="font-semibold text-accent hover:underline"
+            >
+              how to make balanced random teams
+            </Link>
+            .
+          </p>
+          <p className="mt-3">
             Odd counts are normal. Eleven people into three teams becomes 4, 4, and 3. With Pairs
             and an odd roster, one group becomes three unless you switch on Leave one person out.
             That option is useful when you need strict pairs and one person can sit out a round.

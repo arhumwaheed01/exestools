@@ -91,6 +91,35 @@ export function aboutPageLd() {
 }
 
 /** Shared OG fields so child metadata keeps type / siteName / locale. */
+export function articleLd(opts: {
+  headline: string;
+  path: string;
+  datePublished: string;
+  dateModified: string;
+  description: string;
+}) {
+  const url = `https://www.exestools.com/guides/${opts.path.replace(/^\/guides\//, "")}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: opts.headline,
+    description: opts.description,
+    url,
+    datePublished: opts.datePublished,
+    dateModified: opts.dateModified,
+    author: {
+      "@type": "Person",
+      name: "Arhum Waheed",
+      url: "https://www.exestools.com/about#arhum",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "ExesTools",
+      url: "https://www.exestools.com",
+    },
+  };
+}
+
 export function toolOpenGraph(opts: {
   title: string;
   description: string;

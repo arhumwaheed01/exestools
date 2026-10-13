@@ -168,6 +168,16 @@ export default function RaffleGeneratorPage() {
           it, and you get a draw record to copy, download or print. It&apos;s free, there&apos;s no
           signup, and the draw happens in your browser.
         </p>
+        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
+          Running a social giveaway with named entries? See{" "}
+          <Link
+            href="/guides/how-to-run-a-fair-online-giveaway"
+            className="font-semibold text-accent hover:underline"
+          >
+            how to run a fair online giveaway
+          </Link>{" "}
+          for rules to publish before you draw.
+        </p>
 
         <div className="raffle-tool-wrap mt-6 min-w-0">
           <RaffleMount />

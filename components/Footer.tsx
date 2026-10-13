@@ -5,6 +5,7 @@ import { TOOLS } from "@/lib/tools";
 
 const FOOTER_LINKS = [
   ...TOOLS.map((t) => ({ href: t.path, label: t.footerLabel })),
+  { href: "/guides", label: "Guides" },
   { href: "/about", label: "About Us" },
   { href: "/contact", label: "Contact" },
   { href: "/privacy-policy", label: "Privacy Policy" },

@@ -1,9 +1,29 @@
 import type { Metadata } from "next";
+import fs from "node:fs";
+import path from "node:path";
 import Link from "next/link";
+import matter from "gray-matter";
+import PageMeta from "@/components/PageMeta";
+import { GuideMarkdown } from "@/components/guides/GuideMarkdown";
 import { RelatedTools } from "@/components/RelatedTools";
 import { QueryHydratedSpinner } from "@/components/QueryHydratedMounts";
+import { preprocessGuideBody } from "@/lib/guideBody";
+import { getPublishedGuides } from "@/lib/guides";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { faqPageLd, siteGraphLd, toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
+
+const HOME_PAGE_BLOCK_PATH = path.join(
+  process.cwd(),
+  "public/content/site-pages/homepage-block.md",
+);
+
+function loadHomepageBlockMarkdown(): string {
+  const raw = fs.readFileSync(HOME_PAGE_BLOCK_PATH, "utf8");
+  const { content } = matter(raw);
+  const body = preprocessGuideBody(content);
+  const latestIdx = body.search(/^### Latest guides\s*$/m);
+  return latestIdx === -1 ? body : body.slice(0, latestIdx).trim();
+}
 
 const HOME_TITLE = "Free Spinner Wheel Online — Spin & Decide | ExesTools";
 const HOME_META =
@@ -93,6 +113,9 @@ const HOME_FAQS = [
 ] as const;
 
 export default function HomePage() {
+  const homepageBlock = loadHomepageBlockMarkdown();
+  const latestGuides = getPublishedGuides();
+
   const appLd = webAppLd({
     path: "/",
     name: "ExesTools Spinner Wheel",
@@ -123,6 +146,7 @@ export default function HomePage() {
           decision wheel when you have several choices, and there&apos;s no account to create. For
           names, classrooms, prizes, yes-or-no questions and teams, try the related tools below.
         </p>
+        <PageMeta updated="2026-10-13" />
       </header>
 
       <QueryHydratedSpinner toolId="home" />
@@ -266,6 +290,27 @@ export default function HomePage() {
               .
             </li>
           </ul>
+        </section>
+
+        <section id="about-exestools" className="max-w-3xl">
+          <GuideMarkdown content={homepageBlock} />
+          {latestGuides.length > 0 ? (
+            <div className="mt-8">
+              <h3 className="text-lg font-bold tracking-tight text-foreground">Latest guides</h3>
+              <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted sm:text-base">
+                {latestGuides.map((g) => (
+                  <li key={g.slug}>
+                    <Link
+                      href={`/guides/${g.slug}`}
+                      className="font-semibold text-accent hover:underline"
+                    >
+                      {g.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
         </section>
 
         <section id="which-tool" className="max-w-3xl scroll-mt-24">

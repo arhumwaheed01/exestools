@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { GuideMarkdown } from "@/components/guides/GuideMarkdown";
 import { GuideSection, UseCaseToolPage } from "@/components/UseCaseToolPage";
+import { loadToolPageMarkdown } from "@/lib/toolPageMarkdown";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph } from "@/lib/seo/jsonld";
+
+const YES_NO_DECISION = loadToolPageMarkdown("yes-no-wheel-decision-section.md");
 
 const TITLE = "Yes or No Wheel – Free Yes No Spinner | ExesTools";
 const META =
@@ -76,10 +80,6 @@ const FAQS = [
     q: "Should I use the wheel for big decisions?",
     a: "No. Use it for small choices where either answer is fine. For health, money, legal or other hard-to-undo decisions, take your time and get advice from someone qualified.",
   },
-  {
-    q: "Why did I get the same answer several times in a row?",
-    a: "Streaks are normal with real randomness. Each spin is independent, so past results don't change the next one.",
-  },
 ];
 
 export default function YesNoWheelPage() {
@@ -112,6 +112,7 @@ export default function YesNoWheelPage() {
         "Copy share link",
         "No signup",
       ]}
+      pageUpdated="2026-10-13"
     >
       <GuideSection title="How to spin Yes or No">
         <ol className="list-decimal space-y-2 pl-5">
@@ -133,7 +134,8 @@ export default function YesNoWheelPage() {
         <p>
           Tap Heads / Tails and press SPIN. It&apos;s the same 50/50 spin as Yes / No with different
           labels, so it works anywhere you&apos;d toss a coin: deciding who goes first in a game, who
-          picks the movie, or which of two options to try.
+          picks the movie, or which of two options to try. It also helps on a video call when
+          everyone needs to see the same result.
         </p>
         <p className="font-semibold text-foreground">A few tips:</p>
         <ul className="list-disc space-y-2 pl-5">
@@ -166,6 +168,7 @@ export default function YesNoWheelPage() {
           it to a wheel. Take your time and get advice from someone qualified.
         </p>
       </GuideSection>
+      <GuideMarkdown content={YES_NO_DECISION.content} />
       <GuideSection title="Yes, No or Maybe?">
         <p>
           The standard wheel has two slices, so Yes and No each have an even chance. Tap{" "}
@@ -251,32 +254,6 @@ export default function YesNoWheelPage() {
             If either answer would make you unhappy, the question isn&apos;t ready for a wheel yet.
           </li>
         </ul>
-      </GuideSection>
-      <GuideSection title="Yes or no toss: wheel, coin or dice?">
-        <p>
-          A coin toss, a dice roll (odd for Yes, even for No) and this wheel all give the same thing,
-          a 50/50 answer. The wheel helps when nobody has a coin, when you want everyone on a video
-          call to see the result, or when you want labels other than Heads and Tails.
-        </p>
-        <p>
-          For a classic toss, tap{" "}
-          <span className="font-semibold text-foreground">Heads / Tails</span> and spin. For a
-          &quot;yes or no dice&quot; style roll, just use Yes / No. There are no dice on this page,
-          but a two-slice spin gives the same even odds as odd vs even on a die. Need an actual
-          number, like 1 to 6? Use the{" "}
-          <Link
-            href="/random-number-wheel"
-            className="font-semibold text-accent hover:underline"
-          >
-            random number wheel
-          </Link>
-          .
-        </p>
-        <p>
-          Each spin is independent, so a run of three Yeses in a row doesn&apos;t make No
-          &quot;due&quot;. If you&apos;re spinning to settle a tie between two people, call your side
-          before the spin and agree that the first result counts.
-        </p>
       </GuideSection>
       <GuideSection title="Beyond Yes/No">
         <p>
