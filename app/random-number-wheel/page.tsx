@@ -80,7 +80,7 @@ const FAQS = [
   },
   {
     q: "Can I use it as a bingo number caller?",
-    a: "Yes, for a simple game. Tap 1–75, which also switches on No repeats, then turn on Show bingo letters to see calls like B 7 or O 68. Recent results lists your last 20 calls. For the players' cards, use the [bingo card generator].",
+    a: "Yes, for a simple game. Tap the 1–75 quick range: that switches on No repeats and Show bingo letters, so calls look like B 7 or O 68. You can turn letters off with the toggle. Recent results lists your last 20 calls. For the players' cards, use the [bingo card generator].",
   },
   {
     q: "Can I use it for a raffle?",
@@ -158,8 +158,8 @@ export default function RandomNumberWheelPage() {
         <p className="mt-1 text-sm leading-relaxed text-muted sm:text-base">
           Pick a range and press SPIN, and the wheel stops on a random whole number. Tap 1–10 or
           1–100, or type any Min and Max for up to 1,000 numbers. Every number has the same chance.
-          Switch on No repeats to draw each number only once. On 1–75, bingo letters switch on too,
-          so calls read like B 7 or O 68.
+          Switch on No repeats to draw each number only once. Tap the 1–75 quick range to switch on
+          No repeats and Show bingo letters together, so calls read like B 7 or O 68.
         </p>
         <PageMeta updated="2026-10-13" />
       </header>
@@ -214,9 +214,10 @@ export default function RandomNumberWheelPage() {
               with the same chance as a fair die.
             </li>
             <li>
-              Bingo. Tap 1–75 for a simple US-style bingo caller. No repeats and bingo letters switch
-              on, so each call looks like B 7 or O 68 and is never repeated. For 90-ball bingo, set
-              Min 1 and Max 90. To make the cards, use the{" "}
+              Bingo. Tap the 1–75 quick range for a simple US-style bingo caller. That turns on No
+              repeats and Show bingo letters, so each call looks like B 7 or O 68 and is never
+              repeated (you can turn letters off with the toggle). For 90-ball bingo, set Min 1 and
+              Max 90. To make the cards, use the{" "}
               <Link
                 href="/bingo-card-generator"
                 className="font-semibold text-accent hover:underline"
