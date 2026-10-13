@@ -25,9 +25,9 @@ function loadHomepageBlockMarkdown(): string {
   return latestIdx === -1 ? body : body.slice(0, latestIdx).trim();
 }
 
-const HOME_TITLE = "Free Spinner Wheel Online — Spin & Decide | ExesTools";
+const HOME_TITLE = "ExesTools – Free Spinner Wheel, Name Picker & Party Tools";
 const HOME_META =
-  "Free online spinner wheel. Add options, hit SPIN, get a fair pick. Works as a multi-option decision wheel too. No signup on ExesTools.";
+  "Free spinner wheel, random name picker, classroom spinner, prize wheel, team generator, Secret Santa, raffle and bingo tools. No account, lists stay in your browser.";
 
 const FAQ_LINK_HREFS: Record<string, string> = {
   "Yes or no wheel": "/yes-no-wheel",

@@ -8,9 +8,9 @@ import { toolOpenGraph } from "@/lib/seo/jsonld";
 
 const YES_NO_DECISION = loadToolPageMarkdown("yes-no-wheel-decision-section.md");
 
-const TITLE = "Yes or No Wheel – Free Yes No Spinner | ExesTools";
+const TITLE = "Yes or No Wheel – Spin to Decide (Free Yes/No Spinner)";
 const META =
-  "Spin a free yes or no wheel for a 50/50 answer. Add Maybe for a three-way pick, count your results, or toss a coin with Heads / Tails. No account needed.";
+  "Can't decide? Spin the yes or no wheel for a 50/50 answer, add Maybe for three options, and count results. Free, no account.";
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },

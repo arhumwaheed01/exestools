@@ -6,9 +6,9 @@ import { QueryHydratedTeams } from "@/components/QueryHydratedMounts";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
 
-const TITLE = "Random Team Generator — Split Names into Groups | ExesTools";
+const TITLE = "Random Team Generator – Split Names into Groups or Pairs (Free)";
 const META =
-  "Split names into random teams, groups or pairs. Choose the number of groups or people per group, reshuffle, print or share. Free, no account, list stays in browser.";
+  "Paste names and split them into random teams, groups or pairs in one click. Reshuffle, print or share the result. Free, no account, and your list stays in your browser.";
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -262,7 +262,7 @@ export default function RandomTeamGeneratorPage() {
           className="max-w-3xl scroll-mt-24 text-sm leading-relaxed text-muted sm:text-base"
         >
           <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Random pair generator for partner work
+            Randomly pair names
           </h2>
           <p className="mt-3">
             For think-pair-share, lab partners, peer editing or reading buddies, tap{" "}

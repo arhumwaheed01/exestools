@@ -10,7 +10,7 @@ const CLASSROOM_REWRITE = loadToolPageMarkdown("classroom-spinner-rewrite.md");
 
 const TITLE = "Classroom Spinner Wheel — Random Student Picker";
 const META =
-  "Free classroom spinner & random student picker. Paste your roster, spin fairly—anxious students see it's not personal. Remove-winner optional. Lists stay in-browser.";
+  "Free classroom spinner and random student picker. Paste your roster, spin fairly, and remove students once picked. Lists stay in your browser, no account.";
 
 export const metadata: Metadata = {
   title: TITLE,

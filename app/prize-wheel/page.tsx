@@ -4,7 +4,7 @@ import { GuideSection, UseCaseToolPage } from "@/components/UseCaseToolPage";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph } from "@/lib/seo/jsonld";
 
-const TITLE = "Prize Wheel Spinner for Giveaways (Free Online) | ExesTools";
+const TITLE = "Prize Wheel Spinner for Giveaways – Free, No Signup";
 const META =
   "Free prize wheel spinner for giveaways, events and classrooms. Add prizes or entrant names, spin where everyone can see, and share your wheel. No signup.";
 
@@ -28,6 +28,10 @@ export const metadata: Metadata = {
 };
 
 const FAQS = [
+  {
+    q: "How do I use a prize wheel for a giveaway?",
+    a: "Paste your prizes or entrant names, one per line, publish the rules and the full list, then press SPIN where everyone can see it. Turn on Remove winner after spin if you need more than one winner. For ticket counts, alternates or a draw record, use the [raffle generator].",
+  },
   {
     q: "What should I put on a prize wheel?",
     a: "Short, clear prizes that suit your audience, like gift cards or discount codes for an online giveaway, shout-outs on a stream, or homework passes in class. See the ideas above, or load one of the example wheels and edit it.",

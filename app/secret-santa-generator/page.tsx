@@ -90,10 +90,16 @@ const FAQ = [
       "Only if they choose to. Matches stay hidden until you switch on Show all matches. Links are scrambled, not encrypted, so anyone holding a link, including the organizer, can open it.",
   },
   {
-    q: "Can I run Secret Santa for a remote or long-distance group?",
-    a: "Yes. Send each link privately in chat or email. People open their own link from anywhere. Agree on a shipping deadline in the event note.",
+    q: "How do I draw names for Secret Santa remotely?",
+    a: "Add everyone on this page, press Draw names, then send each person their private reveal link by text, WhatsApp, chat or email. They open it from anywhere and only see who they're buying for. Agree on a shipping deadline in the event note.",
     aPlain:
-      "Yes. Send each link privately in chat or email. People open their own link from anywhere. Agree on a shipping deadline in the event note.",
+      "Add everyone on this page, press Draw names, then send each person their private reveal link by text, WhatsApp, chat or email. They open it from anywhere and only see who they're buying for. Agree on a shipping deadline in the event note.",
+  },
+  {
+    q: "Can I run Secret Santa for a remote or long-distance group?",
+    a: "Yes. Draw names online here, then send each link privately in chat or email. People open their own link from anywhere. Agree on a shipping deadline in the event note.",
+    aPlain:
+      "Yes. Draw names online here, then send each link privately in chat or email. People open their own link from anywhere. Agree on a shipping deadline in the event note.",
   },
   {
     q: "Is there a wish list?",
@@ -216,10 +222,10 @@ export default function SecretSantaGeneratorPage() {
         </h1>
         <PageMeta updated="2026-10-13" />
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          Add everyone&apos;s name, mark any couples who shouldn&apos;t draw each other, and press
-          Draw names. Each person gets their own private link that shows only who they&apos;re buying
-          for. It&apos;s free, nobody needs an account or an email address, and the draw happens in
-          your browser.
+          Draw names online for Secret Santa—remotely or in the same room. Add everyone&apos;s name,
+          mark any couples who shouldn&apos;t draw each other, and press Draw names. Each person gets
+          their own private link that shows only who they&apos;re buying for. It&apos;s free, nobody
+          needs an account or an email address, and the draw happens in your browser.
         </p>
         <div className="ss-tool-wrap mt-6 min-w-0">
           <SecretSantaMount />

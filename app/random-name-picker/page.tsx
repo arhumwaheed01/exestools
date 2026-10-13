@@ -4,9 +4,9 @@ import { GuideSection, UseCaseToolPage } from "@/components/UseCaseToolPage";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph } from "@/lib/seo/jsonld";
 
-const TITLE = "Random Name Picker Online — Free Name Wheel | ExesTools";
+const TITLE = "Random Name Picker – Free Name Wheel, Remove Winner & Share";
 const META =
-  "Pick a random name from your list in one spin. Free name picker wheel for up to 60 names, with remove-winner, share link and no account. List stays in your browser.";
+  "Paste up to 60 names and spin to pick one at random. Remove each winner, share the wheel with a link, and keep your list in your browser. Free, no account.";
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -172,7 +172,7 @@ export default function RandomNamePickerPage() {
         </ul>
       </GuideSection>
 
-      <GuideSection title="Pick a giveaway winner from names">
+      <GuideSection title="Picking a giveaway winner">
         <ol className="list-decimal space-y-2 pl-5">
           <li>
             Copy the entrant names from your comments, form or sign-up sheet and paste them in, one
@@ -196,7 +196,14 @@ export default function RandomNamePickerPage() {
           </li>
         </ol>
         <p className="mt-3">
-          Follow the rules of the platform you&apos;re running the giveaway on. ExesTools is a free
+          For rules to publish before you draw, see{" "}
+          <Link
+            href="/guides/how-to-run-a-fair-online-giveaway"
+            className="font-semibold text-accent hover:underline"
+          >
+            how to run a fair online giveaway
+          </Link>
+          . Follow the rules of the platform you&apos;re running the giveaway on. ExesTools is a free
           random picker, not a certified drawing service.
         </p>
       </GuideSection>
