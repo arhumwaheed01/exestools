@@ -4,24 +4,22 @@ import path from "node:path";
 import Link from "next/link";
 import matter from "gray-matter";
 import PageMeta from "@/components/PageMeta";
+import { GuideMarkdown } from "@/components/guides/GuideMarkdown";
+import { preprocessGuideBody } from "@/lib/guideBody";
 import { getPublishedGuides } from "@/lib/guides";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph } from "@/lib/seo/jsonld";
 
 const HUB_INTRO_PATH = path.join(process.cwd(), "public/content/site-pages/guides-hub-intro.md");
 
-function loadHubMeta(): { title: string; description: string; introParagraphs: string[] } {
+function loadHubMeta(): { title: string; description: string; introMarkdown: string } {
   const raw = fs.readFileSync(HUB_INTRO_PATH, "utf8");
   const { data, content } = matter(raw);
   const fm = data as { meta_title?: string; meta_description?: string };
-  const lines = content.trim().split("\n");
-  const introLines = lines.filter((l: string) => !l.startsWith("#") && !l.startsWith("<!--"));
-  const introText = introLines.join("\n").trim();
-  const paragraphs = introText.split(/\n\n+/).filter(Boolean);
   return {
     title: fm.meta_title ?? "Guides | ExesTools",
     description: fm.meta_description ?? "",
-    introParagraphs: paragraphs,
+    introMarkdown: preprocessGuideBody(content),
   };
 }
 
@@ -57,10 +55,8 @@ export default function GuidesHubPage() {
       <header className="max-w-3xl">
         <h1 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">Guides</h1>
         <PageMeta updated={guides[0]?.frontmatter.updated ?? "2026-10-13"} />
-        <div className="mt-6 space-y-4 text-sm leading-relaxed text-muted sm:text-base">
-          {hub.introParagraphs.map((p) => (
-            <p key={p.slice(0, 40)}>{p}</p>
-          ))}
+        <div className="mt-6">
+          <GuideMarkdown content={hub.introMarkdown} />
         </div>
       </header>
 

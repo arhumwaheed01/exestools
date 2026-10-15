@@ -155,13 +155,13 @@ export default function RandomNumberWheelPage() {
         <h1 className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl lg:text-3xl">
           Random number wheel
         </h1>
+        <PageMeta updated="2026-10-13" />
         <p className="mt-1 text-sm leading-relaxed text-muted sm:text-base">
           Pick a range and press SPIN, and the wheel stops on a random whole number. Tap 1–10 or
           1–100, or type any Min and Max for up to 1,000 numbers. Every number has the same chance.
           Switch on No repeats to draw each number only once. Tap the 1–75 quick range to switch on
           No repeats and Show bingo letters together, so calls read like B 7 or O 68.
         </p>
-        <PageMeta updated="2026-10-13" />
       </header>
 
       <QueryHydratedNumbers />

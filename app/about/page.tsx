@@ -4,8 +4,7 @@ import PageMeta from "@/components/PageMeta";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { aboutPageLd, toolOpenGraph } from "@/lib/seo/jsonld";
 
-const ABOUT_TITLE =
-  "About ExesTools: Who Builds It, How Picks Work, Editorial Policy";
+const ABOUT_TITLE = "About ExesTools: Who Builds It and How Picks Work";
 const ABOUT_DESC =
   "ExesTools is a set of free random-pick tools built by Arhum Waheed. How results are picked, why your lists stay in your browser, how ads keep it free, and how our guides are written.";
 

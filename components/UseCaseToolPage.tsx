@@ -159,6 +159,7 @@ export function UseCaseToolPage({
         <h1 className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl lg:text-3xl">
           {title}
         </h1>
+        {pageUpdated ? <PageMeta updated={pageUpdated} /> : null}
         <p className="mt-1 line-clamp-2 text-sm leading-snug text-muted sm:line-clamp-none sm:leading-relaxed">
           {intro}
         </p>
@@ -167,7 +168,6 @@ export function UseCaseToolPage({
             {sectionHeading}
           </h2>
         ) : null}
-        {pageUpdated ? <PageMeta updated={pageUpdated} /> : null}
       </header>
 
       <QueryHydratedSpinner toolId={toolId} />

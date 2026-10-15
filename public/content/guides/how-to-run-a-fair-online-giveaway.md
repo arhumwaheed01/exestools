@@ -1,6 +1,6 @@
 ---
 slug: /guides/how-to-run-a-fair-online-giveaway
-meta_title: "How to Run a Fair Online Giveaway: Rules, Draw and Winners | ExesTools"
+meta_title: "Fair Online Giveaway Guide: Rules and Draws | ExesTools"
 meta_description: "A practical checklist for running a fair online giveaway: the rules to publish, how to clean your entry list, how to draw on camera, and what to do when a winner never replies."
 author: Arhum Waheed
 author_url: /about#arhum

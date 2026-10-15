@@ -220,10 +220,13 @@ export default function ClassroomSpinnerPage() {
       <GuideMarkdown content={CLASSROOM_REWRITE.content} routineCardAside />
       <GuideSection title="Privacy for schools">
         <p>
-          Your class list is saved only in this browser on this device. Student names are not sent
-          anywhere when you spin. If you press Copy share link, the names are packed into the link
-          itself, so anyone who opens it can see them. Follow your school&apos;s policy before you
-          share a roster, and use first names or initials if you prefer. Read our{" "}
+          Your class list is saved only in this browser on this device. With{" "}
+          <span className="font-semibold text-foreground">Remove winner after spin</span> on, only
+          the names still on the wheel are saved—picked students leave the saved list until you paste
+          the full roster back in. Student names are not sent anywhere when you spin. If you press
+          Copy share link, the names are packed into the link itself, so anyone who opens it can see
+          them. Follow your school&apos;s policy before you share a roster, and use first names or
+          initials if you prefer. Read our{" "}
           <Link href="/privacy-policy" className="font-semibold text-accent hover:underline">
             Privacy Policy
           </Link>

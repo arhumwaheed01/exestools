@@ -6,7 +6,7 @@ import { QueryHydratedTeams } from "@/components/QueryHydratedMounts";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
 
-const TITLE = "Random Team Generator – Split Names into Groups or Pairs (Free)";
+const TITLE = "Random Team Generator – Groups or Pairs (Free)";
 const META =
   "Paste names and split them into random teams, groups or pairs in one click. Reshuffle, print or share the result. Free, no account, and your list stays in your browser.";
 
