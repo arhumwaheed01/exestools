@@ -27,7 +27,7 @@ function loadHomepageBlockMarkdown(): string {
 
 const HOME_TITLE = "ExesTools – Free Spinner Wheel, Name Picker & Party Tools";
 const HOME_META =
-  "Free spinner wheel, random name picker, classroom spinner, prize wheel, team generator, Secret Santa, raffle and bingo tools. No account, lists stay in your browser.";
+  "Free spinner wheel, name picker, classroom spinner, prize wheel, team generator, Secret Santa, raffle and bingo. No account; lists stay in your browser.";
 
 const FAQ_LINK_HREFS: Record<string, string> = {
   "Yes or no wheel": "/yes-no-wheel",
@@ -421,7 +421,7 @@ export default function HomePage() {
                     </Link>
                   </td>
                   <td className="py-2.5">
-                    Multiple tickets per person, alternates and a downloadable draw record
+                    Numbered tickets, several winners, alternates and a draw record to copy or print
                   </td>
                 </tr>
                 <tr className="align-top">

@@ -121,7 +121,7 @@ The page keeps one list in this browser at a time. For several classes, make a s
 
 ### How do I make sure every student gets a turn?
 
-Keep **Remove winner after spin (no repeats)** on. Each picked student leaves the wheel, so every name comes up once before any repeats. When one name is left, that student goes last; paste the full roster back in to start the next round.
+Keep **Remove winner after spin (no repeats)** on. Each picked student leaves the wheel, so every name comes up once before any repeats. When one name is left, that student goes last; paste the full roster back in to start the next round. With Remove winner on, the list saved in your browser is only the names still left. Paste your full roster again to start a new round.
 
 ### Is it safe to type student names?
 

@@ -7,9 +7,9 @@ import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
 
 const PAGE_URL = "https://www.exestools.com/raffle-generator";
-const TITLE = "Raffle Generator — Multiple Winners & Tickets | ExesTools";
+const TITLE = "Raffle Generator — Winners & Alternates | ExesTools";
 const DESCRIPTION =
-  "Free raffle generator. Paste names or a ticket range, give people multiple tickets, draw winners and alternates, and save a draw record. No signup.";
+  "Free raffle generator. Paste names or a ticket range, draw winners and alternates, and keep a draw record. No signup; your list stays in the browser.";
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -45,16 +45,10 @@ const FAQ = [
       "Yes. There's no account, signup or download. Your list, settings and latest draw are saved only in this browser.",
   },
   {
-    q: "How do I give someone more than one entry?",
-    a: "Switch on Multiple tickets per person and add the count after the name, like Sam x3, or paste a second column with the number of tickets. Each ticket is one equal chance in the draw.",
-    aPlain:
-      "Switch on Multiple tickets per person and add the count after the name, like Sam x3, or paste a second column with the number of tickets. Each ticket is one equal chance in the draw.",
-  },
-  {
     q: "Can the same person win twice?",
-    a: "Not by default: a winner's tickets all leave the draw. Switch off Each person can win only once to let people with several tickets win again. The same ticket can never be drawn twice.",
+    a: "Not by default: when someone wins, they leave the draw. Switch off Each person can win only once only if your rules allow the same person to win more than once. The same ticket can never be drawn twice.",
     aPlain:
-      "Not by default: a winner's tickets all leave the draw. Switch off Each person can win only once to let people with several tickets win again. The same ticket can never be drawn twice.",
+      "Not by default: when someone wins, they leave the draw. Switch off Each person can win only once only if your rules allow the same person to win more than once. The same ticket can never be drawn twice.",
   },
   {
     q: "How many entries and winners can I have?",
@@ -64,9 +58,9 @@ const FAQ = [
   },
   {
     q: "How do I draw numbered raffle tickets?",
-    a: "Choose Number range and enter your first and last ticket numbers. Add a prefix and zero padding if your tickets read A-001, and list unsold tickets under Leave out.",
+    a: "Choose Number range and enter your first and last ticket numbers. Add a prefix and zero padding if your tickets read A-001, and list unsold tickets under Leave out. Each ticket still in the draw has the same chance.",
     aPlain:
-      "Choose Number range and enter your first and last ticket numbers. Add a prefix and zero padding if your tickets read A-001, and list unsold tickets under Leave out.",
+      "Choose Number range and enter your first and last ticket numbers. Add a prefix and zero padding if your tickets read A-001, and list unsold tickets under Leave out. Each ticket still in the draw has the same chance.",
   },
   {
     q: "Is the draw random?",
@@ -166,9 +160,9 @@ export default function RaffleGeneratorPage() {
         <PageMeta updated="2026-10-13" />
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           Paste your entrants or set a ticket number range, choose how many winners you need, and
-          press Draw. People with more tickets get more chances, nobody wins twice unless you allow
-          it, and you get a draw record to copy, download or print. It&apos;s free, there&apos;s no
-          signup, and the draw happens in your browser.
+          press Draw. Nobody wins twice unless you allow it, and you get a draw record to copy or
+          print. It&apos;s free, there&apos;s no signup, and the draw happens in your browser. Your
+          list stays in this browser; use a result link if you want to share the winners.
         </p>
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           Running a social giveaway with named entries? See{" "}
@@ -212,33 +206,22 @@ export default function RaffleGeneratorPage() {
               device is set to reduce motion).
             </li>
             <li>
-              <span className="font-semibold text-foreground">Keep the record.</span> Copy it,
-              download it as a text or CSV file, print it, or copy a result link to share the
-              winners.
+              <span className="font-semibold text-foreground">Keep the record.</span> Copy it, print
+              it, or copy a result link to share the winners.
             </li>
           </ol>
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Multiple tickets per person
+            One entry per name, or numbered tickets
           </h2>
           <p className="mt-3">
-            If someone bought several tickets, switch on Multiple tickets per person and add the
-            count after their name: Sam x3, Sam *3, or a second spreadsheet column with the number.
-            Sam then holds three tickets in the draw and is three times as likely as a one-ticket
-            entrant to win each pick. It&apos;s ticket counting, the same as three stubs in a hat.
-          </p>
-          <p className="mt-3">
-            Repeated names work the same way. If your ticket export has one row per ticket, each
-            extra line counts as an extra ticket. If your rules say one entry per person, as most
-            social media giveaways do, choose One entry per name and repeats are ignored. Capital
+            For most social giveaways, keep One entry per name on so repeats are ignored. Capital
             letters and extra spaces don&apos;t make a name different, so add an initial when two
-            people share a name.
-          </p>
-          <p className="mt-3">
-            Tickets are numbered down your list: a first line with 3 tickets holds #1 to #3, and the
-            next line starts at #4. Each winner shows the ticket that was drawn.
+            people share a name. If you sold or printed numbered tickets, choose Number range, set
+            the first and last ticket, and list unsold numbers under Leave out. Each ticket still in
+            the draw has the same chance.
           </p>
         </section>
 
@@ -247,11 +230,10 @@ export default function RaffleGeneratorPage() {
             Drawing several winners and alternates
           </h2>
           <p className="mt-3">
-            Each pick takes one random ticket from those still in the draw. By default, a winner&apos;s
-            other tickets leave with them, so each person can win only once. That&apos;s how most
-            prize raffles run, and it means five tickets don&apos;t win five times as many prizes. If
-            your rules allow repeat winners, switch off Each person can win only once. Then only the
-            winning ticket leaves, and someone with several tickets can win more than one prize.
+            Each pick takes one random ticket from those still in the draw. By default, when someone
+            wins they leave the draw, so each person can win only once. That&apos;s how most prize
+            raffles and social giveaways run. If your rules allow the same person to win more than
+            once, switch off Each person can win only once.
           </p>
           <p className="mt-3">
             Alternates are drawn after the winners, from the same tickets, in order. If a winner
@@ -268,8 +250,8 @@ export default function RaffleGeneratorPage() {
           <p className="mt-3">
             Every draw gets a record: the date and time on your device, a draw code, the number of
             names and tickets, the rules you used, each winner with their prize and ticket number,
-            and the alternates. Copy it, download it as .txt or .csv, or print it for your committee.
-            A new draw always gets a new code.
+            and the alternates. Copy it or print it for your committee. A new draw always gets a new
+            code.
           </p>
           <p className="mt-3">
             The record also shows a list fingerprint, a short code made from your final entry list.
@@ -309,9 +291,9 @@ export default function RaffleGeneratorPage() {
               one go, with alternates for families who&apos;ve gone home.
             </li>
             <li>
-              <span className="font-semibold text-foreground">Charity events and galas.</span> Paste
-              ticket sales with a count column, so a supporter who bought ten tickets gets ten
-              chances. Print the record for your treasurer.
+              <span className="font-semibold text-foreground">Charity events and galas.</span> Set a
+              number range for sold ticket books, leave out unsold numbers, and print the record for
+              your treasurer.
             </li>
             <li>
               <span className="font-semibold text-foreground">Giveaways and streams.</span> Paste
@@ -355,8 +337,8 @@ export default function RaffleGeneratorPage() {
             Raffle generator, prize wheel or name picker?
           </h2>
           <p className="mt-3">
-            Use this page for a list: hundreds of tickets, people with several tickets each, several
-            winners at once, or a record to keep. To spin for one prize at a time on a wheel everyone
+            Use this page for a long list, numbered tickets, several winners at once, alternates, or
+            a record to keep. To spin for one prize at a time on a wheel everyone
             can watch, use the{" "}
             <Link href="/prize-wheel" className="font-semibold text-accent hover:underline">
               prize wheel spinner

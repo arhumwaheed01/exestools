@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PageMeta from "@/components/PageMeta";
+import { AuthorBox } from "@/components/guides/AuthorBox";
 import { GuideMarkdown } from "@/components/guides/GuideMarkdown";
 import {
   getGuideBySlug,
@@ -148,6 +149,7 @@ export default async function GuidePage({ params }: Props) {
         <GuideMarkdown content={guide.content} />
       </div>
 
+      <AuthorBox />
       <RelatedToolsBox guide={guide} />
     </article>
   );

@@ -1,7 +1,7 @@
 ---
 slug: /guides/how-random-is-a-spinner-wheel
-meta_title: "How Random Is a Spinner Wheel? Honest Odds | ExesTools"
-meta_description: "How online spinner wheels pick a result, the difference between Math.random and crypto.getRandomValues, why streaks happen, and what a free picker can and can't prove."
+meta_title: "How Random Is a Spinner Wheel? | ExesTools"
+meta_description: "How online spinner wheels pick a result, Math.random vs crypto.getRandomValues, why streaks happen, and what a free picker can and cannot prove."
 author: Arhum Waheed
 author_url: /about#arhum
 published: "2026-10-13"

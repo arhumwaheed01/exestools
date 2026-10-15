@@ -39,7 +39,7 @@ const FAQS = [
   },
   {
     q: "How do I call on every student once, with no repeats?",
-    a: 'Leave "Remove winner after spin (no repeats)" switched on. It is on by default on this page. Each student who is picked comes off the wheel, so everyone gets a turn before anyone repeats. When one name is left, that student is next. To start a new round, paste your full roster back in. Tip: click Copy before your first spin so the whole list is on your clipboard.',
+    a: 'Leave "Remove winner after spin (no repeats)" switched on. It is on by default on this page. Each student who is picked comes off the wheel, so everyone gets a turn before anyone repeats. When one name is left, that student is next. To start a new round, paste your full roster back in. With Remove winner on, the list saved in your browser is only the names still left. Paste your full roster again to start a new round. Tip: click Copy before your first spin so the whole list is on your clipboard.',
   },
   {
     q: "Is the random student picker really random?",
@@ -93,6 +93,10 @@ export default function ClassroomSpinnerPage() {
           <li>
             Keep &quot;Remove winner after spin (no repeats)&quot; switched on. Each picked student
             comes off the wheel, so everyone gets one turn per round.
+          </li>
+          <li>
+            With Remove winner on, the list saved in your browser is only the names still left. Paste
+            your full roster again to start a new round.
           </li>
           <li>
             When the round is over, paste your full roster back in. Tip: click Copy before your first

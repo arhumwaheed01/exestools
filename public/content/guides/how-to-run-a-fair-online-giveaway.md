@@ -1,11 +1,11 @@
 ---
 slug: /guides/how-to-run-a-fair-online-giveaway
-meta_title: "Fair Online Giveaway Guide: Rules and Draws | ExesTools"
-meta_description: "A practical checklist for running a fair online giveaway: the rules to publish, how to clean your entry list, how to draw on camera, and what to do when a winner never replies."
+meta_title: "How to Run a Fair Online Giveaway | ExesTools"
+meta_description: "Checklist for a fair online giveaway: rules to publish, cleaning your entry list, drawing on camera, and what to do when a winner never replies."
 author: Arhum Waheed
 author_url: /about#arhum
-published: 2026-10-13
-updated: 2026-10-13
+published: "2026-10-13"
+updated: "2026-10-13"
 related_tools: [/prize-wheel, /raffle-generator, /random-name-picker]
 ---
 
@@ -32,7 +32,7 @@ A rules post that heads off most disputes covers these points:
 - **How winners are contacted and how long they have to reply.** 48 or 72 hours is common. Say whether you will draw a replacement if they don't respond.
 - **What you will publish.** A first name or handle is usually enough. Never promise to publish personal details.
 
-[SCREENSHOT: A sample giveaway rules post next to the ExesTools prize wheel with "Entrant names" loaded, showing the rules and the wheel side by side.]
+![The ExesTools prize wheel with Entrant names loaded for drawing a giveaway winner.](/guides/how-to-run-a-fair-online-giveaway/1.png)
 
 ## Step 2: Collect and clean the entry list
 
@@ -55,15 +55,15 @@ Each ExesTools picker is set up for a different kind of giveaway. All of them pi
 
 The [prize wheel](/prize-wheel) holds up to 60 entries. Tap **Entrant names**, paste your list and spin. For more than one winner, switch on **Remove winner after spin (no repeats)** so each winner leaves the wheel. The [random name picker](/random-name-picker) works the same way, with remove-winner already on by default. A wheel is good for a live stream because everyone can watch the spin.
 
-### People with several entries, or a big list: raffle generator
+### A big list, several winners, or numbered tickets: raffle generator
 
-If someone earned three entries, a wheel can't show that, because duplicate lines are skipped. The [raffle generator](/raffle-generator) can. Switch on **Multiple tickets per person** and write the count after the name, such as `Sam x3`. It holds up to 10,000 tickets, 100 winners and 20 alternates in one draw. By default each person can win only once: when someone wins, their other tickets leave the draw.
+If you have more names than a wheel's 60-slice limit, need several winners and alternates in one draw, or are drawing from numbered tickets, use the [raffle generator](/raffle-generator). Paste one eligible name per line (or use Number range for ticket numbers), set winners and alternates, and draw. By default each person can win only once: when someone wins, they leave the draw. Keep a copy or print of the draw record with your recording.
 
 ### Spinning for the prize, not the person
 
 Some hosts draw the winner first, then spin a second wheel of prizes to see what they get. That works well on streams. Load **Prize rewards** or **Stream giveaway** on the prize wheel and edit the list. Remember every slice has the same chance, so a gift card and a sticker are equally likely. Plan your budget around that.
 
-[SCREENSHOT: The raffle generator with three entrants marked "x3", "x1" and "x2" and the count line showing names and tickets.]
+![The ExesTools raffle generator with a list of entrants ready to draw winners and alternates.](/guides/how-to-run-a-fair-online-giveaway/2.png)
 
 ## Step 4: Do the draw where people can see it
 
@@ -90,12 +90,12 @@ The unfair option is picking someone yourself because they seem keen. Even if it
 
 ## A worked example
 
-Say you run a giveaway with 3 prizes and 140 commenters. After cleaning you have 128 eligible entrants, and 10 of them earned a bonus entry by answering a question, so there are 138 tickets in total.
+Say you run a giveaway with 3 prizes and 140 commenters. After cleaning you have 128 eligible entrants (one entry each).
 
-- In the raffle generator, switch on Multiple tickets per person, mark those 10 entrants `x2`, set 3 winners and 2 alternates, and draw.
-- A two-ticket entrant has 2/138 ≈ 1.45% chance of winning the first pick. A one-ticket entrant has 1/138 ≈ 0.72%. That ratio is the whole meaning of "two entries", and it is worth saying in your rules.
-- With **Each person can win only once** on (the default), a winner's second ticket leaves with them, so nobody can take two of the three prizes.
-- Download or print the record and keep it with your recording.
+- In the raffle generator, paste the 128 names (One entry per name on), set 3 winners and 2 alternates, and draw.
+- Each entrant has 1/128 ≈ 0.78% chance of winning the first pick. Say that in your rules if you publish odds.
+- With **Each person can win only once** on (the default), a winner leaves the draw, so nobody can take two of the three prizes.
+- Copy or print the record and keep it with your recording.
 
 ## What I checked for this guide
 
@@ -107,9 +107,9 @@ Every feature named above was checked against the live tool pages on 2026-10-13:
 
 Yes, as long as you follow that platform's promotion rules. ExesTools doesn't connect to your account or import comments, so copy the entrant names yourself, paste them in, and spin or draw on screen.
 
-### How do I give someone more than one entry?
+### Can I paste the same name twice for a bonus entry?
 
-Use the raffle generator with Multiple tickets per person switched on and write the count after the name, such as `Sam x3`. The wheels skip duplicate lines, so pasting a name twice on a wheel won't work.
+Not on the wheels: duplicate lines are skipped. On the raffle generator, keep One entry per name on for social giveaways so each person appears once. If your rules truly allow extra entries, say so in the published rules and use a method you can show on camera (for example separate ticket numbers). Do not rely on pasting a name twice on a wheel.
 
 ### What should I do if the winner never replies?
 

@@ -77,7 +77,7 @@ Major changes to the site, newest first.
 - **2026-10-12:** Terms of Service and Contact page updated.
 - **[ARHUM: fill date]:** Older developer tools (JWT decoder, blog title generator) removed so the site could focus on random-pick tools.
 - **[ARHUM: fill date]:** Bingo card generator launched, with printable cards, player links, a caller and a card checker.
-- **[ARHUM: fill date]:** Raffle generator launched, with multiple tickets per person, alternates and a draw record.
+- **[ARHUM: fill date]:** Raffle generator launched, with numbered tickets, alternates and a draw record.
 - **[ARHUM: fill date]:** Secret Santa generator launched, with exclusions and private reveal links.
 - **[ARHUM: fill date]:** Random team generator launched.
 - **[ARHUM: fill date]:** ExesTools launched with the spinner wheel. [ARHUM: list the other wheels if they launched separately]

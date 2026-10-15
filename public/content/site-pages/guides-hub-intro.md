@@ -1,28 +1,18 @@
 ---
 route: /guides
 type: hub page intro (above the guide card list)
-meta_title: "Guides: Fair Draws and How Random Spinners Work"
-meta_description: "Practical ExesTools guides on running a fair online giveaway and how random a spinner wheel really is. Written by Arhum Waheed and checked against the live tools."
+meta_title: "Guides — Fair Giveaways & Spinner Odds | ExesTools"
+meta_description: "ExesTools guides on running a fair online giveaway and how random a spinner wheel really is. Written by the developer who builds the tools."
 ---
 
 # Guides
 
-The tools on ExesTools make a fair pick in a second. The hard part is usually everything around the spin: the giveaway rules you forgot to post before the draw, the winner who never replies, or the moment someone asks whether the wheel is rigged. These guides cover that part of the job. Each one is written by Arhum Waheed, who builds the tools, and each is checked against the live pages on the date shown, so the button names and steps match what you will see on screen.
+The ExesTools Guides section is for the work that sits around a fair pick: the rules you publish before a giveaway, the way you explain a spin to a sceptical audience, and the small checks that stop a draw from turning into an argument. The tools on this site can choose a name or a ticket in a moment. These guides cover what to do before and after that moment, in plain language you can follow while people are watching.
 
-Where a guide gives odds or percentages, it shows the working. Where a tool cannot do something, such as weighted prizes or a certified lottery draw, the guide says so. The point is to help you run something people trust, not to oversell what a free browser picker can prove.
+Every guide here is written by Arhum Waheed, the developer who builds ExesTools. Each one is checked against the live tools on the date shown on the page, so the steps and labels match what you see on screen. Where a guide shows odds or percentages, it shows the working. Where a tool cannot do something, the guide says so plainly instead of stretching a claim. That editorial rule is the same one described on the About page.
 
-## What is live now
+Right now two guides are live. How random is a spinner wheel? explains how an online wheel picks a result, what crypto.getRandomValues does in your browser, why streaks still happen in a fair draw, and what a free picker can and cannot prove to an audience. It is the guide to share when someone asks whether the spin was honest. How to run a fair online giveaway is a practical checklist for hosts: the rules to publish before you start, how to clean an entry list, how to draw where people can see it, how to keep a simple record, and what to do when a winner never replies.
 
-Two guides are published so far.
+Both guides stick to confirmed behaviour of the live tools. The tools are free. They need no account. Remove winner can take a picked name off the list so it does not come up again until you paste the full list back. A share link can open the same list on another device. Your list stays in the browser unless you choose to share it. Presets are mentioned only where the matching tool page actually offers them. The guides do not invent features, certified-draw status, or weighted-entry claims.
 
-**How to run a fair online giveaway** walks through what to publish before you draw, how to clean an entry list, how to spin or draw where people can see it, and what to do when a winner never replies. It pairs with the prize wheel for on-screen spins and the raffle generator when you need tickets, several winners or a draw record.
-
-**How random is a spinner wheel?** explains how ExesTools picks a result, the difference between ordinary browser randomness and the secure generator the tools use, why streaks happen by chance, and what a free picker can and cannot claim. Read it if you need a clear answer for a class, a stream chat or a committee that asks whether the wheel is fair.
-
-More guides on classrooms, teams, Secret Santa and party games are on the way. Until they publish, start from the cards below or jump straight into the matching tool. If you only need a quick pick today, the spinner wheel, name picker, prize wheel and raffle generator are ready without reading a guide first.
-
-## How these guides are written
-
-Every guide carries a byline and an updated date. Features mentioned in the text are checked on the live tool page on that date. If a control changes, the guide is revised and the Updated date moves. Outside research is named and linked; we do not invent statistics or testimonials. Corrections are welcome at hello@exestools.com—send the page address and what looks wrong.
-
-Use the cards below to open a guide. Newest published guides appear first.
+Read the spinner-randomness guide when you need a clear answer for yourself or for people watching a spin. Read the fair-giveaway guide when you are about to run a social draw and want a short process you can follow on camera. If you want to know how these articles are written and updated, start with the editorial notes on About. Then open the guide that matches what you are doing this week.

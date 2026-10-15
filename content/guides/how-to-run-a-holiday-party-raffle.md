@@ -48,7 +48,7 @@ Everyone on the list gets one entry. Easy to explain, and nobody feels the game 
 
 ### Extra tickets for something
 
-Some offices give extra tickets for wearing a holiday sweater, turning up on time, or completing a survey. That's fine, but keep it light. One or two bonus tickets are enough, so a person with three tickets has a better chance without making everyone else's chance pointless. The [raffle generator](/raffle-generator) lets you give people multiple tickets, so you don't have to type a name in three times.
+Some offices give extra tickets for wearing a holiday sweater, turning up on time, or completing a survey. That's fine, but keep it light and say how bonus tickets work in the rules. If you sold or printed numbered tickets, use the [raffle generator](/raffle-generator) with Number range and leave out unsold numbers.
 
 ### Can one person win twice?
 

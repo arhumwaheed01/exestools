@@ -4,9 +4,9 @@ import PageMeta from "@/components/PageMeta";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { aboutPageLd, toolOpenGraph } from "@/lib/seo/jsonld";
 
-const ABOUT_TITLE = "About ExesTools: Who Builds It and How Picks Work";
+const ABOUT_TITLE = "About — Who Builds It, How Picks Work | ExesTools";
 const ABOUT_DESC =
-  "ExesTools is a set of free random-pick tools built by Arhum Waheed. How results are picked, why your lists stay in your browser, how ads keep it free, and how our guides are written.";
+  "ExesTools is free random-pick tools by Arhum Waheed. How picks work, why lists stay in your browser, how ads keep it free, and how guides are written.";
 
 export const metadata: Metadata = {
   title: { absolute: ABOUT_TITLE },
@@ -309,8 +309,7 @@ export default function AboutPage() {
               checker.
             </li>
             <li>
-              Raffle generator launched, with multiple tickets per person, alternates and a draw
-              record.
+              Raffle generator launched, with numbered tickets, alternates and a draw record.
             </li>
             <li>
               Secret Santa generator launched, with exclusions and private reveal links.

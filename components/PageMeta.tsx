@@ -5,9 +5,17 @@ type Props = {
   updated: string; // ISO date
 };
 
-const fmt = (iso: string) =>
+const fmtPublished = (iso: string) =>
   new Date(iso + "T00:00:00Z").toLocaleDateString("en-GB", {
     day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+
+/** Month + year only, e.g. "October 2026", per editorial fix pack. */
+const fmtUpdated = (iso: string) =>
+  new Date(iso + "T00:00:00Z").toLocaleDateString("en-GB", {
     month: "long",
     year: "numeric",
     timeZone: "UTC",
@@ -23,10 +31,10 @@ export default function PageMeta({ published, updated }: Props) {
       {published && (
         <>
           {" "}
-          · Published <time dateTime={published}>{fmt(published)}</time>
+          · Published <time dateTime={published}>{fmtPublished(published)}</time>
         </>
       )}
-      {" · "}Updated <time dateTime={updated}>{fmt(updated)}</time>
+      {" · "}Updated <time dateTime={updated}>{fmtUpdated(updated)}</time>
     </p>
   );
 }
