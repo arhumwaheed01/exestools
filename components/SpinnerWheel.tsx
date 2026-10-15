@@ -22,6 +22,7 @@ import { ResultReveal } from "@/components/tools/ResultReveal";
 import { ThemeChips } from "@/components/tools/ThemeChips";
 import { ToolConfetti } from "@/components/tools/Confetti";
 import { YesNoTally } from "@/components/tools/YesNoTally";
+import { EmbedSnippet } from "@/components/embed/EmbedSnippet";
 import { encodeShareHash, readShareFromLocation } from "@/lib/share-codec";
 import {
   defaultChoicesForTool,
@@ -650,6 +651,7 @@ export function SpinnerWheel({
                 Fresh wheel
               </button>
             </div>
+            <EmbedSnippet toolId={toolId} choices={choices} disabled={spinning} />
             {showNextSteps ? (
               <div className="mt-4 rounded-xl border border-border bg-surface-2 px-3 py-3">
                 <p className="text-sm font-semibold text-foreground">

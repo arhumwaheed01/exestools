@@ -14,7 +14,8 @@ export function AppShell({
   adsense?: ReactNode;
 }) {
   const pathname = usePathname() ?? "";
-  const isEmbed = pathname.startsWith("/classroom-spinner/embed/");
+  const isEmbed =
+    pathname.startsWith("/classroom-spinner/embed/") || pathname.startsWith("/embed/");
 
   return (
     <>

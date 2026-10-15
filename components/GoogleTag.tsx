@@ -6,6 +6,11 @@ import { CONSENT_DENIED_REGIONS, GA_MEASUREMENT_ID } from "@/lib/analytics";
  * Consent defaults stay early; the GA library loads lazyOnload so tool JS paints first.
  * EEA/UK/CH: analytics + ads denied until Google's CMP updates consent.
  * Elsewhere: analytics granted; ads denied by default (CMP / AdSense may update).
+ *
+ * Funding Choices / GDPR dialog: no separate script in this repo. Publish the European
+ * regulations message in AdSense → Privacy & messaging for exestools.com; the existing
+ * adsbygoogle.js tag then serves fundingchoicesmessages.google.com in the EEA (test with
+ * ?fc=alwaysshow&fctype=gdpr).
  */
 export function GoogleTag() {
   if (!GA_MEASUREMENT_ID) return null;

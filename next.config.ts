@@ -33,6 +33,13 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      {
+        source: "/embed/:path*",
+        headers: [
+          { key: "X-Robots-Tag", value: "noindex, nofollow" },
+          { key: "Content-Security-Policy", value: "frame-ancestors *" },
+        ],
+      },
     ];
   },
 };
