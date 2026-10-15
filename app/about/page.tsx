@@ -183,9 +183,8 @@ export default function AboutPage() {
             </li>
             <li>
               <strong className="text-foreground">Raffle generator:</strong> draws one ticket at a
-              time from the tickets still in the draw, so someone with three tickets is exactly
-              three times as likely as someone with one to win that pick. By default, a winner&apos;s
-              other tickets leave the draw.
+              time from the tickets still in the draw, so every ticket has the same chance. By
+              default, a winner leaves the draw.
             </li>
             <li>
               <strong className="text-foreground">Bingo card generator:</strong> builds cards from a

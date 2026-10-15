@@ -41,7 +41,7 @@ Each spin is independent, so streaks happen by chance. Switch on Remove winner i
 
 - **Team generator:** shuffles the whole list with a Fisher–Yates shuffle using the same generator, then deals names into teams.
 - **Secret Santa generator:** first checks that a valid draw exists for your exclusions, then shuffles with the same generator until everyone has someone they're allowed to draw. For heavily restricted lists it falls back to a backtracking search. Nobody can draw themselves.
-- **Raffle generator:** draws one ticket at a time from the tickets still in the draw, so someone with three tickets is exactly three times as likely as someone with one to win that pick. By default, a winner's other tickets leave the draw.
+- **Raffle generator:** draws one ticket at a time from the tickets still in the draw, so every ticket has the same chance. By default, a winner leaves the draw.
 - **Bingo card generator:** builds cards from a short set code, so the same code always makes the same cards, and every card in a set is checked to be different. Its caller uses the secure generator separately and never repeats a call within a game.
 
 ExesTools is a free random picker, not a certified drawing service. For the longer version, with worked examples, read [How random is a spinner wheel?](/guides/how-random-is-a-spinner-wheel)
