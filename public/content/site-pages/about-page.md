@@ -16,7 +16,7 @@ ExesTools is not affiliated with the reverse-engineering forum that has a simila
 
 [ARHUM: fill — headshot, 400×400, alt text "Arhum Waheed"]
 
-ExesTools is built and maintained by **Arhum Waheed**, a software engineer based in Karachi, Pakistan. [ARHUM: fill — one or two sentences on your background, e.g. years of experience and the kind of software you work on.]
+ExesTools is built and maintained by **Arhum Waheed**, a software engineer. [ARHUM: fill — one or two sentences on your background, e.g. years of experience and the kind of software you work on.]
 
 He started ExesTools so that anyone could spin a fair wheel with their own text and settings, save it in the browser, share a link, or go straight to a ready-made tool for names, classrooms, prizes, yes-or-no decisions and teams. Each tool is set up for one job, with its own presets and limits, rather than one general wheel stretched to cover everything. [ARHUM: fill — optional one sentence on the moment or problem that made you build it.]
 

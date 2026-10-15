@@ -1134,7 +1134,11 @@ export function RaffleTool() {
                     {dupNotice}
                   </p>
                 ) : null}
-                {countHintText ? <p className="mt-2 text-xs text-muted">{countHintText}</p> : null}
+                {countHintText ? (
+                  <p className="mt-2 rounded-xl border border-amber-400/50 bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:bg-amber-950/30 dark:text-amber-100">
+                    {countHintText}
+                  </p>
+                ) : null}
                 {parsed.overLimit ? (
                   <p className="mt-2 text-sm text-red-600">
                     {overLimitMessage(parsed.totalTickets)}

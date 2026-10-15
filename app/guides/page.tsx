@@ -25,6 +25,12 @@ function loadHubMeta(): { title: string; description: string; introMarkdown: str
 
 const hub = loadHubMeta();
 
+function liveGuidesOpener(count: number): string {
+  if (count <= 0) return "No guides are published yet.";
+  if (count === 1) return "Right now one guide is live.";
+  return `Right now ${count} guides are live.`;
+}
+
 export const metadata: Metadata = {
   title: { absolute: hub.title },
   description: hub.description,
@@ -49,6 +55,10 @@ export const metadata: Metadata = {
 
 export default function GuidesHubPage() {
   const guides = getPublishedGuides();
+  const introMarkdown = hub.introMarkdown.replace(
+    /\{\{LIVE_GUIDES_OPENER\}\}/g,
+    liveGuidesOpener(guides.length),
+  );
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
@@ -56,7 +66,7 @@ export default function GuidesHubPage() {
         <h1 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">Guides</h1>
         <PageMeta updated={guides[0]?.frontmatter.updated ?? "2026-10-13"} />
         <div className="mt-6">
-          <GuideMarkdown content={hub.introMarkdown} />
+          <GuideMarkdown content={introMarkdown} />
         </div>
       </header>
 

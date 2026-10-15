@@ -20,6 +20,8 @@ export type GuideFrontmatter = {
   related_tools?: string[];
   author?: string;
   author_url?: string;
+  /** When true, the guide stays unpublished even if published <= today. */
+  draft?: boolean;
 };
 
 export type Guide = {
@@ -88,8 +90,8 @@ export function getAllGuides(): Guide[] {
 }
 
 export function getPublishedGuides(asOf: string = todayUtcDateString()): Guide[] {
-  return getAllGuides().filter((g) =>
-    isPublishedOnOrBefore(g.frontmatter.published, asOf),
+  return getAllGuides().filter(
+    (g) => !g.frontmatter.draft && isPublishedOnOrBefore(g.frontmatter.published, asOf),
   );
 }
 
@@ -109,6 +111,6 @@ export function getGuideSlugs(): string[] {
 
 export function isGuidePublished(slug: string, asOf: string = todayUtcDateString()): boolean {
   const guide = getGuideBySlug(slug);
-  if (!guide) return false;
+  if (!guide || guide.frontmatter.draft) return false;
   return isPublishedOnOrBefore(guide.frontmatter.published, asOf);
 }

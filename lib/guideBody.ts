@@ -5,7 +5,9 @@ const SCREENSHOT_LINE_RE = /^\[SCREENSHOT:[^\]]*\]\s*\n?/gm;
 const LEADING_H1_RE = /^#\s+.+\n+/;
 
 export function preprocessGuideBody(raw: string): string {
-  return raw
+  // Normalize CRLF first so ^ anchors and \n+ patterns match Windows-checked-in files.
+  const normalized = raw.replace(/\r\n/g, "\n").replace(/\r/g, "\n").replace(/^\uFEFF/, "").trimStart();
+  return normalized
     .replace(BYLINE_RE, "")
     .replace(SCREENSHOT_LINE_RE, "")
     .replace(LEADING_H1_RE, "")

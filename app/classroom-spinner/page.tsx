@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ClassroomIdeas } from "@/components/ClassroomIdeas";
 import { GuideMarkdown } from "@/components/guides/GuideMarkdown";
 import { GuideSection, UseCaseToolPage } from "@/components/UseCaseToolPage";
 import { loadToolPageMarkdown } from "@/lib/toolPageMarkdown";
@@ -104,6 +105,7 @@ export default function ClassroomSpinnerPage() {
           </li>
         </ol>
       </GuideSection>
+      <ClassroomIdeas />
       <GuideSection title="Ways teachers use it">
         <ul className="list-disc space-y-2 pl-5">
           <li>

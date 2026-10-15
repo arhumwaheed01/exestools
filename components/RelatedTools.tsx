@@ -35,7 +35,7 @@ const RELATED: Record<ToolId, { href: string; label: string }[]> = {
     { href: "/random-name-picker", label: "Pick a winner by name" },
     { href: "/classroom-spinner", label: "Classroom spinner" },
     { href: "/yes-no-wheel", label: "Yes or no wheel" },
-    { href: "/raffle-generator", label: "Raffle generator with multiple entries" },
+    { href: "/raffle-generator", label: "Raffle generator" },
     { href: "/secret-santa-generator", label: "Secret Santa generator (gift exchanges)" },
     { href: "/", label: "Spinner wheel home" },
   ],

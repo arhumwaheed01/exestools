@@ -3,6 +3,7 @@ import Link from "next/link";
 import PageMeta from "@/components/PageMeta";
 import { GuideMarkdown } from "@/components/guides/GuideMarkdown";
 import { QueryHydratedNumbers } from "@/components/QueryHydratedMounts";
+import { RelatedLinks } from "@/components/RelatedLinks";
 import { RelatedTools } from "@/components/RelatedTools";
 import { loadToolPageMarkdown } from "@/lib/toolPageMarkdown";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
@@ -346,6 +347,8 @@ export default function RandomNumberWheelPage() {
         </section>
 
         <GuideMarkdown content={NUMBER_WHEEL_REWRITE.content} />
+
+        <RelatedLinks toolId="random-number-wheel" />
 
         <section className="max-w-3xl" aria-labelledby="number-faq-heading">
           <h2 id="number-faq-heading" className="text-2xl font-bold tracking-tight text-foreground">

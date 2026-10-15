@@ -9,7 +9,7 @@ export function AuthorBox() {
           Arhum Waheed
         </Link>{" "}
         builds and maintains ExesTools. He writes the tool pages and these guides himself, and checks
-        each guide against the live tools on the date shown. He is based in Karachi, Pakistan.
+        each guide against the live tools on the date shown.
       </p>
     </aside>
   );

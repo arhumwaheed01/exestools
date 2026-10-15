@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import PageMeta from "@/components/PageMeta";
+import { RelatedLinks } from "@/components/RelatedLinks";
 import { RelatedTools } from "@/components/RelatedTools";
 import { QueryHydratedSpinner } from "@/components/QueryHydratedMounts";
 import { absoluteUrl } from "@/lib/seo";
@@ -176,6 +177,8 @@ export function UseCaseToolPage({
         <div className="max-w-3xl space-y-8 text-sm leading-relaxed text-muted sm:text-base">
           {children}
         </div>
+
+        <RelatedLinks toolId={toolId} />
 
         <section className="max-w-3xl" aria-labelledby="usecase-faq">
           <h2 id="usecase-faq" className="text-2xl font-bold tracking-tight text-foreground">

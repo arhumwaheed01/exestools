@@ -35,6 +35,12 @@ export function GuideMarkdown({ content, routineCardAside }: Props) {
   let blockquoteCount = 0;
 
   const components: Components = {
+    // Never emit a second page H1 from markdown (hub intros, paste mistakes).
+    h1: ({ children }) => (
+      <h2 className="mt-10 text-2xl font-bold tracking-tight text-foreground first:mt-0">
+        {children}
+      </h2>
+    ),
     h2: ({ children }) => (
       <h2 className="mt-10 text-2xl font-bold tracking-tight text-foreground first:mt-0">
         {children}

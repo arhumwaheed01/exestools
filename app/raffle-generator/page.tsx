@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PageMeta from "@/components/PageMeta";
+import { RelatedLinks } from "@/components/RelatedLinks";
 import { RelatedTools } from "@/components/RelatedTools";
 import { RaffleMount } from "@/components/raffle/RaffleMount";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
@@ -354,6 +355,10 @@ export default function RaffleGeneratorPage() {
             .
           </p>
         </section>
+
+        <div className="mt-10">
+          <RelatedLinks toolId="raffle-generator" />
+        </div>
 
         <section className="mt-10 max-w-3xl" aria-labelledby="raffle-faq">
           <h2 id="raffle-faq" className="text-2xl font-bold tracking-tight text-foreground">

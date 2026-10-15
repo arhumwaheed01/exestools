@@ -102,7 +102,7 @@ export default function AboutPage() {
           </h2>
           <p className="mt-2">
             ExesTools is built and maintained by <strong className="text-foreground">Arhum Waheed</strong>
-            , a software engineer based in Karachi, Pakistan.
+            , a software engineer.
           </p>
           <p className="mt-2">
             He started ExesTools so that anyone could spin a fair wheel with their own text and

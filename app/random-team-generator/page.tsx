@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PageMeta from "@/components/PageMeta";
+import { RelatedLinks } from "@/components/RelatedLinks";
 import { RelatedTools } from "@/components/RelatedTools";
 import { QueryHydratedTeams } from "@/components/QueryHydratedMounts";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
@@ -364,6 +365,8 @@ export default function RandomTeamGeneratorPage() {
             ; for one name at a time on a wheel, stay with the name picker or classroom spinner.
           </p>
         </section>
+
+        <RelatedLinks toolId="random-team-generator" />
 
         <section className="max-w-3xl" aria-labelledby="team-faq">
           <h2 id="team-faq" className="text-2xl font-bold tracking-tight text-foreground">

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PageMeta from "@/components/PageMeta";
+import { RelatedLinks } from "@/components/RelatedLinks";
 import { RelatedTools } from "@/components/RelatedTools";
 import { SecretSantaMount } from "@/components/secret-santa/SecretSantaMount";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
@@ -452,6 +453,10 @@ export default function SecretSantaGeneratorPage() {
             </li>
           </ul>
         </section>
+
+        <div className="mt-10">
+          <RelatedLinks toolId="secret-santa-generator" />
+        </div>
 
         <section className="mt-10 max-w-3xl" aria-labelledby="ss-faq">
           <h2 id="ss-faq" className="text-2xl font-bold tracking-tight text-foreground">

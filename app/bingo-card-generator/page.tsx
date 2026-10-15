@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BingoMount } from "@/components/bingo/BingoMount";
 import PageMeta from "@/components/PageMeta";
+import { RelatedLinks } from "@/components/RelatedLinks";
 import { RelatedTools } from "@/components/RelatedTools";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
@@ -430,6 +431,10 @@ export default function BingoCardGeneratorPage() {
             list and play the next round with the same cards.
           </p>
         </section>
+
+        <div className="mt-10">
+          <RelatedLinks toolId="bingo-card-generator" />
+        </div>
 
         <section className="mt-10 max-w-3xl" aria-labelledby="bingo-faq">
           <h2 id="bingo-faq" className="text-2xl font-bold tracking-tight text-foreground">
