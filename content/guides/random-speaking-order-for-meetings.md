@@ -41,7 +41,7 @@ Here's when it's worth doing, how to set it up for different kinds of meetings, 
 
 **Retros and feedback rounds.** When you want to hear from everyone before the discussion starts, a random order stops the most senior person's opinion from anchoring the room.
 
-**Workshops.** Picking who reports back from a breakout, who presents first, or who takes notes.
+**Workshops.** After four breakout tables finish a 20-minute exercise, spin once per table for who reports back, with remove winner on so the same person isn't the spokesperson twice in a row.
 
 ## When it doesn't
 

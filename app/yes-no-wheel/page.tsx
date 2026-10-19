@@ -45,10 +45,6 @@ const FAQS = [
     a: 'Whatever you decide before spinning. A common rule is "Maybe means ask again later" or "spin once more with just Yes and No".',
   },
   {
-    q: "Is there a yes no maybe wheel?",
-    a: "Yes. Tap Yes / No / Maybe under Example wheels. It adds a third slice, so each answer has a one-in-three chance.",
-  },
-  {
     q: "What is Quick decide?",
     a: "An example wheel with four actions instead of answers: do it, wait, ask someone, or skip. Use it when you know what to do but not whether to do it now.",
   },
@@ -63,10 +59,6 @@ const FAQS = [
   {
     q: "Can I use this as a coin flip?",
     a: 'Yes. Tap Heads / Tails under Example wheels and press SPIN. It\'s the same 50/50 spin as Yes / No, just with different labels. Call your side before you spin.',
-  },
-  {
-    q: "Can I use it like a yes or no dice?",
-    a: "Yes. A two-slice Yes / No spin gives the same 50/50 odds as rolling odd vs even on a die. There are no dice on this page. For numbers, use the [random number wheel].",
   },
   {
     q: "Can I share my yes or no wheel?",
@@ -85,18 +77,6 @@ const FAQS = [
     a: "Chance. With two equal slices, five Nos in a row happens about 1 time in 32. Each spin is independent, so the next one is still 50/50.",
   },
   {
-    q: "Does the yes or no wheel remember my last answer?",
-    a: "No. Every spin is a fresh pick with the same odds. The counter under the wheel only shows your running tally.",
-  },
-  {
-    q: "Can I use the yes or no wheel to teach probability?",
-    a: "Yes. Have students predict a tally, spin 20 times, and compare. It's a quick way to show that exact 50/50 splits are less common than people expect.",
-  },
-  {
-    q: "Is coin-toss mode different from Yes / No?",
-    a: "Only the labels change. Heads / Tails is the same two-slice, 50/50 spin.",
-  },
-  {
     q: "How do I settle who goes first on a video call?",
     a: "Tap Heads / Tails, let each person call a side out loud, share your screen and spin once.",
   },
@@ -110,8 +90,8 @@ export default function YesNoWheelPage() {
       title="Yes or no wheel"
       intro={
         <>
-          Ask your question, hit SPIN, and the wheel lands on Yes or No. It works as a simple yes no
-          wheel or yes or no spinner whenever you need a quick answer. Want a third option? Switch to
+          Ask your question, hit SPIN, and the wheel lands on Yes or No. Use it for the small calls
+          that eat ten minutes: dessert or not, run now or after work, who picks the film. Want a third option? Switch to
           Yes / No / Maybe, or tap Heads / Tails for a coin flip. If you&apos;re choosing between
           more than two options, use the{" "}
           <Link href="/" className="font-semibold text-accent hover:underline">
@@ -149,6 +129,9 @@ export default function YesNoWheelPage() {
           Spins don&apos;t affect the next odds—a long streak of Yes answers is unlikely but normal
           with real randomness.
         </p>
+        <p>
+          It&apos;s free, there&apos;s no account, and the answers you set up are saved in your browser.
+        </p>
       </GuideSection>
       <GuideSection title="Flip a coin with the wheel">
         <p>
@@ -166,6 +149,22 @@ export default function YesNoWheelPage() {
           legal matters or anything hard to undo, take your time and get advice from someone
           qualified instead.
         </p>
+        <ul className="list-disc space-y-2 pl-5">
+          <li>
+            <span className="font-semibold text-foreground">Kids&apos; choices.</span>{" "}
+            &quot;Bath before or after the story?&quot; Let the child press SPIN, so the answer belongs
+            to the wheel and not to you.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Tabletop games.</span>{" "}
+            A game master can let the wheel answer &quot;does the shopkeeper know anything?&quot; when
+            the rules are silent.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Who goes first on a video call.</span>{" "}
+            Tap Heads / Tails, share your screen, spin once.
+          </li>
+        </ul>
       </GuideSection>
       <GuideMarkdown content={YES_NO_DECISION.content} />
       <GuideSection title="Yes, No or Maybe?">
@@ -224,46 +223,6 @@ export default function YesNoWheelPage() {
           SPIN.
         </p>
       </GuideSection>
-      <GuideSection title="Under the hood">
-        <p>
-          The yes or no wheel is a two-slice spinner: one Yes, one No. Each spin picks one at random with
-          equal odds, then the wheel turns to land on it. Spins don&apos;t remember each other, so a run
-          of No answers says nothing about the next spin. Tap{" "}
-          <span className="font-semibold text-foreground">Yes / No / Maybe</span>{" "}
-          for three slices, or{" "}
-          <span className="font-semibold text-foreground">Heads / Tails</span>{" "}
-          for a coin-toss mode with the same 50/50 odds as Yes and No.
-        </p>
-        <p>
-          It&apos;s free, there&apos;s no account, and the answers you set up are saved in your browser.
-        </p>
-      </GuideSection>
-      <GuideSection title="Small ways people use it">
-        <ul className="list-disc space-y-2 pl-5">
-          <li>
-            <span className="font-semibold text-foreground">Kids&apos; choices:</span>{" "}
-            &quot;Bath before or after the story?&quot; Let the child press SPIN, and the result belongs to
-            the wheel, not to you.
-          </li>
-          <li>
-            <span className="font-semibold text-foreground">Date night:</span>{" "}
-            &quot;Cook in?&quot; One spin, no debate.
-          </li>
-          <li>
-            <span className="font-semibold text-foreground">Tabletop games:</span>{" "}
-            a game master can let the wheel answer &quot;does the shopkeeper know anything?&quot; when
-            there&apos;s no rule.
-          </li>
-          <li>
-            <span className="font-semibold text-foreground">Who goes first:</span>{" "}
-            Heads / Tails on a video call, with the screen shared so both sides see it.
-          </li>
-          <li>
-            <span className="font-semibold text-foreground">Teaching probability:</span>{" "}
-            short runs, long runs and why &quot;due&quot; isn&apos;t a thing.
-          </li>
-        </ul>
-      </GuideSection>
       <GuideSection title="Worked example: a probability lesson in ten minutes">
         <p>
           Ask the class to predict how many Yeses you&apos;ll get in 20 spins. Most will say 10. Spin 20
@@ -297,8 +256,9 @@ export default function YesNoWheelPage() {
             Switching after a bad result is how arguments begin.
           </li>
           <li>
-            <span className="font-semibold text-foreground">Use the yes or no wheel for small, reversible choices.</span>{" "}
-            For anything with real consequences, take your time.
+            <span className="font-semibold text-foreground">Keep it to small, reversible choices.</span>{" "}
+            Which film tonight, who serves first, tacos or curry: fine. Whether to take the job offer:
+            not a wheel question.
           </li>
         </ul>
       </GuideSection>

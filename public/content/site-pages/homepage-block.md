@@ -10,11 +10,7 @@ ExesTools is a small set of free tools for the moments when a group needs a deci
 
 ## Who it's for
 
-Teachers use the classroom spinner and team generator to call on students and form groups without favourites. Event hosts and streamers use the prize wheel and raffle generator for giveaways. Families and offices use the Secret Santa generator. Friends use the yes or no wheel to stop debating where to eat. If you need a fair pick in front of other people, it's for you.
-
-## How a pick is made
-
-Every result comes from your browser's secure random number generator, and the wheel only animates to the answer that was already chosen. Spinning longer or harder changes nothing. Switch on Remove winner if each name should come up only once. Read the full explanation in [How random is a spinner wheel?](/guides/how-random-is-a-spinner-wheel)
+Teachers use the classroom spinner and team generator to call on students and form groups without favorites. Event hosts and streamers use the prize wheel and raffle generator for giveaways. Families and offices use the Secret Santa generator. Friends use the yes or no wheel to stop debating where to eat. If you need a fair pick in front of other people, it's for you.
 
 ## Your list, your browser
 

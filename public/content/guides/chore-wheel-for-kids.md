@@ -85,7 +85,7 @@ Kids love pressing the button themselves. It feels like a game, and nobody can c
 
 Put the children's names on the [random name picker](/random-name-picker), keep remove winner on, and read out the bundles one at a time: "Kitchen crew is… Trash and recycling is…" Each name leaves the wheel once picked, so nobody gets two bundles.
 
-This version works better when you have more bundles than kids, or when you want to control the order (say, hand out the least popular bundle first).
+This version works when you have about as many bundles as kids (or fewer), because remove winner takes each name off once and then the wheel is empty. Use it when you want to control the order, for example reading out the least popular bundle first. If you have more bundles than kids, spin the chores instead (Option A) so every bundle can still be assigned.
 
 ## Step 4: Rotate so nobody gets stuck
 

@@ -38,34 +38,16 @@ const FAQ_LINK_HREFS: Record<string, string> = {
 
 const FAQ = [
   {
-    q: "Is this Secret Santa generator free?",
-    a: "Yes. It's free with no account or signup, and nobody needs to give an email address. It runs in your browser, so there's nothing to install.",
-    aPlain:
-      "Yes. It's free with no account or signup, and nobody needs to give an email address. It runs in your browser, so there's nothing to install.",
-  },
-  {
-    q: "How does a Secret Santa generator work?",
-    a: "You add everyone's name and any exclusions, then press Draw names. The generator shuffles the group so that everyone gets exactly one person to buy for, nobody draws themselves, and every exclusion is respected. Each person then opens their own private link to see their match.",
-    aPlain:
-      "You add everyone's name and any exclusions, then press Draw names. The generator shuffles the group so that everyone gets exactly one person to buy for, nobody draws themselves, and every exclusion is respected. Each person then opens their own private link to see their match.",
-  },
-  {
     q: "Does it send emails to participants?",
     a: "No. ExesTools doesn't collect email addresses or send messages. You copy each person's private link and send it yourself, by text, chat, or your own email.",
     aPlain:
       "No. ExesTools doesn't collect email addresses or send messages. You copy each person's private link and send it yourself, by text, chat, or your own email.",
   },
   {
-    q: "Can I send Secret Santa names by WhatsApp or text message?",
-    a: "Yes. Copy each person's private link and send it in WhatsApp, a text message or any chat app. ExesTools doesn't need phone numbers or emails, and it doesn't send messages itself.",
-    aPlain:
-      "Yes. Copy each person's private link and send it in WhatsApp, a text message or any chat app. ExesTools doesn't need phone numbers or emails, and it doesn't send messages itself.",
-  },
-  {
     q: "How do I stop couples from drawing each other?",
-    a: "Add an exclusion: pick both names and choose Neither draws the other. Use One-way if only one person should be blocked from drawing the other.",
+    a: "Add an exclusion: pick both names and choose Neither draws the other. Do the same for each pair of housemates or siblings who live together, so nobody buys for someone in their own household. Use One-way if only one person should be blocked from drawing the other.",
     aPlain:
-      "Add an exclusion: pick both names and choose Neither draws the other. Use One-way if only one person should be blocked from drawing the other.",
+      "Add an exclusion: pick both names and choose Neither draws the other. Do the same for each pair of housemates or siblings who live together, so nobody buys for someone in their own household. Use One-way if only one person should be blocked from drawing the other.",
   },
   {
     q: "How many people do I need for Secret Santa?",
@@ -95,12 +77,6 @@ const FAQ = [
     a: "Add everyone on this page, press Draw names, then send each person their private reveal link by text, WhatsApp, chat or email. They open it from anywhere and only see who they're buying for. Agree on a shipping deadline in the event note.",
     aPlain:
       "Add everyone on this page, press Draw names, then send each person their private reveal link by text, WhatsApp, chat or email. They open it from anywhere and only see who they're buying for. Agree on a shipping deadline in the event note.",
-  },
-  {
-    q: "Can I run Secret Santa for a remote or long-distance group?",
-    a: "Yes. Draw names online here, then send each link privately in chat or email. People open their own link from anywhere. Agree on a shipping deadline in the event note.",
-    aPlain:
-      "Yes. Draw names online here, then send each link privately in chat or email. People open their own link from anywhere. Agree on a shipping deadline in the event note.",
   },
   {
     q: "Is there a wish list?",
@@ -133,20 +109,9 @@ const FAQ = [
       "Yes. Add a one-way exclusion: if Sam shouldn't draw Alex because they had Alex last year, block Sam from drawing Alex. Alex can still draw Sam unless you block that too. The generator doesn't remember past years—you add the rule each time you run a new draw.",
   },
   {
-    q: "How do I keep people in the same household apart?",
-    a: "Add a two-way exclusion (Neither draws the other) for each pair who live together—partners, siblings, or housemates—so nobody buys for someone in their own household. In bigger families you may need several exclusions, one per pair.",
-    aPlain:
-      "Add a two-way exclusion (Neither draws the other) for each pair who live together—partners, siblings, or housemates—so nobody buys for someone in their own household. In bigger families you may need several exclusions, one per pair.",
-  },
-  {
     q: "What if someone loses their Secret Santa link?",
     a: "The organizer can resend it. Copy all links, Download and Print keep a full list of everyone's links, so keep that copy somewhere private.",
     aPlain: "The organizer can resend it. Copy all links, Download and Print keep a full list of everyone's links, so keep that copy somewhere private.",
-  },
-  {
-    q: "Can I reuse last year's group?",
-    a: "Yes. Your list and settings are saved in this browser. Run a new draw and add one-way exclusions so nobody draws the same person as last year.",
-    aPlain: "Yes. Your list and settings are saved in this browser. Run a new draw and add one-way exclusions so nobody draws the same person as last year.",
   },
   {
     q: "What should I put in the event note?",
@@ -162,11 +127,6 @@ const FAQ = [
     q: "How many exclusions can I add?",
     a: "As many as your group can handle. The more you add, the fewer valid draws remain, and the generator tells you if none are left.",
     aPlain: "As many as your group can handle. The more you add, the fewer valid draws remain, and the generator tells you if none are left.",
-  },
-  {
-    q: "Does the draw work for an odd number of people?",
-    a: "Yes. Each person buys for one other person, so any group of three or more works, odd or even.",
-    aPlain: "Yes. Each person buys for one other person, so any group of three or more works, odd or even.",
   },
 ];
 
@@ -338,6 +298,10 @@ export default function SecretSantaGeneratorPage() {
             buying for each other. It&apos;s stricter, so a long list of exclusions can make a single
             loop impossible even when a normal draw works. If that happens, switch it off.
           </p>
+          <p className="mt-3">
+            Odd numbers are fine: with 7 people, everyone still buys one gift and gets one. Only
+            exclusions can make a draw impossible.
+          </p>
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
@@ -355,7 +319,8 @@ export default function SecretSantaGeneratorPage() {
             The match inside a link is scrambled so it can&apos;t be read at a glance. That&apos;s
             obfuscation, not encryption: anyone who has the link can open it, and someone determined
             could decode it. Treat each link like a folded slip of paper and send it only to the
-            person it&apos;s for.
+            person it&apos;s for. Paste each link into a text, WhatsApp, Slack or email to that one
+            person, never into the group chat.
           </p>
           <p className="mt-3">
             The organizer can see the results if they choose to. Show all matches stays off until you
@@ -369,46 +334,8 @@ export default function SecretSantaGeneratorPage() {
           </p>
         </section>
 
-        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Send Secret Santa names by text or WhatsApp
-          </h2>
-          <p className="mt-3">
-            After you press Draw names, each person gets their own private link. Press Copy link next
-            to a name and paste it into a text message, WhatsApp, Messenger, Slack or your own email.
-            Send each link only to the person it belongs to. When they open it and tap Reveal, they
-            see who they&apos;re buying for, plus the budget, date and note you added. Nobody
-            else&apos;s match is shown. ExesTools never asks for phone numbers or email addresses and
-            never sends messages for you.
-          </p>
-        </section>
 
-        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Kris Kringle, office and family gift exchanges
-          </h2>
-          <p className="mt-3">
-            The same draw works for a Kris Kringle in Australia or New Zealand, an office Secret
-            Santa, a family exchange or a class gift swap. Add up to 50 people. Use exclusions so
-            partners, housemates or siblings don&apos;t draw each other, and put the spending limit
-            and exchange date in Event details so everyone sees the same rules. For a remote team,
-            send the links in your team chat as direct messages. Everyone opens their own link,
-            wherever they are.
-          </p>
-        </section>
 
-        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Secret Santa with an odd number of people
-          </h2>
-          <p className="mt-3">
-            Odd numbers are fine. Everyone buys one gift and receives one gift whether you have 5
-            people or 11, because each person is assigned someone to buy for. Nobody has to be split
-            into pairs. You need at least 3 people. Exclusions are what can make a draw impossible in
-            a small group. If that happens, the page tells you who is stuck so you can remove an
-            exclusion or add someone.
-          </p>
-        </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           <h2 className="text-xl font-bold tracking-tight text-foreground">
@@ -416,11 +343,7 @@ export default function SecretSantaGeneratorPage() {
           </h2>
           <ul className="mt-3 list-disc space-y-3 pl-5">
             <li>
-              It works for any exchange where each person buys for one other person, including Kris
-              Kringle, as it&apos;s often called in Australia.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Office Secret Santa.</span> Paste the
+              <span className="font-semibold text-foreground">Office Secret Santa (or Kris Kringle).</span> Paste the
               team from a spreadsheet, set a budget and the party date, then message each colleague
               their link. Nobody hands over an email address.
             </li>
@@ -489,52 +412,21 @@ export default function SecretSantaGeneratorPage() {
               carries its own result, so links sent before a redraw still show the old matches. Every
               reveal shows a short draw code; after a redraw, ask everyone to check theirs matches.
             </li>
+            <li>
+              <span className="font-semibold text-foreground">Keep a private copy of all links</span>{" "}
+              in case someone loses theirs.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Add exclusions sparingly.</span>{" "}
+              Each one removes options. Use them for couples and repeats, not mild preferences.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Need a co-organizer?</span>{" "}
+              Copy setup link sends the names and exclusions, but not the results.
+            </li>
           </ul>
         </section>
 
-        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            What the draw actually does
-          </h2>
-          <p className="mt-3">
-            When you press{" "}
-            <span className="font-semibold text-foreground">Draw names</span>
-            , the generator assigns each person exactly one other person to buy for. Nobody can draw
-            themselves, everyone gives one gift and receives one gift, and every exclusion you set is
-            respected. Before it starts, it checks that a valid draw exists. If your exclusions make one
-            impossible, it tells you which people are stuck.
-          </p>
-          <p className="mt-3">
-            Each person then gets a{" "}
-            <span className="font-semibold text-foreground">private link</span>{" "}
-            that shows only their own match, plus the budget, date and note you added. You send the links
-            yourself, by text, chat or your own email. Nobody needs an account or an email address, and your
-            list stays in your browser.
-          </p>
-        </section>
-        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Exchanges it fits
-          </h2>
-          <ul className="mt-3 list-disc space-y-3 pl-5">
-            <li>
-              <span className="font-semibold text-foreground">Families that span households:</span>{" "}
-              exclusions keep partners and housemates from drawing each other, so gifts cross between homes.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Friend groups in different cities:</span>{" "}
-              everyone opens their link wherever they are, and the note holds the shipping deadline.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Clubs and teams:</span>{" "}
-              a member gift swap at the end-of-season dinner.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Classrooms:</span>{" "}
-              a class swap with a small budget, run by the teacher.
-            </li>
-          </ul>
-        </section>
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           <h2 className="text-xl font-bold tracking-tight text-foreground">
             Worked example: a family of nine
@@ -569,33 +461,6 @@ export default function SecretSantaGeneratorPage() {
             time. In a group of four with the same number of exclusions, it might not, and the page would
             tell you who&apos;s stuck.
           </p>
-        </section>
-        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Tips
-          </h2>
-          <ul className="mt-3 list-disc space-y-3 pl-5">
-            <li>
-              <span className="font-semibold text-foreground">Send links one by one.</span>{" "}
-              Never paste them all into a group chat.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Keep a private copy of all links</span>{" "}
-              in case someone loses theirs.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Use the note for the important rules:</span>{" "}
-              wrap and label, a shipping deadline, or &quot;no gift cards.&quot;
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Add exclusions sparingly.</span>{" "}
-              Each one removes options. Use them for couples and repeats, not mild preferences.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Need a co-organizer?</span>{" "}
-              Copy setup link sends the names and exclusions, but not the results.
-            </li>
-          </ul>
         </section>
 
         <div className="mt-10">

@@ -135,7 +135,7 @@ The wheel holds up to 60 entries, so all 30 fit with room for your own.
 ## A worked example: a 10-minute opener for a 16-person workshop
 
 1. **Minutes 0–3:** This or that (game 2), four rounds. Everyone moves, nobody talks alone.
-2. **Minutes 3–9:** Spin the question (game 1) for six people chosen by the people wheel. Remove winner stays on, so those six come off. Use the remaining ten names later in the day when you need someone to report back from a breakout.
+2. **Minutes 3–9:** Spin the question (game 1) for six people chosen by the people wheel. Remove winner stays on, so those six come off. For the afternoon breakouts, paste all sixteen names into the [random team generator](/random-team-generator), set **Number of teams** to 4, and paste the groups into the chat so each table already knows who they're with.
 3. **Minute 9–10:** One word (game 3) round for the whole room in random order.
 
 Ten minutes, every person spoke at least once, and only six had to talk for more than a few seconds.

@@ -11,13 +11,13 @@ By Arhum Waheed · Updated 2026-10-13
 
 ## Number wheel ideas
 
-A number wheel is the most flexible picker on ExesTools, because almost anything can be numbered. Here are five setups that go beyond "pick a number," with the exact settings to use.
+A number wheel is the most flexible picker on ExesTools, because almost anything can be numbered. Here are six setups that go beyond "pick a number," with the exact settings to use.
 
 ### 1. Raffle ticket numbers at a small event
 
 You sold tickets 101 to 180 at a school stall. Set **Min** to 101 and **Max** to 180, switch on **No repeats**, and spin once per prize. Read each number out and wait for the holder to come forward before the next spin. If nobody claims a number, spin again: because No repeats is on, the unclaimed ticket is already out of the draw.
 
-When the draw is over, press **Copy results**. It copies your last 20 numbers, so you can paste them straight into a message to the organising committee.
+When the draw is over, press **Copy results**. It copies your last 20 numbers, so you can paste them straight into a message to the organizing committee.
 
 If some tickets in the book were never sold, this page can't leave them out. Use the [raffle generator](/raffle-generator), which has a Leave out list for unsold tickets, or reduce the range so it only covers the books you sold.
 
@@ -52,7 +52,7 @@ Board games are balanced around 7 being the most common total. Swap in a single 
 
 For a twenty-sided die in a tabletop role-playing game, tap **1–20**.
 
-### 4. Lottery-style picks for games and classroom maths
+### 4. Lottery-style picks for games and classroom math
 
 For a "pick six numbers" game at a party or a probability lesson, set Min 1 and Max 49, switch on No repeats, and spin six times. Press Copy results to keep the set.
 
@@ -62,13 +62,27 @@ This is a good way to show a class how unlikely a jackpot is. The number of diff
 
 For a reading game, a "random page" writing prompt or picking where to start revising, set the range to the pages that actually have content. A novel with 312 pages whose first chapter starts on page 9 should be set to Min 9 and Max 312, so the front matter never comes up. Leave No repeats on if you're running a whole lesson of random-page prompts and don't want to repeat one.
 
+### 6. A rounding warm-up
+
+Set Min 100 and Max 999, leave No repeats off, and spin five times. Say you get 312, 845, 650, 199 and 503.
+
+| Spin | Nearest 10 | Nearest 100 |
+|---|---|---|
+| 312 | 310 | 300 |
+| 845 | 850 | 800 |
+| 650 | 650 | 700 |
+| 199 | 200 | 200 |
+| 503 | 500 | 500 |
+
+Students write their answers on whiteboards before you reveal each row. The 650 row is the one that sparks discussion: it's already a multiple of 10, and it sits exactly halfway between 600 and 700, so the usual round-half-up rule sends it to 700. Using a fresh spin each time means nobody can memorize the answers from yesterday's worksheet.
+
 ![The ExesTools random number wheel with a result shown and range controls on the right.](/tools/random-number-wheel/1.png)
 
 ## A higher-or-lower game that teaches strategy
 
 Spin a number from 1 to 100 without showing it, or have one player look away while another spins. Everyone else guesses, and the holder only answers "higher" or "lower."
 
-It's a quick game, but it hides a neat piece of maths. If you always guess the middle of the numbers that are still possible (50, then 25 or 75, and so on), you halve the options with every guess. Since 2 multiplied by itself 7 times is 128, which is more than 100, the halving strategy always finds the number in **7 guesses or fewer**. For 1 to 1,000, it takes at most 10, because 2¹⁰ is 1,024.
+It's a quick game, but it hides a neat piece of math. If you always guess the middle of the numbers that are still possible (50, then 25 or 75, and so on), you halve the options with every guess. Since 2 multiplied by itself 7 times is 128, which is more than 100, the halving strategy always finds the number in **7 guesses or fewer**. For 1 to 1,000, it takes at most 10, because 2¹⁰ is 1,024.
 
 Try it with a class: let students play a few rounds freely, count their guesses, then teach the halving strategy and play again. The drop in guesses is the lesson. It's an easy introduction to binary search for older students, and to number sense and place value for younger ones. Keep No repeats off between rounds, so a number can come up again just as it would in a fresh game.
 
@@ -90,7 +104,7 @@ A few small details save confusion:
 
 - **Both ends are included.** Min 1 and Max 10 puts ten numbers on the wheel, 1 and 10 included. The count is always Max − Min + 1.
 - **Up to 1,000 numbers fit in one range.** 1 to 1,000 works; so does 5,001 to 6,000. For bigger ticket ranges, use the raffle generator.
-- **Negative numbers work.** −10 to 10 holds 21 numbers, including 0. That's useful for temperature or number-line games in a maths lesson.
+- **Negative numbers work.** −10 to 10 holds 21 numbers, including 0. That's useful for temperature or number-line games in a math lesson.
 - **Whole numbers only.** For a random decimal, spin a whole number and divide: 1 to 100 divided by 10 gives 0.1 to 10.0 in steps of 0.1.
 
 ## Numbers instead of names, for privacy
@@ -114,20 +128,17 @@ Ask one question: *should the same number be able to come up twice?*
 
 If you change your mind halfway through a draw, finish the round first. Switching modes partway makes it hard to explain to anyone watching which numbers were still in play.
 
+A few habits help either way:
+
+- **Copy results** at the end of a draw if you need a record of what came up.
+- **Copy share link** sends the range and settings, not any names.
+
 ## Frequently asked questions
-
-### Can I pick a number between 1 and 1000?
-
-Yes. Tap the **1–1000** quick range, or type Min 1 and Max 1000, then press SPIN. Each number has a 1 in 1,000 chance. That is the largest range the wheel holds; for bigger ranges, use the raffle generator.
-
-### How do I pick several numbers without repeats?
-
-Switch on **No repeats** and spin once for each number you need. Each result leaves the wheel until you press **Reset draws**. Your last 20 results are listed under Recent results, and **Copy results** copies them so you can paste the list anywhere.
 
 ### Is every number equally likely?
 
-Yes. Each spin picks one whole number from the numbers still on the wheel with your browser's secure random number generator, and every one of them has the same chance. With No repeats on, the remaining numbers become more likely as drawn numbers leave, but they stay equal to each other.
+Yes. Each spin picks one whole number from the numbers still on the wheel with your browser's secure random number generator, and every one of them has the same chance. With No repeats on, the remaining numbers become more likely as drawn numbers leave, but they stay equal to each other. Learn more: [How ExesTools picks a result].
 
 ### Can I skip certain numbers?
 
-Not directly. This page doesn't have an option to exclude individual numbers from a range. You can narrow the range, convert results (spin 1–20 and use 2n − 1 for odd numbers only), put the exact numbers you want on the [spinner wheel](/) one per line (up to 60), or use the raffle generator's Leave out list for ticket numbers.
+Not directly. This page doesn't have an option to exclude individual numbers from a range. You can narrow the range, convert results (spin 1–20 and use 2n − 1 for odd numbers only), put the exact numbers you want on the [spinner wheel] one per line (up to 60), or use the raffle generator's Leave out list for ticket numbers.

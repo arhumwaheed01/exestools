@@ -33,14 +33,6 @@ const FAQS = [
     a: "Paste your prizes or entrant names, one per line, publish the rules and the full list, then press SPIN where everyone can see it. Turn on Remove winner after spin if you need more than one winner. For ticket counts, alternates or a draw record, use the [raffle generator].",
   },
   {
-    q: "What should I put on a prize wheel?",
-    a: "Short, clear prizes that suit your audience, like gift cards or discount codes for an online giveaway, shout-outs on a stream, or homework passes in class. See the ideas above, or load one of the example wheels and edit it.",
-  },
-  {
-    q: "Can I use the prize wheel at an event or booth?",
-    a: "Yes. Open it on any laptop or screen, add your prizes one per line, and let each visitor press SPIN. It's free with no signup. You supply the real prizes.",
-  },
-  {
     q: "What are the odds on a prize wheel?",
     a: "Every slice is the same size, so each prize has a 1 in N chance, where N is the number of slices. With 8 prizes, each has a 1 in 8 (12.5%) chance.",
   },
@@ -51,14 +43,6 @@ const FAQS = [
   {
     q: "Can I make some prizes more likely to win?",
     a: "No. Every slice has the same chance, and if you add the same prize twice the duplicate is skipped. If you want a rare grand prize, add fewer big prizes and more small ones.",
-  },
-  {
-    q: "Can I make a prize wheel with names?",
-    a: "Yes. Tap Entrant names, paste one name per line, and spin. If two people share a name, add an initial so both stay on the wheel.",
-  },
-  {
-    q: "How do I pick more than one winner?",
-    a: 'Turn on "Remove winner after spin". Each winner leaves the wheel, so you can keep spinning until you have enough winners without repeats.',
   },
   {
     q: "Can I use the prize wheel on a Twitch or YouTube stream?",
@@ -73,14 +57,6 @@ const FAQS = [
     a: "Whatever your rules say. Decide before the first spin, for example spin once more for the same person, and stick to it every time.",
   },
   {
-    q: "Is this an online prize wheel generator?",
-    a: "Yes. It's a free online prize wheel that runs in your browser. Type your prizes or entrant names, one per line, and spin. No signup and no download.",
-  },
-  {
-    q: "Is this a physical prize wheel for sale?",
-    a: "No. ExesTools doesn't sell or rent physical wheels. This is a free on-screen spinner you can show at an event, in class, or on a stream.",
-  },
-  {
     q: "Can I spin for prizes or for entrant names?",
     a: 'Both. Use the Prize rewards or Stream giveaway example to spin for a prize, or Entrant names to draw a winner from a list of people. To draw several winners, turn on "Remove winner after spin" so nobody wins twice. If some entrants have more than one ticket, use the [raffle generator with multiple entries].',
   },
@@ -89,16 +65,8 @@ const FAQS = [
     a: "Yes, as long as you follow the platform's rules. Paste the entrant names you collected, for example from comments, then spin on screen or record the spin so entrants can see the result. ExesTools doesn't connect to social accounts or import comments.",
   },
   {
-    q: "How do I keep a giveaway fair?",
-    a: 'Publish your rules before you spin, let everyone see the full list of prizes or names, and explain any "Bonus spin" slices up front. Every slice has the same chance on each spin. Learn more: [How ExesTools picks a result].',
-  },
-  {
     q: "Is this a certified lottery or raffle draw?",
-    a: "No. It's a free random picker, not a certified drawing service. If the law or your platform requires a certified draw, use one. See our [Terms of Service].",
-  },
-  {
-    q: "Can I remove a prize once it has been won?",
-    a: "Yes. Turn on Remove winner after spin before you start, or press Remove & continue when the result appears. That slice leaves the wheel.",
+    a: "No. It's a free random picker. If your platform or local law requires an official or supervised draw, use one. See our [Terms of Service].",
   },
   {
     q: "Can I change the prizes between spins?",
@@ -111,14 +79,6 @@ const FAQS = [
   {
     q: "Can viewers spin my prize wheel themselves?",
     a: "They can open the same list with your share link, but their spins happen on their own device and don't affect yours. For an official result, spin on your screen.",
-  },
-  {
-    q: "How do I spin for prizes after picking winners?",
-    a: "Draw winners from a wheel of entrant names with remove winner on, then load a list of prizes and spin once per winner. Each prize leaves after it's won.",
-  },
-  {
-    q: "Is the prize wheel free for business use?",
-    a: "Yes. It's free with no account. You supply and hand out the real prizes, and you're responsible for any rules that apply to your promotion.",
   },
 ];
 
@@ -213,9 +173,9 @@ export default function PrizeWheelPage() {
             a 2 in 10 chance of no prize.
           </li>
           <li>
-            Each prize has a 1 in N chance, where N is the number of slices. To make a prize more
-            likely, add it more than once on separate lines with different labels (for example
-            &quot;Sticker&quot; and &quot;Sticker 2&quot;), because exact duplicates are skipped.
+            Each prize has a 1 in N chance, where N is the number of slices. On a 10-slice wheel with
+            one $25 gift card, expect the card about once every 10 spins. If that&apos;s too often,
+            stock a fixed number and take the slice off when they&apos;re gone.
           </li>
           <li>The wheel picks the prize. You hand out the real rewards.</li>
         </ul>
@@ -254,32 +214,6 @@ export default function PrizeWheelPage() {
           so entrants can open the exact list you spun.
         </p>
       </GuideSection>
-      <GuideSection title="Drawing several winners">
-        <p>
-          To give away more than one prize, turn on{" "}
-          <span className="font-semibold text-foreground">Remove winner after spin (no repeats)</span>
-          . Each name leaves the wheel after it wins, so nobody wins twice. Decide the order up
-          front: many hosts draw the smallest prize first and the main prize last, or say
-          &quot;first name drawn gets first pick&quot;.
-        </p>
-        <p>
-          Announce how many winners you&apos;ll draw before the first spin, and write each winner
-          down as they come up. If a winner doesn&apos;t reply or turns out not to qualify, say in
-          your rules how long they have to claim and whether you&apos;ll spin again for a
-          replacement. Before the next giveaway, paste the full list back in so the removed names
-          return.
-        </p>
-        <p>
-          Hosting a gift exchange instead of a giveaway? The{" "}
-          <Link
-            href="/secret-santa-generator"
-            className="font-semibold text-accent hover:underline"
-          >
-            Secret Santa generator
-          </Link>{" "}
-          matches people so everyone gives and receives one gift.
-        </p>
-      </GuideSection>
       <GuideSection title="How to run a fair giveaway on stream or in class">
         <p>
           On a stream, put the wheel on screen before you start, read out the full list of prizes or
@@ -316,8 +250,8 @@ export default function PrizeWheelPage() {
           At an event or booth, put the wheel on a laptop or tablet facing visitors, and keep the
           prize list printed or written next to it so people know what&apos;s on the wheel before
           they spin. Restock or edit slices between spins if a prize runs out, and say so out loud.
-          Platform rules and local laws for giveaways differ, so check the ones that apply to you.
-          This wheel picks a result. It doesn&apos;t make your giveaway compliant with any rule.
+          Giveaway rules differ by platform and by place, so check the ones that apply to you before
+          you announce prizes.
         </p>
       </GuideSection>
       <GuideSection title="How a prize spin is decided">
@@ -338,30 +272,14 @@ export default function PrizeWheelPage() {
           when a prize should only be won once. The won slice leaves the wheel, and the next spin is
           between what&apos;s left.
         </p>
-      </GuideSection>
-      <GuideSection title="Where a prize wheel works">
-        <ul className="list-disc space-y-2 pl-5">
-          <li>
-            <span className="font-semibold text-foreground">Classroom reward days:</span>{" "}
-            a Friday spin for the table that earned it, with rewards the class helped choose.
-          </li>
-          <li>
-            <span className="font-semibold text-foreground">Stream milestones:</span>{" "}
-            a spin when you hit a follower goal, with viewer-friendly prizes like picking the next game.
-          </li>
-          <li>
-            <span className="font-semibold text-foreground">Shop promotions:</span>{" "}
-            one spin with a purchase at the counter, with a printed list of prizes beside the screen.
-          </li>
-          <li>
-            <span className="font-semibold text-foreground">Team events:</span>{" "}
-            door prizes at an office party, spun after names are drawn.
-          </li>
-          <li>
-            <span className="font-semibold text-foreground">Fundraiser add-ons:</span>{" "}
-            a quick, low-cost spin for kids while the main raffle runs elsewhere.
-          </li>
-        </ul>
+        <p>
+          Make sure everyone can see the wheel and the full list, and disclose your contest rules
+          before you spin. See our{" "}
+          <Link href="/terms" className="font-semibold text-accent hover:underline">
+            Terms of Service
+          </Link>
+          .
+        </p>
       </GuideSection>
       <GuideSection title="Worked example: two wheels, three prizes, 40 entrants">
         <p>
@@ -396,6 +314,11 @@ export default function PrizeWheelPage() {
       <GuideSection title="Tips">
         <ul className="list-disc space-y-2 pl-5">
           <li>
+            <span className="font-semibold text-foreground">Say the order before the first spin.</span>{" "}
+            &quot;Smallest prize first, gift card last&quot; or &quot;first name drawn picks first.&quot;
+            Write each winner down as they come up.
+          </li>
+          <li>
             <span className="font-semibold text-foreground">Show the full list before the first spin.</span>{" "}
             People trust what they&apos;ve seen.
           </li>
@@ -412,17 +335,6 @@ export default function PrizeWheelPage() {
             The wheel shows the current spin, not a history.
           </li>
         </ul>
-      </GuideSection>
-      <GuideSection title="Fairness">
-        <p>
-          Every slice has the same chance on each spin, and the result is always the slice under the
-          pointer. Make sure everyone can see the wheel and the full list, and disclose your contest
-          rules before you spin. See our{" "}
-          <Link href="/terms" className="font-semibold text-accent hover:underline">
-            Terms of Service
-          </Link>
-          .
-        </p>
       </GuideSection>
     </UseCaseToolPage>
   );

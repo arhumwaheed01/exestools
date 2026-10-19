@@ -90,7 +90,7 @@ You can draw from a bucket, and plenty of raffles do. But if you've got hundreds
 
 With the [raffle generator](/raffle-generator):
 
-1. **Paste the sold ticket numbers**, one per line. If they're in your spreadsheet, copy the column. Only sold tickets go in; leave out anything that came back unsold.
+1. **Choose Number range** and enter the first and last sold ticket (for example 1 to 500). Add a prefix or zero padding if your stubs read A-001. List unsold or void numbers under **Leave out**. Or paste one sold ticket number per line in List mode, and turn **One entry per name** off so each number stays in as its own ticket.
 2. **Check the count** against your sales sheet before you press anything. Say it out loud: "We sold 452 tickets, and there are 452 in the draw."
 3. **Type the prizes in draw order**, smallest to largest if that's your plan.
 4. **Add a few alternates**, say three to five. Alternates are drawn after the winners, in order, so if a winner can't be reached, you already know who's next.
@@ -98,7 +98,7 @@ With the [raffle generator](/raffle-generator):
 
 Each pick takes one ticket at random from the tickets still in the draw, and every one of those tickets has the same chance. A drawn ticket leaves the draw, so the same ticket can't win twice.
 
-One honest caveat: the generator sees ticket numbers, not people. If the Garcias bought ten tickets, they have ten numbers, and two of them could come up. Decide your rule before the draw. "One prize per household" is common at schools; if a second Garcia ticket is drawn, you pass that prize to the next alternate. Put the rule on the poster so nobody's surprised.
+One honest caveat: the generator sees ticket numbers, not households. If the Garcias bought ten tickets, they have ten numbers in the draw, and two of them could come up as winners. The tool will not skip a second Garcia ticket on its own. If your house rule is "one prize per household," write that on the poster and, when a second family ticket is drawn, pass that prize to the next alternate by hand.
 
 Read each number out twice, slowly. Wait for the holder to come forward, or check the spreadsheet if they've left. Write the winner's name next to the prize on paper as you go.
 

@@ -106,7 +106,7 @@ For the dice version, use a real die or a number wheel set to 1–6. Write the m
 
 ## White elephant vs Secret Santa
 
-They get mixed up constantly. In white elephant, nobody is assigned a person; you bring a gift for the pile and anyone could end up with it. In Secret Santa, you draw one specific person and buy for them. If your group would rather buy thoughtful gifts for named people, use the [Secret Santa generator](/secret-santa-generator) instead: it lets you keep couples from drawing each other, and each person gets a private link that shows only their match.
+They get mixed up constantly. In white elephant, nobody is assigned a person; you bring a gift for the pile and anyone could end up with it. In Secret Santa, you draw one specific person and buy for them. If your group wants named gifts with couple exclusions, run the draw on the [Secret Santa generator](/secret-santa-generator) and send each person their own match link instead of passing a hat.
 
 Some offices do both: Secret Santa for a small team, white elephant for the whole floor party.
 

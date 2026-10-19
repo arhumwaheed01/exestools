@@ -37,11 +37,6 @@ const FAQ_LINK_HREFS: Record<string, string> = {
 
 const FAQ = [
   {
-    q: "Is the bingo card generator free?",
-    a: "Yes. Making, printing and playing cards is free, and you don't need an account.",
-    aPlain: "Yes. Making, printing and playing cards is free, and you don't need an account.",
-  },
-  {
     q: "How many items do I need?",
     a: "A 5×5 card needs 24 items with a FREE square or 25 without. A 4×4 card needs 16 and a 3×3 card needs 8 with FREE. Adding a few more than the minimum makes the cards look more different from each other.",
     aPlain:
@@ -84,12 +79,6 @@ const FAQ = [
       "No. Each item is called once until you start a new game. Undo last call takes back a mis-tap.",
   },
   {
-    q: "How do I check if someone really has bingo?",
-    a: "Enter their card number in Check a card and choose the pattern. It compares the card with everything called so far.",
-    aPlain:
-      "Enter their card number in Check a card and choose the pattern. It compares the card with everything called so far.",
-  },
-  {
     q: "Can I play 90-ball bingo?",
     a: "Not yet. This tool makes 75-ball cards and number cards up to 99. To call numbers 1 to 90, use the [random number wheel] with Min 1 and Max 90.",
     aPlain:
@@ -114,11 +103,6 @@ const FAQ = [
       "No. It's made for classrooms, parties, families and team events. Small prizes like stickers or treats are part of the fun, but it isn't designed for paid or cash games.",
   },
   {
-    q: "Can I play bingo on a video call?",
-    a: "Yes. Make a set, copy each player's link from Player links, and send them before the call. Run the Caller on your screen and read each call out.",
-    aPlain: "Yes. Make a set, copy each player's link from Player links, and send them before the call. Run the Caller on your screen and read each call out.",
-  },
-  {
     q: "What grid size is best for young children?",
     a: "A 3×3 or 4×4 card keeps games short and the squares large. Save 5×5 for older players.",
     aPlain: "A 3×3 or 4×4 card keeps games short and the squares large. Save 5×5 for older players.",
@@ -127,16 +111,6 @@ const FAQ = [
     q: "How do I play several rounds with the same cards?",
     a: "Press New game in the Caller to clear the called list. Players keep their cards and you start the next round.",
     aPlain: "Press New game in the Caller to clear the called list. Players keep their cards and you start the next round.",
-  },
-  {
-    q: "How many cards can I make for a big event?",
-    a: "Up to 100 different cards in one set. For more players, make a second set, but cards from different sets aren't checked against each other.",
-    aPlain: "Up to 100 different cards in one set. For more players, make a second set, but cards from different sets aren't checked against each other.",
-  },
-  {
-    q: "Can players use paper and phones in the same game?",
-    a: "Yes. Print some cards and send player links for others from the same set, and use the same Caller for everyone.",
-    aPlain: "Yes. Print some cards and send player links for others from the same set, and use the same Caller for everyone.",
   },
   {
     q: "How do I stop players marking squares that weren't called?",
@@ -170,7 +144,7 @@ const HASH_HANDOFF = `(function(){try{var h=location.hash;if(/^#[bp]=v1\\./.test
 const FEATURE_LIST = [
   "Word bingo from your own list",
   "75-ball B-I-N-G-O number cards",
-  "3x3, 4x4 and 5x5 grids with optional FREE centre",
+  "3x3, 4x4 and 5x5 grids with optional FREE center",
   "Up to 100 unique cards per set",
   "Print 2 or 4 cards per page on A4 or Letter",
   "Player card links with tap-to-mark",
@@ -211,7 +185,7 @@ export default function BingoCardGeneratorPage() {
   };
 
   return (
-    <main>
+    <article>
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
         <script id="bingo-hash-handoff" dangerouslySetInnerHTML={{ __html: HASH_HANDOFF }} />
 
@@ -235,7 +209,7 @@ export default function BingoCardGeneratorPage() {
         <PageMeta updated="2026-10-19" />
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           Make printable bingo cards from your own word list or classic 1–75 numbers. Choose a 3×3,
-          4×4 or 5×5 grid, add a FREE centre square, and make up to 100 different cards in one set.
+          4×4 or 5×5 grid, add a FREE center square, and make up to 100 different cards in one set.
           Print two or four cards per page, or send each player a link to their own card and mark
           squares on a phone. A built-in caller draws without repeats and a card checker confirms a
           bingo. It&apos;s free, there&apos;s no signup, and everything runs in your browser.
@@ -377,24 +351,10 @@ export default function BingoCardGeneratorPage() {
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           <h2 className="text-xl font-bold tracking-tight text-foreground">Classroom bingo</h2>
           <p className="mt-3">
-            Bingo is an easy way to practise words and facts without it feeling like a worksheet. The{" "}
-            <strong className="font-semibold text-foreground">Sight words (K–1)</strong> theme uses
-            the 40 Dolch pre-primer words, such as the, said, where and yellow. Say the word, use it
-            in a short sentence, and let students find it. A 4×4 card keeps the round short for young
-            readers. With <strong className="font-semibold text-foreground">Math facts</strong>, the
-            squares show facts like 6 × 7 and you read out only the answer, so students have to work
-            backwards. Replace any list with this week&apos;s vocabulary, capital cities or science
-            terms.
-          </p>
-          <p className="mt-3">
-            Give every student a different card so the whole class doesn&apos;t shout at once, and
-            keep the set code so you can print the same cards again next term. For picking who reads
-            next or who answers a question, the{" "}
-            <Link href="/classroom-spinner" className="font-semibold text-accent hover:underline">
-              classroom spinner
-            </Link>{" "}
-            pairs well with a bingo lesson. For list length, call timing, classroom variations and
-            party games, read{" "}
+            Use the <strong className="font-semibold text-foreground">Sight words (K–1)</strong>{" "}
+            theme or paste this week&apos;s vocabulary, and pick 4×4 for short rounds. Read a
+            definition instead of the word for older students. List lengths, round timing and math
+            variations are in{" "}
             <Link
               href="/guides/bingo-games-for-classrooms-and-parties"
               className="font-semibold text-accent hover:underline"
@@ -407,50 +367,14 @@ export default function BingoCardGeneratorPage() {
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Baby shower and bridal shower bingo
+            Party, shower and office bingo
           </h2>
           <p className="mt-3">
-            Shower bingo is usually played with the gifts. Before the presents are opened, give each
-            guest a card filled with likely gifts such as a onesie, a board book or a towel set. As
-            each gift is unwrapped, guests mark the matching square, and the first full line wins a
-            small prize. Edit the theme to match the registry, add the baby&apos;s name or the
-            couple&apos;s wedding date as the subtitle, and make one card per guest. The Bridal
-            shower theme works the same way with kitchen and home gifts.
-          </p>
-        </section>
-
-        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Christmas, Halloween and holiday party bingo
-          </h2>
-          <p className="mt-3">
-            Holiday themes give a party something for all ages to do together. Christmas, Halloween,
-            Thanksgiving and New Year&apos;s lists are ready to edit, and they work two ways. Call
-            items from the caller for a classic game, or play spotting bingo during a holiday film, a
-            parade or a walk to see the lights, where players mark things as they see them. For a
-            class party, print four per page and use stickers as markers. To pick a gift exchange
-            partner at the same party, try the{" "}
-            <Link
-              href="/secret-santa-generator"
-              className="font-semibold text-accent hover:underline"
-            >
-              Secret Santa generator
-            </Link>
-            .
-          </p>
-        </section>
-
-        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Meeting bingo and office party bingo
-          </h2>
-          <p className="mt-3">
-            Meeting bingo (sometimes called buzzword bingo) gives a long call a light touch: squares
-            hold familiar phrases like &quot;You&apos;re on mute&quot; or &quot;Let&apos;s circle
-            back&quot;, and players tap them on their own card link as they hear them. Keep it kind,
-            and skip phrases that single out a colleague. The Office party theme is a mixer instead.
-            Each square is a trait, such as &quot;Plays an instrument&quot;, and players find a
-            coworker who matches and write their name in that square.
+            Load the Baby shower or Christmas theme and edit it, or paste your own list of meeting
+            phrases. Swap in the guest of honor&apos;s name, the office in-jokes, or this year&apos;s
+            party menu. A theme only works if the players recognize the squares, so cut anything your
+            group wouldn&apos;t say out loud. For an office call, send each colleague their player
+            link before the meeting starts and run the caller on your shared screen.
           </p>
         </section>
 
@@ -461,7 +385,7 @@ export default function BingoCardGeneratorPage() {
           <p className="mt-3">
             The classic American game uses 75 numbers on a 5×5 card. Each column has its own range: B
             holds 1–15, I holds 16–30, N holds 31–45, G holds 46–60 and O holds 61–75. Every card has
-            five numbers per column, listed smallest to largest, and the centre of the N column is
+            five numbers per column, listed smallest to largest, and the center of the N column is
             usually a FREE square. The caller draws numbers one at a time with their letter, and
             players cover matching numbers. The first player to complete the agreed pattern calls
             &quot;Bingo!&quot; and the caller checks the card. Then press{" "}
@@ -485,34 +409,6 @@ export default function BingoCardGeneratorPage() {
           <p className="mt-3">
             Everything happens in your browser. It&apos;s free, and nobody needs an account.
           </p>
-        </section>
-        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Games it works for
-          </h2>
-          <ul className="mt-3 list-disc space-y-3 pl-5">
-            <li>
-              <span className="font-semibold text-foreground">Vocabulary review:</span>{" "}
-              this week&apos;s spelling words or science terms on a 4×4 card. Read a definition and students
-              find the word.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Senior center or care home afternoons:</span>{" "}
-              big squares, two cards per page, and a slow, clear caller.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Virtual team socials:</span>{" "}
-              send each colleague their player link before the call and play from the meeting chat.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Road trip or walk bingo:</span>{" "}
-              squares for things to spot, like a red truck, a cow or a bridge, played with no caller at all.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Reading bingo:</span>{" "}
-              squares for genres or reading challenges that run over a month.
-            </li>
-          </ul>
         </section>
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           <h2 className="text-xl font-bold tracking-tight text-foreground">
@@ -628,6 +524,6 @@ export default function BingoCardGeneratorPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-    </main>
+    </article>
   );
 }

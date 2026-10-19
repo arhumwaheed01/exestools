@@ -2,6 +2,13 @@
  * Per-URL lastmod for the sitemap (MA-11 / BK-03).
  * Update an entry ONLY when that page's visible copy, structured data, or links change.
  * Do not stamp every page with the build date.
+ *
+ * Guides are NOT listed here: each guide's sitemap lastmod comes from its own
+ * frontmatter `updated` field in content/guides/*.md. Only bump that when the body changes.
+ *
+ * 2026-10-19: the tool pages (and "/", which is the spinner wheel) were consolidated that day,
+ * and about/contact/privacy-policy shipped with the Oct 19 content pack. terms and dmca have
+ * not changed since 2026-10-12.
  */
 export const LASTMOD: Record<string, string> = {
   "/": "2026-10-19",

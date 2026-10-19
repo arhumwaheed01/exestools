@@ -5,12 +5,14 @@ meta_title: "Guides — Fair Picks, Teams, Classrooms & Parties | ExesTools"
 meta_description: "ExesTools guides on fair giveaways, spinner odds, cold calling, balanced teams, Secret Santa and bingo. Written by the developer who builds the tools."
 ---
 
-The ExesTools Guides section is for the work that sits around a fair pick: the rules you publish before a giveaway, the way you explain a spin to a sceptical audience, and the small checks that stop a draw from turning into an argument. The tools on this site can choose a name or a ticket in a moment. These guides cover what to do before and after that moment, in plain language you can follow while people are watching.
+By Arhum Waheed · Updated October 2026
 
-Every guide here is written by Arhum Waheed, the developer who builds ExesTools. Each one is checked against the live tools on the date shown on the page, so the steps and labels match what you see on screen. Where a guide shows odds or percentages, it shows the working. Where a tool cannot do something, the guide says so plainly instead of stretching a claim. That editorial rule is the same one described on the About page.
+The tools on this site take a second to pick a name or a ticket. These guides are about everything around that second: the rules you post before a giveaway, how to cold-call a class without singling anyone out, what to do when a Secret Santa match falls through a week before the party.
 
-{{LIVE_GUIDES_OPENER}} They cover spinner randomness and fair online giveaways, fair cold calling in class, making balanced random teams, Secret Santa rules and budgets, and bingo ideas for classrooms and parties. Open the card below that matches what you are doing this week.
+Each guide is written by Arhum Waheed, who builds the tools, and checked against the live tools on the date shown. Where a guide gives odds, it shows the math. Where a tool can't do something, the guide says so.
 
-Each guide is checked against the live tools on the date shown, and says plainly what a tool can't do.
+**For teachers:** [Fair ways to call on students](/guides/cold-calling-students-fairly) · [Bingo game ideas for classrooms](/guides/bingo-games-for-classrooms-and-parties) · [How to make balanced teams](/guides/how-to-make-balanced-random-teams)
 
-If you want to know how these articles are written and updated, start with the editorial notes on About. Then open the guide that matches what you are doing this week.
+**For giveaways and draws:** [How to run a fair online giveaway](/guides/how-to-run-a-fair-online-giveaway) · [How random is a spinner wheel?](/guides/how-random-is-a-spinner-wheel)
+
+**For the holidays:** [Secret Santa rules and gift exchange ideas](/guides/secret-santa-rules-and-budget-ideas)

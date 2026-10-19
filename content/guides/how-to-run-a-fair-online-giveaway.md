@@ -15,16 +15,16 @@ By Arhum Waheed · Published 2026-10-13 · Updated 2026-10-19
 
 Most giveaway complaints are not about the draw itself. They come from things decided too late: a rule nobody wrote down, an entry window that ended in a different time zone than people assumed, or a winner who went quiet and a host who quietly picked someone else. A random picker solves only one step. The rest is planning, and that is what this guide covers.
 
-I build the picking tools on ExesTools, so I will be specific about what they do and what they don't. They pick fairly from the list you give them. They don't collect entries, check eligibility or make a giveaway legal where you live. ExesTools is a free tool, not a certified drawing service. If your platform or local law requires a certified or supervised draw, use one.
+I build the picking tools on ExesTools, so I will be specific about what they do and what they don't. They pick fairly from the list you give them. They don't collect entries, check eligibility or make a giveaway legal where you live. If your platform or local law requires a supervised draw, use one.
 
 ## Step 1: Write the rules before you announce anything
 
-Write the rules first and post them with the giveaway, pinned or linked, not buried in a reply. Once entries start, any rule you add looks like it was written to favour someone.
+Write the rules first and post them with the giveaway, pinned or linked, not buried in a reply. Once entries start, any rule you add looks like it was written to favor someone.
 
 A rules post that heads off most disputes covers these points:
 
 - **Who can enter.** Age, country or region, and whether staff, moderators or family members are excluded.
-- **How to enter.** "Comment with your favourite flavour" is clear. "Like, share and tag three friends" is hard to check by hand, and some platforms restrict tagging and sharing requirements, so check their promotion rules first.
+- **How to enter.** "Comment with your favorite flavor" is clear. "Like, share and tag three friends" is hard to check by hand, and some platforms restrict tagging and sharing requirements, so check their promotion rules first.
 - **How many entries each person gets.** One per person is easiest to defend. If extra actions earn extra entries, say exactly how many each one is worth.
 - **The entry window, with a time zone.** "Closes Friday, October 16, 11:59 p.m. Eastern Time (UTC−4)" leaves no room for argument. "Closes Friday" leaves plenty.
 - **The prizes, in draw order.** Say which prize is drawn first and whether each person can win only once.
@@ -73,7 +73,7 @@ A draw nobody saw is a draw you will be asked to prove. Pick one of these and sa
 - **Screen recording.** Record your whole screen from the moment you paste the list to the moment the winner appears. Don't cut the video. Post it, or keep it in case someone asks.
 - **Share the exact list.** On the wheel tools, **Copy share link** creates a link to the exact wheel you spun. Anyone with the link can see every name on it, so only share it if your entrants are comfortable with their handles being visible.
 
-The raffle generator adds a written record: the date and time on your device, a draw code, the number of names and tickets, the rules used, each winner with their prize and ticket number, and the alternates. It also shows a **list fingerprint**, a short code made from your final entry list. If you publish the list before the draw, anyone can paste it into the page and check that the fingerprint matches. That proves the list didn't change. It doesn't prove anything about how the winner was picked, so pair it with a recording.
+If you draw with the raffle generator, post two things with the winner announcement: the draw code from the record, and a link to the entry list you published before the draw. Anyone who doubts the result can paste that list into the generator and check the list fingerprint matches. That proves you didn't add or remove entries after the fact. It doesn't prove how the winner was picked, so record your screen as well.
 
 One thing worth knowing about the wheels: the result is chosen first, then the animation spins to land on it. How long or how hard the wheel spins changes nothing, so don't let anyone tell you a "better spin" exists.
 
@@ -117,7 +117,7 @@ Follow the claim window in your published rules. If you drew alternates, offer t
 
 ### Is an ExesTools draw legally valid?
 
-ExesTools is a free random picker, not a certified drawing service, and nothing here is legal advice. Giveaway and raffle laws vary by country and region. If a certified draw is required, use one.
+ExesTools is a free random picker, and nothing here is legal advice. Giveaway and raffle laws vary by country and region.
 
 ### Can entrants check the list I drew from?
 

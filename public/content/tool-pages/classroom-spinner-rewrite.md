@@ -61,6 +61,25 @@ The **Classroom jobs** example wheel hands out line leader, door holder and othe
 
 Either way, write the week's jobs on the board. The wheel doesn't keep a history, and a written list settles "but I was line leader last week" in seconds.
 
+## Uses by subject
+
+- **English:** who reads the next paragraph aloud; which character a group writes about; spinning a story element (setting, problem, twist) for a quick-write.
+- **Math:** whose working goes under the document camera; which strategy a table has to use for the next problem.
+- **Science:** lab roles for each group, like recorder, materials manager, timer and reporter. Spin a role wheel, not names, and each group member takes the next role.
+- **PE:** which warm-up drill, which station a group starts at, who chooses the cool-down stretch.
+- **Languages:** spin vocabulary topics, then spin a student to start the conversation.
+
+## Worked example: one week with a class of 28
+
+Say you call on students about eight times a lesson and teach the class every day.
+
+- **Monday:** paste the roster and press **Copy** before the first spin. Eight names come off. Twenty are left.
+- **Tuesday:** don't paste the roster back. Carry on with the 20 who are left. Eight more. Twelve left.
+- **Wednesday:** eight more. Four left.
+- **Thursday:** the last four go first, then paste the full roster back in and start round two.
+
+By Thursday every student has been called on exactly once, and nobody had a second turn while someone else was still waiting. If a student is absent, delete their line for the day and add it back when they return. They keep their place in the round.
+
 ## When students are absent or away for a while
 
 Most days, absence is simple: delete the student's line before you start the round. A few situations need more thought.
@@ -75,7 +94,7 @@ Most days, absence is simple: delete the student's line before you start the rou
 A wheel on a projector is a visual thing, so a few adjustments help everyone follow along.
 
 - **Read the result aloud.** Don't rely on students reading a name from the back of the room. Say it, then pause.
-- **Choose a theme that reads clearly on your projector.** The page has several colour themes. Test from the back row in your real lighting; a theme that looks good on a laptop can wash out on a whiteboard.
+- **Choose a theme that reads clearly on your projector.** The page has several color themes. Test from the back row in your real lighting; a theme that looks good on a laptop can wash out on a whiteboard.
 - **Zoom the browser** if the wheel is too small. ExesTools doesn't have a separate presentation mode, so browser zoom is the way to make it bigger.
 - **Turn Sound off** if the spin sound is distracting, or if a student is sensitive to sudden noise.
 - **Use the Short spin length** if waiting builds anxiety. A short spin gets to the result quickly; it doesn't change who gets picked.
@@ -112,16 +131,18 @@ The spinner is most useful when students trust it, and a few habits protect that
 - **Let the class see the roster.** Scroll the list on screen once at the start of the year so students can check their name is there and spelled right. Two students called Sam with no initial would quietly become one slice, because identical lines are merged.
 - **Don't use it for every question.** Mix spins with hands-up, mini-whiteboards and pair discussion. A spinner that is one tool among several stays fresh.
 - **Let a student press SPIN.** Handing over the Space key for the last few picks of a round is a small privilege that also shows the class the teacher isn't steering the result.
+- **Ask the question before you spin.** If you spin first, 27 students relax.
+- **Allow "phone a friend."** The picked student can bring in a classmate, so nobody is stuck on the spot.
 
 ## Frequently asked questions
 
 ### Can I save a separate wheel for each class?
 
-The page keeps one list in this browser at a time. For several classes, make a share link for each roster with **Copy share link** and bookmark each one with the class name. Opening a bookmark brings back that class's wheel.
+The page keeps one list in this browser at a time. For several classes, make a share link for each roster with Copy share link and bookmark each one with the class name. Opening a bookmark brings back that class's wheel.
 
 ### How do I make sure every student gets a turn?
 
-Keep **Remove winner after spin (no repeats)** on. Each picked student leaves the wheel, so every name comes up once before any repeats. When one name is left, that student goes last; paste the full roster back in to start the next round. With Remove winner on, the list saved in your browser is only the names still left. Paste your full roster again to start a new round.
+Keep "Remove winner after spin (no repeats)" on. Each picked student leaves the wheel, so every name comes up once before any repeats. When one name is left, that student goes last; paste the full roster back in to start the next round. With Remove winner on, the list saved in your browser is only the names still left. Paste your full roster again to start a new round.
 
 ### Is it safe to type student names?
 
@@ -129,4 +150,4 @@ Your list is saved only in this browser on this device, and names are not sent a
 
 ### Can I share the wheel with a substitute teacher?
 
-Yes. Press **Copy share link** and send it through your school's usual channels. Anyone who opens the link sees the same list of names, so only send it to the teacher who needs it.
+Yes. Press Copy share link and send it through your school's usual channels. Anyone who opens the link sees the same list of names, so only send it to the teacher who needs it.

@@ -76,18 +76,6 @@ const FAQS = [
     q: "Is there a limit to how many times I can spin?",
     a: "No. You can spin as often as you like, and it's free with no account.",
   },
-  {
-    q: "Can I pick a random order for everyone, not just one person?",
-    a: "Yes. Leave remove winner on and keep spinning until one name is left. The order names come off the wheel is your random order, and the last name goes last.",
-  },
-  {
-    q: "Why did my list get shorter after I closed the page?",
-    a: "Remove winner was on, so picked names left the wheel and the saved list only holds the names that are left. Paste the full list again to start over.",
-  },
-  {
-    q: "Can I pick from more than 60 names?",
-    a: "The wheel holds up to 60. For a longer list, such as a big giveaway, use the raffle generator, which draws one entry at a time from everyone still in the draw.",
-  },
 ];
 
 export default function RandomNamePickerPage() {
@@ -145,16 +133,6 @@ export default function RandomNamePickerPage() {
       <GuideSection title="Ways to use a random name picker">
         <ul className="list-disc space-y-3 pl-5">
           <li>
-            <span className="font-semibold text-foreground">Meetings and standups.</span> Paste
-            who is in the room, leave remove-winner on, and spin for speaking order. Nobody debates
-            who should talk next, and everyone gets a turn before repeats.
-          </li>
-          <li>
-            <span className="font-semibold text-foreground">Cold call without favorites.</span>{" "}
-            In a training session or mixed group, spin to choose who answers. It is the same fair
-            pick a teacher gets on the classroom spinner, without the class-specific examples.
-          </li>
-          <li>
             <span className="font-semibold text-foreground">Parties and icebreakers.</span> Load
             Party / icebreakers or type guest names. Spin for who starts a game, who picks the next
             song, or who tells a story. Turn remove-winner off if repeats are fine.
@@ -189,95 +167,38 @@ export default function RandomNamePickerPage() {
             .
           </li>
           <li>
-            <span className="font-semibold text-foreground">Workshops and facilitation.</span>{" "}
-            Pick a volunteer, a note-taker, or the next breakout reporter without looking for eye
-            contact. Copy share link if a co-facilitator needs the same list on another device.
+            <span className="font-semibold text-foreground">Book clubs and supper clubs.</span> Who
+            hosts next month, or who picks the next book.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Sign-up sheets.</span> Eleven people
+            want the one spare concert ticket: paste their names and spin once.
           </li>
         </ul>
       </GuideSection>
 
       <GuideSection title="Picking a giveaway winner">
-        <ol className="list-decimal space-y-2 pl-5">
-          <li>
-            Copy the entrant names from your comments, form or sign-up sheet and paste them in, one
-            per line. Duplicate lines are skipped, so each person is on the wheel once.
-          </li>
-          <li>
-            Switch on Remove winner after spin, so a winner can&apos;t be drawn again for the next
-            prize.
-          </li>
-          <li>Spin on screen or record the spin, and spin once per prize.</li>
-          <li>
-            Need people to have more than one entry, or a winner plus alternates? Use the{" "}
-            <Link href="/raffle-generator" className="font-semibold text-accent hover:underline">
-              raffle generator
-            </Link>
-            . Want prizes on the slices instead of names? Use the{" "}
-            <Link href="/prize-wheel" className="font-semibold text-accent hover:underline">
-              prize wheel
-            </Link>
-            .
-          </li>
-        </ol>
-        <p className="mt-3">
-          For rules to publish before you draw, see{" "}
+        <p>
+          Paste the entrant names, spin once per prize with remove winner on, and record the screen.
+          If people have several entries or you need alternates, the{" "}
+          <Link href="/raffle-generator" className="font-semibold text-accent hover:underline">
+            raffle generator
+          </Link>{" "}
+          is the better fit. The{" "}
           <Link
             href="/guides/how-to-run-a-fair-online-giveaway"
             className="font-semibold text-accent hover:underline"
           >
-            how to run a fair online giveaway
-          </Link>
-          . Follow the rules of the platform you&apos;re running the giveaway on. ExesTools is a free
-          random picker, not a certified drawing service.
-        </p>
-      </GuideSection>
-
-      <GuideSection title="Random name picker with no repeats">
-        <p>
-          Leave &quot;Remove winner after spin (no repeats)&quot; switched on and each name leaves
-          the wheel once it&apos;s picked. Keep spinning until everyone has had a turn. This works
-          well for speaking order in a meeting or for drawing several winners. When one name is
-          left, that person goes last (the wheel needs at least two slices to spin, so restore the
-          list or pick the last name by hand when only one remains). To run the list again, paste it
-          back in or use Fresh wheel for the sample set.
-        </p>
-        <p className="mt-3">
-          Turn remove-winner off when streaks are acceptable—for example a light icebreaker where
-          the same person can be silly twice. Each spin is still independent and fair; repeats are
-          normal with real randomness when names stay on the wheel.
-        </p>
-      </GuideSection>
-
-      <GuideSection title="Fairness tips">
-        <p>
-          Every name still on the wheel has the same chance on each spin. The pick comes from your
-          browser&apos;s secure random number generator, then the wheel stops on that slice. Shuffle
-          only changes the order around the rim. Short labels are easier to read on a projector; if
-          two people share a first name, add an initial before you spin so duplicates are not
-          collapsed into one slice.
-        </p>
-        <p className="mt-3">
-          Show the full list before important draws. Anyone with a share link can see the names
-          packed into that link, so avoid sensitive personal data. For splitting a roster into many
-          groups at once, switch to the{" "}
-          <Link
-            href="/random-team-generator"
-            className="font-semibold text-accent hover:underline"
-          >
-            random team generator
-          </Link>
-          .
+            giveaway guide
+          </Link>{" "}
+          covers the rules to publish first.
         </p>
       </GuideSection>
 
       <GuideSection title="Using the name picker for stand-ups and meeting order">
         <p>
-          Paste the team list once. It stays in this browser, so tomorrow&apos;s stand-up starts with
-          one click. Keep{" "}
-          <span className="font-semibold text-foreground">Remove winner after spin</span> on and spin
-          until one name is left: the order names come off is your speaking order, and the last name
-          on the wheel goes last. If someone joins late, add their name as a new line. Duplicate
-          lines are skipped, so two people called Alex need an initial (Alex P., Alex R.).
+          Paste the team once and it&apos;s there tomorrow. Spin the whole order before anyone speaks
+          and paste it in the chat.
         </p>
       </GuideSection>
 
@@ -294,31 +215,12 @@ export default function RandomNamePickerPage() {
           left, and the order names came off is a complete random order, with the last name going last.
           The wheel holds up to 60 names.
         </p>
-      </GuideSection>
-      <GuideSection title="Where people use it">
-        <ul className="list-disc space-y-2 pl-5">
-          <li>
-            <span className="font-semibold text-foreground">Book clubs and supper clubs:</span>{" "}
-            who hosts next month, or who picks the next book.
-          </li>
-          <li>
-            <span className="font-semibold text-foreground">Workshops:</span>{" "}
-            who presents first, who takes notes, who reports back from each table.
-          </li>
-          <li>
-            <span className="font-semibold text-foreground">Online quizzes and game nights:</span>{" "}
-            who answers next, or who picks the category.
-          </li>
-          <li>
-            <span className="font-semibold text-foreground">Choosing a volunteer</span>{" "}
-            when you&apos;d rather not stare at the room until someone gives in.
-          </li>
-          <li>
-            <span className="font-semibold text-foreground">Sign-up sheets:</span>{" "}
-            picking one name from a list of people who put their hand up for something limited, like a spare
-            ticket.
-          </li>
-        </ul>
+        <p>
+          The pick comes from your browser&apos;s secure random number generator, and Shuffle only
+          moves names around the rim. The wheel needs two names to spin, so when one is left, that
+          person simply goes last. For icebreakers where the same person being picked twice is part
+          of the joke, switch remove winner off.
+        </p>
       </GuideSection>
       <GuideSection title="Worked example: three presenters from fourteen">
         <p>

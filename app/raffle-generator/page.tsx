@@ -47,9 +47,9 @@ const FAQ = [
   },
   {
     q: "Can the same person win twice?",
-    a: "Not by default: when someone wins, they leave the draw. Switch off Each person can win only once only if your rules allow the same person to win more than once. The same ticket can never be drawn twice.",
+    a: "Not by default: when someone wins, they leave the draw. Switch off Each person can win only once only if your rules allow the same person to win more than once. The same ticket can never be drawn twice. If you entered ticket numbers rather than names, each number counts separately, so set a house rule for people who hold several.",
     aPlain:
-      "Not by default: when someone wins, they leave the draw. Switch off Each person can win only once only if your rules allow the same person to win more than once. The same ticket can never be drawn twice.",
+      "Not by default: when someone wins, they leave the draw. Switch off Each person can win only once only if your rules allow the same person to win more than once. The same ticket can never be drawn twice. If you entered ticket numbers rather than names, each number counts separately, so set a house rule for people who hold several.",
   },
   {
     q: "How many entries and winners can I have?",
@@ -70,10 +70,10 @@ const FAQ = [
       "Yes. Each pick uses your browser's secure random number generator (crypto.getRandomValues) with rejection sampling, so every ticket still in the draw has exactly the same chance. The winner is chosen before the animation starts.",
   },
   {
-    q: "Is this a certified or legally compliant raffle draw?",
-    a: "No. It gives you a record for transparency, not a certified, audited or legally compliant draw. Raffle and lottery laws vary by place, and the organizer is responsible for following them. If your raffle needs a certified draw, use one.",
+    q: "Is this an official raffle draw?",
+    a: "No. It's a free picker that gives you a written record. Raffle and lottery rules vary by place, and some require a license or a supervised draw. If yours does, use that service.",
     aPlain:
-      "No. It gives you a record for transparency, not a certified, audited or legally compliant draw. Raffle and lottery laws vary by place, and the organizer is responsible for following them. If your raffle needs a certified draw, use one.",
+      "No. It's a free picker that gives you a written record. Raffle and lottery rules vary by place, and some require a license or a supervised draw. If yours does, use that service.",
   },
   {
     q: "Are my entries uploaded anywhere?",
@@ -100,11 +100,6 @@ const FAQ = [
     q: "Can I run a raffle draw on a livestream?",
     a: "Yes. Show the page on screen, read out the number of entries, and choose One at a time to reveal each prize in turn.",
     aPlain: "Yes. Show the page on screen, read out the number of entries, and choose One at a time to reveal each prize in turn.",
-  },
-  {
-    q: "What happens to a winner's other tickets?",
-    a: "By default, when someone wins they leave the draw, so their other entries can't win again. If you entered ticket numbers rather than names, each number counts separately, so set a house rule for people who hold several.",
-    aPlain: "By default, when someone wins they leave the draw, so their other entries can't win again. If you entered ticket numbers rather than names, each number counts separately, so set a house rule for people who hold several.",
   },
   {
     q: "Can I draw again if I make a mistake?",
@@ -290,11 +285,11 @@ export default function RaffleGeneratorPage() {
             fingerprint matches. That shows the list didn&apos;t change, not how winners were picked.
           </p>
           <p className="mt-3">
-            This is a record for transparency, made in your browser. It isn&apos;t a certified,
-            audited or legally compliant draw, and ExesTools doesn&apos;t store draws, so we can&apos;t
-            confirm a result afterwards. Draw where people can see, or record your screen. Winners
-            are picked with your browser&apos;s secure random number generator, and every ticket still
-            in the draw has the same chance. Learn more:{" "}
+            The record is made in your browser and isn&apos;t stored by ExesTools, so we can&apos;t
+            confirm a result afterwards. It&apos;s a transparency aid, not an official or audited
+            draw. Draw where people can see, or record your screen. Winners are picked with your
+            browser&apos;s secure random number generator, and every ticket still in the draw has the
+            same chance.{" "}
             <Link href="/about#how-it-works" className="font-semibold text-accent hover:underline">
               How ExesTools picks a result
             </Link>
@@ -363,51 +358,6 @@ export default function RaffleGeneratorPage() {
           </ul>
         </section>
 
-        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            How a draw runs
-          </h2>
-          <p className="mt-3">
-            Paste your entries, one per line: names, or ticket numbers if you sold numbered tickets. Choose
-            how many winners and alternates you need, and type the prizes in the order you&apos;ll draw
-            them.
-          </p>
-          <p className="mt-3">
-            When you press{" "}
-            <span className="font-semibold text-foreground">Draw</span>
-            , the generator picks one ticket at random from all the tickets still in the draw. Every one of
-            them has the same chance. That ticket wins the first prize and leaves the draw. Then it picks
-            again from what&apos;s left for the second prize, and so on. By default, a winner leaves the
-            draw entirely, so the same person can&apos;t win twice. Alternates are drawn after the winners,
-            in order, from the tickets that are left.
-          </p>
-          <p className="mt-3">
-            It&apos;s free, there&apos;s no account, and your list stays in your browser.
-          </p>
-        </section>
-        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Where it fits
-          </h2>
-          <ul className="mt-3 list-disc space-y-3 pl-5">
-            <li>
-              <span className="font-semibold text-foreground">School and club raffles</span>{" "}
-              with paper ticket stubs, where you type in the sold numbers.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Charity dinners</span>{" "}
-              with a run of donated prizes, small ones first and the headline prize last.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Online giveaways</span>{" "}
-              with several prizes and a backup winner for each.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Membership draws</span>{" "}
-              for a club prize, with alternates in case a winner can&apos;t be reached.
-            </li>
-          </ul>
-        </section>
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           <h2 className="text-xl font-bold tracking-tight text-foreground">
             Worked example: 5 prizes, 3 alternates, 300 tickets

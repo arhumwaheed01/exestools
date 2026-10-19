@@ -130,10 +130,6 @@ const HOME_FAQS = [
     q: "How do I bring back an option I removed?",
     a: "Type it back in as a new line. Fresh wheel brings back the starter list, and pasting your original list restores everything at once.",
   },
-  {
-    q: "Does the spinner wheel cost anything?",
-    a: "No. It's free, there's no account or signup, and it runs in your browser.",
-  },
 ] as const;
 
 export default function HomePage() {
@@ -203,20 +199,10 @@ export default function HomePage() {
             What is a spinner wheel?
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
-            A spinner wheel (also called a wheel spinner, random wheel, or picker wheel) turns a list
-            into equal slices, so when you spin the wheel, every option has the same chance. When the
-            wheel stops, the slice under the fixed pointer is the result. ExesTools picks the result
-            with your browser&apos;s built-in random number generator and then turns the wheel so it
-            stops on that slice, so what you see is always what was picked.
-          </p>
-          <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
-            Because every slice is the same size, the same tool works as a wheel of names for turn
-            order, a decision wheel when you have several choices, or a quick random picker when you
-            want the spin to settle it instead of debating.
-          </p>
-          <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
-            You may know it as a wheel of names, a decision wheel or a random picker wheel.
-            They&apos;re all the same idea. ExesTools has versions set up for{" "}
+            It&apos;s a list turned into equal slices. Type &quot;Pizza&quot;, &quot;Tacos&quot; and
+            &quot;Curry&quot; and you get three slices, each with a 1 in 3 chance. When the wheel
+            stops, the slice under the pointer is the answer. ExesTools also has wheels set up for
+            specific jobs:{" "}
             <Link href="/random-name-picker" className="font-semibold text-accent hover:underline">
               names
             </Link>
@@ -235,20 +221,6 @@ export default function HomePage() {
             and{" "}
             <Link href="/random-number-wheel" className="font-semibold text-accent hover:underline">
               numbers
-            </Link>
-            .
-          </p>
-        </section>
-
-        <section id="multi-option" className="max-w-3xl">
-          <h2 className="text-2xl font-bold tracking-tight text-foreground">
-            Multi-option decision wheel
-          </h2>
-          <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
-            When you need to choose among several options—not just yes or no—list each choice and
-            spin. For a binary yes/no answer only, use the{" "}
-            <Link href="/yes-no-wheel" className="font-semibold text-accent hover:underline">
-              Yes or no wheel
             </Link>
             .
           </p>
@@ -282,37 +254,6 @@ export default function HomePage() {
               Turn order. Add everyone&apos;s name and switch on &quot;Remove winner after
               spin&quot;. The order in which names come off the wheel is your turn order.
             </li>
-            <li>
-              Small jobs. List the chores or tasks and spin to see which one gets done first, or who
-              picks first.
-            </li>
-            <li>
-              Planning a gift exchange? Use the{" "}
-              <Link
-                href="/secret-santa-generator"
-                className="font-semibold text-accent hover:underline"
-              >
-                Secret Santa generator with exclusions
-              </Link>
-              .
-            </li>
-            <li>
-              Need groups instead of one pick?{" "}
-              <Link
-                href="/random-team-generator"
-                className="font-semibold text-accent hover:underline"
-              >
-                Split a list into random groups or pairs
-              </Link>
-              .
-            </li>
-            <li>
-              Running a giveaway with prizes on screen? Use the{" "}
-              <Link href="/prize-wheel" className="font-semibold text-accent hover:underline">
-                prize wheel for giveaways
-              </Link>
-              .
-            </li>
           </ul>
         </section>
 
@@ -333,8 +274,14 @@ export default function HomePage() {
             and you need at least two for the wheel to spin.
           </p>
           <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
-            What you type is saved in your browser, so the same wheel is waiting next time you open the page
-            on that device. Nothing needs an account.
+            The long version, with streak math, is in{" "}
+            <Link
+              href="/guides/how-random-is-a-spinner-wheel"
+              className="font-semibold text-accent hover:underline"
+            >
+              How random is a spinner wheel?
+            </Link>
+            .
           </p>
         </section>
         <section className="max-w-3xl">

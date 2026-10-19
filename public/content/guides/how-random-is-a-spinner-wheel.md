@@ -5,13 +5,13 @@ meta_description: "How online spinner wheels pick a result, Math.random vs crypt
 author: Arhum Waheed
 author_url: /about#arhum
 published: "2026-10-13"
-updated: "2026-10-13"
+updated: "2026-10-19"
 related_tools: [/, /random-number-wheel, /yes-no-wheel, /random-team-generator, /raffle-generator]
 ---
 
 # How random is a spinner wheel? An honest explanation
 
-By Arhum Waheed · Published 2026-10-13 · Updated 2026-10-13
+By Arhum Waheed · Published 2026-10-13 · Updated 2026-10-19
 
 "Is this wheel rigged?" is a fair question to ask of any online picker, including mine. A spinning wheel looks physical, but on a screen it is code, and code does exactly what it was written to do. This guide explains how the ExesTools wheels pick a result, what kind of randomness that is, why streaks that look suspicious are normal, and where the honest limits are. It doesn't claim any certification, because there isn't one.
 
@@ -85,7 +85,7 @@ For a bigger check, use the random number wheel on 1–6, press **Copy results**
 
 Here are the limits, stated plainly.
 
-- **It isn't certified.** ExesTools hasn't been tested by a certification body or audited independently. If a law, a platform or a sponsor requires a certified draw, use one.
+- **No outside audit.** ExesTools hasn't been independently tested. If a law, a platform or a sponsor requires an official draw, use a service that provides one.
 - **The generator belongs to your browser.** The quality of `crypto.getRandomValues` depends on the browser and operating system you use. Modern browsers are held to a high standard here, but that standard is theirs, not mine.
 - **Nothing is stored on a server.** Picks happen on your device, and ExesTools doesn't keep a copy, so it can't confirm a result afterwards. To prove a draw happened, record your screen or spin live.
 - **A fair picker can't fix an unfair list.** If someone is missing from the list, or appears in a way that gives them an edge, the pick will be perfectly random and still unfair. The [raffle generator](/raffle-generator) shows a list fingerprint that proves the list didn't change after you published it; it doesn't prove how the winner was picked.
@@ -106,7 +106,7 @@ Because with names left on the wheel, each spin is independent and repeats are n
 
 ### Can a spinner wheel be used for a legal raffle or lottery?
 
-ExesTools isn't a certified drawing service. Raffle and lottery rules vary by place, and some require a licence or a certified draw. Check the rules that apply to you.
+Raffle and lottery rules vary by place, and some require a license or a supervised draw. Check the rules that apply to you.
 
 ### How can I check the wheel is fair?
 

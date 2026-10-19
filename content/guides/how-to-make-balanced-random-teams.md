@@ -7,6 +7,12 @@ author_url: /about#arhum
 published: "2026-10-19"
 updated: "2026-10-19"
 related_tools: [/random-team-generator, /classroom-spinner, /random-name-picker]
+images:
+  - file: /guides/how-to-make-balanced-random-teams/1.jpg
+    alt: "A group of schoolchildren in matching blue sports shirts posing with their teacher in a school gym"
+    source: https://www.pexels.com/photo/portrait-of-group-of-children-15065571/
+    credit: Nasirun Khan on Pexels
+    license: "Pexels License (free for commercial use, no attribution required)"
 ---
 
 # How to make balanced teams
@@ -14,6 +20,9 @@ related_tools: [/random-team-generator, /classroom-spinner, /random-name-picker]
 By Arhum Waheed · Published 2026-10-19 · Updated 2026-10-19
 
 "Balanced" means different things to different people. A PE teacher wants teams that can actually compete, a workshop host wants each table to mix departments, and a parent at a birthday party just wants nobody picked last. A random split handles some of this well and some of it not at all. This guide shows which is which, with the numbers. It also covers a tiered method that gets you close to skill-balanced teams using the [random team generator](/random-team-generator).
+
+![A group of schoolchildren in matching blue sports shirts posing with their teacher in a school gym](/guides/how-to-make-balanced-random-teams/1.jpg)
+*Photo: Nasirun Khan on Pexels (Pexels License).*
 
 ## Two kinds of balance
 
@@ -118,7 +127,7 @@ Not by itself. It deals names at random. To mix skill levels, sort people into t
 
 ### What happens to the extra person in pairs?
 
-They join one pair to make a group of three. Switch on Leave one person out if you need strict pairs.
+With 15 students in pairs you get six pairs and one group of three. If the activity really needs twos (a partner quiz, a doubles match), switch on Leave one person out and give the extra student a job, like scorekeeper, for that round.
 
 ### Will reshuffling give everyone new partners?
 
@@ -126,4 +135,4 @@ Each reshuffle is a fresh random deal, but the tool doesn't remember earlier rou
 
 ### How many people can I split at once?
 
-Up to 200 names, into up to 50 teams or up to 100 people per team.
+Up to 200 names. That's enough for a full year group split into 25 tables of 8, or a 120-person conference into breakout rooms of 6.

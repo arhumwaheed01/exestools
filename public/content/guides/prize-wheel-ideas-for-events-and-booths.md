@@ -24,7 +24,7 @@ images:
 
 By Arhum Waheed · Published 2026-11-02 · Updated 2026-11-02
 
-A spinning wheel pulls people over to a table better than almost anything else. It's loud, it's visual, and everyone thinks they'll be the one who lands the big prize. That's great for foot traffic. It's less great if you didn't plan the prize mix and you've given away all the good stuff by 11 a.m.
+At a school fair last spring I watched a tablet prize wheel stop three people mid-walk: they heard the spin, saw the slices, and queued before anyone had said hello. A wheel is loud and visual, and everyone thinks they'll land the big prize. That's great for foot traffic. It's less great if you didn't plan the prize mix and you've given away all the good stuff by 11 a.m.
 
 This guide covers running an on-screen [prize wheel](/prize-wheel) at a trade show booth, a school fair, a library open day or a shop counter. Most of it is about prizes and money, because that's the part people get wrong.
 

@@ -7,6 +7,12 @@ author_url: /about#arhum
 published: "2026-10-19"
 updated: "2026-10-19"
 related_tools: [/classroom-spinner, /random-name-picker, /random-team-generator]
+images:
+  - file: /guides/cold-calling-students-fairly/1.jpg
+    alt: "A teacher standing at a chalkboard while several students at wooden desks raise their hands"
+    source: https://www.pexels.com/photo/teacher-teaching-his-students-5212342/
+    credit: Max Fischer on Pexels
+    license: "Pexels License (free for commercial use, no attribution required)"
 ---
 
 # Fair ways to call on students
@@ -17,13 +23,16 @@ With hands-up questioning, the same five students answer everything and the rest
 
 This guide covers the research behind random calling, the one real design choice (repeats or no repeats), question scripts that work, and how to adapt the routine for anxious students. The step-by-step button routine is on the [classroom spinner](/classroom-spinner) page itself, so this guide focuses on the teaching side.
 
+![A teacher standing at a chalkboard while several students at wooden desks raise their hands](/guides/cold-calling-students-fairly/1.jpg)
+*Photo: Max Fischer on Pexels (Pexels License).*
+
 ## What the research actually found
 
-**Wait time.** Mary Budd Rowe analysed more than 300 recordings of elementary science lessons. She found teachers waited about one second for an answer before repeating the question, rephrasing it or moving to someone else. When teachers stretched that pause to three to five seconds, students' answers got longer and they gave more unprompted, relevant contributions. Students the teachers had rated as "slow" also answered more often, and fewer questions went unanswered (*Journal of Research in Science Teaching*, 1974). In a 1986 review in the *Journal of Teacher Education*, she put the threshold at about three seconds. Below it, changes made little difference. She also described a second pause, after a student answers, which matters just as much: wait before you react, and the student often adds to their answer.
+**Wait time.** Mary Budd Rowe analyzed more than 300 recordings of elementary science lessons. She found teachers waited about one second for an answer before repeating the question, rephrasing it or moving to someone else. When teachers stretched that pause to three to five seconds, students' answers got longer and they gave more unprompted, relevant contributions. Students the teachers had rated as "slow" also answered more often, and fewer questions went unanswered ([*Journal of Research in Science Teaching*, 1974](https://doi.org/10.1002/tea.3660110202)). In a [1986 review in the *Journal of Teacher Education*](https://doi.org/10.1177/002248718603700110), she put the threshold at about three seconds. Below it, changes made little difference. She also described a second pause, after a student answers, which matters just as much: wait before you react, and the student often adds to their answer.
 
-**Frequent cold calling.** Dallimore, Hertenstein and Platt (*Journal of Management Education*, 2013) observed 632 students in 16 sections of a required undergraduate accounting course. In sections with a lot of cold calling, 77% of students answered questions voluntarily, against 55% in sections with little cold calling. Comfort with taking part in discussion rose over the term in the high-cold-call sections and didn't change in the others. These were university students, not school students, so treat the finding as encouraging rather than settled for younger classes.
+**Frequent cold calling.** Dallimore, Hertenstein and Platt ([*Journal of Management Education*, 2013](https://doi.org/10.1177/1052562912446067)) observed 632 students in 16 sections of a required undergraduate accounting course. In sections with a lot of cold calling, 77% of students answered questions voluntarily, against 55% in sections with little cold calling. Comfort with taking part in discussion rose over the term in the high-cold-call sections and didn't change in the others. These were university students, not school students, so treat the finding as encouraging rather than settled for younger classes.
 
-**No hands up.** Dylan Wiliam's formative assessment work popularised "no hands up except to ask a question," with names drawn at random, often from lolly sticks. When he trialled it with a Year 8 class for the BBC in 2010, teachers settled on a compromise: pick two students at random, then ask whether anyone wants to add something. That gave the keen volunteers a way back in. Wiliam also points out that random picking only samples a few students. He pairs it with all-class responses, such as mini-whiteboards, at least once every 20 to 30 minutes.
+**No hands up.** Dylan Wiliam's formative assessment work popularized "no hands up except to ask a question," with names drawn at random, often from lolly sticks. When he trialled it with a Year 8 class for the BBC in 2010, teachers settled on a compromise: pick two students at random, then ask whether anyone wants to add something. That gave the keen volunteers a way back in. Wiliam also points out that random picking only samples a few students. He pairs it with all-class responses, such as mini-whiteboards, at least once every 20 to 30 minutes.
 
 Random calling suits checking understanding: short questions, quick answers, many students. A discussion where students build on each other's ideas needs a different structure.
 

@@ -95,7 +95,7 @@ Take anything off the list that doesn't suit your space or your students. A brai
 
 ### 8. Freeze and spin
 
-**Setup:** A wheel of short movement prompts.
+**Setup:** A wheel of short movement prompts, for example: touch your toes, spin once in place, high-five a neighbor, freeze like a statue, walk in a circle, clap three times, hop on one foot, stretch to the ceiling.
 **Play:** Students move around while music plays. Stop the music, everyone freezes, spin, and the class does what the wheel says before the music starts again.
 **Time:** 5 minutes. Great before a test or after lunch.
 

@@ -65,7 +65,7 @@ Open the Secret Santa generator and:
 3. Fill in the event details: the name of the exchange, the $25 budget, the date, and a note such as "Wrap it, label it with their name, bring it to the lunch."
 4. Press **Draw names**.
 
-Each person gets a private link that shows only who they're buying for, plus the budget, date and your note. Nobody needs an account or an email address, and the draw happens in your browser.
+After the draw, copy Priya's private link and paste it into a DM to her alone. When she opens it, she sees only "You're buying for Marcus," plus the budget and party date you typed in. She never sees who has her name. Do the same for everyone else: one link, one person, never the group chat.
 
 If the generator tells you no valid draw is possible, you've got too many exclusions for the group size. It names the people who are stuck. Usually you remove one exclusion that was nice-to-have rather than essential.
 

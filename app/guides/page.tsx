@@ -25,11 +25,20 @@ function loadHubMeta(): { title: string; description: string; introMarkdown: str
 
 const hub = loadHubMeta();
 
-function liveGuidesOpener(count: number): string {
-  if (count <= 0) return "No guides are published yet.";
-  if (count === 1) return "Right now one guide is live.";
-  return `Right now ${count} guides are live.`;
-}
+/** "Who it's for" line per guide card (quality audit 2026-10-19). Falls back to meta_description. */
+const WHO_ITS_FOR: Record<string, string> = {
+  "bingo-games-for-classrooms-and-parties":
+    "For a teacher planning a 15-minute vocabulary round, or a host with 30 guests and one caller.",
+  "cold-calling-students-fairly":
+    "For teachers who want every student answering, without the 'frozen in front of the class' moment.",
+  "how-to-make-balanced-random-teams":
+    "For PE, workshops and quiz nights where 'random' keeps landing all the strong players together.",
+  "secret-santa-rules-and-budget-ideas":
+    "For the organizer: rules to send before the draw, dropouts, budgets.",
+  "how-random-is-a-spinner-wheel": "For anyone who's been asked 'is this wheel rigged?'",
+  "how-to-run-a-fair-online-giveaway":
+    "For creators and small businesses running a comment or form giveaway.",
+};
 
 export const metadata: Metadata = {
   title: { absolute: hub.title },
@@ -55,10 +64,7 @@ export const metadata: Metadata = {
 
 export default function GuidesHubPage() {
   const guides = getPublishedGuides();
-  const introMarkdown = hub.introMarkdown.replace(
-    /\{\{LIVE_GUIDES_OPENER\}\}/g,
-    liveGuidesOpener(guides.length),
-  );
+  const introMarkdown = hub.introMarkdown;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
@@ -79,7 +85,7 @@ export default function GuidesHubPage() {
             >
               <h2 className="text-lg font-bold text-foreground">{guide.title}</h2>
               <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">
-                {guide.frontmatter.meta_description}
+                {WHO_ITS_FOR[guide.slug] ?? guide.frontmatter.meta_description}
               </p>
               <p className="mt-3 text-xs font-medium text-muted">
                 Published{" "}

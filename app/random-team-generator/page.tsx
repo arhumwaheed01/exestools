@@ -62,24 +62,12 @@ const FAQS = [
     a: "It shuffles your whole list with a Fisher–Yates shuffle, using your browser's secure random number generator, then deals the names into teams one at a time. Every arrangement is equally likely, and nobody is placed on a team in advance. Learn more: [How ExesTools picks a result].",
   },
   {
-    q: "How do I make random partners for my class?",
-    a: "Paste your class list, tap Pairs, and press Generate teams. Every student gets a partner, and with an odd number one group has three. Press Reshuffle for a new set.",
-  },
-  {
-    q: "How do I split or shuffle names into random groups?",
-    a: "Paste the names one per line, choose how many groups (or how many people per group), and press Generate teams. The list is shuffled and dealt out evenly.",
-  },
-  {
     q: "What happens if the names don't split evenly?",
     a: "Teams are kept as even as possible, so sizes never differ by more than one. For example, 11 names in 3 teams gives teams of 4, 4 and 3.",
   },
   {
     q: "Can I make random pairs?",
     a: 'Yes. Tap Pairs, or set People per team to 2. With an odd number of names, the extra person joins one pair to make a group of three. Switch on "Leave one person out" if you\'d rather they sit out.',
-  },
-  {
-    q: "Can I make groups of 3?",
-    a: "Yes. Set People per team to 3. If the class doesn't divide evenly, a few groups have one person fewer.",
   },
   {
     q: "Will it avoid putting the same partners together next time?",
@@ -124,10 +112,6 @@ const FAQS = [
   {
     q: "Does Reshuffle change my list?",
     a: "No. Reshuffle keeps your list and settings and makes a completely new random split.",
-  },
-  {
-    q: "Can I send the teams to people who aren't in the room?",
-    a: "Yes. Copy share link opens the same names and teams on another device, and Copy teams gives you plain text to paste into chat or email.",
   },
 ];
 
@@ -270,36 +254,15 @@ export default function RandomTeamGeneratorPage() {
           id="classroom"
           className="max-w-3xl scroll-mt-24 text-sm leading-relaxed text-muted sm:text-base"
         >
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Random groups for the classroom
+          <h2 id="pairs" className="scroll-mt-24 text-xl font-bold tracking-tight text-foreground">
+            Classroom groups and pairs
           </h2>
           <p className="mt-3">
-            Paste your class list once, then set Number of teams for table groups or People per team
-            for groups of 3 or 4. Teams never differ by more than one student, so 26 students in
-            groups of 4 become five groups of 4 and two groups of 3. Show the result on your board,
-            press Print for a paper copy, or Copy share link to send the same groups to a
-            co-teacher. Your list stays in this browser, so it&apos;s there next lesson.
-          </p>
-        </section>
-
-        <section
-          id="pairs"
-          className="max-w-3xl scroll-mt-24 text-sm leading-relaxed text-muted sm:text-base"
-        >
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Randomly pair names
-          </h2>
-          <p className="mt-3">
-            For think-pair-share, lab partners, peer editing or reading buddies, tap{" "}
-            <span className="font-semibold text-foreground">Pairs</span> (or set People per team to
-            2) and press Generate teams. With an odd number of students, one pair becomes a group of
-            three so nobody is left out. Switch on{" "}
-            <span className="font-semibold text-foreground">Leave one person out</span> if you need
-            strict pairs. Press Reshuffle for new partners. Each reshuffle is a fresh random deal.
-            The tool doesn&apos;t remember earlier rounds, so the same two students can be paired
-            again.
-          </p>
-          <p className="mt-3">
+            For table groups, set Number of teams; for groups of 3 or 4, set People per team. With 26
+            students in groups of 4 you get five groups of 4 and two groups of 3. For think-pair-share
+            or lab partners, tap <span className="font-semibold text-foreground">Pairs</span>. With an
+            odd class, one pair becomes a three unless you switch on{" "}
+            <span className="font-semibold text-foreground">Leave one person out</span>.{" "}
             <Link
               href="/random-team-generator?preset=pairs"
               className="font-semibold text-accent hover:underline"
@@ -338,9 +301,9 @@ export default function RandomTeamGeneratorPage() {
             </li>
             <li>
               <span className="font-semibold text-foreground">Events, trivia, and parties.</span>{" "}
-              Split guests into quiz teams or scavenger-hunt crews. Add optional team names so the
-              cards match your theme, then Copy share link so phones in the room can open the same
-              groups.
+              Split guests into quiz teams or scavenger-hunt crews as people arrive. Add optional team
+              names so the cards match your theme and the scoreboard reads well, then Copy share
+              link so phones in the room can open the same groups.
             </li>
           </ul>
         </section>
@@ -349,12 +312,6 @@ export default function RandomTeamGeneratorPage() {
           <h2 className="text-xl font-bold tracking-tight text-foreground">
             Tips for balanced teams and odd counts
           </h2>
-          <p className="mt-3">
-            Balanced here means sizes that differ by at most one person, not matched skill levels.
-            The generator does not know who is strong at math or who should not sit together. It
-            shuffles the full list, then deals names into teams like dealing cards, so every fair
-            arrangement is equally likely.
-          </p>
           <p className="mt-3">
             Odd counts are normal. Eleven people into three teams becomes 4, 4, and 3. With Pairs
             and an odd roster, one group becomes three unless you switch on Leave one person out.
@@ -372,6 +329,26 @@ export default function RandomTeamGeneratorPage() {
             draw for a second activity. It does not remember previous teams, so the same two people
             can land together again—that is expected with real randomness.
           </p>
+          <ul className="mt-3 list-disc space-y-3 pl-5">
+            <li>
+              <span className="font-semibold text-foreground">Pick team size, not team count, for projects.</span>{" "}
+              Groups of three or four tend to keep everyone involved.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Choose captains after the split.</span>{" "}
+              Use the{" "}
+              <Link href="/random-name-picker" className="font-semibold text-accent hover:underline">random name picker</Link>{" "}
+              on each team&apos;s names if you need a leader.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Say up front that teams are random.</span>{" "}
+              It heads off the &quot;why am I with him?&quot; conversation.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Print the teams</span>{" "}
+              for in-person events so tables can find their group without crowding a screen.
+            </li>
+          </ul>
           <p className="mt-3">
             For odd counts, pairs, how often pure random goes lopsided, and a tiered method for
             mixing skill levels, read{" "}
@@ -385,51 +362,6 @@ export default function RandomTeamGeneratorPage() {
           </p>
         </section>
 
-        <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            How a split is made
-          </h2>
-          <p className="mt-3">
-            The generator takes your whole list, shuffles it into a random order, and then deals names out
-            one at a time, like dealing cards around a table. That&apos;s why team sizes never differ by
-            more than one person, and why every possible split is equally likely. Nobody is placed on a team
-            ahead of time.
-          </p>
-          <p className="mt-3">
-            You choose the shape: a number of teams, or a number of people per team.{" "}
-            <span className="font-semibold text-foreground">Reshuffle</span>{" "}
-            gives you a completely new deal from the same list. It&apos;s free, there&apos;s no account, and
-            your list stays in your browser.
-          </p>
-        </section>
-        <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Where it helps
-          </h2>
-          <ul className="mt-3 list-disc space-y-3 pl-5">
-            <li>
-              <span className="font-semibold text-foreground">Trivia nights:</span>{" "}
-              split the room into quiz teams as people arrive, and give the teams names so the scoreboard
-              reads well.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Hackathons and project weeks:</span>{" "}
-              mix people from different departments or classes instead of letting friends cluster.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Rec leagues and pickup games:</span>{" "}
-              two sides in seconds, with no captains and no one picked last.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Book clubs and discussion groups:</span>{" "}
-              small circles of four or five so everyone gets airtime.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Workshops:</span>{" "}
-              breakout groups you can paste straight into the meeting chat.
-            </li>
-          </ul>
-        </section>
         <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           <h2 className="text-xl font-bold tracking-tight text-foreground">
             Worked example: 23 people, 4 teams
@@ -455,35 +387,6 @@ export default function RandomTeamGeneratorPage() {
             <span className="font-semibold text-foreground">Reshuffle</span>
             . Each reshuffle is a fresh, independent deal, so you might need two.
           </p>
-        </section>
-        <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Tips
-          </h2>
-          <ul className="mt-3 list-disc space-y-3 pl-5">
-            <li>
-              <span className="font-semibold text-foreground">Check the list before you generate.</span>{" "}
-              A typo like &quot;Maria&quot; and &quot;Mariah&quot; turns one person into two.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Pick team size, not team count, for projects.</span>{" "}
-              Groups of three or four tend to keep everyone involved.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Choose captains after the split.</span>{" "}
-              Use the{" "}
-              <Link href="/random-name-picker" className="font-semibold text-accent hover:underline">random name picker</Link>{" "}
-              on each team&apos;s names if you need a leader.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Say up front that teams are random.</span>{" "}
-              It heads off the &quot;why am I with him?&quot; conversation.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Print the teams</span>{" "}
-              for in-person events so tables can find their group without crowding a screen.
-            </li>
-          </ul>
         </section>
 
         <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">

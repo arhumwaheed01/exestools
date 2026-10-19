@@ -61,7 +61,7 @@ Real coins are very close to fair but not perfect. A 2023 study by František Ba
 
 Some ties are two options dressed up as an argument: "Pizza or tacos?" The cleanest way to spin for it is to name one option Yes and the other No out loud, before the spin. "Yes is pizza, No is tacos." Then spin. No relabeling afterwards.
 
-If you're genuinely split and want a softer approach, spin once and notice how you feel about the result. Relieved? Go with it. Disappointed? You probably wanted the other one, so pick that instead. The spin did its job by showing you what you actually wanted.
+If you're genuinely split and want a softer approach, name the options out loud, spin once, and give yourself ten seconds before you act on it. If you catch yourself hoping for a re-spin, you already know which option you prefer: pick that one and skip the second spin.
 
 ## Three or more tied
 

@@ -1,12 +1,18 @@
 ---
 slug: /guides/bingo-games-for-classrooms-and-parties
 meta_title: "Bingo Ideas for Classrooms and Parties | ExesTools"
-meta_description: "Bingo for classrooms and parties: list length, calls per round, avoiding ties, vocabulary and maths variations, and how to call and check."
+meta_description: "Bingo for classrooms and parties: how long your list should be, calls per round, avoiding ties, vocabulary and math variations, and how to call and check."
 author: Arhum Waheed
 author_url: /about#arhum
 published: "2026-10-19"
 updated: "2026-10-19"
 related_tools: [/bingo-card-generator, /random-number-wheel, /classroom-spinner, /raffle-generator]
+images:
+  - file: /guides/bingo-games-for-classrooms-and-parties/1.jpg
+    alt: "Colorful stacks of printed bingo cards in yellow, green, pink and blue beside a pink numbered ball on a wooden table"
+    source: https://www.pexels.com/photo/colorful-bingo-cards-and-numbered-ball-on-table-36402490/
+    credit: Soc Nang Dong on Pexels
+    license: "Pexels License (free for commercial use, no attribution required)"
 ---
 
 # Bingo game ideas for classrooms and parties
@@ -15,9 +21,12 @@ By Arhum Waheed · Published 2026-10-19 · Updated 2026-10-19
 
 Bingo asks very little of players: listen, look, mark. Most bingo that falls flat has the same few causes. The word list is too short, so half the room wins at once. Or nobody knows how long a round will take, so the "quick game" eats the lesson. This guide starts with the numbers that fix both, then gets into game ideas. The cards and caller mentioned are from the [bingo card generator](/bingo-card-generator).
 
+![Colorful stacks of printed bingo cards in yellow, green, pink and blue beside a pink numbered ball on a wooden table](/guides/bingo-games-for-classrooms-and-parties/1.jpg)
+*Photo: Soc Nang Dong on Pexels (Pexels License).*
+
 ## How long your list should be
 
-A 5×5 card with a FREE centre needs 24 items, a 4×4 card needs 16, and a 3×3 card with FREE needs 8. Those are minimums. If you use exactly the minimum, every card holds every item, just in a different order. Line games still work, but in a full-card (blackout) game every player finishes on the same call.
+A 5×5 card with a FREE center needs 24 items, a 4×4 card needs 16, and a 3×3 card with FREE needs 8. Those are minimums. If you use exactly the minimum, every card holds every item, just in a different order. Line games still work, but in a full-card (blackout) game every player finishes on the same call.
 
 To see what happens above the minimum, I simulated 3,000 games for each list length, with 30 different 5×5 cards with FREE. The table shows the average number of calls before the first winner, and how often two or more cards won on the same call:
 
@@ -58,7 +67,7 @@ Bingo makes a good review game because every student works on every call. The tr
 
 Put the terms on the cards and read the definitions. For a Year 7 science set, the cards might say *evaporation*, *condensation*, *solvent*, *solute* and *filtration*. Calls would be "The liquid that something dissolves in" (*solvent*) or "Separating an insoluble solid from a liquid" (*filtration*). Write the call on the board after the second reading for students who need to see it.
 
-### Answers-only maths
+### Answers-only math
 
 The **Math facts** theme puts facts like 6 × 7 on the squares. Read out only the answer, "forty-two," and students work backwards. It gets harder when several facts share an answer: 24 could be 3 × 8, 4 × 6 or 2 × 12. Tell students they may mark only one square per call. Swap the list each week: number bonds to 10 for younger classes, squares and square roots for older ones.
 
