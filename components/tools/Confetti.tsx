@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 type ConfettiOptions = {
   particleCount?: number;
@@ -89,7 +89,7 @@ export function fireCelebrationConfetti(colors?: string[]) {
   });
 }
 
-/** Fires celebration confetti when `fire` increments. */
+/** Fires celebration confetti when `fire` increments (not on unrelated re-renders). */
 export function ToolConfetti({
   fire,
   colors,
@@ -97,10 +97,13 @@ export function ToolConfetti({
   fire: number;
   colors?: string[];
 }) {
+  const colorsRef = useRef(colors);
+  colorsRef.current = colors;
+
   useEffect(() => {
     if (!fire) return;
-    fireCelebrationConfetti(colors);
-  }, [fire, colors]);
+    fireCelebrationConfetti(colorsRef.current);
+  }, [fire]);
 
   return null;
 }

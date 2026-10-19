@@ -35,16 +35,26 @@ export function winnerIndexAt(rotation: number, count: number): number {
   return Math.floor(normalized / slice) % count;
 }
 
-/** Target absolute rotation so mid-segment of `index` lands under the pointer. */
+/**
+ * Target absolute rotation so `index` lands under the pointer.
+ * By default lands at a random point inside the slice (kept off the edges so it
+ * doesn't look like a near-miss / tie). Pass `sliceT` in 0–1 to pin the spot.
+ */
 export function targetRotationForIndex(
   index: number,
   count: number,
   currentRotation: number,
   extraSpins = 5,
+  sliceT?: number,
 ): number {
   const slice = sliceAngle(count);
-  const mid = index * slice + slice / 2;
-  const landing = normalizeAngle(-mid);
+  const edge = 0.12;
+  const t =
+    typeof sliceT === "number"
+      ? Math.min(1 - edge, Math.max(edge, sliceT))
+      : edge + Math.random() * (1 - 2 * edge);
+  const within = index * slice + slice * t;
+  const landing = normalizeAngle(-within);
   const current = normalizeAngle(currentRotation);
   let delta = normalizeAngle(landing - current);
   if (delta < 0.12) delta += Math.PI * 2;

@@ -1103,6 +1103,11 @@ export function RaffleTool() {
                     </button>
                   ) : null}
                 </div>
+                {inputsLocked ? (
+                  <p className="mt-2 text-xs text-muted" role="status">
+                    Settings locked — click Edit entries to change.
+                  </p>
+                ) : null}
 
                 <Switch
                   id="rf-multi"
@@ -1251,13 +1256,18 @@ export function RaffleTool() {
                   />
                 </div>
                 {inputsLocked ? (
-                  <button
-                    type="button"
-                    onClick={() => setConfirm("edit-entries")}
-                    className="inline-flex min-h-11 items-center rounded-xl border border-border px-4 text-sm font-bold text-foreground outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
-                  >
-                    Edit entries
-                  </button>
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => setConfirm("edit-entries")}
+                      className="inline-flex min-h-11 items-center rounded-xl border border-border px-4 text-sm font-bold text-foreground outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
+                    >
+                      Edit entries
+                    </button>
+                    <p className="text-xs text-muted" role="status">
+                      Settings locked — click Edit entries to change.
+                    </p>
+                  </>
                 ) : null}
                 {rangeLive ? <p className="text-sm text-muted">{rangeLive}</p> : null}
                 {rangeErr ? (
