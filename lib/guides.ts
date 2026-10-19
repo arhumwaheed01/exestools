@@ -22,6 +22,8 @@ export type GuideFrontmatter = {
   author_url?: string;
   /** When true, the guide stays unpublished even if published <= today. */
   draft?: boolean;
+  /** Photo credits/alt text kept in frontmatter for editors; not rendered from here. */
+  images?: unknown;
 };
 
 export type Guide = {

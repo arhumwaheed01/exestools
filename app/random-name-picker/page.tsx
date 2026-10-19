@@ -64,6 +64,30 @@ const FAQS = [
     q: "Can I use the name picker for a giveaway?",
     a: "Yes, for a simple draw. Paste the entrant names, leave remove-winner on, and spin once per prize. For multiple entries per person or alternates, use the [raffle generator].",
   },
+  {
+    q: "How do I bring back the names that were already picked?",
+    a: "Paste your full list back in. With remove winner on, the saved list only keeps the names still on the wheel, so it helps to press Copy before your first spin.",
+  },
+  {
+    q: "Can I use the name picker on my phone?",
+    a: "Yes. It runs in a modern mobile browser with no app to install. Your list is saved in that phone's browser.",
+  },
+  {
+    q: "Is there a limit to how many times I can spin?",
+    a: "No. You can spin as often as you like, and it's free with no account.",
+  },
+  {
+    q: "Can I pick a random order for everyone, not just one person?",
+    a: "Yes. Leave remove winner on and keep spinning until one name is left. The order names come off the wheel is your random order, and the last name goes last.",
+  },
+  {
+    q: "Why did my list get shorter after I closed the page?",
+    a: "Remove winner was on, so picked names left the wheel and the saved list only holds the names that are left. Paste the full list again to start over.",
+  },
+  {
+    q: "Can I pick from more than 60 names?",
+    a: "The wheel holds up to 60. For a longer list, such as a big giveaway, use the raffle generator, which draws one entry at a time from everyone still in the draw.",
+  },
 ];
 
 export default function RandomNamePickerPage() {
@@ -76,7 +100,7 @@ export default function RandomNamePickerPage() {
       faqs={FAQS}
       schemaName="Random Name Picker Wheel"
       schemaDescription={META}
-      pageUpdated="2026-10-13"
+      pageUpdated="2026-10-20"
     >
       <GuideSection title="How to pick a name">
         <ol className="list-decimal space-y-2 pl-5">
@@ -257,6 +281,96 @@ export default function RandomNamePickerPage() {
         </p>
       </GuideSection>
 
+      <GuideSection title="How the name picker decides">
+        <p>
+          Each line in your list is one name and one equal slice. When you press SPIN, the page picks one
+          of the names still on the wheel at random, and then the wheel turns to stop on it. On this page{" "}
+          <span className="font-semibold text-foreground">remove winner</span>{" "}
+          is on by default, so the picked name leaves the wheel straight away. The next spin is only
+          between the people who haven&apos;t been picked yet.
+        </p>
+        <p>
+          That makes it a fair way to build an order, not just choose one person. Spin until one name is
+          left, and the order names came off is a complete random order, with the last name going last.
+          The wheel holds up to 60 names.
+        </p>
+      </GuideSection>
+      <GuideSection title="Where people use it">
+        <ul className="list-disc space-y-2 pl-5">
+          <li>
+            <span className="font-semibold text-foreground">Book clubs and supper clubs:</span>{" "}
+            who hosts next month, or who picks the next book.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Workshops:</span>{" "}
+            who presents first, who takes notes, who reports back from each table.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Online quizzes and game nights:</span>{" "}
+            who answers next, or who picks the category.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Choosing a volunteer</span>{" "}
+            when you&apos;d rather not stare at the room until someone gives in.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Sign-up sheets:</span>{" "}
+            picking one name from a list of people who put their hand up for something limited, like a spare
+            ticket.
+          </li>
+        </ul>
+      </GuideSection>
+      <GuideSection title="Worked example: three presenters from fourteen">
+        <p>
+          A workshop has 14 attendees and time for three short presentations. Paste the 14 names and leave
+          remove winner on.
+        </p>
+        <ul className="list-disc space-y-2 pl-5">
+          <li>
+            First spin: each person has a 1 in 14 chance.
+          </li>
+          <li>
+            Second spin: one name is gone, so it&apos;s 1 in 13 for the rest.
+          </li>
+          <li>
+            Third spin: 1 in 12.
+          </li>
+        </ul>
+        <p>
+          Across the three spins, every attendee has the same overall chance of presenting: 3 in 14, or
+          about 21%. Nobody&apos;s position in the list makes any difference.
+        </p>
+        <p>
+          Before the first spin, press{" "}
+          <span className="font-semibold text-foreground">Copy</span>{" "}
+          so the full list is on your clipboard. When the session ends, paste it back and the wheel is
+          ready for the next group.
+        </p>
+      </GuideSection>
+      <GuideSection title="Tips">
+        <ul className="list-disc space-y-2 pl-5">
+          <li>
+            <span className="font-semibold text-foreground">Read the name out, then pause.</span>{" "}
+            People are slower to react than you&apos;d think.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Add initials for shared names.</span>{" "}
+            Duplicate lines are skipped, so two &quot;Sam&quot; lines become one slice.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Show the list first</span>{" "}
+            when the result matters, so everyone can check they&apos;re on it.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Send a co-host the same list</span>{" "}
+            with Copy share link. Anyone with the link can see the names, so keep sensitive lists off it.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Turn remove winner off</span>{" "}
+            for games where the same person being picked twice is part of the fun.
+          </li>
+        </ul>
+      </GuideSection>
       <GuideSection title="Privacy">
         <p>
           Your list is saved in this browser on this device, not on our servers. A share link

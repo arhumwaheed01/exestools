@@ -5,13 +5,13 @@ meta_description: "Checklist for a fair online giveaway: rules to publish, clean
 author: Arhum Waheed
 author_url: /about#arhum
 published: "2026-10-13"
-updated: "2026-10-13"
+updated: "2026-10-19"
 related_tools: [/prize-wheel, /raffle-generator, /random-name-picker]
 ---
 
 # How to run a fair online giveaway
 
-By Arhum Waheed · Published 2026-10-13 · Updated 2026-10-13
+By Arhum Waheed · Published 2026-10-13 · Updated 2026-10-19
 
 Most giveaway complaints are not about the draw itself. They come from things decided too late: a rule nobody wrote down, an entry window that ended in a different time zone than people assumed, or a winner who went quiet and a host who quietly picked someone else. A random picker solves only one step. The rest is planning, and that is what this guide covers.
 
@@ -26,7 +26,7 @@ A rules post that heads off most disputes covers these points:
 - **Who can enter.** Age, country or region, and whether staff, moderators or family members are excluded.
 - **How to enter.** "Comment with your favourite flavour" is clear. "Like, share and tag three friends" is hard to check by hand, and some platforms restrict tagging and sharing requirements, so check their promotion rules first.
 - **How many entries each person gets.** One per person is easiest to defend. If extra actions earn extra entries, say exactly how many each one is worth.
-- **The entry window, with a time zone.** "Closes Friday 16 October, 11:59 pm PKT (UTC+5)" leaves no room for argument. "Closes Friday" leaves plenty.
+- **The entry window, with a time zone.** "Closes Friday, October 16, 11:59 p.m. Eastern Time (UTC−4)" leaves no room for argument. "Closes Friday" leaves plenty.
 - **The prizes, in draw order.** Say which prize is drawn first and whether each person can win only once.
 - **How the winner is picked.** For example: "Winners are drawn at random on a livestream on Saturday at 8 pm, using an online random picker."
 - **How winners are contacted and how long they have to reply.** 48 or 72 hours is common. Say whether you will draw a replacement if they don't respond.

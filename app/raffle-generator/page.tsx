@@ -81,6 +81,36 @@ const FAQ = [
     aPlain:
       "No. The draw runs in your browser and your list stays on this device. A result link carries the winners' names, not your list, after the # sign, which browsers don't send to our server; anyone with the link can see them. Analytics counts draws but never receives names.",
   },
+  {
+    q: "Can I name each prize in the draw?",
+    a: "Yes. Type the prizes in draw order and each winner is shown with their prize. If you leave them blank, they're listed as 1st prize, 2nd prize and so on.",
+    aPlain: "Yes. Type the prizes in draw order and each winner is shown with their prize. If you leave them blank, they're listed as 1st prize, 2nd prize and so on.",
+  },
+  {
+    q: "How many alternates should I draw?",
+    a: "A good rule of thumb is one for every two or three prizes, and at least two for any draw where winners might not be present.",
+    aPlain: "A good rule of thumb is one for every two or three prizes, and at least two for any draw where winners might not be present.",
+  },
+  {
+    q: "What order should I draw the prizes in?",
+    a: "Many events draw the smallest prizes first and the main prize last, so people stay until the end. Say the order before you start.",
+    aPlain: "Many events draw the smallest prizes first and the main prize last, so people stay until the end. Say the order before you start.",
+  },
+  {
+    q: "Can I run a raffle draw on a livestream?",
+    a: "Yes. Show the page on screen, read out the number of entries, and choose One at a time to reveal each prize in turn.",
+    aPlain: "Yes. Show the page on screen, read out the number of entries, and choose One at a time to reveal each prize in turn.",
+  },
+  {
+    q: "What happens to a winner's other tickets?",
+    a: "By default, when someone wins they leave the draw, so their other entries can't win again. If you entered ticket numbers rather than names, each number counts separately, so set a house rule for people who hold several.",
+    aPlain: "By default, when someone wins they leave the draw, so their other entries can't win again. If you entered ticket numbers rather than names, each number counts separately, so set a house rule for people who hold several.",
+  },
+  {
+    q: "Can I draw again if I make a mistake?",
+    a: "A new draw gives a completely new result. Only redraw if your published rules allow it, and say why before you do.",
+    aPlain: "A new draw gives a completely new result. Only redraw if your published rules allow it, and say why before you do.",
+  },
 ];
 
 function FaqAnswer({ text }: { text: string }) {
@@ -158,7 +188,7 @@ export default function RaffleGeneratorPage() {
         <h1 className="mt-4 max-w-3xl text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
           Raffle generator and winner picker
         </h1>
-        <PageMeta updated="2026-10-13" />
+        <PageMeta updated="2026-10-20" />
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           Paste your entrants or set a ticket number range, choose how many winners you need, and
           press Draw. Nobody wins twice unless you allow it, and you get a draw record to copy or
@@ -329,6 +359,107 @@ export default function RaffleGeneratorPage() {
                 bingo card generator
               </Link>
               , then draw door prizes here from everyone&apos;s ticket numbers.
+            </li>
+          </ul>
+        </section>
+
+        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            How a draw runs
+          </h2>
+          <p className="mt-3">
+            Paste your entries, one per line: names, or ticket numbers if you sold numbered tickets. Choose
+            how many winners and alternates you need, and type the prizes in the order you&apos;ll draw
+            them.
+          </p>
+          <p className="mt-3">
+            When you press{" "}
+            <span className="font-semibold text-foreground">Draw</span>
+            , the generator picks one ticket at random from all the tickets still in the draw. Every one of
+            them has the same chance. That ticket wins the first prize and leaves the draw. Then it picks
+            again from what&apos;s left for the second prize, and so on. By default, a winner leaves the
+            draw entirely, so the same person can&apos;t win twice. Alternates are drawn after the winners,
+            in order, from the tickets that are left.
+          </p>
+          <p className="mt-3">
+            It&apos;s free, there&apos;s no account, and your list stays in your browser.
+          </p>
+        </section>
+        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            Where it fits
+          </h2>
+          <ul className="mt-3 list-disc space-y-3 pl-5">
+            <li>
+              <span className="font-semibold text-foreground">School and club raffles</span>{" "}
+              with paper ticket stubs, where you type in the sold numbers.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Charity dinners</span>{" "}
+              with a run of donated prizes, small ones first and the headline prize last.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Online giveaways</span>{" "}
+              with several prizes and a backup winner for each.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Membership draws</span>{" "}
+              for a club prize, with alternates in case a winner can&apos;t be reached.
+            </li>
+          </ul>
+        </section>
+        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            Worked example: 5 prizes, 3 alternates, 300 tickets
+          </h2>
+          <p className="mt-3">
+            A youth soccer club sold 300 numbered tickets for five prizes. They paste the sold numbers, one
+            per line, set 5 winners and 3 alternates, and type the prizes from smallest to largest.
+          </p>
+          <ul className="mt-3 list-disc space-y-3 pl-5">
+            <li>
+              <span className="font-semibold text-foreground">1st pick:</span>{" "}
+              each of the 300 tickets has a 1 in 300 chance. The winning ticket leaves.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">2nd pick:</span>{" "}
+              1 in 299 for each remaining ticket.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">5th pick:</span>{" "}
+              1 in 296.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Alternates:</span>{" "}
+              then three more tickets are drawn, in order, from the 295 left.
+            </li>
+          </ul>
+          <p className="mt-3">
+            Across the whole draw, each ticket has the same 5 in 300 (about 1.7%) chance of winning a prize.
+            The family that bought ten tickets holds ten separate numbers. If the club&apos;s rule is one
+            prize per family, it says so on the poster and passes any second win to Alternate 1.
+          </p>
+        </section>
+        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            Tips
+          </h2>
+          <ul className="mt-3 list-disc space-y-3 pl-5">
+            <li>
+              <span className="font-semibold text-foreground">Check the count before you draw.</span>{" "}
+              It should match the number of tickets you sold.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Draw on a screen people can see</span>
+              , or record your screen.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Write your claim rule down:</span>{" "}
+              how long winners have, and when you move to an alternate.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Draw a few more alternates than you think you need.</span>{" "}
+              It&apos;s easier than redrawing later.
             </li>
           </ul>
         </section>

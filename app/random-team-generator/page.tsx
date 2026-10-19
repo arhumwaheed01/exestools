@@ -105,6 +105,30 @@ const FAQS = [
     q: "How many names can I add?",
     a: "Up to 200 names. You can make up to 50 teams, or up to 100 people per team. If you only need to call on one person at a time, the wheel tools (60 names max) are a better fit.",
   },
+  {
+    q: "Can I give the teams names?",
+    a: "Yes. Add optional team names, such as Red and Blue, and they appear on the team cards.",
+  },
+  {
+    q: "What's a good team size for group projects?",
+    a: "Three or four people usually works best. Set People per team to 3 or 4 and the generator works out how many groups you need.",
+  },
+  {
+    q: "Can I make a tournament bracket with this?",
+    a: "No. It splits a list into teams. Once you have teams, you'll need to set up the matchups yourself.",
+  },
+  {
+    q: "How do I pick a captain for each team?",
+    a: "After generating, paste each team's names into the random name picker and spin once per team.",
+  },
+  {
+    q: "Does Reshuffle change my list?",
+    a: "No. Reshuffle keeps your list and settings and makes a completely new random split.",
+  },
+  {
+    q: "Can I send the teams to people who aren't in the room?",
+    a: "Yes. Copy share link opens the same names and teams on another device, and Copy teams gives you plain text to paste into chat or email.",
+  },
 ];
 
 export default function RandomTeamGeneratorPage() {
@@ -169,7 +193,7 @@ export default function RandomTeamGeneratorPage() {
         <h1 className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl lg:text-3xl">
           Random team generator: split names into groups
         </h1>
-        <PageMeta updated="2026-10-13" />
+        <PageMeta updated="2026-10-20" />
         <p className="mt-1 text-sm leading-relaxed text-muted sm:text-base">
           Paste one name per line, choose how many teams you need (or how many people per team), and
           press Generate teams. Names are shuffled and dealt out so team sizes never differ by more
@@ -359,6 +383,107 @@ export default function RandomTeamGeneratorPage() {
             </Link>
             .
           </p>
+        </section>
+
+        <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            How a split is made
+          </h2>
+          <p className="mt-3">
+            The generator takes your whole list, shuffles it into a random order, and then deals names out
+            one at a time, like dealing cards around a table. That&apos;s why team sizes never differ by
+            more than one person, and why every possible split is equally likely. Nobody is placed on a team
+            ahead of time.
+          </p>
+          <p className="mt-3">
+            You choose the shape: a number of teams, or a number of people per team.{" "}
+            <span className="font-semibold text-foreground">Reshuffle</span>{" "}
+            gives you a completely new deal from the same list. It&apos;s free, there&apos;s no account, and
+            your list stays in your browser.
+          </p>
+        </section>
+        <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            Where it helps
+          </h2>
+          <ul className="mt-3 list-disc space-y-3 pl-5">
+            <li>
+              <span className="font-semibold text-foreground">Trivia nights:</span>{" "}
+              split the room into quiz teams as people arrive, and give the teams names so the scoreboard
+              reads well.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Hackathons and project weeks:</span>{" "}
+              mix people from different departments or classes instead of letting friends cluster.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Rec leagues and pickup games:</span>{" "}
+              two sides in seconds, with no captains and no one picked last.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Book clubs and discussion groups:</span>{" "}
+              small circles of four or five so everyone gets airtime.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Workshops:</span>{" "}
+              breakout groups you can paste straight into the meeting chat.
+            </li>
+          </ul>
+        </section>
+        <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            Worked example: 23 people, 4 teams
+          </h2>
+          <p className="mt-3">
+            A trivia night has 23 players and four tables. Choose{" "}
+            <span className="font-semibold text-foreground">Number of teams</span>
+            , set it to 4, and press{" "}
+            <span className="font-semibold text-foreground">Generate teams</span>
+            . 23 doesn&apos;t divide evenly by 4, so the generator deals 6, 6, 6 and 5. That&apos;s as even
+            as 23 can get.
+          </p>
+          <p className="mt-3">
+            Add team names if you like, say &quot;Owls,&quot; &quot;Foxes,&quot; &quot;Bears&quot; and
+            &quot;Otters,&quot; and the cards show them. Press{" "}
+            <span className="font-semibold text-foreground">Copy teams</span>{" "}
+            to drop the line-ups into the group chat, or{" "}
+            <span className="font-semibold text-foreground">Copy share link</span>{" "}
+            so anyone with the link can open the same teams on their phone.
+          </p>
+          <p className="mt-3">
+            If chance puts all four regulars from last week on one table, press{" "}
+            <span className="font-semibold text-foreground">Reshuffle</span>
+            . Each reshuffle is a fresh, independent deal, so you might need two.
+          </p>
+        </section>
+        <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            Tips
+          </h2>
+          <ul className="mt-3 list-disc space-y-3 pl-5">
+            <li>
+              <span className="font-semibold text-foreground">Check the list before you generate.</span>{" "}
+              A typo like &quot;Maria&quot; and &quot;Mariah&quot; turns one person into two.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Pick team size, not team count, for projects.</span>{" "}
+              Groups of three or four tend to keep everyone involved.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Choose captains after the split.</span>{" "}
+              Use the{" "}
+              <Link href="/random-name-picker" className="font-semibold text-accent hover:underline">random name picker</Link>{" "}
+              on each team&apos;s names if you need a leader.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Say up front that teams are random.</span>{" "}
+              It heads off the &quot;why am I with him?&quot; conversation.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Print the teams</span>{" "}
+              for in-person events so tables can find their group without crowding a screen.
+            </li>
+          </ul>
         </section>
 
         <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">

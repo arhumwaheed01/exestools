@@ -110,6 +110,30 @@ const HOME_FAQS = [
     q: "Can I remove the winner after each spin?",
     a: 'Yes. Switch on "Remove winner after spin (no repeats)" before you spin, or press Remove & continue when the result appears. The picked option leaves the wheel, so it can\'t come up again until you add it back.',
   },
+  {
+    q: "Can I put an option on the wheel twice to make it more likely?",
+    a: "No. Duplicate lines are skipped, so each option appears once and every slice has the same chance. If you want an option to come up more often, add a different label for it, such as \"Pizza\" and \"Pizza night.\"",
+  },
+  {
+    q: "Does spinning harder or longer change the result?",
+    a: "No. The result is picked at random before the animation starts, and the wheel then stops on it. Spin length and speed are only for show.",
+  },
+  {
+    q: "What happens to my wheel if I clear my browser data?",
+    a: "It's deleted, because the list is stored in your browser on that device. If you want to keep a wheel, press Copy share link first and save the link somewhere safe.",
+  },
+  {
+    q: "If I send a share link, will we see the same result?",
+    a: "You'll see the same list of options, but each spin on each device is separate. If a group needs one shared result, spin on one screen everyone can see.",
+  },
+  {
+    q: "How do I bring back an option I removed?",
+    a: "Type it back in as a new line. Fresh wheel brings back the starter list, and pasting your original list restores everything at once.",
+  },
+  {
+    q: "Does the spinner wheel cost anything?",
+    a: "No. It's free, there's no account or signup, and it runs in your browser.",
+  },
 ] as const;
 
 export default function HomePage() {
@@ -141,7 +165,7 @@ export default function HomePage() {
         <h1 className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl lg:text-3xl">
           Free spinner wheel online
         </h1>
-        <PageMeta updated="2026-10-13" />
+        <PageMeta updated="2026-10-20" />
         <p className="mt-1 line-clamp-2 text-sm leading-snug text-muted sm:line-clamp-none sm:text-base sm:leading-relaxed">
           Add one option per line, hit SPIN, and land on a fair result. It works as a multi-option
           decision wheel when you have several choices, and there&apos;s no account to create. For
@@ -288,6 +312,102 @@ export default function HomePage() {
                 prize wheel for giveaways
               </Link>
               .
+            </li>
+          </ul>
+        </section>
+
+        <section className="max-w-3xl">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+            What happens when you press SPIN
+          </h2>
+          <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
+            The wheel doesn&apos;t decide anything by how it spins. When you press SPIN, the page first
+            picks one option at random from everything currently on the wheel, with every option getting the
+            same chance. Then it animates the wheel so it stops on that option. That&apos;s why a long spin,
+            a short spin or a second press of the button can&apos;t nudge the result.
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
+            Each line in your list becomes one equal slice. Blank lines are ignored, and a line that repeats
+            an earlier one is skipped, with capital letters not counting as a difference. So
+            &quot;Pizza&quot; and &quot;pizza&quot; make one slice, not two. You can have up to 60 slices,
+            and you need at least two for the wheel to spin.
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
+            What you type is saved in your browser, so the same wheel is waiting next time you open the page
+            on that device. Nothing needs an account.
+          </p>
+        </section>
+        <section className="max-w-3xl">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+            Small jobs this wheel is good at
+          </h2>
+          <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted sm:text-base">
+            <li>
+              <span className="font-semibold text-foreground">The weekly dinner rut.</span>{" "}
+              Put eight meals you actually know how to cook on the wheel. Spin on Sunday for Monday to
+              Thursday, with remove-winner on so nothing repeats in a week.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">The reading pile.</span>{" "}
+              List the books stacked by your bed and let the wheel choose the next one. It ends the
+              &quot;I&apos;ll start something tomorrow&quot; loop.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Workout variety.</span>{" "}
+              Rowing, a run, a bike ride, yoga, a rest day. Spin each morning.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Game night.</span>{" "}
+              Put the group&apos;s games on the wheel so the same person doesn&apos;t always choose.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Writing prompts.</span>{" "}
+              A list of opening lines or settings, one per slice, for a class or for yourself.
+            </li>
+          </ul>
+        </section>
+        <section className="max-w-3xl">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+            Worked example: planning a weekend
+          </h2>
+          <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
+            You have seven ideas for Saturday: farmers market, hike, museum, beach, bike ride, movie, a new
+            café. Type them in, one per line, and switch on{" "}
+            <span className="font-semibold text-foreground">Remove winner after spin</span>
+            .
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
+            The first spin gives each idea a 1 in 7 chance. Say it lands on &quot;hike.&quot; That slice
+            leaves, so Sunday&apos;s spin is from the six that remain, each with a 1 in 6 chance. If it
+            lands on something you really don&apos;t want to do, that&apos;s useful information too. Delete
+            it and spin again; it&apos;s your weekend.
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
+            Want a partner to see the same options? Press{" "}
+            <span className="font-semibold text-foreground">Copy share link</span>{" "}
+            and send it. The link carries the list, so they&apos;ll open the exact same wheel.
+          </p>
+        </section>
+        <section className="max-w-3xl">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+            Tips for a better wheel
+          </h2>
+          <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted sm:text-base">
+            <li>
+              <span className="font-semibold text-foreground">Keep labels to a few words.</span>{" "}
+              Long text gets cramped on narrow slices.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Decide what a result means before you spin.</span>{" "}
+              If you&apos;re going to ignore an answer, take it off the wheel first.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Use Shuffle for looks, not luck.</span>{" "}
+              It changes the order around the rim, not the odds.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Save useful wheels as links.</span>{" "}
+              The page keeps one list in your browser. For others, copy a share link and bookmark it.
             </li>
           </ul>
         </section>

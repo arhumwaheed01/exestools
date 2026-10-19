@@ -96,6 +96,30 @@ const FAQS = [
     q: "Is this a certified lottery or raffle draw?",
     a: "No. It's a free random picker, not a certified drawing service. If the law or your platform requires a certified draw, use one. See our [Terms of Service].",
   },
+  {
+    q: "Can I remove a prize once it has been won?",
+    a: "Yes. Turn on Remove winner after spin before you start, or press Remove & continue when the result appears. That slice leaves the wheel.",
+  },
+  {
+    q: "Can I change the prizes between spins?",
+    a: "Yes. Edit the list at any time, for example to delete a prize that has run out. The next spin uses the updated list.",
+  },
+  {
+    q: "How many slices should a prize wheel have?",
+    a: "Eight to twelve is easy to read on a laptop or projector. The wheel holds up to 60 if you need more.",
+  },
+  {
+    q: "Can viewers spin my prize wheel themselves?",
+    a: "They can open the same list with your share link, but their spins happen on their own device and don't affect yours. For an official result, spin on your screen.",
+  },
+  {
+    q: "How do I spin for prizes after picking winners?",
+    a: "Draw winners from a wheel of entrant names with remove winner on, then load a list of prizes and spin once per winner. Each prize leaves after it's won.",
+  },
+  {
+    q: "Is the prize wheel free for business use?",
+    a: "Yes. It's free with no account. You supply and hand out the real prizes, and you're responsible for any rules that apply to your promotion.",
+  },
 ];
 
 export default function PrizeWheelPage() {
@@ -116,7 +140,7 @@ export default function PrizeWheelPage() {
         "Sound on/off",
         "No signup",
       ]}
-      pageUpdated="2026-10-13"
+      pageUpdated="2026-10-20"
     >
       <GuideSection title="How to run a giveaway spin">
         <ol className="list-decimal space-y-2 pl-5">
@@ -295,6 +319,99 @@ export default function PrizeWheelPage() {
           Platform rules and local laws for giveaways differ, so check the ones that apply to you.
           This wheel picks a result. It doesn&apos;t make your giveaway compliant with any rule.
         </p>
+      </GuideSection>
+      <GuideSection title="How a prize spin is decided">
+        <p>
+          Every prize or name on the list is one equal slice, up to 60. When you press SPIN, one slice is
+          chosen at random from everything currently on the wheel, and the wheel then turns to land on it.
+          A spin that looks close to the big prize wasn&apos;t &quot;nearly&quot; anything; the result was
+          set before the wheel moved.
+        </p>
+        <p>
+          Because every slice is the same size, the odds come straight from the count. Ten slices, one
+          grand prize: a 1 in 10 chance on each spin. If you want the grand prize to be rarer, add more
+          small prizes, not thinner slices.
+        </p>
+        <p>
+          Turn on{" "}
+          <span className="font-semibold text-foreground">Remove winner after spin</span>{" "}
+          when a prize should only be won once. The won slice leaves the wheel, and the next spin is
+          between what&apos;s left.
+        </p>
+      </GuideSection>
+      <GuideSection title="Where a prize wheel works">
+        <ul className="list-disc space-y-2 pl-5">
+          <li>
+            <span className="font-semibold text-foreground">Classroom reward days:</span>{" "}
+            a Friday spin for the table that earned it, with rewards the class helped choose.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Stream milestones:</span>{" "}
+            a spin when you hit a follower goal, with viewer-friendly prizes like picking the next game.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Shop promotions:</span>{" "}
+            one spin with a purchase at the counter, with a printed list of prizes beside the screen.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Team events:</span>{" "}
+            door prizes at an office party, spun after names are drawn.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Fundraiser add-ons:</span>{" "}
+            a quick, low-cost spin for kids while the main raffle runs elsewhere.
+          </li>
+        </ul>
+      </GuideSection>
+      <GuideSection title="Worked example: two wheels, three prizes, 40 entrants">
+        <p>
+          You have 40 entrants and three prizes: a gift card, a book and a mug. Up to 60 names fit on one
+          wheel, so:
+        </p>
+        <ol className="list-decimal space-y-2 pl-5">
+          <li>
+            Tap{" "}
+            <span className="font-semibold text-foreground">Entrant names</span>
+            , paste the 40 names, and turn on{" "}
+            <span className="font-semibold text-foreground">Remove winner after spin</span>
+            .
+          </li>
+          <li>
+            Spin three times. Each winner leaves, so nobody wins twice. Write the three names down in order.
+          </li>
+          <li>
+            Clear the list, type the three prizes, and keep remove winner on.
+          </li>
+          <li>
+            Spin once for each winner, in the order they were drawn. Each prize leaves after it&apos;s won.
+          </li>
+        </ol>
+        <p>
+          Every entrant had the same 3 in 40 chance of winning something, and each winner had an equal
+          shot at each prize still left. Press{" "}
+          <span className="font-semibold text-foreground">Copy share link</span>{" "}
+          on the entrant wheel before you start if you want to post the exact list you used.
+        </p>
+      </GuideSection>
+      <GuideSection title="Tips">
+        <ul className="list-disc space-y-2 pl-5">
+          <li>
+            <span className="font-semibold text-foreground">Show the full list before the first spin.</span>{" "}
+            People trust what they&apos;ve seen.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Edit between spins</span>{" "}
+            if a prize runs out, and say so out loud.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Keep prize labels short</span>{" "}
+            so they&apos;re readable from across a room.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Write results on paper as you go.</span>{" "}
+            The wheel shows the current spin, not a history.
+          </li>
+        </ul>
       </GuideSection>
       <GuideSection title="Fairness">
         <p>

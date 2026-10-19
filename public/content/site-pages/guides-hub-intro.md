@@ -11,6 +11,6 @@ Every guide here is written by Arhum Waheed, the developer who builds ExesTools.
 
 {{LIVE_GUIDES_OPENER}} They cover spinner randomness and fair online giveaways, fair cold calling in class, making balanced random teams, Secret Santa rules and budgets, and bingo ideas for classrooms and parties. Open the card below that matches what you are doing this week.
 
-These guides stick to confirmed behaviour of the live tools. The tools are free. They need no account. Remove winner can take a picked name off the list so it does not come up again until you paste the full list back. A share link can open the same list on another device. Your list stays in the browser unless you choose to share it. Presets are mentioned only where the matching tool page actually offers them. The guides do not invent features, certified-draw status, or weighted-entry claims.
+Each guide is checked against the live tools on the date shown, and says plainly what a tool can't do.
 
 If you want to know how these articles are written and updated, start with the editorial notes on About. Then open the guide that matches what you are doing this week.

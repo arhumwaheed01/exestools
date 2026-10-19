@@ -80,6 +80,26 @@ const FAQS = [
     q: "Should I use the wheel for big decisions?",
     a: "No. Use it for small choices where either answer is fine. For health, money, legal or other hard-to-undo decisions, take your time and get advice from someone qualified.",
   },
+  {
+    q: "Why did I get No five times in a row?",
+    a: "Chance. With two equal slices, five Nos in a row happens about 1 time in 32. Each spin is independent, so the next one is still 50/50.",
+  },
+  {
+    q: "Does the yes or no wheel remember my last answer?",
+    a: "No. Every spin is a fresh pick with the same odds. The counter under the wheel only shows your running tally.",
+  },
+  {
+    q: "Can I use the yes or no wheel to teach probability?",
+    a: "Yes. Have students predict a tally, spin 20 times, and compare. It's a quick way to show that exact 50/50 splits are less common than people expect.",
+  },
+  {
+    q: "Is coin-toss mode different from Yes / No?",
+    a: "Only the labels change. Heads / Tails is the same two-slice, 50/50 spin.",
+  },
+  {
+    q: "How do I settle who goes first on a video call?",
+    a: "Tap Heads / Tails, let each person call a side out loud, share your screen and spin once.",
+  },
 ];
 
 export default function YesNoWheelPage() {
@@ -112,7 +132,7 @@ export default function YesNoWheelPage() {
         "Copy share link",
         "No signup",
       ]}
-      pageUpdated="2026-10-13"
+      pageUpdated="2026-10-20"
     >
       <GuideSection title="How to spin Yes or No">
         <ol className="list-decimal space-y-2 pl-5">
@@ -203,6 +223,84 @@ export default function YesNoWheelPage() {
           accept either answer. In a group, say out loud what Yes and No mean before anyone presses
           SPIN.
         </p>
+      </GuideSection>
+      <GuideSection title="Under the hood">
+        <p>
+          The yes or no wheel is a two-slice spinner: one Yes, one No. Each spin picks one at random with
+          equal odds, then the wheel turns to land on it. Spins don&apos;t remember each other, so a run
+          of No answers says nothing about the next spin. Tap{" "}
+          <span className="font-semibold text-foreground">Yes / No / Maybe</span>{" "}
+          for three slices, or{" "}
+          <span className="font-semibold text-foreground">Heads / Tails</span>{" "}
+          for a coin-toss mode with the same 50/50 odds as Yes and No.
+        </p>
+        <p>
+          It&apos;s free, there&apos;s no account, and the answers you set up are saved in your browser.
+        </p>
+      </GuideSection>
+      <GuideSection title="Small ways people use it">
+        <ul className="list-disc space-y-2 pl-5">
+          <li>
+            <span className="font-semibold text-foreground">Kids&apos; choices:</span>{" "}
+            &quot;Bath before or after the story?&quot; Let the child press SPIN, and the result belongs to
+            the wheel, not to you.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Date night:</span>{" "}
+            &quot;Cook in?&quot; One spin, no debate.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Tabletop games:</span>{" "}
+            a game master can let the wheel answer &quot;does the shopkeeper know anything?&quot; when
+            there&apos;s no rule.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Who goes first:</span>{" "}
+            Heads / Tails on a video call, with the screen shared so both sides see it.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Teaching probability:</span>{" "}
+            short runs, long runs and why &quot;due&quot; isn&apos;t a thing.
+          </li>
+        </ul>
+      </GuideSection>
+      <GuideSection title="Worked example: a probability lesson in ten minutes">
+        <p>
+          Ask the class to predict how many Yeses you&apos;ll get in 20 spins. Most will say 10. Spin 20
+          times and use the counter under the wheel to keep the tally.
+        </p>
+        <p>
+          Then show the math. The chance of getting{" "}
+          <em>exactly</em>{" "}
+          10 Yeses in 20 fair spins is about 17.6% (there are 184,756 ways to choose which 10 spins are
+          Yes, out of 1,048,576 possible sequences). So getting exactly 10 is actually unlikely. Results
+          like 8, 9, 11 or 12 are just as normal.
+        </p>
+        <p>
+          Follow up with streaks. The chance of five No answers in a row is 1 in 32, about 3.1%. Over a
+          class&apos;s worth of spins, a streak like that will turn up now and then, and it doesn&apos;t
+          mean the wheel is broken.
+        </p>
+      </GuideSection>
+      <GuideSection title="Tips">
+        <ul className="list-disc space-y-2 pl-5">
+          <li>
+            <span className="font-semibold text-foreground">Say what Yes means out loud</span>{" "}
+            before a group spin, so nobody reinterprets it afterwards.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Make Yes the change</span>{" "}
+            when you&apos;re stuck between doing something new and staying put.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Decide on one spin or best of three before you start.</span>{" "}
+            Switching after a bad result is how arguments begin.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Use the yes or no wheel for small, reversible choices.</span>{" "}
+            For anything with real consequences, take your time.
+          </li>
+        </ul>
       </GuideSection>
       <GuideSection title="Beyond Yes/No">
         <p>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BrandLogo } from "@/components/BrandLogo";
+import { PrivacySettingsLink } from "@/components/PrivacySettingsLink";
 import { siteConfig } from "@/lib/seo";
 import { TOOLS } from "@/lib/tools";
 
@@ -43,6 +44,7 @@ export function Footer() {
               {l.label}
             </Link>
           ))}
+          <PrivacySettingsLink className="hover:text-accent outline-none focus-visible:ring-2 focus-visible:ring-accent rounded" />
         </nav>
       </div>
     </footer>

@@ -113,6 +113,36 @@ const FAQ = [
     aPlain:
       "No. It's made for classrooms, parties, families and team events. Small prizes like stickers or treats are part of the fun, but it isn't designed for paid or cash games.",
   },
+  {
+    q: "Can I play bingo on a video call?",
+    a: "Yes. Make a set, copy each player's link from Player links, and send them before the call. Run the Caller on your screen and read each call out.",
+    aPlain: "Yes. Make a set, copy each player's link from Player links, and send them before the call. Run the Caller on your screen and read each call out.",
+  },
+  {
+    q: "What grid size is best for young children?",
+    a: "A 3×3 or 4×4 card keeps games short and the squares large. Save 5×5 for older players.",
+    aPlain: "A 3×3 or 4×4 card keeps games short and the squares large. Save 5×5 for older players.",
+  },
+  {
+    q: "How do I play several rounds with the same cards?",
+    a: "Press New game in the Caller to clear the called list. Players keep their cards and you start the next round.",
+    aPlain: "Press New game in the Caller to clear the called list. Players keep their cards and you start the next round.",
+  },
+  {
+    q: "How many cards can I make for a big event?",
+    a: "Up to 100 different cards in one set. For more players, make a second set, but cards from different sets aren't checked against each other.",
+    aPlain: "Up to 100 different cards in one set. For more players, make a second set, but cards from different sets aren't checked against each other.",
+  },
+  {
+    q: "Can players use paper and phones in the same game?",
+    a: "Yes. Print some cards and send player links for others from the same set, and use the same Caller for everyone.",
+    aPlain: "Yes. Print some cards and send player links for others from the same set, and use the same Caller for everyone.",
+  },
+  {
+    q: "How do I stop players marking squares that weren't called?",
+    a: "Use Check a card when someone calls bingo. It compares their card with the called list and highlights every called square.",
+    aPlain: "Use Check a card when someone calls bingo. It compares their card with the called list and highlights every called square.",
+  },
 ];
 
 function FaqAnswer({ text }: { text: string }) {
@@ -202,7 +232,7 @@ export default function BingoCardGeneratorPage() {
         <h1 className="mt-4 max-w-3xl text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
           Bingo card generator
         </h1>
-        <PageMeta updated="2026-10-13" />
+        <PageMeta updated="2026-10-20" />
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           Make printable bingo cards from your own word list or classic 1–75 numbers. Choose a 3×3,
           4×4 or 5×5 grid, add a FREE centre square, and make up to 100 different cards in one set.
@@ -438,6 +468,113 @@ export default function BingoCardGeneratorPage() {
             <strong className="font-semibold text-foreground">New game</strong> to clear the called
             list and play the next round with the same cards.
           </p>
+        </section>
+
+        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            How a card set is made
+          </h2>
+          <p className="mt-3">
+            You give the generator a list of words or numbers and pick a grid size. It builds every card in
+            the set from that list, shuffling the items differently each time and checking that no two cards
+            match. You can make up to 100 cards in one set. Each card gets its own number, and each player
+            can get their own{" "}
+            <span className="font-semibold text-foreground">player link</span>{" "}
+            that shows only their card on a phone, where tapping a square marks it.
+          </p>
+          <p className="mt-3">
+            Everything happens in your browser. It&apos;s free, and nobody needs an account.
+          </p>
+        </section>
+        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            Games it works for
+          </h2>
+          <ul className="mt-3 list-disc space-y-3 pl-5">
+            <li>
+              <span className="font-semibold text-foreground">Vocabulary review:</span>{" "}
+              this week&apos;s spelling words or science terms on a 4×4 card. Read a definition and students
+              find the word.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Senior center or care home afternoons:</span>{" "}
+              big squares, two cards per page, and a slow, clear caller.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Virtual team socials:</span>{" "}
+              send each colleague their player link before the call and play from the meeting chat.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Road trip or walk bingo:</span>{" "}
+              squares for things to spot, like a red truck, a cow or a bridge, played with no caller at all.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Reading bingo:</span>{" "}
+              squares for genres or reading challenges that run over a month.
+            </li>
+          </ul>
+        </section>
+        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            Worked example: a vocabulary game for 28 students
+          </h2>
+          <p className="mt-3">
+            A teacher wants a quick review of 30 words before a test.
+          </p>
+          <ol className="mt-3 list-decimal space-y-3 pl-5">
+            <li>
+              Choose{" "}
+              <span className="font-semibold text-foreground">Words</span>
+              , paste the 30 terms, and pick{" "}
+              <span className="font-semibold text-foreground">4×4</span>
+              . A 4×4 card needs 16 items, so 30 gives plenty of variety between cards.
+            </li>
+            <li>
+              Set the number of cards to 28 and press{" "}
+              <span className="font-semibold text-foreground">Make cards</span>
+              . Every card is different.
+            </li>
+            <li>
+              Print four per page to save paper, or send player links to students with devices.
+            </li>
+            <li>
+              Open the{" "}
+              <span className="font-semibold text-foreground">Caller</span>{" "}
+              and read a definition for each word it calls, not the word itself. Students have to work out the
+              answer before they can mark it.
+            </li>
+            <li>
+              When someone calls bingo, type their card number into{" "}
+              <span className="font-semibold text-foreground">Check a card</span>
+              .
+            </li>
+          </ol>
+          <p className="mt-3">
+            Because the list has 30 words and each card shows only 16, cards differ enough that wins
+            don&apos;t arrive in a big rush.
+          </p>
+        </section>
+        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            Tips
+          </h2>
+          <ul className="mt-3 list-disc space-y-3 pl-5">
+            <li>
+              <span className="font-semibold text-foreground">Add more items than the minimum.</span>{" "}
+              It makes the cards more varied and the game less predictable.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Agree on the winning pattern before the first call.</span>
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Keep the set link</span>{" "}
+              if you&apos;ll want the same cards again later.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Give each player link to one person only.</span>{" "}
+              Anyone with the link can see that card.
+            </li>
+          </ul>
         </section>
 
         <div className="mt-10">

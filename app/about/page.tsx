@@ -4,9 +4,9 @@ import PageMeta from "@/components/PageMeta";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { aboutPageLd, toolOpenGraph } from "@/lib/seo/jsonld";
 
-const ABOUT_TITLE = "About — Who Builds It, How Picks Work | ExesTools";
+const ABOUT_TITLE = "About ExesTools | Who Builds It, How Picks Work, How It's Paid For";
 const ABOUT_DESC =
-  "ExesTools is free random-pick tools by Arhum Waheed. How picks work, why lists stay in your browser, how ads keep it free, and how guides are written.";
+  "ExesTools is a set of free random-pick tools built and maintained by software engineer Arhum Waheed. How the tools pick results, how guides are written, what the site won't do, and how it's funded.";
 
 export const metadata: Metadata = {
   title: { absolute: ABOUT_TITLE },
@@ -26,6 +26,61 @@ export const metadata: Metadata = {
   },
 };
 
+const linkCls = "font-semibold text-accent hover:underline";
+
+const TOOL_SUMMARIES: { href: string; label: string; text: string }[] = [
+  {
+    href: "/",
+    label: "Spinner wheel",
+    text: "a general decision wheel for up to 60 options, with example wheels for meals, weekend plans and word games.",
+  },
+  {
+    href: "/random-name-picker",
+    label: "Random name picker",
+    text: "one name at a time, with remove-winner on by default, for meeting order, volunteers and simple draws.",
+  },
+  {
+    href: "/classroom-spinner",
+    label: "Classroom spinner",
+    text: "the same idea set up for teachers, with classroom example wheels and a roster that stays in your browser between lessons.",
+  },
+  {
+    href: "/prize-wheel",
+    label: "Prize wheel",
+    text: "prizes or entrant names on a wheel everyone can watch, for giveaways, streams, booths and reward days.",
+  },
+  {
+    href: "/yes-no-wheel",
+    label: "Yes or no wheel",
+    text: "a two-way spin, with a Yes / No / Maybe option and a Heads / Tails coin-toss mode.",
+  },
+  {
+    href: "/random-number-wheel",
+    label: "Random number wheel",
+    text: "a number from any range, with a no-repeats option for tickets, questions and bingo calls.",
+  },
+  {
+    href: "/random-team-generator",
+    label: "Random team generator",
+    text: "splits a whole list into even teams or pairs in one step.",
+  },
+  {
+    href: "/secret-santa-generator",
+    label: "Secret Santa generator",
+    text: "draws names with exclusions for couples and housemates, and gives each person a private link that shows only their match.",
+  },
+  {
+    href: "/raffle-generator",
+    label: "Raffle generator",
+    text: "draws several winners and alternates for multiple prizes, one ticket at a time from those still in the draw, each with an equal chance.",
+  },
+  {
+    href: "/bingo-card-generator",
+    label: "Bingo card generator",
+    text: "up to 100 different printable cards from your own words or numbers, with a link per player for phone play.",
+  },
+];
+
 export default function AboutPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
@@ -36,93 +91,70 @@ export default function AboutPage() {
       <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
         About ExesTools
       </h1>
-      <PageMeta updated="2026-10-13" />
+      <PageMeta updated="2026-10-20" />
       <div className="mt-6 space-y-8 text-sm leading-relaxed text-muted sm:text-base">
-        <p>
-          ExesTools makes free online tools for everyday random picks: a{" "}
-          <Link href="/" className="font-semibold text-accent hover:underline">
-            spinner wheel
-          </Link>
-          , a{" "}
-          <Link href="/random-name-picker" className="font-semibold text-accent hover:underline">
-            random name picker
-          </Link>
-          , a{" "}
-          <Link href="/classroom-spinner" className="font-semibold text-accent hover:underline">
-            classroom spinner
-          </Link>
-          , a{" "}
-          <Link href="/prize-wheel" className="font-semibold text-accent hover:underline">
-            prize wheel
-          </Link>
-          , a{" "}
-          <Link href="/yes-no-wheel" className="font-semibold text-accent hover:underline">
-            yes or no wheel
-          </Link>
-          , a{" "}
-          <Link href="/random-number-wheel" className="font-semibold text-accent hover:underline">
-            random number wheel
-          </Link>
-          , a{" "}
-          <Link href="/random-team-generator" className="font-semibold text-accent hover:underline">
-            random team generator
-          </Link>
-          , a{" "}
-          <Link
-            href="/secret-santa-generator"
-            className="font-semibold text-accent hover:underline"
-          >
-            Secret Santa generator
-          </Link>
-          , a{" "}
-          <Link href="/raffle-generator" className="font-semibold text-accent hover:underline">
-            raffle generator
-          </Link>{" "}
-          and a{" "}
-          <Link
-            href="/bingo-card-generator"
-            className="font-semibold text-accent hover:underline"
-          >
-            bingo card generator
-          </Link>
-          . They run in your browser, with no account to create and nothing to install. Alongside
-          the tools, the{" "}
-          <Link href="/guides" className="font-semibold text-accent hover:underline">
-            Guides
-          </Link>{" "}
-          section has longer articles on running giveaways, calling on students, making teams and
-          more.
-        </p>
+        <section>
+          <p>
+            ExesTools is a small set of free tools for the moments when a group needs a fair
+            decision: who answers next, who wins the prize, which team you&apos;re on, who buys a
+            gift for whom. There are ten of them, and each one is built for a specific job rather
+            than being one general wheel stretched to cover everything.
+          </p>
+          <p className="mt-3">
+            Everything runs in your browser. There&apos;s no account to create, nothing to install,
+            and the lists you type stay on your device unless you choose to share a link.
+          </p>
+        </section>
 
-        <p>ExesTools is not affiliated with the reverse-engineering forum that has a similar name.</p>
+        <section>
+          <h2 className="text-lg font-bold text-foreground">The tools, and what each one is for</h2>
+          <ul className="mt-3 list-disc space-y-2 pl-5">
+            {TOOL_SUMMARIES.map((t) => (
+              <li key={t.href}>
+                <Link href={t.href} className={linkCls}>
+                  {t.label}
+                </Link>
+                : {t.text}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3">
+            The{" "}
+            <Link href="/guides" className={linkCls}>
+              Guides
+            </Link>{" "}
+            section has longer, practical articles on the work around a fair pick: running giveaways,
+            calling on students, making teams and more.
+          </p>
+          <p className="mt-3">
+            ExesTools is not affiliated with the reverse-engineering forum that has a similar name.
+          </p>
+        </section>
 
         <section>
           <h2 id="arhum" className="text-lg font-bold text-foreground scroll-mt-24">
             Who builds ExesTools
           </h2>
           <p className="mt-2">
-            ExesTools is built and maintained by <strong className="text-foreground">Arhum Waheed</strong>
-            , a software engineer.
+            ExesTools is built and maintained by{" "}
+            <strong className="text-foreground">Arhum Waheed</strong>, a software engineer. He writes
+            the code and every guide on the site.
           </p>
           <p className="mt-2">
-            He started ExesTools so that anyone could spin a fair wheel with their own text and
-            settings, save it in the browser, share a link, or go straight to a ready-made tool for
-            names, classrooms, prizes, yes-or-no decisions and teams. Each tool is set up for one
-            job, with its own presets and limits, rather than one general wheel stretched to cover
-            everything.
+            He built ExesTools after needing a fair, on-screen pick for group decisions and finding
+            most free wheels either needed an account, hid how they worked, or tried to be one tool
+            for every job.
           </p>
           <p className="mt-2">
-            He writes the code and the guides on this site himself. The site is actively developed:
-            changes are checked before release, and automated tests cover important wheel and
-            random-pick behaviour, so what you see under the pointer stays honest.
+            The idea behind the site is simple: a fair pick should be easy to run in front of other
+            people, and it should be obvious that nobody&apos;s steering it. That&apos;s why every
+            tool shows the full list before you pick, lets you remove winners so everyone gets a
+            turn, and lets you share a link to the exact list you used.
           </p>
           <ul className="mt-3 list-disc space-y-1 pl-5">
             <li>
               Email:{" "}
-              <a
-                href={`mailto:${siteConfig.contactEmail}`}
-                className="font-semibold text-accent hover:underline"
-              >
+              <a href={`mailto:${siteConfig.contactEmail}`} className={linkCls}>
                 {siteConfig.contactEmail}
               </a>
             </li>
@@ -160,15 +192,15 @@ export default function AboutPage() {
             <code className="rounded bg-surface-2 px-1 py-0.5 text-sm text-foreground">
               crypto.getRandomValues
             </code>
-            ) with rejection sampling, so each option still on the wheel has exactly the same
-            chance. The result is chosen first, and the wheel animation then stops on it, so the
-            slice under the pointer is always the pick. Nothing is decided by how long or how hard
-            the wheel spins. Cosmetic details such as the exact spin duration and the spin sound use
-            the browser&apos;s ordinary random function; they can&apos;t change the result.
+            ) with rejection sampling, so each option still in play has exactly the same chance. The
+            result is chosen first, and the wheel animation then stops on it, so the slice under the
+            pointer is always the pick. How long or how hard the wheel spins changes nothing.
+            Cosmetic details such as the spin duration and sound use the browser&apos;s ordinary
+            random function, and they can&apos;t affect the result.
           </p>
           <p className="mt-2">
-            Each spin is independent, so streaks happen by chance. Switch on Remove winner if you
-            want every name picked once before any repeats.
+            Each spin is independent, so streaks happen by chance. Switch on remove winner if every
+            name should be picked once before any repeats.
           </p>
           <ul className="mt-3 list-disc space-y-2 pl-5">
             <li>
@@ -176,10 +208,9 @@ export default function AboutPage() {
               with a Fisher–Yates shuffle using the same generator, then deals names into teams.
             </li>
             <li>
-              <strong className="text-foreground">Secret Santa generator:</strong> first checks that
-              a valid draw exists for your exclusions, then shuffles with the same generator until
-              everyone has someone they&apos;re allowed to draw. For heavily restricted lists it
-              falls back to a backtracking search. Nobody can draw themselves.
+              <strong className="text-foreground">Secret Santa generator:</strong> checks that a
+              valid draw exists for your exclusions, then shuffles until everyone has someone
+              they&apos;re allowed to draw. Nobody can draw themselves.
             </li>
             <li>
               <strong className="text-foreground">Raffle generator:</strong> draws one ticket at a
@@ -188,146 +219,179 @@ export default function AboutPage() {
             </li>
             <li>
               <strong className="text-foreground">Bingo card generator:</strong> builds cards from a
-              short set code, so the same code always makes the same cards, and every card in a set
-              is checked to be different. Its caller uses the secure generator separately and never
-              repeats a call within a game.
+              short set code, so the same code always makes the same cards, and checks that every
+              card in a set is different. Its caller never repeats a call within a game.
             </li>
           </ul>
           <p className="mt-3">
-            ExesTools is a free random picker, not a certified drawing service. For the longer
-            version, with worked examples, read{" "}
-            <Link
-              href="/guides/how-random-is-a-spinner-wheel"
-              className="font-semibold text-accent hover:underline"
-            >
+            ExesTools is a free random picker. For the long version, with worked examples, read{" "}
+            <Link href="/guides/how-random-is-a-spinner-wheel" className={linkCls}>
               How random is a spinner wheel?
             </Link>
           </p>
         </section>
 
         <section>
+          <h2 className="text-lg font-bold text-foreground">What ExesTools won&apos;t do</h2>
+          <p className="mt-2">
+            Being clear about limits is part of being trustworthy, so here they are:
+          </p>
+          <ul className="mt-3 list-disc space-y-2 pl-5">
+            <li>
+              <strong className="text-foreground">It doesn&apos;t store your lists or results.</strong>{" "}
+              Nothing you type is uploaded, which also means there&apos;s nothing to recover if you
+              clear your browser.
+            </li>
+            <li>
+              <strong className="text-foreground">It doesn&apos;t collect entries for you.</strong>{" "}
+              There&apos;s no connection to social accounts, comment sections or forms. You paste the
+              list yourself.
+            </li>
+            <li>
+              <strong className="text-foreground">It doesn&apos;t send messages.</strong> Secret
+              Santa links, raffle results and bingo player links are sent by you, through your own
+              chat or email.
+            </li>
+            <li>
+              <strong className="text-foreground">
+                It isn&apos;t legal advice, and it isn&apos;t an official drawing service.
+              </strong>{" "}
+              Raffle and giveaway rules vary by place. Check the ones that apply to you.
+            </li>
+            <li>
+              <strong className="text-foreground">
+                It doesn&apos;t give some entries better odds than others.
+              </strong>{" "}
+              Every option on a wheel has the same chance.
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="text-lg font-bold text-foreground">How the tools are tested and updated</h2>
+          <p className="mt-2">
+            The site is actively developed. Changes are checked before release, and automated tests
+            cover the important wheel and random-pick behavior, so what you see under the pointer
+            stays honest.
+          </p>
+          <p className="mt-2">
+            Every tool page and guide shows an <strong className="text-foreground">Updated</strong>{" "}
+            date. When a tool changes in a way that affects a page, the page is revised and the date
+            moves. The{" "}
+            <a href="#changelog" className={linkCls}>
+              changelog
+            </a>{" "}
+            below lists the bigger changes.
+          </p>
+        </section>
+
+        <section>
           <h2 className="text-lg font-bold text-foreground">Your lists stay in your browser</h2>
           <p className="mt-2">
-            Your lists are saved only in your browser, on your device, not on our servers. Share
-            links carry the list inside the link itself, so anyone with the link can see it. We use
-            Google Analytics to count visits and tool use, but we never send the names or options
-            you type. See the{" "}
-            <Link href="/privacy-policy" className="font-semibold text-accent hover:underline">
+            Your lists are saved only in your browser, on your device, not on ExesTools servers.
+            Share links carry the list inside the link itself, so anyone with the link can see it.
+            Google Analytics counts visits and tool use, but the names and options you type are never
+            sent to it. The{" "}
+            <Link href="/privacy-policy" className={linkCls}>
               Privacy Policy
             </Link>{" "}
-            for details.
+            has the details.
           </p>
         </section>
 
         <section>
           <h2 className="text-lg font-bold text-foreground">How ExesTools is paid for</h2>
           <p className="mt-2">
-            ExesTools is free, and it is paid for by ads from Google AdSense on some pages. Visitors
-            in the EEA, the UK and Switzerland are asked for consent before ads use cookies for
-            personalisation.
+            ExesTools is free, and it&apos;s paid for by ads from Google AdSense on some pages.
+            Visitors in the EEA, the UK and Switzerland are asked for consent through Google&apos;s
+            consent message before ads use cookies for personalization.
           </p>
           <p className="mt-2">
-            Ads don&apos;t decide what we build or write. Advertisers have no say in the tools, the
-            guides or how results are picked, and the text you type into a tool is never used for
-            advertising. ExesTools does not accept paid placements or sponsored guides.
+            Ads don&apos;t decide what gets built or written. Advertisers have no say in the tools,
+            the guides or how results are picked, and the text you type into a tool is never used
+            for advertising. ExesTools doesn&apos;t accept paid placements or sponsored guides.
           </p>
         </section>
 
         <section>
           <h2 className="text-lg font-bold text-foreground">Editorial policy</h2>
-          <p className="mt-2">
-            The guides on ExesTools are written to help you do something specific: run a draw people
-            trust, call on students fairly, set up a gift exchange. This is how they&apos;re made.
-          </p>
+          <p className="mt-2">Guides on ExesTools are written to help you do one specific thing well.</p>
           <ul className="mt-3 list-disc space-y-2 pl-5">
             <li>
-              <strong className="text-foreground">Written by a named author.</strong> Every guide
-              carries a byline and a published date. Today, all guides are written by Arhum Waheed.
+              <strong className="text-foreground">Written by a named author.</strong> Every guide has
+              a byline and a published date. All current guides are written by Arhum Waheed.
             </li>
             <li>
               <strong className="text-foreground">Checked against the live tools.</strong> Any
-              feature a guide mentions is checked against the live tool page on the publish date. If
-              a tool changes, the guide is updated and its &quot;Updated&quot; date changes.
+              feature a guide mentions is checked on the live tool page on the publish date.
             </li>
             <li>
-              <strong className="text-foreground">Maths shown, not asserted.</strong> Where a guide
-              gives odds or percentages, it shows the working so you can check it.
+              <strong className="text-foreground">Math shown, not asserted.</strong> Where a guide
+              gives odds or percentages, the working is on the page.
             </li>
             <li>
-              <strong className="text-foreground">Sources linked.</strong> Research and outside
-              claims are named and cited. We don&apos;t invent statistics or testimonials.
+              <strong className="text-foreground">Sources linked.</strong> Research is named and
+              cited. No invented statistics, no made-up testimonials.
             </li>
             <li>
               <strong className="text-foreground">Honest limits.</strong> Guides say what the tools
-              don&apos;t do, and they don&apos;t present ExesTools as a certified or legally
-              compliant drawing service.
+              don&apos;t do.
             </li>
             <li>
-              <strong className="text-foreground">Not professional advice.</strong> Guides about
-              raffles, giveaways or classrooms are practical tips, not legal advice. Check the rules
-              that apply where you are.
+              <strong className="text-foreground">Not professional advice.</strong> Raffle, giveaway
+              and classroom guides are practical tips, not legal advice.
             </li>
             <li>
               <strong className="text-foreground">Corrections.</strong> Spotted a mistake? Email{" "}
-              <a
-                href={`mailto:${siteConfig.contactEmail}`}
-                className="font-semibold text-accent hover:underline"
-              >
+              <a href={`mailto:${siteConfig.contactEmail}`} className={linkCls}>
                 {siteConfig.contactEmail}
               </a>{" "}
-              with the page address. Corrections are made on the page and the Updated date changes.
+              with the page address. Fixes are made on the page and the Updated date changes.
             </li>
           </ul>
         </section>
 
         <section>
-          <h2 className="text-lg font-bold text-foreground">Changelog</h2>
+          <h2 id="changelog" className="text-lg font-bold text-foreground scroll-mt-24">
+            Changelog
+          </h2>
           <p className="mt-2">Major changes to the site, newest first.</p>
           <ul className="mt-3 list-disc space-y-2 pl-5">
             <li>
+              <strong className="text-foreground">2026-10-20:</strong> Contact page and Privacy Policy
+              updated, and worked examples, tips and new FAQs added to every tool page.
+            </li>
+            <li>
               <strong className="text-foreground">2026-10-19:</strong> Published{" "}
-              <Link
-                href="/guides/bingo-games-for-classrooms-and-parties"
-                className="font-semibold text-accent hover:underline"
-              >
+              <Link href="/guides/bingo-games-for-classrooms-and-parties" className={linkCls}>
                 Bingo game ideas for classrooms and parties
               </Link>
               .
             </li>
             <li>
               <strong className="text-foreground">2026-10-19:</strong> Published{" "}
-              <Link
-                href="/guides/secret-santa-rules-and-budget-ideas"
-                className="font-semibold text-accent hover:underline"
-              >
+              <Link href="/guides/secret-santa-rules-and-budget-ideas" className={linkCls}>
                 Secret Santa rules and gift exchange ideas
               </Link>
               .
             </li>
             <li>
               <strong className="text-foreground">2026-10-19:</strong> Published{" "}
-              <Link
-                href="/guides/how-to-make-balanced-random-teams"
-                className="font-semibold text-accent hover:underline"
-              >
+              <Link href="/guides/how-to-make-balanced-random-teams" className={linkCls}>
                 How to make balanced teams
               </Link>
               .
             </li>
             <li>
               <strong className="text-foreground">2026-10-19:</strong> Published{" "}
-              <Link
-                href="/guides/cold-calling-students-fairly"
-                className="font-semibold text-accent hover:underline"
-              >
+              <Link href="/guides/cold-calling-students-fairly" className={linkCls}>
                 Fair ways to call on students
               </Link>
               .
             </li>
             <li>
               <strong className="text-foreground">2026-10-13:</strong> Guides section launched,
-              starting with{" "}
-              <em>How random is a spinner wheel?</em> and{" "}
+              starting with <em>How random is a spinner wheel?</em> and{" "}
               <em>How to run a fair online giveaway</em>.
             </li>
             <li>
@@ -347,16 +411,10 @@ export default function AboutPage() {
               Bingo card generator launched, with printable cards, player links, a caller and a card
               checker.
             </li>
-            <li>
-              Raffle generator launched, with numbered tickets, alternates and a draw record.
-            </li>
-            <li>
-              Secret Santa generator launched, with exclusions and private reveal links.
-            </li>
+            <li>Raffle generator launched, with numbered tickets, alternates and a draw record.</li>
+            <li>Secret Santa generator launched, with exclusions and private reveal links.</li>
             <li>Random team generator launched.</li>
-            <li>
-              ExesTools launched with the spinner wheel and related random-pick tools.
-            </li>
+            <li>ExesTools launched with the spinner wheel and related random-pick tools.</li>
           </ul>
         </section>
 
@@ -364,16 +422,13 @@ export default function AboutPage() {
           <h2 className="text-lg font-bold text-foreground">For teachers</h2>
           <p className="mt-2">
             Use the{" "}
-            <Link href="/classroom-spinner" className="font-semibold text-accent hover:underline">
+            <Link href="/classroom-spinner" className={linkCls}>
               classroom spinner
             </Link>{" "}
             for fair turn-taking with no account. Your class list stays in this browser, Remove
             winner makes sure everyone gets a turn before anyone repeats, and you can share a link
             to the same wheel when your school&apos;s policy allows. For the teaching routine, see{" "}
-            <Link
-              href="/guides/cold-calling-students-fairly"
-              className="font-semibold text-accent hover:underline"
-            >
+            <Link href="/guides/cold-calling-students-fairly" className={linkCls}>
               fair ways to call on students
             </Link>
             .
@@ -381,17 +436,14 @@ export default function AboutPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-bold text-foreground">Contact</h2>
+          <h2 className="text-lg font-bold text-foreground">Get in touch</h2>
           <p className="mt-2">
             Found a problem or have an idea? Email{" "}
-            <a
-              href={`mailto:${siteConfig.contactEmail}`}
-              className="font-semibold text-accent hover:underline"
-            >
+            <a href={`mailto:${siteConfig.contactEmail}`} className={linkCls}>
               {siteConfig.contactEmail}
             </a>{" "}
             or use the{" "}
-            <Link href="/contact" className="font-semibold text-accent hover:underline">
+            <Link href="/contact" className={linkCls}>
               Contact page
             </Link>
             .

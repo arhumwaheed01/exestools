@@ -99,6 +99,26 @@ const FAQS = [
     q: "What happens when every number has been drawn?",
     a: "With No repeats on, each result leaves the wheel until the range is empty. The tool then tells you and offers Reset draws so you can run the range again.",
   },
+  {
+    q: "Can I use the number wheel as a dice roller for tabletop games?",
+    a: "Yes. Set the range to match the die, such as 1–20 for a d20 or 1–8 for a d8, and leave No repeats off so numbers can repeat like real dice.",
+  },
+  {
+    q: "How do I pick a random day of the month?",
+    a: "Set Min 1 and Max 28 for a day that exists in every month, or 1–31 if you're happy to respin when a date doesn't exist.",
+  },
+  {
+    q: "Can I share my range with a class or a friend?",
+    a: "Yes. Copy share link sends your range and settings. The other person opens the same wheel on their device.",
+  },
+  {
+    q: "Is the number wheel good for picking a random seat?",
+    a: "Yes. Set the range to your seat or table numbers and spin. Nothing on the page identifies anyone, which is handy when you'd rather not type names.",
+  },
+  {
+    q: "Does the wheel keep the numbers I've already drawn?",
+    a: "With No repeats on, drawn numbers stay out until you press Reset draws, and your recent results are listed under the wheel.",
+  },
 ] as const;
 
 const ALL_FAQS = [...FAQS, ...NUMBER_WHEEL_REWRITE.faqs];
@@ -156,7 +176,7 @@ export default function RandomNumberWheelPage() {
         <h1 className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl lg:text-3xl">
           Random number wheel
         </h1>
-        <PageMeta updated="2026-10-13" />
+        <PageMeta updated="2026-10-20" />
         <p className="mt-1 text-sm leading-relaxed text-muted sm:text-base">
           Pick a range and press SPIN, and the wheel stops on a random whole number. Tap 1–10 or
           1–100, or type any Min and Max for up to 1,000 numbers. Every number has the same chance.
@@ -347,6 +367,114 @@ export default function RandomNumberWheelPage() {
         </section>
 
         <GuideMarkdown content={NUMBER_WHEEL_REWRITE.content} />
+
+        <section className="max-w-3xl">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+            Even more number wheel ideas
+          </h2>
+          <h3 className="text-xl font-bold tracking-tight text-foreground">The short version of how it works</h3>
+          <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
+            Set a Min and a Max and the wheel holds every whole number between them, both ends included.
+            Each spin picks one of those numbers at random with the same chance for each, and the wheel then
+            stops on it. Switch on{" "}
+            <span className="font-semibold text-foreground">No repeats</span>{" "}
+            and a drawn number leaves the wheel, so it works like pulling numbered balls from a bag without
+            putting them back. It&apos;s free and there&apos;s no account to create.
+          </p>
+          <h3 className="text-xl font-bold tracking-tight text-foreground">Fresh ways to use it</h3>
+          <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted sm:text-base">
+            <li>
+              <span className="font-semibold text-foreground">Tabletop dice:</span>{" "}
+              set 1–4, 1–8, 1–10, 1–12 or 1–20 for the dice a role-playing game uses. Keep No repeats off,
+              because real dice can repeat.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Rounding practice:</span>{" "}
+              spin 1–1000 and have students round to the nearest 10 and 100. A spin of 649 rounds to 650 and
+              600, which starts a nice argument about the middle.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Random day of the month:</span>{" "}
+              1–28 for a fair pick that works in every month, or 1–31 if you&apos;ll skip invalid dates.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Seat numbers at events:</span>{" "}
+              pick a lucky seat or table without handling anyone&apos;s name.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Practice problems:</span>{" "}
+              spin a question number from a review sheet, with No repeats on so each one comes up once.
+            </li>
+          </ul>
+          <h3 className="text-xl font-bold tracking-tight text-foreground">Worked example: a rounding warm-up</h3>
+          <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
+            Set Min 100 and Max 999, leave No repeats off, and spin five times. Say you get 312, 845, 650,
+            199 and 503.
+          </p>
+          <div className="mt-4 overflow-x-auto">
+            <table className="w-full min-w-[18rem] border-collapse text-left text-sm leading-relaxed">
+              <thead>
+                <tr className="border-b border-border">
+                  <th className="py-2 pr-3 font-semibold text-foreground">Spin</th>
+                  <th className="py-2 pr-3 font-semibold text-foreground">Nearest 10</th>
+                  <th className="py-2 pr-3 font-semibold text-foreground">Nearest 100</th>
+                </tr>
+              </thead>
+              <tbody className="text-muted">
+                <tr className="border-b border-border/60 align-top">
+                  <td className="py-2.5 pr-3">312</td>
+                  <td className="py-2.5 pr-3">310</td>
+                  <td className="py-2.5 pr-3">300</td>
+                </tr>
+                <tr className="border-b border-border/60 align-top">
+                  <td className="py-2.5 pr-3">845</td>
+                  <td className="py-2.5 pr-3">850</td>
+                  <td className="py-2.5 pr-3">800</td>
+                </tr>
+                <tr className="border-b border-border/60 align-top">
+                  <td className="py-2.5 pr-3">650</td>
+                  <td className="py-2.5 pr-3">650</td>
+                  <td className="py-2.5 pr-3">700</td>
+                </tr>
+                <tr className="border-b border-border/60 align-top">
+                  <td className="py-2.5 pr-3">199</td>
+                  <td className="py-2.5 pr-3">200</td>
+                  <td className="py-2.5 pr-3">200</td>
+                </tr>
+                <tr className="border-b border-border/60 align-top">
+                  <td className="py-2.5 pr-3">503</td>
+                  <td className="py-2.5 pr-3">500</td>
+                  <td className="py-2.5 pr-3">500</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
+            Students write their answers on whiteboards before you reveal each row. The 650 row is the one
+            that sparks discussion: it&apos;s already a multiple of 10, and it sits exactly halfway between
+            600 and 700, so the usual round-half-up rule sends it to 700. Using a fresh spin each time means
+            nobody can memorize the answers from yesterday&apos;s worksheet.
+          </p>
+          <h3 className="text-xl font-bold tracking-tight text-foreground">Tips</h3>
+          <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted sm:text-base">
+            <li>
+              <span className="font-semibold text-foreground">Decide on No repeats before the first spin.</span>{" "}
+              Changing it mid-draw makes it hard to explain which numbers were still in play.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Remember both ends count.</span>{" "}
+              Min 1 and Max 10 is ten numbers.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Copy results</span>{" "}
+              at the end of a draw if you need a record of what came up.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Send the range</span>{" "}
+              with Copy share link. The link carries the range and settings, not any names.
+            </li>
+          </ul>
+        </section>
 
         <RelatedLinks toolId="random-number-wheel" />
 

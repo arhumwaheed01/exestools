@@ -138,6 +138,36 @@ const FAQ = [
     aPlain:
       "Add a two-way exclusion (Neither draws the other) for each pair who live together—partners, siblings, or housemates—so nobody buys for someone in their own household. In bigger families you may need several exclusions, one per pair.",
   },
+  {
+    q: "What if someone loses their Secret Santa link?",
+    a: "The organizer can resend it. Copy all links, Download and Print keep a full list of everyone's links, so keep that copy somewhere private.",
+    aPlain: "The organizer can resend it. Copy all links, Download and Print keep a full list of everyone's links, so keep that copy somewhere private.",
+  },
+  {
+    q: "Can I reuse last year's group?",
+    a: "Yes. Your list and settings are saved in this browser. Run a new draw and add one-way exclusions so nobody draws the same person as last year.",
+    aPlain: "Yes. Your list and settings are saved in this browser. Run a new draw and add one-way exclusions so nobody draws the same person as last year.",
+  },
+  {
+    q: "What should I put in the event note?",
+    a: "The things people forget: the exchange date, a shipping deadline for remote people, \"wrap and label it,\" and any theme or gift ideas.",
+    aPlain: "The things people forget: the exchange date, a shipping deadline for remote people, \"wrap and label it,\" and any theme or gift ideas.",
+  },
+  {
+    q: "Can two people organize the same Secret Santa?",
+    a: "Yes. Copy setup link sends the names and exclusions to a co-organizer without the results, so neither of you has to see the matches.",
+    aPlain: "Yes. Copy setup link sends the names and exclusions to a co-organizer without the results, so neither of you has to see the matches.",
+  },
+  {
+    q: "How many exclusions can I add?",
+    a: "As many as your group can handle. The more you add, the fewer valid draws remain, and the generator tells you if none are left.",
+    aPlain: "As many as your group can handle. The more you add, the fewer valid draws remain, and the generator tells you if none are left.",
+  },
+  {
+    q: "Does the draw work for an odd number of people?",
+    a: "Yes. Each person buys for one other person, so any group of three or more works, odd or even.",
+    aPlain: "Yes. Each person buys for one other person, so any group of three or more works, odd or even.",
+  },
 ];
 
 function FaqAnswer({ text }: { text: string }) {
@@ -221,7 +251,7 @@ export default function SecretSantaGeneratorPage() {
         <h1 className="mt-4 max-w-3xl text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
           Secret Santa generator with exclusions
         </h1>
-        <PageMeta updated="2026-10-13" />
+        <PageMeta updated="2026-10-20" />
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           Draw names online for Secret Santa—remotely or in the same room. Add everyone&apos;s name,
           mark any couples who shouldn&apos;t draw each other, and press Draw names. Each person gets
@@ -458,6 +488,112 @@ export default function SecretSantaGeneratorPage() {
               <span className="font-semibold text-foreground">Redraw with care.</span> Each link
               carries its own result, so links sent before a redraw still show the old matches. Every
               reveal shows a short draw code; after a redraw, ask everyone to check theirs matches.
+            </li>
+          </ul>
+        </section>
+
+        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            What the draw actually does
+          </h2>
+          <p className="mt-3">
+            When you press{" "}
+            <span className="font-semibold text-foreground">Draw names</span>
+            , the generator assigns each person exactly one other person to buy for. Nobody can draw
+            themselves, everyone gives one gift and receives one gift, and every exclusion you set is
+            respected. Before it starts, it checks that a valid draw exists. If your exclusions make one
+            impossible, it tells you which people are stuck.
+          </p>
+          <p className="mt-3">
+            Each person then gets a{" "}
+            <span className="font-semibold text-foreground">private link</span>{" "}
+            that shows only their own match, plus the budget, date and note you added. You send the links
+            yourself, by text, chat or your own email. Nobody needs an account or an email address, and your
+            list stays in your browser.
+          </p>
+        </section>
+        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            Exchanges it fits
+          </h2>
+          <ul className="mt-3 list-disc space-y-3 pl-5">
+            <li>
+              <span className="font-semibold text-foreground">Families that span households:</span>{" "}
+              exclusions keep partners and housemates from drawing each other, so gifts cross between homes.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Friend groups in different cities:</span>{" "}
+              everyone opens their link wherever they are, and the note holds the shipping deadline.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Clubs and teams:</span>{" "}
+              a member gift swap at the end-of-season dinner.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Classrooms:</span>{" "}
+              a class swap with a small budget, run by the teacher.
+            </li>
+          </ul>
+        </section>
+        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            Worked example: a family of nine
+          </h2>
+          <p className="mt-3">
+            Nine people: two couples, a parent, and four adult cousins, two of whom share an apartment.
+          </p>
+          <ol className="mt-3 list-decimal space-y-3 pl-5">
+            <li>
+              Add all nine names.
+            </li>
+            <li>
+              Add three two-way exclusions: one for each couple, and one for the two cousins who live
+              together.
+            </li>
+            <li>
+              Last year Priya had Dev. Add a one-way exclusion so Priya can&apos;t draw Dev again. Dev can
+              still draw Priya.
+            </li>
+            <li>
+              Event details: &quot;Family Secret Santa,&quot; budget &quot;$30–$40,&quot; date &quot;December
+              24,&quot; note &quot;Gifts under the tree by 6 p.m.&quot;
+            </li>
+            <li>
+              Press{" "}
+              <span className="font-semibold text-foreground">Draw names</span>
+              , then send each person their link privately.
+            </li>
+          </ol>
+          <p className="mt-3">
+            With nine people and four exclusions, there are still plenty of valid draws, so it works first
+            time. In a group of four with the same number of exclusions, it might not, and the page would
+            tell you who&apos;s stuck.
+          </p>
+        </section>
+        <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            Tips
+          </h2>
+          <ul className="mt-3 list-disc space-y-3 pl-5">
+            <li>
+              <span className="font-semibold text-foreground">Send links one by one.</span>{" "}
+              Never paste them all into a group chat.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Keep a private copy of all links</span>{" "}
+              in case someone loses theirs.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Use the note for the important rules:</span>{" "}
+              wrap and label, a shipping deadline, or &quot;no gift cards.&quot;
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Add exclusions sparingly.</span>{" "}
+              Each one removes options. Use them for couples and repeats, not mild preferences.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Need a co-organizer?</span>{" "}
+              Copy setup link sends the names and exclusions, but not the results.
             </li>
           </ul>
         </section>

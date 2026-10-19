@@ -30,7 +30,7 @@ export default function PrivacyPolicyPage() {
       <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
         Privacy Policy
       </h1>
-      <p className="mt-2 text-sm text-muted">Last updated: October 9, 2026</p>
+      <p className="mt-2 text-sm text-muted">Last updated: October 20, 2026</p>
       <div className="mt-6 space-y-5 text-sm leading-relaxed text-muted sm:text-base">
         <p>
           This Privacy Policy explains how ExesTools (https://www.exestools.com) handles information
@@ -147,94 +147,192 @@ export default function PrivacyPolicyPage() {
           <p className="mt-2">
             ExesTools is free to use. To pay for it, we show ads from Google AdSense on some pages.
           </p>
-          <ul className="mt-2 list-disc space-y-2 pl-5">
-            <li>
+          <p className="mt-2">
+            <strong className="text-foreground">
               Third-party vendors, including Google, use cookies to serve ads based on your prior
               visits to this website or other websites.
-            </li>
-            <li>
-              Google&apos;s use of advertising cookies enables it and its partners to serve ads to
-              you based on your visit to ExesTools and/or other sites on the Internet.
-            </li>
-            <li>
-              Ad serving may involve cookies, web beacons, IP addresses and other identifiers. Google
-              and its partners may place or read cookies on your browser, or use web beacons, to
-              collect information when ads are shown on this site.
-            </li>
-            <li>
-              You can opt out of personalized advertising in Google&apos;s{" "}
-              <a
-                href="https://adssettings.google.com"
-                className="font-semibold text-accent hover:underline"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                Ads Settings
-              </a>
-              . You can also opt out of some third-party vendors&apos; use of cookies for
-              personalized advertising at{" "}
-              <a
-                href="https://www.aboutads.info/choices/"
-                className="font-semibold text-accent hover:underline"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                www.aboutads.info
-              </a>{" "}
-              or, if you are in Europe, at{" "}
-              <a
-                href="https://www.youronlinechoices.eu/"
-                className="font-semibold text-accent hover:underline"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                www.youronlinechoices.eu
-              </a>
-              .
-            </li>
-            <li>
-              Other ad technology providers may also serve ads through Google on this site. For
-              visitors in the EEA, the UK and Switzerland they are listed, with links to their own
-              privacy policies, in our consent message. Where a provider offers it, you can opt out
-              of its cookies for personalized advertising on its website or at www.aboutads.info.
-            </li>
-            <li>
-              To learn how Google uses information from sites that use its services, see{" "}
-              <a
-                href="https://policies.google.com/technologies/partner-sites"
-                className="font-semibold text-accent hover:underline"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                How Google uses information from sites or apps that use our services
-              </a>
-              .
-            </li>
+            </strong>{" "}
+            Google&apos;s use of advertising cookies enables it and its partners to serve ads to you
+            based on your visit to ExesTools and/or other sites on the internet.
+          </p>
+          <p className="mt-2">
+            When an ad is shown, Google and its partners may place or read cookies in your browser,
+            or use web beacons, IP addresses and similar identifiers, to:
+          </p>
+          <ul className="mt-2 list-disc space-y-1 pl-5">
+            <li>choose which ad to show you;</li>
+            <li>limit how many times you see the same ad;</li>
+            <li>measure whether ads were seen or clicked, and report on that in aggregate;</li>
+            <li>detect and prevent fraud and abuse.</li>
           </ul>
+          <p className="mt-2">
+            Other ad technology providers may also serve ads on ExesTools through Google. For
+            visitors in the EEA, the UK and Switzerland, these providers are listed, with links to
+            their privacy policies, in our consent message.
+          </p>
+          <p className="mt-2">
+            To learn more about how Google uses information from sites like this one, see{" "}
+            <a
+              href="https://policies.google.com/technologies/partner-sites"
+              className="font-semibold text-accent hover:underline"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              How Google uses information from sites or apps that use our services
+            </a>
+            . Google&apos;s own{" "}
+            <a
+              href="https://policies.google.com/privacy"
+              className="font-semibold text-accent hover:underline"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Privacy Policy
+            </a>{" "}
+            and{" "}
+            <a
+              href="https://policies.google.com/technologies/ads"
+              className="font-semibold text-accent hover:underline"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Advertising page
+            </a>{" "}
+            explain its practices in more detail.
+          </p>
+          <h3 className="mt-4 text-base font-bold text-foreground">What we never share with advertisers</h3>
+          <p className="mt-2">
+            The names, options, prizes, notes and lists you type into ExesTools tools are never sent
+            to Google or any ad provider, and they&apos;re never used to choose ads. They stay in
+            your browser unless you send someone a share link yourself. We don&apos;t sell lists, and
+            we don&apos;t have accounts, email addresses or profiles to share.
+          </p>
         </section>
 
         <section>
-          <h2 className="text-lg font-bold text-foreground">
+          <h2 className="text-lg font-bold text-foreground">Personalized and non-personalized ads</h2>
+          <p className="mt-2">
+            <strong className="text-foreground">Personalized ads</strong> are chosen using
+            information such as your previous browsing on this and other sites, collected through
+            cookies and similar technologies.
+          </p>
+          <p className="mt-2">
+            <strong className="text-foreground">Non-personalized ads</strong> aren&apos;t based on
+            your past behavior. They&apos;re chosen using things like the page you&apos;re viewing
+            and your general location (for example, your city or region). Non-personalized ads still
+            use cookies or similar identifiers for frequency capping, aggregated ad reporting, and to
+            fight fraud and abuse.
+          </p>
+          <p className="mt-2">
+            If you don&apos;t consent to personalized ads where consent is required, or if no choice
+            has been recorded, Google may show non-personalized or limited ads instead.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-lg font-bold text-foreground">How to opt out of personalized advertising</h2>
+          <p className="mt-2">You can turn off or adjust personalized advertising at any time:</p>
+          <ul className="mt-2 list-disc space-y-2 pl-5">
+            <li>
+              <strong className="text-foreground">Google:</strong> visit{" "}
+              <a
+              href="https://myadcenter.google.com/"
+              className="font-semibold text-accent hover:underline"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              My Ad Center
+            </a>{" "}
+              (formerly Ads Settings,{" "}
+              <a
+              href="https://adssettings.google.com/"
+              className="font-semibold text-accent hover:underline"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              adssettings.google.com
+            </a>
+              ) to turn off personalized ads from Google.
+            </li>
+            <li>
+              <strong className="text-foreground">Many US-based ad companies:</strong> use the
+              Digital Advertising Alliance&apos;s tool at{" "}
+              <a
+              href="https://www.aboutads.info/choices/"
+              className="font-semibold text-accent hover:underline"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              www.aboutads.info/choices
+            </a>
+              , or the Network Advertising Initiative&apos;s tool at{" "}
+              <a
+              href="https://optout.networkadvertising.org/"
+              className="font-semibold text-accent hover:underline"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              optout.networkadvertising.org
+            </a>
+              .
+            </li>
+            <li>
+              <strong className="text-foreground">In Europe:</strong> use{" "}
+              <a
+              href="https://www.youronlinechoices.eu/"
+              className="font-semibold text-accent hover:underline"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              www.youronlinechoices.eu
+            </a>
+              .
+            </li>
+            <li>
+              <strong className="text-foreground">In your browser:</strong> you can block or delete
+              cookies in your browser settings. Blocking all cookies may also clear the lists
+              you&apos;ve saved in ExesTools tools, because those are stored in your browser too.
+            </li>
+          </ul>
+          <p className="mt-2">
+            Opting out doesn&apos;t stop ads from appearing. It means the ads you see are less likely
+            to be based on your interests.
+          </p>
+        </section>
+
+        <section>
+          <h2 id="consent-choices" className="text-lg font-bold text-foreground scroll-mt-24">
             Your consent choices (EEA, UK and Switzerland)
           </h2>
           <p className="mt-2">
-            If you visit from the European Economic Area, the United Kingdom or Switzerland, ads on
-            ExesTools use Google&apos;s consent management platform (Google&apos;s European
-            regulations message, a CMP certified under the IAB Transparency and Consent Framework).
-            When this message is shown, it asks for your consent before cookies or similar storage
-            are used for personalized ads. If you don&apos;t consent, or if no consent has been
-            collected, Google may show only non-personalized or limited ads. Until you make a choice,
-            our Google Consent Mode defaults deny advertising and analytics storage in these regions.
-            You can reset your choice at any time by clearing cookies for this site in your browser,
-            or email{" "}
-            <a
-              href={`mailto:${siteConfig.contactEmail}`}
-              className="font-semibold text-accent hover:underline"
-            >
-              {siteConfig.contactEmail}
-            </a>
-            .
+            If you visit from the European Economic Area, the United Kingdom or Switzerland,
+            ExesTools uses{" "}
+            <strong className="text-foreground">Google&apos;s consent management platform</strong>{" "}
+            (Google&apos;s European regulations message, which is registered with the IAB
+            Transparency and Consent Framework) to ask for your consent before cookies or similar
+            storage are used for personalized ads, ad measurement and analytics.
           </p>
+          <ul className="mt-2 list-disc space-y-2 pl-5">
+            <li>
+              <strong className="text-foreground">Until you make a choice,</strong> Google Consent
+              Mode defaults deny advertising and analytics storage in these regions.
+            </li>
+            <li>
+              <strong className="text-foreground">If you consent,</strong> Google and the listed
+              vendors may use cookies for the purposes you agreed to.
+            </li>
+            <li>
+              <strong className="text-foreground">If you don&apos;t consent,</strong> or only consent
+              to some purposes, Google may show non-personalized or limited ads.
+            </li>
+            <li>
+              <strong className="text-foreground">To change your choice later,</strong> use the{" "}
+              <strong className="text-foreground">Privacy and cookie settings</strong> link at the
+              bottom of every page. It reopens the consent message so you can update or withdraw
+              consent at any time. Clearing this site&apos;s cookies in your browser also resets your
+              choice.
+            </li>
+          </ul>
           <p className="mt-2">
             We do not use the names or options you type into the tools for advertising, and we do
             not send them to Google.
@@ -249,6 +347,64 @@ export default function PrivacyPolicyPage() {
             collect personal information from children. Names typed into a tool stay in your browser
             unless you choose to share a link. If you are a teacher, follow your school&apos;s policy
             on student data and consider using first names or initials.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-lg font-bold text-foreground">Your privacy rights</h2>
+          <p className="mt-2">
+            ExesTools holds very little information about you. Lists and draws stay in your browser,
+            and there are no accounts. The data that does exist is analytics data (Google Analytics
+            4) and advertising data handled by Google and its partners.
+          </p>
+          <p className="mt-2">
+            Depending on where you live, you may have the right to ask for access to personal
+            information about you, to ask for it to be corrected or deleted, to object to certain
+            uses, and to withdraw consent you gave earlier. To make a request about data ExesTools
+            controls, email{" "}
+            <a
+              href={`mailto:${siteConfig.contactEmail}?subject=Privacy`}
+              className="font-semibold text-accent hover:underline"
+            >
+              {siteConfig.contactEmail}
+            </a>{" "}
+            with &quot;Privacy&quot; in the subject line. We&apos;ll reply within 30 days. For data
+            Google holds, you can also use Google&apos;s own tools, such as{" "}
+            <a
+              href="https://myadcenter.google.com/"
+              className="font-semibold text-accent hover:underline"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              My Ad Center
+            </a>{" "}
+            and{" "}
+            <a
+              href="https://myaccount.google.com/data-and-privacy"
+              className="font-semibold text-accent hover:underline"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Google Account data controls
+            </a>
+            .
+          </p>
+          <p className="mt-2">
+            Event data in Google Analytics 4 is retained for 14 months. It is then deleted
+            automatically.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-lg font-bold text-foreground">Changes to this policy</h2>
+          <p className="mt-2">
+            When this policy changes, the &quot;Last updated&quot; date at the top of the page
+            changes too. Significant changes, such as a new advertising partner or a new kind of
+            data, will also be noted in the{" "}
+            <Link href="/about#changelog" className="font-semibold text-accent hover:underline">
+              About page changelog
+            </Link>
+            .
           </p>
         </section>
 
