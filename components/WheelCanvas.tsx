@@ -7,15 +7,37 @@ type Props = {
   choices: string[];
   rotation: number;
   className?: string;
-  /** Optional themed segment fills (falls back to WHEEL_COLORS). */
   colors?: readonly string[];
-  /** Label colours matching each segment. */
   labelColors?: readonly string[];
-  /** Index of winning slice to glow (optional). */
   highlightIndex?: number | null;
   title?: string;
 };
 
+function lighten(hex: string, amount: number): string {
+  const raw = hex.replace("#", "");
+  if (raw.length !== 6) return hex;
+  const n = parseInt(raw, 16);
+  const r = Math.min(255, ((n >> 16) & 255) + amount);
+  const g = Math.min(255, ((n >> 8) & 255) + amount);
+  const b = Math.min(255, (n & 255) + amount);
+  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, "0")}`;
+}
+
+function darken(hex: string, amount: number): string {
+  const raw = hex.replace("#", "");
+  if (raw.length !== 6) return hex;
+  const n = parseInt(raw, 16);
+  const r = Math.max(0, ((n >> 16) & 255) - amount);
+  const g = Math.max(0, ((n >> 8) & 255) - amount);
+  const b = Math.max(0, (n & 255) - amount);
+  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, "0")}`;
+}
+
+/**
+ * Segments painted once to an offscreen canvas; the visible canvas rotates that
+ * bitmap each frame (rAF + cubic ease-out in SpinnerWheel). Rim, bulbs, hub and
+ * pointer stay fixed.
+ */
 export function WheelCanvas({
   choices,
   rotation,
@@ -27,7 +49,12 @@ export function WheelCanvas({
 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
+  const offscreenRef = useRef<HTMLCanvasElement | null>(null);
+  const sizeRef = useRef({ css: 420, dpr: 1, radius: 190 });
+  const rotationRef = useRef(rotation);
+  rotationRef.current = rotation;
 
+  // Paint segments to offscreen when list / theme changes
   useEffect(() => {
     const canvas = canvasRef.current;
     const wrap = wrapRef.current;
@@ -36,131 +63,200 @@ export function WheelCanvas({
     const palette = colors?.length ? colors : WHEEL_COLORS;
     const labels = labelColors;
 
-    const draw = () => {
+    const paintOffscreen = () => {
       const dpr = Math.max(1, window.devicePixelRatio || 1);
       const css = Math.min(420, wrap.clientWidth || 420);
+      const rimPad = 18;
+      const radius = Math.min(css / 2, css / 2) - rimPad;
+      sizeRef.current = { css, dpr, radius };
+
       canvas.style.width = `${css}px`;
       canvas.style.height = `${css}px`;
       canvas.width = Math.round(css * dpr);
       canvas.height = Math.round(css * dpr);
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      const w = css;
-      const h = css;
-      const cx = w / 2;
-      const cy = h / 2;
-      const radius = Math.min(cx, cy) - 10;
+      if (!offscreenRef.current) offscreenRef.current = document.createElement("canvas");
+      const off = offscreenRef.current;
+      off.width = Math.round(css * dpr);
+      off.height = Math.round(css * dpr);
+      const octx = off.getContext("2d");
+      if (!octx) return;
+      octx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const cx = css / 2;
+      const cy = css / 2;
       const n = choices.length;
-
-      ctx.clearRect(0, 0, w, h);
-
-      ctx.beginPath();
-      ctx.arc(cx, cy, radius + 5, 0, Math.PI * 2);
-      ctx.fillStyle = "#0f172a";
-      ctx.fill();
+      octx.clearRect(0, 0, css, css);
 
       if (n === 0) {
-        ctx.beginPath();
-        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-        ctx.fillStyle = "#1c2430";
-        ctx.fill();
-        ctx.fillStyle = "#94a3b8";
-        ctx.font = "600 16px system-ui, sans-serif";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText("Add choices", cx, cy);
+        octx.beginPath();
+        octx.arc(cx, cy, radius, 0, Math.PI * 2);
+        octx.fillStyle = "#1c2430";
+        octx.fill();
+        octx.fillStyle = "#94a3b8";
+        octx.font = "600 16px system-ui, sans-serif";
+        octx.textAlign = "center";
+        octx.textBaseline = "middle";
+        octx.fillText("Add choices", cx, cy);
         return;
       }
 
       const slice = sliceAngle(n);
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate(rotation);
+      octx.save();
+      octx.translate(cx, cy);
 
       for (let i = 0; i < n; i++) {
         const start = i * slice - Math.PI / 2;
         const end = start + slice;
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.arc(0, 0, radius, start, end);
-        ctx.closePath();
-        ctx.fillStyle = palette[i % palette.length]!;
-        ctx.fill();
+        const base = palette[i % palette.length]!;
+        const mid = start + slice / 2;
+
+        octx.beginPath();
+        octx.moveTo(0, 0);
+        octx.arc(0, 0, radius, start, end);
+        octx.closePath();
+
+        const grad = octx.createRadialGradient(
+          Math.cos(mid) * radius * 0.25,
+          Math.sin(mid) * radius * 0.25,
+          radius * 0.05,
+          0,
+          0,
+          radius,
+        );
+        grad.addColorStop(0, lighten(base, 55));
+        grad.addColorStop(0.45, base);
+        grad.addColorStop(1, darken(base, 40));
+        octx.fillStyle = grad;
+        octx.fill();
+
         if (highlightIndex === i) {
-          ctx.strokeStyle = "#ffffff";
-          ctx.lineWidth = 5;
-          ctx.stroke();
-          ctx.shadowColor = palette[i % palette.length]!;
-          ctx.shadowBlur = 18;
-          ctx.stroke();
-          ctx.shadowBlur = 0;
+          octx.strokeStyle = "#ffffff";
+          octx.lineWidth = 5;
+          octx.shadowColor = base;
+          octx.shadowBlur = 18;
+          octx.stroke();
+          octx.shadowBlur = 0;
         } else {
-          ctx.strokeStyle = "rgba(255,255,255,0.55)";
-          ctx.lineWidth = 2;
-          ctx.stroke();
+          octx.strokeStyle = "rgba(255,255,255,0.35)";
+          octx.lineWidth = 1.5;
+          octx.stroke();
         }
 
-        // Label along the radius, upright on both halves, inset so hub/rim don't clip.
-        const mid = start + slice / 2;
-        const world = normalizeAngle(mid + rotation);
+        const world = normalizeAngle(mid);
         const flip = world > Math.PI / 2 && world < (Math.PI * 3) / 2;
         const labelR = radius * (n <= 6 ? 0.62 : 0.68);
-        // Chord width at label radius, with padding — keep text inside the wedge.
         const maxW = Math.max(28, 2 * labelR * Math.sin(slice / 2) * 0.78);
 
-        ctx.save();
-        ctx.rotate(mid);
-        if (flip) ctx.rotate(Math.PI);
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = labels?.[i % labels.length] ?? "#ffffff";
-        ctx.shadowColor = "rgba(0,0,0,0.35)";
-        ctx.shadowBlur = 2;
+        octx.save();
+        octx.rotate(mid);
+        if (flip) octx.rotate(Math.PI);
+        octx.textAlign = "center";
+        octx.textBaseline = "middle";
+        octx.fillStyle = labels?.[i % labels.length] ?? "#ffffff";
+        octx.shadowColor = "rgba(0,0,0,0.4)";
+        octx.shadowBlur = 3;
 
         let fontSize = Math.max(12, Math.min(20, radius / (n > 10 ? 8.5 : 6.5)));
         let text = choices[i]!.trim();
-        ctx.font = `700 ${fontSize}px system-ui, sans-serif`;
-        while (fontSize > 11 && ctx.measureText(text).width > maxW) {
+        octx.font = `700 ${fontSize}px system-ui, sans-serif`;
+        while (fontSize > 11 && octx.measureText(text).width > maxW) {
           fontSize -= 1;
-          ctx.font = `700 ${fontSize}px system-ui, sans-serif`;
+          octx.font = `700 ${fontSize}px system-ui, sans-serif`;
         }
-        if (ctx.measureText(text).width > maxW) {
-          // Ellipsis to fit the wedge
-          while (text.length > 1 && ctx.measureText(`${text}…`).width > maxW) {
+        if (octx.measureText(text).width > maxW) {
+          while (text.length > 1 && octx.measureText(`${text}…`).width > maxW) {
             text = text.slice(0, -1);
           }
           text = text.length < choices[i]!.trim().length ? `${text}…` : text;
         }
-        // Local +x points outward before flip; after flip it points inward.
-        // Centered at ±labelR keeps the string in the middle of the slice.
-        ctx.fillText(text, flip ? -labelR : labelR, 0);
-        ctx.restore();
+        octx.fillText(text, flip ? -labelR : labelR, 0);
+        octx.restore();
       }
-      ctx.restore();
-
-      // Hub with ET
-      const hubR = Math.max(22, radius * 0.12);
-      ctx.beginPath();
-      ctx.arc(cx, cy, hubR, 0, Math.PI * 2);
-      ctx.fillStyle = "#0b0f14";
-      ctx.fill();
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = "#e2e8f0";
-      ctx.stroke();
-      ctx.fillStyle = "#e2e8f0";
-      ctx.font = `800 ${Math.max(10, hubR * 0.7)}px system-ui, sans-serif`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText("ET", cx, cy + 1);
+      octx.restore();
     };
 
-    draw();
-    const ro = new ResizeObserver(() => draw());
+    paintOffscreen();
+    const ro = new ResizeObserver(() => paintOffscreen());
     ro.observe(wrap);
     return () => ro.disconnect();
-  }, [choices, rotation, colors, labelColors, highlightIndex]);
+  }, [choices, colors, labelColors, highlightIndex]);
+
+  // Blit rotated disk + fixed rim/hub on each rotation update
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const off = offscreenRef.current;
+    if (!canvas || !off) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const { css, dpr, radius } = sizeRef.current;
+    const cx = css / 2;
+    const cy = css / 2;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, css, css);
+
+    ctx.beginPath();
+    ctx.arc(cx, cy + 6, radius + 10, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(0,0,0,0.35)";
+    ctx.fill();
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(rotation);
+    ctx.drawImage(off, -cx, -cy, css, css);
+    ctx.restore();
+
+    const rimOuter = radius + 12;
+    const rimInner = radius + 2;
+    const rimGrad = ctx.createLinearGradient(cx - rimOuter, cy, cx + rimOuter, cy);
+    rimGrad.addColorStop(0, "#b45309");
+    rimGrad.addColorStop(0.35, "#fbbf24");
+    rimGrad.addColorStop(0.55, "#fde68a");
+    rimGrad.addColorStop(0.75, "#f59e0b");
+    rimGrad.addColorStop(1, "#92400e");
+    ctx.beginPath();
+    ctx.arc(cx, cy, rimOuter, 0, Math.PI * 2);
+    ctx.arc(cx, cy, rimInner, 0, Math.PI * 2, true);
+    ctx.fillStyle = rimGrad;
+    ctx.fill();
+
+    const bulbs = 24;
+    for (let i = 0; i < bulbs; i++) {
+      const a = (i / bulbs) * Math.PI * 2 - Math.PI / 2;
+      const bx = cx + Math.cos(a) * (radius + 7);
+      const by = cy + Math.sin(a) * (radius + 7);
+      const bulb = ctx.createRadialGradient(bx, by, 0, bx, by, 4.5);
+      bulb.addColorStop(0, "#fffbeb");
+      bulb.addColorStop(0.4, "#fde047");
+      bulb.addColorStop(1, "rgba(251,191,36,0)");
+      ctx.beginPath();
+      ctx.arc(bx, by, 4.5, 0, Math.PI * 2);
+      ctx.fillStyle = bulb;
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(bx, by, 2.2, 0, Math.PI * 2);
+      ctx.fillStyle = "#fef08a";
+      ctx.fill();
+    }
+
+    const hubR = Math.max(22, radius * 0.12);
+    const hubGrad = ctx.createRadialGradient(cx - 4, cy - 4, 2, cx, cy, hubR);
+    hubGrad.addColorStop(0, "#1e293b");
+    hubGrad.addColorStop(1, "#0b0f17");
+    ctx.beginPath();
+    ctx.arc(cx, cy, hubR, 0, Math.PI * 2);
+    ctx.fillStyle = hubGrad;
+    ctx.fill();
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = "#e2e8f0";
+    ctx.stroke();
+    ctx.fillStyle = "#e2e8f0";
+    ctx.font = `800 ${Math.max(10, hubR * 0.7)}px system-ui, sans-serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("ET", cx, cy + 1);
+  }, [rotation, choices, colors, labelColors, highlightIndex]);
 
   return (
     <div
@@ -174,21 +270,30 @@ export function WheelCanvas({
         </p>
       ) : null}
       <div
-        className="pointer-events-none absolute left-1/2 top-0 z-10 -translate-x-1/2"
+        className="pointer-events-none absolute left-1/2 top-[-6px] z-20 -translate-x-1/2"
         aria-hidden
       >
-        <div
-          className="relative h-0 w-0 border-l-[14px] border-r-[14px] border-t-[28px] border-l-transparent border-r-transparent border-t-white drop-shadow-md"
-          style={{ marginBottom: -6 }}
-        >
-          <span className="absolute left-1/2 top-[-6px] h-2.5 w-2.5 -translate-x-1/2 rounded-full bg-amber-400 shadow-[0_0_0_3px_#0b0f14]" />
-        </div>
+        <svg width="36" height="48" viewBox="0 0 36 48" className="drop-shadow-lg">
+          <defs>
+            <linearGradient id="et-ptr" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#e2e8f0" />
+              <stop offset="100%" stopColor="#94a3b8" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M18 46 C18 46 4 28 4 16 C4 7.7 10.3 2 18 2 C25.7 2 32 7.7 32 16 C32 28 18 46 18 46 Z"
+            fill="url(#et-ptr)"
+            stroke="#64748b"
+            strokeWidth="1.5"
+          />
+          <circle cx="18" cy="16" r="5" fill="#22d3ee" stroke="#0b0f17" strokeWidth="2" />
+        </svg>
       </div>
       <canvas
         ref={canvasRef}
         width={420}
         height={420}
-        className="relative z-[1] block h-full w-full drop-shadow-xl"
+        className="relative z-[1] block h-full w-full"
         role="img"
         aria-label={`Spinner wheel with ${choices.length} choices`}
       />

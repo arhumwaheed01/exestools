@@ -34,6 +34,8 @@ import {
   type SecretSantaState,
 } from "@/lib/secret-santa/storage";
 import { ToolConfetti } from "@/components/tools/Confetti";
+import { MoreMenu } from "@/components/tools/MoreMenu";
+import { ToolSkeleton } from "@/components/tools/ToolSkeleton";
 import { track } from "@/lib/track";
 import { useSound } from "@/lib/tools/sound";
 import { resolveToolTheme } from "@/lib/tools/theme";
@@ -43,6 +45,7 @@ import "@/app/styles/tools-themes.css";
 const TOOL_ID = "secret-santa-generator";
 const SITE_ORIGIN = "https://www.exestools.com";
 const SAMPLE_NAMES = ["Ava", "Noah", "Mia", "Liam", "Sophia"] as const;
+const CHIP_COLORS = ["#f9a8d4", "#93c5fd", "#fde047", "#5eead4", "#c4b5fd", "#fdba74"] as const;
 
 type ViewMode = "tool" | "reveal" | "reveal-bad";
 type ConfirmKind =
@@ -695,12 +698,7 @@ export function SecretSantaTool() {
   };
 
   if (!ready) {
-    return (
-      <div
-        className="min-h-[560px] animate-pulse rounded-3xl border border-border bg-surface p-5"
-        aria-hidden
-      />
-    );
+    return <ToolSkeleton variant="santa" />;
   }
 
   if (view === "reveal-bad") {
@@ -810,6 +808,40 @@ export function SecretSantaTool() {
 
   return (
     <div className="ss-tool min-w-0" data-tool-theme={festiveTheme}>
+      <div className="et-tool-hero-santa mb-4 flex flex-col gap-4 overflow-hidden rounded-3xl border border-border px-4 py-5 sm:flex-row sm:items-center sm:px-6">
+        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-3xl shadow-inner" aria-hidden>
+          🎁
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="inline-flex items-center gap-1.5 rounded-full bg-black/25 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-emerald-100">
+            Free · No sign-up
+          </p>
+          <p className="mt-2 text-xl font-extrabold text-white sm:text-2xl">
+            Secret Santa generator
+          </p>
+          <p className="mt-1 text-sm text-white/85">
+            Draw names, share private links, done in a minute.
+          </p>
+        </div>
+        <ol className="flex shrink-0 gap-2 text-xs font-bold text-white/95">
+          {[
+            ["1", "Add names"],
+            ["2", "Draw"],
+            ["3", "Share links"],
+          ].map(([n, label]) => (
+            <li
+              key={n}
+              className="flex items-center gap-1.5 rounded-full bg-black/25 px-2.5 py-1.5"
+            >
+              <span className="grid h-5 w-5 place-items-center rounded-full bg-accent-strong text-[11px] text-slate-950">
+                {n}
+              </span>
+              <span className="hidden sm:inline">{label}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+
       <div className="grid min-w-0 gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)]">
         <div className="min-w-0 space-y-4 rounded-3xl border border-border bg-surface p-3 sm:p-5">
           {/* Participants */}
@@ -819,7 +851,8 @@ export function SecretSantaTool() {
                 Who&apos;s taking part
               </h2>
               <p className="text-xs text-muted">
-                {participants.length} / {MAX_PARTICIPANTS} people
+                {participants.length}{" "}
+                {participants.length === 1 ? "participant" : "participants"}
               </p>
             </div>
 
@@ -846,17 +879,17 @@ export function SecretSantaTool() {
                           addPerson(nameInput);
                         }
                       }}
-                      className="w-full min-h-11 rounded-xl border border-border bg-background px-3 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                      placeholder="Name"
+                      className="w-full min-h-11 rounded-xl border border-accent/40 bg-background px-3 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                      placeholder="Type a name and press Enter…"
                     />
                   </div>
                   <button
                     type="button"
                     disabled={participants.length >= MAX_PARTICIPANTS}
                     onClick={() => addPerson(nameInput)}
-                    className="inline-flex min-h-11 items-center justify-center rounded-xl bg-accent-strong px-4 text-sm font-bold text-slate-950 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
+                    className="inline-flex min-h-11 items-center justify-center rounded-xl bg-accent-strong px-4 text-sm font-bold text-slate-950 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:bg-border disabled:text-muted disabled:opacity-100"
                   >
-                    Add
+                    + Add
                   </button>
                 </div>
                 <div className="mt-2 flex flex-wrap gap-3">
@@ -909,17 +942,16 @@ export function SecretSantaTool() {
               </button>
             )}
 
-            <ul className="mt-3 space-y-2">
+            <ul className="mt-3 flex flex-wrap gap-2">
               {participants.map((p, i) => {
                 const nextId = participants[i + 1]?.id ?? null;
                 const isDup = dupSet.has(i);
+                const chipColor = CHIP_COLORS[i % CHIP_COLORS.length]!;
                 return (
                   <li
                     key={p.id}
                     aria-invalid={isDup || undefined}
-                    className={`flex min-w-0 items-center gap-2 rounded-xl border px-2 py-1.5 ${
-                      isDup ? "border-red-500" : "border-border"
-                    }`}
+                    className={`ss-chip ${isDup ? "ring-2 ring-red-500" : ""}`}
                   >
                     {editingId === p.id && !locked ? (
                       <input
@@ -932,36 +964,41 @@ export function SecretSantaTool() {
                           if (e.key === "Enter") commitEdit(p.id);
                           if (e.key === "Escape") setEditingId(null);
                         }}
-                        className="min-h-11 min-w-0 flex-1 rounded-lg border border-border bg-background px-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                        className="min-h-9 w-28 rounded-lg border border-border bg-background px-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-accent"
                         autoFocus
                       />
                     ) : (
-                      <span className="min-w-0 flex-1 px-1 text-sm font-medium text-foreground [overflow-wrap:anywhere]">
-                        {p.name}
-                      </span>
-                    )}
-                    {!locked ? (
                       <>
+                        <span
+                          className="ss-chip-avatar"
+                          style={{ background: chipColor }}
+                          aria-hidden
+                        >
+                          {p.name.trim().charAt(0).toUpperCase() || "?"}
+                        </span>
                         <button
                           type="button"
                           onClick={() => {
+                            if (locked) return;
                             setEditingId(p.id);
                             setEditDraft(p.name);
                           }}
-                          className="inline-flex min-h-11 shrink-0 items-center px-2 text-xs font-semibold text-accent outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                          className="min-w-0 max-w-[10rem] truncate text-left text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent"
                         >
-                          Edit
-                        </button>
-                        <button
-                          type="button"
-                          data-remove-id={p.id}
-                          aria-label={`Remove ${p.name}`}
-                          onClick={() => removePerson(p.id, nextId)}
-                          className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-muted outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
-                        >
-                          ✕
+                          {p.name}
                         </button>
                       </>
+                    )}
+                    {!locked ? (
+                      <button
+                        type="button"
+                        data-remove-id={p.id}
+                        aria-label={`Remove ${p.name}`}
+                        onClick={() => removePerson(p.id, nextId)}
+                        className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
+                      >
+                        ✕
+                      </button>
                     ) : null}
                   </li>
                 );
@@ -1201,19 +1238,27 @@ export function SecretSantaTool() {
           ) : null}
 
           <div className="sticky bottom-0 z-30 -mx-1 border-t border-border bg-surface/95 px-1 py-2 backdrop-blur supports-[padding:max(0px)]:pb-[max(0.5rem,env(safe-area-inset-bottom))] sm:static sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none sm:supports-[padding:max(0px)]:pb-0">
+            <p className="mb-2 flex items-center gap-2 text-xs text-muted">
+              <span aria-hidden>🔒</span>
+              Each person only sees their own match.
+            </p>
             <button
               type="button"
               disabled={Boolean(drawDisabledReason) || drawing || locked}
               aria-describedby={drawDisabledReason ? "ss-draw-hint" : undefined}
               onClick={() => runDraw(false)}
-              className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-accent-strong px-4 text-sm font-bold text-slate-950 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
+              className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-accent-strong px-4 text-sm font-bold text-slate-950 shadow-[0_0_24px_rgba(34,211,238,0.3)] outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:bg-border disabled:text-muted disabled:shadow-none disabled:opacity-100"
             >
-              {drawing ? "Drawing…" : "Draw names"}
+              {drawing ? "Drawing…" : "🎁 Draw names"}
             </button>
           </div>
           {drawDisabledReason ? (
             <p id="ss-draw-hint" className="text-xs text-muted">
               {drawDisabledReason}
+            </p>
+          ) : participants.length >= MIN_PARTICIPANTS ? (
+            <p className="text-xs text-muted">
+              {participants.length} names added. You&apos;re good to go.
             </p>
           ) : null}
 
@@ -1236,27 +1281,48 @@ export function SecretSantaTool() {
         >
           {draw ? (
             <>
-              <h2
-                ref={linksHeadingRef}
-                tabIndex={-1}
-                className="text-lg font-bold text-foreground outline-none"
-              >
-                Links are ready — draw {draw.code}
-              </h2>
-              <p className="mt-2 text-sm text-muted">
-                Send each link only to the person named. Links are scrambled, not encrypted, so
-                anyone who has a link can open it.
-              </p>
-              <ul className="mt-4 space-y-2">
-                {participants.map((p) => {
+              <div className="et-tool-hero-santa -mx-1 mb-4 overflow-hidden rounded-2xl px-4 py-5 sm:mx-0">
+                <p className="inline-flex items-center gap-1.5 rounded-full bg-emerald-900/50 px-2.5 py-1 text-[11px] font-bold text-emerald-100">
+                  ✓ Names drawn · {participants.length} participants
+                </p>
+                <h2
+                  ref={linksHeadingRef}
+                  tabIndex={-1}
+                  className="mt-2 text-2xl font-extrabold text-white outline-none"
+                >
+                  Links are ready 🎁
+                </h2>
+                <p className="mt-1 text-sm text-white/85">
+                  Send each person their own private link. Nobody else can see who they got.
+                </p>
+                <p className="mt-2 text-xs text-white/70">Draw {draw.code}</p>
+              </div>
+              <p className="text-xs font-bold uppercase tracking-wide text-muted">Private links</p>
+              <ul className="mt-3 space-y-2">
+                {participants.map((p, i) => {
                   const url = personLinks.get(p.id) ?? "";
+                  const chipColor = CHIP_COLORS[i % CHIP_COLORS.length]!;
                   return (
                     <li
                       key={p.id}
                       className="flex min-w-0 flex-wrap items-center gap-2 rounded-xl border border-border px-3 py-2"
                     >
+                      <span
+                        className="ss-chip-avatar shrink-0"
+                        style={{ background: chipColor }}
+                        aria-hidden
+                      >
+                        {p.name.trim().charAt(0).toUpperCase() || "?"}
+                      </span>
                       <span className="min-w-0 flex-1 text-sm font-semibold text-foreground [overflow-wrap:anywhere]">
                         {p.name}
+                      </span>
+                      <span
+                        className={`text-xs font-semibold ${
+                          copiedId === p.id ? "text-emerald-400" : "text-muted"
+                        }`}
+                      >
+                        {copiedId === p.id ? "✓ Copied" : "Not sent"}
                       </span>
                       <button
                         type="button"
@@ -1265,7 +1331,7 @@ export function SecretSantaTool() {
                         }
                         className="inline-flex min-h-11 items-center rounded-lg border border-border px-3 text-xs font-bold outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent print:hidden"
                       >
-                        {copiedId === p.id ? "Copied ✓" : "Copy link"}
+                        Copy
                       </button>
                       {canShare ? (
                         <button
@@ -1284,49 +1350,39 @@ export function SecretSantaTool() {
                 })}
               </ul>
 
-              <div className="mt-4 flex flex-wrap gap-2 print:hidden">
-                <button
-                  type="button"
-                  onClick={copyAllLinks}
-                  className="inline-flex min-h-11 items-center rounded-xl border border-border px-3 text-xs font-bold outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
-                >
-                  Copy all links
-                </button>
-                <button
-                  type="button"
-                  onClick={downloadLinks}
-                  className="inline-flex min-h-11 items-center rounded-xl border border-border px-3 text-xs font-bold outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
-                >
-                  Download (.txt)
-                </button>
-                <button
-                  type="button"
-                  onClick={printLinks}
-                  className="inline-flex min-h-11 items-center rounded-xl border border-border px-3 text-xs font-bold outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
-                >
-                  Print links
-                </button>
-                <button
-                  type="button"
-                  onClick={copySetup}
-                  className="inline-flex min-h-11 items-center rounded-xl border border-border px-3 text-xs font-bold outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
-                >
-                  Copy setup link
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setConfirm("redraw")}
-                  className="inline-flex min-h-11 items-center rounded-xl border border-border px-3 text-xs font-bold outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
-                >
-                  Redraw
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setConfirm("reset")}
-                  className="inline-flex min-h-11 items-center rounded-xl border border-border px-3 text-xs font-bold outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
-                >
-                  Reset
-                </button>
+              <div className="mt-4 flex flex-wrap items-center justify-between gap-3 print:hidden">
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={copyAllLinks}
+                    className="inline-flex min-h-11 items-center rounded-xl bg-accent-strong px-4 text-sm font-bold text-slate-950 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent"
+                  >
+                    Copy all links
+                  </button>
+                  <MoreMenu
+                    items={[
+                      { label: "Download (.txt)", onClick: downloadLinks },
+                      { label: "Print links", onClick: printLinks },
+                      { label: "Copy setup link", onClick: copySetup },
+                    ]}
+                  />
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setConfirm("redraw")}
+                    className="inline-flex min-h-11 items-center rounded-xl border border-red-500/70 px-3 text-xs font-bold text-red-300 outline-none hover:bg-red-950/40 focus-visible:ring-2 focus-visible:ring-red-400"
+                  >
+                    Redraw
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfirm("reset")}
+                    className="inline-flex min-h-11 items-center rounded-xl border border-red-500/70 px-3 text-xs font-bold text-red-300 outline-none hover:bg-red-950/40 focus-visible:ring-2 focus-visible:ring-red-400"
+                  >
+                    Reset
+                  </button>
+                </div>
               </div>
 
               <div className="mt-5 flex min-w-0 items-start justify-between gap-3 rounded-2xl border border-border p-3 print:hidden">

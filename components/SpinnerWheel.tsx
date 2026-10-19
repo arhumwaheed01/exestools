@@ -9,7 +9,7 @@ import {
   type CSSProperties,
 } from "react";
 import Link from "next/link";
-import { Link2, Share2 } from "lucide-react";
+import { Link2, Share2, Volume2, VolumeX } from "lucide-react";
 import { useReducedMotion } from "framer-motion";
 import { StaticWheelPreview } from "@/components/StaticWheelPreview";
 import { ChoicesEditor } from "@/components/ChoicesEditor";
@@ -21,6 +21,7 @@ import { HistoryRow } from "@/components/tools/HistoryRow";
 import { ResultReveal } from "@/components/tools/ResultReveal";
 import { ThemeChips } from "@/components/tools/ThemeChips";
 import { ToolConfetti } from "@/components/tools/Confetti";
+import { WinnerModal } from "@/components/WinnerModal";
 import { YesNoTally } from "@/components/tools/YesNoTally";
 import { EmbedSnippet } from "@/components/embed/EmbedSnippet";
 import { encodeShareHash, readShareFromLocation } from "@/lib/share-codec";
@@ -161,6 +162,7 @@ export function SpinnerWheel({
   const allowSaveRef = useRef(true);
   const stageRef = useRef<HTMLDivElement>(null);
   const stickySpinRef = useRef<HTMLButtonElement>(null);
+  const entryCountAtReveal = useRef(0);
 
   const resolvedTheme = resolveToolTheme(themeChoice, toolId);
   const themeColors = useMemo(
@@ -269,6 +271,7 @@ export function SpinnerWheel({
       const name = choices[idx] ?? null;
       setWinner(name);
       setWinnerIndex(idx);
+      entryCountAtReveal.current = choices.length;
       setRevealOpen(Boolean(name));
       setSpinning(false);
       if (toolId === "prize-wheel") {
@@ -527,7 +530,24 @@ export function SpinnerWheel({
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:items-start lg:gap-6">
         <div className="flex min-w-0 flex-col gap-0">
-          <div className="rounded-3xl border border-border bg-surface p-3 sm:p-5" ref={stageRef}>
+          <div className="relative rounded-3xl border border-border bg-surface p-3 sm:p-5" ref={stageRef}>
+            <button
+              type="button"
+              onClick={() => {
+                sound.unlock();
+                sound.setEnabled(!sound.enabled);
+              }}
+              className="absolute right-3 top-3 z-30 inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-surface-2 text-accent outline-none hover:bg-border focus-visible:ring-2 focus-visible:ring-accent"
+              aria-pressed={sound.enabled}
+              aria-label={sound.enabled ? "Mute spin sound" : "Enable spin sound"}
+              title={sound.enabled ? "Mute spin sound" : "Enable spin sound"}
+            >
+              {sound.enabled ? (
+                <Volume2 className="h-4 w-4" aria-hidden />
+              ) : (
+                <VolumeX className="h-4 w-4" aria-hidden />
+              )}
+            </button>
             {wheelTitle ? (
               <p className="mb-2 text-center text-sm font-bold text-muted">{wheelTitle}</p>
             ) : null}
@@ -554,37 +574,27 @@ export function SpinnerWheel({
                 />
               </div>
             </div>
-            <ResultReveal
-              open={revealOpen}
-              value={winner}
-              label={
-                toolId === "prize-wheel"
-                  ? "Prize"
-                  : toolId === "yes-no-wheel"
-                    ? "Result"
-                    : "Winner"
-              }
-              variant={
-                toolId === "prize-wheel"
-                  ? "prize"
-                  : toolId === "yes-no-wheel"
-                    ? "yesno"
-                    : "default"
-              }
-              showRemove={!autoRemove && toolId !== "yes-no-wheel"}
-              onSpinAgain={() => {
-                setRevealOpen(false);
-                setShowNextSteps(false);
-                spin();
-              }}
-              onRemove={onRemoveWinner}
-              onShare={() => void onShare()}
-              onClose={() => {
-                setRevealOpen(false);
-                setShowNextSteps(true);
-              }}
-              spinBtnRef={stickySpinRef}
-            />
+            {toolId === "prize-wheel" || toolId === "yes-no-wheel" ? (
+              <ResultReveal
+                open={revealOpen}
+                value={winner}
+                label={toolId === "prize-wheel" ? "Prize" : "Result"}
+                variant={toolId === "prize-wheel" ? "prize" : "yesno"}
+                showRemove={!autoRemove && toolId !== "yes-no-wheel"}
+                onSpinAgain={() => {
+                  setRevealOpen(false);
+                  setShowNextSteps(false);
+                  spin();
+                }}
+                onRemove={onRemoveWinner}
+                onShare={() => void onShare()}
+                onClose={() => {
+                  setRevealOpen(false);
+                  setShowNextSteps(true);
+                }}
+                spinBtnRef={stickySpinRef}
+              />
+            ) : null}
             <HistoryRow
               items={history}
               onClear={() => setHistory([])}
@@ -735,7 +745,26 @@ export function SpinnerWheel({
         </p>
       ) : null}
 
-      <ToolConfetti fire={confettiFire} colors={[...themeColors]} />
+      {toolId !== "prize-wheel" && toolId !== "yes-no-wheel" ? (
+        <WinnerModal
+          open={revealOpen}
+          winner={winner}
+          entryCount={entryCountAtReveal.current || choices.length}
+          showRemoveContinue={!autoRemove}
+          onClose={() => {
+            setRevealOpen(false);
+            setShowNextSteps(true);
+          }}
+          onSpinAgain={() => {
+            setRevealOpen(false);
+            setShowNextSteps(false);
+            spin();
+          }}
+          onRemoveWinner={onRemoveWinner}
+        />
+      ) : (
+        <ToolConfetti fire={confettiFire} colors={[...themeColors]} />
+      )}
     </div>
   );
 }

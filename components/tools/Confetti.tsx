@@ -1,95 +1,89 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
-/** Short center-burst confetti — clears itself; no-op when prefers-reduced-motion. */
+type ConfettiOptions = {
+  particleCount?: number;
+  angle?: number;
+  spread?: number;
+  startVelocity?: number;
+  origin?: { x?: number; y?: number };
+  colors?: string[];
+  disableForReducedMotion?: boolean;
+  zIndex?: number;
+};
+
+type ConfettiFn = (options?: ConfettiOptions) => Promise<null> | null;
+
+let confettiPromise: Promise<ConfettiFn> | null = null;
+
+function loadConfetti(): Promise<ConfettiFn> {
+  if (!confettiPromise) {
+    confettiPromise = import("canvas-confetti").then((m) => {
+      const mod = m as unknown as { default?: ConfettiFn } & ConfettiFn;
+      return (typeof mod.default === "function" ? mod.default : mod) as ConfettiFn;
+    });
+  }
+  return confettiPromise;
+}
+
+/** Dual side-bursts (then a smaller follow-up at 300ms). No-op when prefers-reduced-motion. */
+export function fireCelebrationConfetti(colors?: string[]) {
+  if (typeof window === "undefined") return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const palette = colors?.length
+    ? colors
+    : ["#22d3ee", "#f472b6", "#fbbf24", "#a78bfa", "#34d399", "#fb923c"];
+
+  void loadConfetti().then((confetti) => {
+    const common: ConfettiOptions = {
+      colors: palette,
+      disableForReducedMotion: true,
+      zIndex: 60,
+    };
+
+    confetti({
+      ...common,
+      particleCount: 55,
+      spread: 62,
+      startVelocity: 38,
+      origin: { x: 0.12, y: 0.55 },
+      angle: 60,
+    });
+    confetti({
+      ...common,
+      particleCount: 55,
+      spread: 62,
+      startVelocity: 38,
+      origin: { x: 0.88, y: 0.55 },
+      angle: 120,
+    });
+
+    window.setTimeout(() => {
+      confetti({
+        ...common,
+        particleCount: 28,
+        spread: 70,
+        startVelocity: 28,
+        origin: { x: 0.5, y: 0.42 },
+      });
+    }, 300);
+  });
+}
+
+/** Fires celebration confetti when `fire` increments. */
 export function ToolConfetti({
   fire,
-  colors = ["#06b6d4", "#22c55e", "#f59e0b", "#ef4444", "#a855f7"],
+  colors,
 }: {
   fire: number;
   colors?: string[];
 }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
   useEffect(() => {
     if (!fire) return;
-    if (typeof window === "undefined") return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-    canvas.width = Math.floor(w * dpr);
-    canvas.height = Math.floor(h * dpr);
-    canvas.style.width = `${w}px`;
-    canvas.style.height = `${h}px`;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    const cx = w * 0.5;
-    const cy = h * 0.38;
-    const parts = Array.from({ length: 48 }, () => {
-      const angle = Math.random() * Math.PI * 2;
-      const speed = 3 + Math.random() * 7;
-      return {
-        x: cx + (Math.random() - 0.5) * 40,
-        y: cy + (Math.random() - 0.5) * 24,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed - 4,
-        w: 3 + Math.random() * 3.5,
-        h: 4 + Math.random() * 6,
-        color: colors[Math.floor(Math.random() * colors.length)]!,
-        rot: Math.random() * Math.PI,
-        vr: (Math.random() - 0.5) * 0.25,
-      };
-    });
-
-    const duration = 900;
-    const start = performance.now();
-    let raf = 0;
-    const tick = (now: number) => {
-      const t = Math.min(1, (now - start) / duration);
-      ctx.clearRect(0, 0, w, h);
-      // Fade out in the last third
-      ctx.globalAlpha = t < 0.65 ? 1 : 1 - (t - 0.65) / 0.35;
-      for (const p of parts) {
-        p.vy += 0.22;
-        p.vx *= 0.99;
-        p.x += p.vx;
-        p.y += p.vy;
-        p.rot += p.vr;
-        ctx.save();
-        ctx.translate(p.x, p.y);
-        ctx.rotate(p.rot);
-        ctx.fillStyle = p.color;
-        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
-        ctx.restore();
-      }
-      ctx.globalAlpha = 1;
-      if (t < 1) {
-        raf = requestAnimationFrame(tick);
-      } else {
-        ctx.clearRect(0, 0, w, h);
-      }
-    };
-    raf = requestAnimationFrame(tick);
-    return () => {
-      cancelAnimationFrame(raf);
-      ctx.clearRect(0, 0, w, h);
-    };
+    fireCelebrationConfetti(colors);
   }, [fire, colors]);
 
-  if (!fire) return null;
-  return (
-    <canvas
-      ref={canvasRef}
-      aria-hidden
-      className="pointer-events-none fixed inset-0 z-[45]"
-    />
-  );
+  return null;
 }

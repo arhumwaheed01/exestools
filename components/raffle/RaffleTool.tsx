@@ -42,7 +42,9 @@ import {
   type RaffleState,
 } from "@/lib/raffle/storage";
 import { ToolConfetti } from "@/components/tools/Confetti";
+import { MoreMenu } from "@/components/tools/MoreMenu";
 import { ThemeChips } from "@/components/tools/ThemeChips";
+import { ToolSkeleton } from "@/components/tools/ToolSkeleton";
 import { track } from "@/lib/track";
 import { useSound } from "@/lib/tools/sound";
 import {
@@ -938,12 +940,7 @@ export function RaffleTool() {
   }, [drawComplete, listMismatch, alternates, holders, picks, allowRepeatWinners]);
 
   if (!ready) {
-    return (
-      <div
-        className="min-h-[620px] animate-pulse rounded-3xl border border-border bg-surface p-5"
-        aria-hidden
-      />
-    );
+    return <ToolSkeleton variant="raffle" />;
   }
 
   const fpDisplay = fpUnavailable
@@ -963,6 +960,21 @@ export function RaffleTool() {
 
   return (
     <div className="raffle-tool min-w-0" data-tool-theme={resolvedTheme}>
+      <div className="et-tool-hero-raffle mb-4 flex items-center gap-4 overflow-hidden rounded-3xl border border-border px-4 py-5 sm:px-6">
+        <div
+          className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-orange-500/90 text-2xl shadow-lg"
+          aria-hidden
+        >
+          🎟️
+        </div>
+        <div className="min-w-0">
+          <p className="text-xl font-extrabold text-white sm:text-2xl">Raffle generator</p>
+          <p className="mt-1 text-sm text-white/85">
+            Paste entries, draw a winner. Fair, instant, free.
+          </p>
+        </div>
+      </div>
+
       {shared?.kind === "invalid" ? (
         <div className="mb-4 rounded-3xl border border-border bg-surface p-5 sm:p-6">
           <p className="text-base text-foreground">
@@ -1289,12 +1301,22 @@ export function RaffleTool() {
             </p>
           </section>
 
-          {/* Draw settings */}
-          <section aria-labelledby="rf-settings">
-            <h2 id="rf-settings" className="text-lg font-bold text-foreground">
+          {/* Draw settings — advanced controls behind More options */}
+          <details className="rounded-2xl border border-border p-3" open={!drawComplete}>
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-2 outline-none focus-visible:ring-2 focus-visible:ring-accent [&::-webkit-details-marker]:hidden">
+              <span className="text-sm font-bold text-foreground">
+                More options{" "}
+                <span className="font-normal text-muted">· Themes, prizes, alternates</span>
+              </span>
+              <span className="text-xs text-muted" aria-hidden>
+                ▾
+              </span>
+            </summary>
+          <section aria-labelledby="rf-settings" className="mt-3">
+            <h2 id="rf-settings" className="sr-only">
               Draw settings
             </h2>
-            <div className="mt-3 space-y-3">
+            <div className="space-y-3">
               <div>
                 <label htmlFor="rf-title" className="text-xs text-muted">
                   Raffle name (optional)
@@ -1406,8 +1428,20 @@ export function RaffleTool() {
                   </label>
                 </div>
               </fieldset>
+
+              <div className="print:hidden">
+                <p className="mb-2 text-xs font-bold uppercase tracking-wide text-muted">Theme</p>
+                <ThemeChips
+                  value={themeChoice}
+                  onChange={(next) => {
+                    setThemeChoice(next);
+                    saveToolTheme(TOOL_ID, next);
+                  }}
+                />
+              </div>
             </div>
           </section>
+          </details>
 
           {shuffling ? (
             <div
@@ -1427,17 +1461,6 @@ export function RaffleTool() {
             </p>
           ) : null}
 
-          <div className="print:hidden">
-            <p className="mb-2 text-xs font-bold uppercase tracking-wide text-muted">Theme</p>
-            <ThemeChips
-              value={themeChoice}
-              onChange={(next) => {
-                setThemeChoice(next);
-                saveToolTheme(TOOL_ID, next);
-              }}
-            />
-          </div>
-
           {drawComplete ? (
             <p className="text-sm font-semibold text-muted">Draw complete.</p>
           ) : (
@@ -1453,9 +1476,11 @@ export function RaffleTool() {
                 }
                 aria-describedby={drawDisabledReason ? "rf-draw-hint" : undefined}
                 onClick={runDraw}
-                className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-accent-strong px-4 text-sm font-bold text-slate-950 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
+                className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-accent-strong px-4 text-sm font-bold text-slate-950 shadow-[0_0_24px_rgba(34,211,238,0.3)] outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
               >
-                {drawing ? "Drawing…" : drawButtonLabel(reveal, winners, alternates, picks, prizes)}
+                {drawing
+                  ? "Drawing…"
+                  : `🎟️ ${drawButtonLabel(reveal, winners, alternates, picks, prizes)}`}
               </button>
             </div>
           )}
@@ -1464,6 +1489,9 @@ export function RaffleTool() {
               {drawDisabledReason}
             </p>
           ) : null}
+          <p className="text-xs text-muted">
+            Winners are picked in your browser using a secure random generator.
+          </p>
         </div>
 
         {/* Results — Draw stays at top of this sticky column on desktop */}
@@ -1478,9 +1506,11 @@ export function RaffleTool() {
                 (locked && reveal === "all")
               }
               onClick={runDraw}
-              className="mb-4 hidden min-h-12 w-full items-center justify-center rounded-xl bg-accent-strong px-4 text-sm font-bold text-slate-950 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50 lg:inline-flex"
+              className="mb-4 hidden min-h-12 w-full items-center justify-center rounded-xl bg-accent-strong px-4 text-sm font-bold text-slate-950 shadow-[0_0_24px_rgba(34,211,238,0.3)] outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50 lg:inline-flex"
             >
-              {drawing ? "Drawing…" : drawButtonLabel(reveal, winners, alternates, picks, prizes)}
+              {drawing
+                ? "Drawing…"
+                : `🎟️ ${drawButtonLabel(reveal, winners, alternates, picks, prizes)}`}
             </button>
           ) : (
             <p className="mb-3 hidden text-sm font-semibold text-muted lg:block">Draw complete.</p>
@@ -1499,21 +1529,39 @@ export function RaffleTool() {
           />
 
           {picks.length > 0 && activeRecord ? (
-            <div className="mt-4 flex flex-wrap gap-2">
-              <ActionBtn label="Copy record" onClick={copyRecord} />
-              <ActionBtn label="Download .txt" onClick={downloadTxt} />
-              <ActionBtn label="Download .csv" onClick={downloadCsv} />
-              <ActionBtn label="Print" onClick={printRecord} />
-              {showResultLink ? (
-                <ActionBtn label="Copy result link" onClick={copyResultLink} />
-              ) : null}
-              <ActionBtn
-                ref={extraAltButtonRef}
-                label="Draw another alternate"
-                onClick={runExtraAlternate}
-                disabled={!extraAlternateOk}
+            <div className="mt-4 flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setConfirm("new-draw")}
+                className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-accent-strong px-4 text-sm font-bold text-slate-950 shadow-[0_0_20px_rgba(34,211,238,0.28)] outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent"
+              >
+                Draw again
+              </button>
+              <MoreMenu
+                items={[
+                  { label: "Copy record", onClick: copyRecord },
+                  { label: "Download .txt", onClick: downloadTxt },
+                  { label: "Download .csv", onClick: downloadCsv },
+                  { label: "Print", onClick: printRecord },
+                  ...(showResultLink
+                    ? [{ label: "Copy result link", onClick: copyResultLink }]
+                    : []),
+                  {
+                    label: "Draw another alternate",
+                    onClick: runExtraAlternate,
+                    disabled: !extraAlternateOk,
+                  },
+                ]}
               />
-              <ActionBtn label="New draw" onClick={() => setConfirm("new-draw")} />
+              <button
+                ref={extraAltButtonRef}
+                type="button"
+                className="sr-only"
+                tabIndex={-1}
+                aria-hidden
+              >
+                Draw another alternate
+              </button>
             </div>
           ) : null}
         </div>
@@ -1616,7 +1664,7 @@ function rulesLine(r: DrawRecord): string {
 }
 
 const TRANSPARENCY_NOTICE =
-  "This record is for transparency only. It isn't a certified, audited or legally compliant draw. Raffle and lottery laws vary by place; you're responsible for following the rules where you run your raffle.";
+  "Results are random and for fun; the organizer is responsible for awarding any prizes. This record is for transparency only — it isn't a certified or legally compliant draw.";
 
 function ResultsPanel({
   heading,
@@ -1642,7 +1690,7 @@ function ResultsPanel({
   hasPicks: boolean;
 }) {
   const notice = (
-    <p className="mt-4 text-sm text-muted">{TRANSPARENCY_NOTICE}</p>
+    <p className="mt-4 text-xs leading-relaxed text-muted">{TRANSPARENCY_NOTICE}</p>
   );
 
   if (!hasPicks) {
@@ -1660,9 +1708,12 @@ function ResultsPanel({
 
   const winnerPicks = picks.filter((p) => p.kind === "winner");
   const altPicks = picks.filter((p) => p.kind === "alternate");
+  const first = winnerPicks[0];
+  const firstEnt = first ? displayEntrants[first.entrant] : null;
+  const showHero = Boolean(first && winners === 1 && winnerPicks.length === 1);
 
   return (
-    <div>
+    <div className="relative overflow-hidden">
       <h2
         ref={headingRef}
         tabIndex={-1}
@@ -1676,38 +1727,68 @@ function ResultsPanel({
         </p>
       ) : null}
 
-      <ol className="mt-4 space-y-3">
-        {winnerPicks.map((p, i) => {
-          const ent = displayEntrants[p.entrant];
-          const pl = prizeLabel(p.position, prizes);
-          const anim = revealAnim.includes(picks.indexOf(p));
-          const ticketNo = mode === "list" ? p.ticket : p.position;
-          return (
-            <li
-              key={`w-${i}`}
-              className={`et-ticket ${anim ? "rf-reveal-anim" : ""}`}
-              style={anim ? { animationDelay: `${Math.min(i * 60, 1140)}ms` } : undefined}
-            >
-              <div className="et-ticket-stub">#{String(ticketNo).padStart(2, "0")}</div>
-              <div className="et-ticket-body">
-                <p className="text-xs font-bold uppercase tracking-wide text-muted">{pl}</p>
-                <p className="min-w-0 text-lg font-bold text-foreground [overflow-wrap:anywhere]">
-                  {ent?.label ?? "—"}
-                </p>
-                {mode === "list" ? (
-                  <p className="text-xs text-muted">
-                    Ticket #{p.ticket} · drawn {i + 1} of {winners}
+      {showHero && first ? (
+        <div className="relative mt-6 pb-2">
+          <p className="mb-4 text-center text-xs font-bold uppercase tracking-[0.18em] text-accent">
+            🎉 And the winner is
+          </p>
+          <div
+            className={`et-ticket-hero ${revealAnim.includes(picks.indexOf(first)) ? "rf-reveal-anim" : ""}`}
+          >
+            <p className="inline-flex rounded-full bg-stone-900/80 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
+              {prizeLabel(first.position, prizes)}
+            </p>
+            <p className="mt-3 max-w-[12rem] break-words pr-14 text-3xl font-black leading-tight text-stone-950 [overflow-wrap:anywhere]">
+              {firstEnt?.label ?? "—"}
+            </p>
+            <p className="mt-2 text-xs font-semibold text-stone-900/75">
+              Drawn from {record?.tickets ?? "—"} tickets.
+            </p>
+            <div className="et-ticket-hero-stub">
+              <span>
+                TICKET
+                <br />#{mode === "list" ? first.ticket : first.position}
+              </span>
+              <span className="mt-1 tracking-widest" aria-hidden>
+                ★★★
+              </span>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <ol className="mt-4 space-y-3">
+          {winnerPicks.map((p, i) => {
+            const ent = displayEntrants[p.entrant];
+            const pl = prizeLabel(p.position, prizes);
+            const anim = revealAnim.includes(picks.indexOf(p));
+            const ticketNo = mode === "list" ? p.ticket : p.position;
+            return (
+              <li
+                key={`w-${i}`}
+                className={`et-ticket ${anim ? "rf-reveal-anim" : ""}`}
+                style={anim ? { animationDelay: `${Math.min(i * 60, 1140)}ms` } : undefined}
+              >
+                <div className="et-ticket-stub">#{String(ticketNo).padStart(2, "0")}</div>
+                <div className="et-ticket-body">
+                  <p className="text-xs font-bold uppercase tracking-wide text-muted">{pl}</p>
+                  <p className="min-w-0 text-lg font-bold text-foreground [overflow-wrap:anywhere]">
+                    {ent?.label ?? "—"}
                   </p>
-                ) : (
-                  <p className="text-xs text-muted">
-                    Drawn {i + 1} of {winners}
-                  </p>
-                )}
-              </div>
-            </li>
-          );
-        })}
-      </ol>
+                  {mode === "list" ? (
+                    <p className="text-xs text-muted">
+                      Ticket #{p.ticket} · drawn {i + 1} of {winners}
+                    </p>
+                  ) : (
+                    <p className="text-xs text-muted">
+                      Drawn {i + 1} of {winners}
+                    </p>
+                  )}
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      )}
 
       {altPicks.length > 0 ? (
         <>

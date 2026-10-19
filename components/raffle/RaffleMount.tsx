@@ -1,17 +1,13 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { ToolSkeleton } from "@/components/tools/ToolSkeleton";
 
 const RaffleTool = dynamic(
   () => import("@/components/raffle/RaffleTool").then((m) => m.RaffleTool),
   {
     ssr: false,
-    loading: () => (
-      <div
-        className="min-h-[620px] animate-pulse rounded-3xl border border-border bg-surface p-5"
-        aria-hidden
-      />
-    ),
+    loading: () => <ToolSkeleton variant="raffle" />,
   },
 );
 

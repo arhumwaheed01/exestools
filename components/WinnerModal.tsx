@@ -2,12 +2,13 @@
 
 import { useEffect, useId, useRef } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { X } from "lucide-react";
+import { RefreshCw, Trophy, X } from "lucide-react";
+import { fireCelebrationConfetti } from "@/components/tools/Confetti";
 
 type Props = {
   open: boolean;
   winner: string | null;
-  /** When remove-winner is already on, the winner is off the list — hide the redundant button. */
+  entryCount?: number;
   showRemoveContinue?: boolean;
   onClose: () => void;
   onSpinAgain: () => void;
@@ -17,6 +18,7 @@ type Props = {
 export function WinnerModal({
   open,
   winner,
+  entryCount,
   showRemoveContinue = true,
   onClose,
   onSpinAgain,
@@ -25,6 +27,17 @@ export function WinnerModal({
   const titleId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
   const reduceMotion = useReducedMotion();
+  const firedFor = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!open || !winner) {
+      firedFor.current = null;
+      return;
+    }
+    if (firedFor.current === winner) return;
+    firedFor.current = winner;
+    fireCelebrationConfetti();
+  }, [open, winner]);
 
   useEffect(() => {
     if (!open) return;
@@ -41,6 +54,11 @@ export function WinnerModal({
       document.body.style.overflow = prev;
     };
   }, [open, onClose]);
+
+  const subtitle =
+    typeof entryCount === "number" && entryCount > 0
+      ? `Picked fairly from ${entryCount} ${entryCount === 1 ? "entry" : "entries"}.`
+      : "Nice pick! Spin again anytime.";
 
   return (
     <AnimatePresence>
@@ -64,23 +82,6 @@ export function WinnerModal({
             exit={reduceMotion ? undefined : { opacity: 0, scale: 0.96 }}
             transition={{ type: "spring", stiffness: 380, damping: 28 }}
           >
-            {!reduceMotion ? (
-              <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
-                {Array.from({ length: 18 }).map((_, i) => (
-                  <span
-                    key={i}
-                    className="confetti-piece absolute h-2.5 w-2 rounded-sm"
-                    style={{
-                      left: `${(i * 17) % 100}%`,
-                      top: `${(i * 11) % 40}%`,
-                      background: ["#06b6d4", "#22c55e", "#f59e0b", "#ef4444", "#a855f7"][i % 5],
-                      animationDelay: `${i * 0.04}s`,
-                    }}
-                  />
-                ))}
-              </div>
-            ) : null}
-
             <button
               ref={closeRef}
               type="button"
@@ -91,39 +92,39 @@ export function WinnerModal({
               <X className="h-5 w-5" />
             </button>
 
-            <p className="text-sm font-semibold uppercase tracking-widest text-accent">Winner</p>
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-amber-400/20 shadow-[0_0_32px_rgba(251,191,36,0.45)]">
+              <Trophy className="h-8 w-8 text-amber-300" aria-hidden />
+            </div>
+
+            <p className="mt-4 text-xs font-bold uppercase tracking-[0.2em] text-accent">
+              We have a winner
+            </p>
             <h2
               id={titleId}
               className="mt-2 break-words text-3xl font-extrabold text-foreground sm:text-4xl"
             >
-              {winner}
+              Winner: {winner}
             </h2>
-            <p className="mt-3 text-sm text-muted">Nice pick! Spin again anytime.</p>
+            <p className="mt-3 text-sm text-muted">{subtitle}</p>
 
-            <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-center">
+            <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-center">
               <button
                 type="button"
                 onClick={onSpinAgain}
-                className="rounded-xl bg-accent-strong px-5 py-3 text-sm font-bold text-slate-950 hover:bg-accent outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-accent-strong px-5 text-sm font-bold text-slate-950 shadow-[0_0_24px_rgba(34,211,238,0.35)] outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent"
               >
+                <RefreshCw className="h-4 w-4" aria-hidden />
                 Spin again
               </button>
               {showRemoveContinue ? (
                 <button
                   type="button"
                   onClick={onRemoveWinner}
-                  className="rounded-xl border border-border bg-surface-2 px-5 py-3 text-sm font-bold text-foreground hover:bg-border outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  className="inline-flex min-h-12 items-center justify-center rounded-xl border border-border bg-surface-2 px-5 text-sm font-bold text-foreground outline-none hover:bg-border focus-visible:ring-2 focus-visible:ring-accent"
                 >
-                  Remove &amp; continue
+                  Remove winner
                 </button>
               ) : null}
-              <button
-                type="button"
-                onClick={onClose}
-                className="rounded-xl bg-background px-5 py-3 text-sm font-bold text-muted hover:text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              >
-                Close
-              </button>
             </div>
           </motion.div>
         </motion.div>

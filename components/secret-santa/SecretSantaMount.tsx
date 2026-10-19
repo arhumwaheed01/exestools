@@ -1,17 +1,13 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { ToolSkeleton } from "@/components/tools/ToolSkeleton";
 
 const SecretSantaTool = dynamic(
   () => import("@/components/secret-santa/SecretSantaTool").then((m) => m.SecretSantaTool),
   {
     ssr: false,
-    loading: () => (
-      <div
-        className="min-h-[560px] animate-pulse rounded-3xl border border-border bg-surface p-5"
-        aria-hidden
-      />
-    ),
+    loading: () => <ToolSkeleton variant="santa" />,
   },
 );
 

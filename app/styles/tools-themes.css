@@ -122,6 +122,92 @@
   min-width: 0;
 }
 
+/* Hero raffle ticket (results) */
+.et-ticket-hero {
+  position: relative;
+  margin-inline: auto;
+  max-width: 22rem;
+  transform: rotate(-6deg);
+  border-radius: 1rem;
+  background: linear-gradient(145deg, #fb923c, #ea580c 55%, #c2410c);
+  color: #0f172a;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  padding: 1.25rem 1.5rem 1.25rem 1.25rem;
+}
+.et-ticket-hero::before,
+.et-ticket-hero::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 999px;
+  background: #0b0f17;
+  transform: translateY(-50%);
+}
+.et-ticket-hero::before {
+  left: -0.55rem;
+}
+.et-ticket-hero::after {
+  right: -0.55rem;
+}
+.et-ticket-hero-stub {
+  position: absolute;
+  right: 0;
+  top: 0.75rem;
+  bottom: 0.75rem;
+  width: 4.5rem;
+  border-left: 2px dashed rgba(15, 23, 42, 0.35);
+  display: grid;
+  place-content: center;
+  text-align: center;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+@media (prefers-reduced-motion: reduce) {
+  .et-ticket-hero {
+    transform: none;
+  }
+}
+
+/* Secret Santa name chips */
+.ss-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 999px;
+  border: 1px solid var(--border, #2a3441);
+  background: color-mix(in srgb, var(--surface-2, #1a2438) 80%, transparent);
+  padding: 0.35rem 0.65rem 0.35rem 0.35rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.ss-chip-avatar {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+/* Tool hero banners */
+.et-tool-hero-santa {
+  background:
+    radial-gradient(circle at 20% 30%, rgb(255 255 255 / 0.1) 0 1.5px, transparent 2px),
+    linear-gradient(105deg, #7f1d1d 0%, #14532d 100%);
+}
+.et-tool-hero-raffle {
+  background:
+    radial-gradient(circle at 15% 40%, #22d3ee 0 2px, transparent 3px),
+    radial-gradient(circle at 70% 20%, #fb923c 0 2px, transparent 3px),
+    radial-gradient(circle at 40% 80%, #a78bfa 0 1.5px, transparent 2px),
+    linear-gradient(110deg, #431407 0%, #7c2d12 55%, #1c1917 100%);
+}
+
 /* Team card stagger */
 @keyframes et-team-in {
   from {
