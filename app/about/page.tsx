@@ -91,7 +91,7 @@ export default function AboutPage() {
       <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
         About ExesTools
       </h1>
-      <PageMeta updated="2026-10-20" />
+      <PageMeta updated="2026-10-19" />
       <div className="mt-6 space-y-8 text-sm leading-relaxed text-muted sm:text-base">
         <section>
           <p>
@@ -358,7 +358,7 @@ export default function AboutPage() {
           <p className="mt-2">Major changes to the site, newest first.</p>
           <ul className="mt-3 list-disc space-y-2 pl-5">
             <li>
-              <strong className="text-foreground">2026-10-20:</strong> Contact page and Privacy Policy
+              <strong className="text-foreground">2026-10-19:</strong> Contact page and Privacy Policy
               updated, and worked examples, tips and new FAQs added to every tool page.
             </li>
             <li>

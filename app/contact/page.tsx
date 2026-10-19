@@ -31,7 +31,7 @@ export default function ContactPage() {
   return (
     <div className="mx-auto max-w-xl px-4 py-10 sm:px-6 sm:py-14">
       <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">Contact ExesTools</h1>
-      <p className="mt-2 text-sm text-muted">Last updated: October 20, 2026</p>
+      <p className="mt-2 text-sm text-muted">Last updated: October 19, 2026</p>
       <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
         ExesTools is built and run by one person,{" "}
         <Link href="/about#arhum" className="font-semibold text-accent hover:underline">

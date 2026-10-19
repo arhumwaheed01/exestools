@@ -251,7 +251,7 @@ export default function SecretSantaGeneratorPage() {
         <h1 className="mt-4 max-w-3xl text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
           Secret Santa generator with exclusions
         </h1>
-        <PageMeta updated="2026-10-20" />
+        <PageMeta updated="2026-10-19" />
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           Draw names online for Secret Santa—remotely or in the same room. Add everyone&apos;s name,
           mark any couples who shouldn&apos;t draw each other, and press Draw names. Each person gets

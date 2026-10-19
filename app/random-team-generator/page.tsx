@@ -193,7 +193,7 @@ export default function RandomTeamGeneratorPage() {
         <h1 className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl lg:text-3xl">
           Random team generator: split names into groups
         </h1>
-        <PageMeta updated="2026-10-20" />
+        <PageMeta updated="2026-10-19" />
         <p className="mt-1 text-sm leading-relaxed text-muted sm:text-base">
           Paste one name per line, choose how many teams you need (or how many people per team), and
           press Generate teams. Names are shuffled and dealt out so team sizes never differ by more

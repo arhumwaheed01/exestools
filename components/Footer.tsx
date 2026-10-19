@@ -44,7 +44,7 @@ export function Footer() {
               {l.label}
             </Link>
           ))}
-          <PrivacySettingsLink className="hover:text-accent outline-none focus-visible:ring-2 focus-visible:ring-accent rounded" />
+          <PrivacySettingsLink className="cursor-pointer bg-transparent p-0 font-medium text-inherit hover:text-accent outline-none focus-visible:ring-2 focus-visible:ring-accent rounded" />
         </nav>
       </div>
     </footer>

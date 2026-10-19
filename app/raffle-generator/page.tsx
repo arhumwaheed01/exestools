@@ -188,7 +188,7 @@ export default function RaffleGeneratorPage() {
         <h1 className="mt-4 max-w-3xl text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
           Raffle generator and winner picker
         </h1>
-        <PageMeta updated="2026-10-20" />
+        <PageMeta updated="2026-10-19" />
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           Paste your entrants or set a ticket number range, choose how many winners you need, and
           press Draw. Nobody wins twice unless you allow it, and you get a draw record to copy or

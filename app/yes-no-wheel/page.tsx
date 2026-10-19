@@ -132,7 +132,7 @@ export default function YesNoWheelPage() {
         "Copy share link",
         "No signup",
       ]}
-      pageUpdated="2026-10-20"
+      pageUpdated="2026-10-19"
     >
       <GuideSection title="How to spin Yes or No">
         <ol className="list-decimal space-y-2 pl-5">

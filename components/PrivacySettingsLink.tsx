@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import type { MouseEvent } from "react";
 
 type GoogleFcWindow = Window & {
@@ -9,23 +8,43 @@ type GoogleFcWindow = Window & {
 
 type Props = { className?: string };
 
+const FALLBACK_HREF = "/privacy-policy#consent-choices";
+
+function tryShowRevocation(): boolean {
+  const fc = (window as GoogleFcWindow).googlefc;
+  if (typeof fc?.showRevocationMessage === "function") {
+    fc.showRevocationMessage();
+    return true;
+  }
+  return false;
+}
+
 /**
- * Footer link that reopens Google's consent message (Funding Choices) when it is
- * available on the page, and otherwise falls back to the consent section of the
- * Privacy Policy.
+ * Footer control that reopens Google's Funding Choices consent message.
+ * Falls back to the Privacy Policy consent section only if googlefc never loads.
  */
 export function PrivacySettingsLink({ className }: Props) {
-  function onClick(event: MouseEvent<HTMLAnchorElement>) {
-    const fc = (window as GoogleFcWindow).googlefc;
-    if (typeof fc?.showRevocationMessage === "function") {
-      event.preventDefault();
-      fc.showRevocationMessage();
-    }
+  function onClick(event: MouseEvent<HTMLButtonElement>) {
+    event.preventDefault();
+    if (tryShowRevocation()) return;
+
+    let attempts = 0;
+    const id = window.setInterval(() => {
+      attempts += 1;
+      if (tryShowRevocation()) {
+        window.clearInterval(id);
+        return;
+      }
+      if (attempts >= 25) {
+        window.clearInterval(id);
+        window.location.assign(FALLBACK_HREF);
+      }
+    }, 100);
   }
 
   return (
-    <Link href="/privacy-policy#consent-choices" onClick={onClick} className={className}>
+    <button type="button" onClick={onClick} className={className}>
       Privacy and cookie settings
-    </Link>
+    </button>
   );
 }

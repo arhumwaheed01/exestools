@@ -176,7 +176,7 @@ export default function RandomNumberWheelPage() {
         <h1 className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl lg:text-3xl">
           Random number wheel
         </h1>
-        <PageMeta updated="2026-10-20" />
+        <PageMeta updated="2026-10-19" />
         <p className="mt-1 text-sm leading-relaxed text-muted sm:text-base">
           Pick a range and press SPIN, and the wheel stops on a random whole number. Tap 1–10 or
           1–100, or type any Min and Max for up to 1,000 numbers. Every number has the same chance.

@@ -232,7 +232,7 @@ export default function BingoCardGeneratorPage() {
         <h1 className="mt-4 max-w-3xl text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
           Bingo card generator
         </h1>
-        <PageMeta updated="2026-10-20" />
+        <PageMeta updated="2026-10-19" />
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           Make printable bingo cards from your own word list or classic 1–75 numbers. Choose a 3×3,
           4×4 or 5×5 grid, add a FREE centre square, and make up to 100 different cards in one set.
