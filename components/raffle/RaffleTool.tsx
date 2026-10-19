@@ -1114,25 +1114,27 @@ export function RaffleTool() {
                 />
 
                 <fieldset className="mt-3">
-                  <legend className="text-xs font-semibold text-foreground">Repeated names</legend>
+                  <legend className="text-sm font-semibold text-foreground">Repeated names</legend>
                   <div className="mt-2 flex flex-col gap-2">
-                    <label className="inline-flex min-h-11 items-center gap-2 text-sm">
+                    <label className="inline-flex min-h-11 cursor-pointer items-center gap-3 rounded-xl border border-border px-3 text-sm text-foreground has-[:checked]:border-accent has-[:checked]:bg-surface-2 has-[:disabled]:opacity-50">
                       <input
                         type="radio"
                         name="rf-dup"
                         checked={duplicates === "combine"}
                         disabled={inputsLocked}
                         onChange={() => setDuplicates("combine")}
+                        className="h-4 w-4 accent-cyan-400"
                       />
                       Count each line as a ticket
                     </label>
-                    <label className="inline-flex min-h-11 items-center gap-2 text-sm">
+                    <label className="inline-flex min-h-11 cursor-pointer items-center gap-3 rounded-xl border border-border px-3 text-sm text-foreground has-[:checked]:border-accent has-[:checked]:bg-surface-2 has-[:disabled]:opacity-50">
                       <input
                         type="radio"
                         name="rf-dup"
                         checked={duplicates === "dedupe"}
                         disabled={inputsLocked}
                         onChange={() => setDuplicates("dedupe")}
+                        className="h-4 w-4 accent-cyan-400"
                       />
                       One entry per name
                     </label>
@@ -1547,11 +1549,15 @@ export function RaffleTool() {
                   ...(showResultLink
                     ? [{ label: "Copy result link", onClick: copyResultLink }]
                     : []),
-                  {
-                    label: "Draw another alternate",
-                    onClick: runExtraAlternate,
-                    disabled: !extraAlternateOk,
-                  },
+                  ...(alternates > 0
+                    ? [
+                        {
+                          label: "Draw another alternate",
+                          onClick: runExtraAlternate,
+                          disabled: !extraAlternateOk,
+                        },
+                      ]
+                    : []),
                 ]}
               />
             </div>
@@ -1559,9 +1565,17 @@ export function RaffleTool() {
         </div>
       </div>
 
-      <p className="mt-3 min-h-5 text-sm text-muted" role="status" aria-live="polite">
+      <p className="sr-only" role="status" aria-live="polite">
         {status}
       </p>
+      {status ? (
+        <p
+          className="fixed bottom-20 left-1/2 z-40 -translate-x-1/2 rounded-full bg-accent-strong px-4 py-2 text-xs font-semibold text-slate-950 shadow-lg sm:bottom-4"
+          aria-hidden
+        >
+          {status}
+        </p>
+      ) : null}
 
       <pre className="hidden whitespace-pre-wrap print:block">{record ? formatRecordText(record) : ""}</pre>
 
@@ -1720,13 +1734,15 @@ function ResultsPanel({
       ) : null}
 
       {showHero && first ? (
-        <div className="relative mt-6 pb-2">
+        <div
+          className={`relative mt-6 pb-2 ${
+            revealAnim.includes(picks.indexOf(first)) ? "rf-reveal-anim" : ""
+          }`}
+        >
           <p className="mb-4 text-center text-xs font-bold uppercase tracking-[0.18em] text-accent">
             🎉 And the winner is
           </p>
-          <div
-            className={`et-ticket-hero ${revealAnim.includes(picks.indexOf(first)) ? "rf-reveal-anim" : ""}`}
-          >
+          <div className="et-ticket-hero">
             <p className="inline-flex rounded-full bg-stone-900/80 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
               {prizeLabel(first.position, prizes)}
             </p>

@@ -396,7 +396,9 @@ export function SecretSantaTool() {
     ];
     setParticipants(next);
     setNameInput("");
-    announce(`Added ${result.added.length} names.`);
+    announce(
+      `Added ${result.added.length} ${result.added.length === 1 ? "name" : "names"}.`,
+    );
   };
 
   const addPasted = () => {
@@ -1237,29 +1239,33 @@ export function SecretSantaTool() {
             </p>
           ) : null}
 
-          <div className="sticky bottom-0 z-30 -mx-1 border-t border-border bg-surface/95 px-1 py-2 backdrop-blur supports-[padding:max(0px)]:pb-[max(0.5rem,env(safe-area-inset-bottom))] sm:static sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none sm:supports-[padding:max(0px)]:pb-0">
-            <p className="mb-2 flex items-center gap-2 text-xs text-muted">
-              <span aria-hidden>🔒</span>
-              Each person only sees their own match.
-            </p>
-            <button
-              type="button"
-              disabled={Boolean(drawDisabledReason) || drawing || locked}
-              aria-describedby={drawDisabledReason ? "ss-draw-hint" : undefined}
-              onClick={() => runDraw(false)}
-              className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-accent-strong px-4 text-sm font-bold text-slate-950 shadow-[0_0_24px_rgba(34,211,238,0.3)] outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:bg-border disabled:text-muted disabled:shadow-none disabled:opacity-100"
-            >
-              {drawing ? "Drawing…" : "🎁 Draw names"}
-            </button>
-          </div>
-          {drawDisabledReason ? (
-            <p id="ss-draw-hint" className="text-xs text-muted">
-              {drawDisabledReason}
-            </p>
-          ) : participants.length >= MIN_PARTICIPANTS ? (
-            <p className="text-xs text-muted">
-              {participants.length} names added. You&apos;re good to go.
-            </p>
+          {!draw ? (
+            <>
+              <div className="sticky bottom-0 z-30 -mx-1 border-t border-border bg-surface/95 px-1 py-2 backdrop-blur supports-[padding:max(0px)]:pb-[max(0.5rem,env(safe-area-inset-bottom))] sm:static sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none sm:supports-[padding:max(0px)]:pb-0">
+                <p className="mb-2 flex items-center gap-2 text-xs text-muted">
+                  <span aria-hidden>🔒</span>
+                  Each person only sees their own match.
+                </p>
+                <button
+                  type="button"
+                  disabled={Boolean(drawDisabledReason) || drawing || locked}
+                  aria-describedby={drawDisabledReason ? "ss-draw-hint" : undefined}
+                  onClick={() => runDraw(false)}
+                  className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-accent-strong px-4 text-sm font-bold text-slate-950 shadow-[0_0_24px_rgba(34,211,238,0.3)] outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:bg-border disabled:text-muted disabled:shadow-none disabled:opacity-100"
+                >
+                  {drawing ? "Drawing…" : "🎁 Draw names"}
+                </button>
+              </div>
+              {drawDisabledReason ? (
+                <p id="ss-draw-hint" className="text-xs text-muted">
+                  {drawDisabledReason}
+                </p>
+              ) : participants.length >= MIN_PARTICIPANTS ? (
+                <p className="text-xs text-muted">
+                  {participants.length} names added. You&apos;re good to go.
+                </p>
+              ) : null}
+            </>
           ) : null}
 
           <div className="flex flex-wrap gap-2">
@@ -1481,9 +1487,17 @@ export function SecretSantaTool() {
         </div>
       </div>
 
-      <p className="mt-3 min-h-5 text-sm text-muted" role="status" aria-live="polite">
+      <p className="sr-only" role="status" aria-live="polite">
         {status}
       </p>
+      {status && status !== "Drawing…" ? (
+        <p
+          className="fixed bottom-20 left-1/2 z-40 -translate-x-1/2 rounded-full bg-accent-strong px-4 py-2 text-xs font-semibold text-slate-950 shadow-lg sm:bottom-4"
+          aria-hidden
+        >
+          {status}
+        </p>
+      ) : null}
 
       <ConfirmDialog
         open={confirm === "clear-list"}
