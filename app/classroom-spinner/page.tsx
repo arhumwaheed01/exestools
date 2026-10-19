@@ -220,7 +220,15 @@ export default function ClassroomSpinnerPage() {
         </ol>
         <p>
           Why it works: students can see the pick isn&apos;t the teacher choosing, and remove-winner
-          guarantees everyone gets one turn per round.
+          guarantees everyone gets one turn per round. For the research, question scripts and tips
+          for anxious students, read{" "}
+          <Link
+            href="/guides/cold-calling-students-fairly"
+            className="font-semibold text-accent hover:underline"
+          >
+            fair ways to call on students
+          </Link>
+          .
         </p>
       </GuideSection>
       <GuideMarkdown content={CLASSROOM_REWRITE.content} routineCardAside />

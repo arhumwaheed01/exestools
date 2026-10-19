@@ -348,6 +348,17 @@ export default function RandomTeamGeneratorPage() {
             draw for a second activity. It does not remember previous teams, so the same two people
             can land together again—that is expected with real randomness.
           </p>
+          <p className="mt-3">
+            For odd counts, pairs, how often pure random goes lopsided, and a tiered method for
+            mixing skill levels, read{" "}
+            <Link
+              href="/guides/how-to-make-balanced-random-teams"
+              className="font-semibold text-accent hover:underline"
+            >
+              how to make balanced teams
+            </Link>
+            .
+          </p>
         </section>
 
         <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">

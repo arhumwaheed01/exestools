@@ -226,7 +226,15 @@ export default function SecretSantaGeneratorPage() {
           Draw names online for Secret Santa—remotely or in the same room. Add everyone&apos;s name,
           mark any couples who shouldn&apos;t draw each other, and press Draw names. Each person gets
           their own private link that shows only who they&apos;re buying for. It&apos;s free, nobody
-          needs an account or an email address, and the draw happens in your browser.
+          needs an account or an email address, and the draw happens in your browser. For rules,
+          budgets and dropouts, see{" "}
+          <Link
+            href="/guides/secret-santa-rules-and-budget-ideas"
+            className="font-semibold text-accent hover:underline"
+          >
+            Secret Santa rules and gift exchange ideas
+          </Link>
+          .
         </p>
         <div className="ss-tool-wrap mt-6 min-w-0">
           <SecretSantaMount />

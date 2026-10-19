@@ -285,6 +285,46 @@ export default function AboutPage() {
           <p className="mt-2">Major changes to the site, newest first.</p>
           <ul className="mt-3 list-disc space-y-2 pl-5">
             <li>
+              <strong className="text-foreground">2026-10-19:</strong> Published{" "}
+              <Link
+                href="/guides/bingo-games-for-classrooms-and-parties"
+                className="font-semibold text-accent hover:underline"
+              >
+                Bingo game ideas for classrooms and parties
+              </Link>
+              .
+            </li>
+            <li>
+              <strong className="text-foreground">2026-10-19:</strong> Published{" "}
+              <Link
+                href="/guides/secret-santa-rules-and-budget-ideas"
+                className="font-semibold text-accent hover:underline"
+              >
+                Secret Santa rules and gift exchange ideas
+              </Link>
+              .
+            </li>
+            <li>
+              <strong className="text-foreground">2026-10-19:</strong> Published{" "}
+              <Link
+                href="/guides/how-to-make-balanced-random-teams"
+                className="font-semibold text-accent hover:underline"
+              >
+                How to make balanced teams
+              </Link>
+              .
+            </li>
+            <li>
+              <strong className="text-foreground">2026-10-19:</strong> Published{" "}
+              <Link
+                href="/guides/cold-calling-students-fairly"
+                className="font-semibold text-accent hover:underline"
+              >
+                Fair ways to call on students
+              </Link>
+              .
+            </li>
+            <li>
               <strong className="text-foreground">2026-10-13:</strong> Guides section launched,
               starting with{" "}
               <em>How random is a spinner wheel?</em> and{" "}
@@ -329,7 +369,14 @@ export default function AboutPage() {
             </Link>{" "}
             for fair turn-taking with no account. Your class list stays in this browser, Remove
             winner makes sure everyone gets a turn before anyone repeats, and you can share a link
-            to the same wheel when your school&apos;s policy allows.
+            to the same wheel when your school&apos;s policy allows. For the teaching routine, see{" "}
+            <Link
+              href="/guides/cold-calling-students-fairly"
+              className="font-semibold text-accent hover:underline"
+            >
+              fair ways to call on students
+            </Link>
+            .
           </p>
         </section>
 

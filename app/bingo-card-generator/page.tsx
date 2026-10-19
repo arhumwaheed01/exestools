@@ -363,7 +363,15 @@ export default function BingoCardGeneratorPage() {
             <Link href="/classroom-spinner" className="font-semibold text-accent hover:underline">
               classroom spinner
             </Link>{" "}
-            pairs well with a bingo lesson.
+            pairs well with a bingo lesson. For list length, call timing, classroom variations and
+            party games, read{" "}
+            <Link
+              href="/guides/bingo-games-for-classrooms-and-parties"
+              className="font-semibold text-accent hover:underline"
+            >
+              bingo game ideas for classrooms and parties
+            </Link>
+            .
           </p>
         </section>
 
