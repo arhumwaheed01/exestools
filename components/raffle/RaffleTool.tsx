@@ -499,16 +499,17 @@ export function RaffleTool() {
     return () => window.clearTimeout(t);
   }, [entrants, fpUnavailable]);
 
+  // Detect list edits after a draw. Never unlock settings here — only flag the mismatch.
   useEffect(() => {
-    if (!ready || !record || listMismatch) return;
+    if (!ready || !record || !locked || listMismatch) return;
     if (fpUnavailable) return;
     if (entrants.length === 0) return;
     void listFingerprint(entrants).then((fp) => {
       if (record.fingerprint !== "unavailable" && fp !== record.fingerprint) {
         setListMismatch(true);
-      } else if (locked && !frozenEntrants) {
-        setFrozenEntrants(entrants);
+        return;
       }
+      if (!frozenEntrants) setFrozenEntrants(entrants);
     });
   }, [ready, record, entrants, locked, frozenEntrants, listMismatch, fpUnavailable]);
 
@@ -583,9 +584,15 @@ export function RaffleTool() {
     locked && picks.length >= winners + alternates && !drawing && !shuffling;
 
   const rebuildRecord = useCallback(
-    (nextPicks: RafflePick[], meta: { code: string; createdAt: number; tzOffsetMin: number }) => {
-      const ents = frozenEntrants ?? entrants;
-      const fp = fpUnavailable ? "unavailable" : fingerprint;
+    (
+      nextPicks: RafflePick[],
+      meta: { code: string; createdAt: number; tzOffsetMin: number },
+      opts?: { ents?: Entrant[]; fingerprint?: string },
+    ) => {
+      const ents = opts?.ents ?? frozenEntrants ?? entrants;
+      const fp =
+        opts?.fingerprint ??
+        (fpUnavailable ? "unavailable" : fingerprint || "unavailable");
       return buildRecord({
         code: meta.code,
         createdAt: meta.createdAt,
@@ -700,43 +707,63 @@ export function RaffleTool() {
   );
 
   const applyPicks = useCallback(
-    (nextPicks: RafflePick[], meta: { code: string; createdAt: number; tzOffsetMin: number }) => {
-      const nextRecord = rebuildRecord(nextPicks, meta);
+    async (
+      nextPicks: RafflePick[],
+      meta: { code: string; createdAt: number; tzOffsetMin: number },
+      snapshot?: Entrant[],
+    ) => {
+      const ents = snapshot ?? frozenEntrants ?? entrants;
+      let fp = "unavailable";
+      if (!fpUnavailable) {
+        try {
+          fp = await listFingerprint(ents);
+        } catch {
+          fp = "unavailable";
+        }
+      }
+      const nextRecord = rebuildRecord(nextPicks, meta, { ents, fingerprint: fp });
       setPicks(nextPicks);
       setRecord(nextRecord);
       setDrawMeta(meta);
+      setFingerprint(fp === "unavailable" ? "" : fp);
       persist({ draw: { picks: nextPicks, record: nextRecord } });
+      return nextRecord;
     },
-    [rebuildRecord, persist],
+    [rebuildRecord, persist, frozenEntrants, entrants, fpUnavailable],
   );
 
   const finishPick = useCallback(
-    (nextPicks: RafflePick[], meta: { code: string; createdAt: number; tzOffsetMin: number }) => {
-      applyPicks(nextPicks, meta);
-      const last = nextPicks[nextPicks.length - 1]!;
-      const ent = (frozenEntrants ?? entrants)[last.entrant]!;
-      if (last.kind === "winner") {
-        const pl = prizeLabel(last.position, prizes);
-        const ticketPart = mode === "list" ? `, ticket #${last.ticket}` : "";
-        announce(`${pl}: ${ent.label}${ticketPart}.`);
-      } else {
-        const ticketPart = mode === "list" ? ` · ticket #${last.ticket}` : "";
-        announce(`Alternate ${last.position}: ${ent.label}${ticketPart}.`);
-      }
-      if (reveal === "all" && nextPicks.length === winners + alternates) {
-        const w = nextPicks.filter((p) => p.kind === "winner").length;
-        const a = nextPicks.filter((p) => p.kind === "alternate").length;
-        const parts: string[] = [];
-        if (w) parts.push(`${w} winner${w === 1 ? "" : "s"}`);
-        if (a) parts.push(`${a} alternate${a === 1 ? "" : "s"}`);
-        announce(`${parts.join(" and ")} drawn. Draw code ${meta.code}.`);
-      }
-      const planned = winners + alternates;
-      const done = nextPicks.length >= planned;
-      // All at once → results heading. One at a time → stay on Draw until complete.
-      requestAnimationFrame(() => {
-        if (reveal === "all" || done) resultsHeadingRef.current?.focus();
-        else drawButtonRef.current?.focus();
+    (
+      nextPicks: RafflePick[],
+      meta: { code: string; createdAt: number; tzOffsetMin: number },
+      snapshot?: Entrant[],
+    ) => {
+      void applyPicks(nextPicks, meta, snapshot).then(() => {
+        const last = nextPicks[nextPicks.length - 1]!;
+        const ents = snapshot ?? frozenEntrants ?? entrants;
+        const ent = ents[last.entrant]!;
+        if (last.kind === "winner") {
+          const pl = prizeLabel(last.position, prizes);
+          const ticketPart = mode === "list" ? `, ticket #${last.ticket}` : "";
+          announce(`${pl}: ${ent.label}${ticketPart}.`);
+        } else {
+          const ticketPart = mode === "list" ? ` · ticket #${last.ticket}` : "";
+          announce(`Alternate ${last.position}: ${ent.label}${ticketPart}.`);
+        }
+        if (reveal === "all" && nextPicks.length === winners + alternates) {
+          const w = nextPicks.filter((p) => p.kind === "winner").length;
+          const a = nextPicks.filter((p) => p.kind === "alternate").length;
+          const parts: string[] = [];
+          if (w) parts.push(`${w} winner${w === 1 ? "" : "s"}`);
+          if (a) parts.push(`${a} alternate${a === 1 ? "" : "s"}`);
+          announce(`${parts.join(" and ")} drawn. Draw code ${meta.code}.`);
+        }
+        const planned = winners + alternates;
+        const done = nextPicks.length >= planned;
+        requestAnimationFrame(() => {
+          if (reveal === "all" || done) resultsHeadingRef.current?.focus();
+          else drawButtonRef.current?.focus();
+        });
       });
     },
     [applyPicks, frozenEntrants, entrants, prizes, mode, announce, reveal, winners, alternates],
@@ -752,39 +779,47 @@ export function RaffleTool() {
 
     const isFirst = picks.length === 0;
     let meta = drawMeta;
+    const snapshot = isFirst ? [...entrants] : frozenEntrants ?? [...entrants];
     if (isFirst) {
       meta = {
         code: randomCode(),
         createdAt: Date.now(),
         tzOffsetMin: -new Date().getTimezoneOffset(),
       };
-      setFrozenEntrants([...entrants]);
+      setFrozenEntrants(snapshot);
       setLocked(true);
+      setListMismatch(false);
     }
     if (!meta) return;
 
     if (reveal === "all") {
       setDrawing(true);
       window.setTimeout(() => {
-        const res = drawRaffle(holders, { winners, alternates, allowRepeatWinners });
-        if (!res.ok) {
-          setDrawError(describeDrawFailure(res, allowRepeatWinners));
+        void (async () => {
+          const res = drawRaffle(holders, { winners, alternates, allowRepeatWinners });
+          if (!res.ok) {
+            setDrawError(describeDrawFailure(res, allowRepeatWinners));
+            setDrawing(false);
+            if (isFirst) {
+              setLocked(false);
+              setFrozenEntrants(null);
+            }
+            trackDraw(res.reason);
+            return;
+          }
+          await applyPicks(res.picks, meta!, snapshot);
+          setRevealAnim(res.picks.map((_, i) => i));
+          sound.fanfare();
+          setConfettiFire((n) => n + 1);
+          trackDraw("success");
           setDrawing(false);
-          trackDraw(res.reason);
-          return;
-        }
-        applyPicks(res.picks, meta!);
-        setRevealAnim(res.picks.map((_, i) => i));
-        sound.fanfare();
-        setConfettiFire((n) => n + 1);
-        trackDraw("success");
-        setDrawing(false);
-        const w = res.picks.filter((p) => p.kind === "winner").length;
-        const a = res.picks.filter((p) => p.kind === "alternate").length;
-        announce(
-          `${w} winner${w === 1 ? "" : "s"} and ${a} alternate${a === 1 ? "" : "s"} drawn. Draw code ${meta!.code}.`,
-        );
-        requestAnimationFrame(() => resultsHeadingRef.current?.focus());
+          const w = res.picks.filter((p) => p.kind === "winner").length;
+          const a = res.picks.filter((p) => p.kind === "alternate").length;
+          announce(
+            `${w} winner${w === 1 ? "" : "s"} and ${a} alternate${a === 1 ? "" : "s"} drawn. Draw code ${meta!.code}.`,
+          );
+          requestAnimationFrame(() => resultsHeadingRef.current?.focus());
+        })();
       }, 0);
       return;
     }
@@ -800,15 +835,19 @@ export function RaffleTool() {
       if (!res.ok) {
         setDrawError(describeDrawFailure(res, allowRepeatWinners));
         setDrawing(false);
-        if (isFirst) trackDraw(res.reason);
+        if (isFirst) {
+          setLocked(false);
+          setFrozenEntrants(null);
+          trackDraw(res.reason);
+        }
         return;
       }
       const last = res.picks[res.picks.length - 1]!;
-      const ent = entrants[last.entrant]!;
+      const ent = snapshot[last.entrant]!;
       setDrawing(false);
       if (isFirst) trackDraw("success");
       playShuffle(ent.label, () => {
-        finishPick(res.picks, meta!);
+        finishPick(res.picks, meta!, snapshot);
         sound.chime();
         setConfettiFire((n) => n + 1);
       });
@@ -932,7 +971,9 @@ export function RaffleTool() {
     announce("Entries cleared.");
   };
 
-  const inputsLocked = locked && !listMismatch;
+  // Keep settings frozen for the whole draw. listMismatch is a warning only — it must
+  // not unlock inputs (that made the lock flash off after a fingerprint race).
+  const inputsLocked = locked;
 
   const extraAlternateOk = useMemo(() => {
     if (!drawComplete || listMismatch || alternates >= MAX_ALTERNATES) return false;
@@ -1093,7 +1134,7 @@ export function RaffleTool() {
                   >
                     Clear
                   </button>
-                  {inputsLocked ? (
+                  {locked ? (
                     <button
                       type="button"
                       onClick={() => setConfirm("edit-entries")}
@@ -1103,9 +1144,15 @@ export function RaffleTool() {
                     </button>
                   ) : null}
                 </div>
-                {inputsLocked ? (
+                {locked ? (
                   <p className="mt-2 text-xs text-muted" role="status">
                     Settings locked — click Edit entries to change.
+                  </p>
+                ) : null}
+                {listMismatch ? (
+                  <p className="mt-2 rounded-xl border border-amber-400/50 bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:bg-amber-950/30 dark:text-amber-100">
+                    The list changed since this draw. Click Edit entries or New draw before drawing
+                    again.
                   </p>
                 ) : null}
 
