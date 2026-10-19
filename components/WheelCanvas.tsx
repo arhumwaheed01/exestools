@@ -35,8 +35,8 @@ function darken(hex: string, amount: number): string {
 
 /**
  * Segments painted once to an offscreen canvas; the visible canvas rotates that
- * bitmap each frame (rAF + cubic ease-out in SpinnerWheel). Rim, bulbs, hub and
- * pointer stay fixed.
+ * bitmap each frame. Rim, bulbs, hub and pointer stay fixed. Always blits after
+ * paint (including ResizeObserver) so the glossy wheel shows on first load.
  */
 export function WheelCanvas({
   choices,
@@ -54,7 +54,6 @@ export function WheelCanvas({
   const rotationRef = useRef(rotation);
   rotationRef.current = rotation;
 
-  // Paint segments to offscreen when list / theme changes
   useEffect(() => {
     const canvas = canvasRef.current;
     const wrap = wrapRef.current;
@@ -63,11 +62,84 @@ export function WheelCanvas({
     const palette = colors?.length ? colors : WHEEL_COLORS;
     const labels = labelColors;
 
+    const blit = () => {
+      const off = offscreenRef.current;
+      const ctx = canvas.getContext("2d");
+      if (!off || !ctx) return;
+
+      const { css, dpr, radius } = sizeRef.current;
+      const cx = css / 2;
+      const cy = css / 2;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, css, css);
+
+      ctx.beginPath();
+      ctx.arc(cx, cy + 6, radius + 10, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(0,0,0,0.35)";
+      ctx.fill();
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(rotationRef.current);
+      ctx.drawImage(off, -cx, -cy, css, css);
+      ctx.restore();
+
+      const rimOuter = radius + 12;
+      const rimInner = radius + 2;
+      const rimGrad = ctx.createLinearGradient(cx - rimOuter, cy, cx + rimOuter, cy);
+      rimGrad.addColorStop(0, "#b45309");
+      rimGrad.addColorStop(0.35, "#fbbf24");
+      rimGrad.addColorStop(0.55, "#fde68a");
+      rimGrad.addColorStop(0.75, "#f59e0b");
+      rimGrad.addColorStop(1, "#92400e");
+      ctx.beginPath();
+      ctx.arc(cx, cy, rimOuter, 0, Math.PI * 2);
+      ctx.arc(cx, cy, rimInner, 0, Math.PI * 2, true);
+      ctx.fillStyle = rimGrad;
+      ctx.fill();
+
+      const bulbs = 24;
+      for (let i = 0; i < bulbs; i++) {
+        const a = (i / bulbs) * Math.PI * 2 - Math.PI / 2;
+        const bx = cx + Math.cos(a) * (radius + 7);
+        const by = cy + Math.sin(a) * (radius + 7);
+        const bulb = ctx.createRadialGradient(bx, by, 0, bx, by, 4.5);
+        bulb.addColorStop(0, "#fffbeb");
+        bulb.addColorStop(0.4, "#fde047");
+        bulb.addColorStop(1, "rgba(251,191,36,0)");
+        ctx.beginPath();
+        ctx.arc(bx, by, 4.5, 0, Math.PI * 2);
+        ctx.fillStyle = bulb;
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(bx, by, 2.2, 0, Math.PI * 2);
+        ctx.fillStyle = "#fef08a";
+        ctx.fill();
+      }
+
+      const hubR = Math.max(22, radius * 0.12);
+      const hubGrad = ctx.createRadialGradient(cx - 4, cy - 4, 2, cx, cy, hubR);
+      hubGrad.addColorStop(0, "#1e293b");
+      hubGrad.addColorStop(1, "#0b0f17");
+      ctx.beginPath();
+      ctx.arc(cx, cy, hubR, 0, Math.PI * 2);
+      ctx.fillStyle = hubGrad;
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = "#e2e8f0";
+      ctx.stroke();
+      ctx.fillStyle = "#e2e8f0";
+      ctx.font = `800 ${Math.max(10, hubR * 0.7)}px system-ui, sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("ET", cx, cy + 1);
+    };
+
     const paintOffscreen = () => {
       const dpr = Math.max(1, window.devicePixelRatio || 1);
-      const css = Math.min(420, wrap.clientWidth || 420);
+      const css = Math.min(420, Math.max(1, wrap.clientWidth || 420));
       const rimPad = 18;
-      const radius = Math.min(css / 2, css / 2) - rimPad;
+      const radius = css / 2 - rimPad;
       sizeRef.current = { css, dpr, radius };
 
       canvas.style.width = `${css}px`;
@@ -98,6 +170,7 @@ export function WheelCanvas({
         octx.textAlign = "center";
         octx.textBaseline = "middle";
         octx.fillText("Add choices", cx, cy);
+        blit();
         return;
       }
 
@@ -174,6 +247,7 @@ export function WheelCanvas({
         octx.restore();
       }
       octx.restore();
+      blit();
     };
 
     paintOffscreen();
@@ -182,7 +256,7 @@ export function WheelCanvas({
     return () => ro.disconnect();
   }, [choices, colors, labelColors, highlightIndex]);
 
-  // Blit rotated disk + fixed rim/hub on each rotation update
+  // Re-blit when rotation changes during a spin (disk already painted).
   useEffect(() => {
     const canvas = canvasRef.current;
     const off = offscreenRef.current;
@@ -191,6 +265,7 @@ export function WheelCanvas({
     if (!ctx) return;
 
     const { css, dpr, radius } = sizeRef.current;
+    if (css < 2) return;
     const cx = css / 2;
     const cy = css / 2;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -256,7 +331,7 @@ export function WheelCanvas({
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText("ET", cx, cy + 1);
-  }, [rotation, choices, colors, labelColors, highlightIndex]);
+  }, [rotation]);
 
   return (
     <div

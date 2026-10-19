@@ -1538,6 +1538,7 @@ export function RaffleTool() {
                 Draw again
               </button>
               <MoreMenu
+                buttonRef={extraAltButtonRef}
                 items={[
                   { label: "Copy record", onClick: copyRecord },
                   { label: "Download .txt", onClick: downloadTxt },
@@ -1553,15 +1554,6 @@ export function RaffleTool() {
                   },
                 ]}
               />
-              <button
-                ref={extraAltButtonRef}
-                type="button"
-                className="sr-only"
-                tabIndex={-1}
-                aria-hidden
-              >
-                Draw another alternate
-              </button>
             </div>
           ) : null}
         </div>

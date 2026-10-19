@@ -230,7 +230,7 @@ export default function SecretSantaGeneratorPage() {
   };
 
   return (
-    <main>
+    <div>
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
         <script id="ss-hash-handoff" dangerouslySetInnerHTML={{ __html: HASH_HANDOFF }} />
 
@@ -645,6 +645,6 @@ export default function SecretSantaGeneratorPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-    </main>
+    </div>
   );
 }

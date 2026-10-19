@@ -167,7 +167,7 @@ export default function RaffleGeneratorPage() {
   };
 
   return (
-    <main>
+    <div>
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
         <script id="raffle-hash-handoff" dangerouslySetInnerHTML={{ __html: HASH_HANDOFF }} />
 
@@ -534,6 +534,6 @@ export default function RaffleGeneratorPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-    </main>
+    </div>
   );
 }

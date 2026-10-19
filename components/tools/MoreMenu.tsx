@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type ReactNode,
+  type Ref,
+} from "react";
 import { ChevronDown } from "lucide-react";
 
 export type MoreMenuItem = {
@@ -14,6 +21,7 @@ type Props = {
   label?: string;
   className?: string;
   trailing?: ReactNode;
+  buttonRef?: Ref<HTMLButtonElement>;
 };
 
 export function MoreMenu({
@@ -21,6 +29,7 @@ export function MoreMenu({
   label = "More",
   className = "",
   trailing,
+  buttonRef,
 }: Props) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -45,6 +54,7 @@ export function MoreMenu({
   return (
     <div ref={rootRef} className={`relative inline-flex flex-wrap items-center gap-2 ${className}`}>
       <button
+        ref={buttonRef}
         type="button"
         aria-haspopup="menu"
         aria-expanded={open}

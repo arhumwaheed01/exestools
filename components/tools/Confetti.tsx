@@ -11,11 +11,15 @@ type ConfettiOptions = {
   colors?: string[];
   disableForReducedMotion?: boolean;
   zIndex?: number;
+  ticks?: number;
 };
 
-type ConfettiFn = (options?: ConfettiOptions) => Promise<null> | null;
+type ConfettiFn = ((options?: ConfettiOptions) => Promise<null> | null) & {
+  reset?: () => void;
+};
 
 let confettiPromise: Promise<ConfettiFn> | null = null;
+let clearTimer = 0;
 
 function loadConfetti(): Promise<ConfettiFn> {
   if (!confettiPromise) {
@@ -27,7 +31,10 @@ function loadConfetti(): Promise<ConfettiFn> {
   return confettiPromise;
 }
 
-/** Dual side-bursts (then a smaller follow-up at 300ms). No-op when prefers-reduced-motion. */
+/**
+ * Dual side-bursts + a smaller follow-up at 300ms.
+ * Stays under modals (z-40) and clears itself after ~3s.
+ */
 export function fireCelebrationConfetti(colors?: string[]) {
   if (typeof window === "undefined") return;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -37,10 +44,16 @@ export function fireCelebrationConfetti(colors?: string[]) {
     : ["#22d3ee", "#f472b6", "#fbbf24", "#a78bfa", "#34d399", "#fb923c"];
 
   void loadConfetti().then((confetti) => {
+    window.clearTimeout(clearTimer);
+    confetti.reset?.();
+
     const common: ConfettiOptions = {
       colors: palette,
       disableForReducedMotion: true,
-      zIndex: 60,
+      // Below ConfirmDialog / WinnerModal (z-50)
+      zIndex: 40,
+      // ~2.5–3s at 60fps
+      ticks: 150,
     };
 
     confetti({
@@ -69,6 +82,10 @@ export function fireCelebrationConfetti(colors?: string[]) {
         origin: { x: 0.5, y: 0.42 },
       });
     }, 300);
+
+    clearTimer = window.setTimeout(() => {
+      confetti.reset?.();
+    }, 3000);
   });
 }
 
