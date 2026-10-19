@@ -65,7 +65,7 @@ const FAQS = [
     a: "Yes, as long as you follow the platform's rules. Paste the entrant names you collected, for example from comments, then spin on screen or record the spin so entrants can see the result. ExesTools doesn't connect to social accounts or import comments.",
   },
   {
-    q: "Is this a certified lottery or raffle draw?",
+    q: "Can I use this for an official lottery draw?",
     a: "No. It's a free random picker. If your platform or local law requires an official or supervised draw, use one. See our [Terms of Service].",
   },
   {

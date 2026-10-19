@@ -359,31 +359,19 @@ export default function AboutPage() {
           <ul className="mt-3 list-disc space-y-2 pl-5">
             <li>
               <strong className="text-foreground">2026-10-19:</strong> Contact page and Privacy Policy
-              updated, and worked examples, tips and new FAQs added to every tool page.
-            </li>
-            <li>
-              <strong className="text-foreground">2026-10-19:</strong> Published{" "}
+              updated; worked examples, tips and new FAQs added to every tool page; published{" "}
               <Link href="/guides/bingo-games-for-classrooms-and-parties" className={linkCls}>
                 Bingo game ideas for classrooms and parties
               </Link>
-              .
-            </li>
-            <li>
-              <strong className="text-foreground">2026-10-19:</strong> Published{" "}
+              ,{" "}
               <Link href="/guides/secret-santa-rules-and-budget-ideas" className={linkCls}>
                 Secret Santa rules and gift exchange ideas
               </Link>
-              .
-            </li>
-            <li>
-              <strong className="text-foreground">2026-10-19:</strong> Published{" "}
+              ,{" "}
               <Link href="/guides/how-to-make-balanced-random-teams" className={linkCls}>
                 How to make balanced teams
               </Link>
-              .
-            </li>
-            <li>
-              <strong className="text-foreground">2026-10-19:</strong> Published{" "}
+              , and{" "}
               <Link href="/guides/cold-calling-students-fairly" className={linkCls}>
                 Fair ways to call on students
               </Link>

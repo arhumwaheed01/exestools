@@ -32,7 +32,7 @@ export default function TermsPage() {
       <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
         Terms of Service
       </h1>
-      <p className="mt-2 text-sm text-muted">Last updated: October 12, 2026</p>
+      <p className="mt-2 text-sm text-muted">Last updated: October 19, 2026</p>
       <div className="mt-6 space-y-5 text-sm leading-relaxed text-muted sm:text-base">
         <p>
           These Terms govern your use of <strong className="text-foreground">{siteConfig.name}</strong>{" "}
@@ -76,7 +76,7 @@ export default function TermsPage() {
           <h2 className="text-lg font-bold text-foreground">Giveaways, raffles and contests</h2>
           <p className="mt-2">
             You&apos;re responsible for the rules, prizes and any legal requirements of draws you run
-            with ExesTools. ExesTools isn&apos;t a certified drawing service.
+            with ExesTools. ExesTools doesn&apos;t run official or supervised draws.
           </p>
         </section>
 

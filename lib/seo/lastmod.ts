@@ -24,7 +24,7 @@ export const LASTMOD: Record<string, string> = {
   "/about": "2026-10-19",
   "/contact": "2026-10-19",
   "/privacy-policy": "2026-10-19",
-  "/terms": "2026-10-12",
+  "/terms": "2026-10-19",
   "/dmca": "2026-10-12",
 };
 

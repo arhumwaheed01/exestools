@@ -13,7 +13,7 @@ related_tools: [/, /random-number-wheel, /yes-no-wheel, /random-team-generator, 
 
 By Arhum Waheed · Published 2026-10-13 · Updated 2026-10-19
 
-"Is this wheel rigged?" is a fair question to ask of any online picker, including mine. A spinning wheel looks physical, but on a screen it is code, and code does exactly what it was written to do. This guide explains how the ExesTools wheels pick a result, what kind of randomness that is, why streaks that look suspicious are normal, and where the honest limits are. It doesn't claim any certification, because there isn't one.
+"Is this wheel rigged?" is a fair question to ask of any online picker, including mine. A spinning wheel looks physical, but on a screen it is code, and code does exactly what it was written to do. This guide explains how the ExesTools wheels pick a result, what kind of randomness that is, why streaks that look suspicious are normal, and where the honest limits are.
 
 ## Two ways an online wheel can work
 
