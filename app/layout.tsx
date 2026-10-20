@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import { AppShell } from "@/components/AppShell";
 import { GoogleTag } from "@/components/GoogleTag";
-import { organizationLd } from "@/lib/seo/jsonld";
 import { siteConfig } from "@/lib/seo";
 import "./globals.css";
 
@@ -79,10 +78,6 @@ export default function RootLayout({
       style={{ colorScheme: "dark" }}
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd()) }}
-        />
         <AppShell adsense={adsense}>{children}</AppShell>
         {/* Embeds: no AdSense units; keep GA for aggregate embed_view / spin only */}
         <GoogleTag />

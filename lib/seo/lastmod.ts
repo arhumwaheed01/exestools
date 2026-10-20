@@ -3,15 +3,13 @@
  * Update an entry ONLY when that page's visible copy, structured data, or links change.
  * Do not stamp every page with the build date.
  *
- * Guides are NOT listed here: each guide's sitemap lastmod comes from its own
- * frontmatter `updated` field in content/guides/*.md. Only bump that when the body changes.
- *
- * 2026-10-19: the tool pages (and "/", which is the spinner wheel) were consolidated that day,
- * and about/contact/privacy-policy shipped with the Oct 19 content pack. terms and dmca have
- * not changed since 2026-10-12.
+ * Guides (except the hub) are NOT listed here: each guide's sitemap lastmod comes from
+ * its frontmatter `updated` in content/guides/*.md.
  */
 export const LASTMOD: Record<string, string> = {
-  "/": "2026-10-19",
+  // Homepage JSON-LD merged into one @graph (2026-10-20)
+  "/": "2026-10-20",
+  // Tool pages consolidated in the Oct 19 quality pass
   "/random-name-picker": "2026-10-19",
   "/classroom-spinner": "2026-10-19",
   "/prize-wheel": "2026-10-19",
@@ -21,11 +19,14 @@ export const LASTMOD: Record<string, string> = {
   "/random-number-wheel": "2026-10-19",
   "/raffle-generator": "2026-10-19",
   "/bingo-card-generator": "2026-10-19",
-  "/about": "2026-10-19",
+  // Trust / legal
+  "/about": "2026-10-20",
   "/contact": "2026-10-19",
   "/privacy-policy": "2026-10-19",
   "/terms": "2026-10-19",
   "/dmca": "2026-10-12",
+  // Guides hub card copy (2026-10-20)
+  "/guides": "2026-10-20",
 };
 
 /** IndexNow key (also served at /{key}.txt). */

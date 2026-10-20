@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import PageMeta from "@/components/PageMeta";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
-import { aboutPageLd, toolOpenGraph } from "@/lib/seo/jsonld";
+import { aboutPageGraphLd, toolOpenGraph } from "@/lib/seo/jsonld";
 
 const ABOUT_TITLE = "About ExesTools | Who Builds It, How Picks Work, How It's Paid For";
 const ABOUT_DESC =
-  "ExesTools is a set of free random-pick tools built and maintained by software engineer Arhum Waheed. How the tools pick results, how guides are written, what the site won't do, and how it's funded.";
+  "ExesTools: free random-pick tools by Arhum Waheed. How picks work, how guides are written, what we will not do, and how the site is funded.";
 
 export const metadata: Metadata = {
   title: { absolute: ABOUT_TITLE },
@@ -86,12 +86,12 @@ export default function AboutPage() {
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutPageLd()) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutPageGraphLd()) }}
       />
       <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
         About ExesTools
       </h1>
-      <PageMeta updated="2026-10-19" />
+      <PageMeta updated="2026-10-20" />
       <div className="mt-6 space-y-8 text-sm leading-relaxed text-muted sm:text-base">
         <section>
           <p>

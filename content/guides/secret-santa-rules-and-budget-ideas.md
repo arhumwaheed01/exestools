@@ -1,11 +1,11 @@
 ---
 slug: /guides/secret-santa-rules-and-budget-ideas
-meta_title: "Secret Santa Rules, Budgets and Gift Ideas | ExesTools"
-meta_description: "Secret Santa rules to write down, why hat draws fail, couples and dropouts, budget starting points, and gift themes for offices and families."
+meta_title: "Secret Santa Rules: Budgets, Couples and Gift Ideas"
+meta_description: "Secret Santa rules worth writing down, why hat draws fail, handling couples and dropouts, budget starting points, and gift themes for offices and families."
 author: Arhum Waheed
 author_url: /about#arhum
 published: "2026-10-19"
-updated: "2026-10-19"
+updated: "2026-10-20"
 related_tools: [/secret-santa-generator, /random-name-picker, /bingo-card-generator]
 images:
   - file: /guides/secret-santa-rules-and-budget-ideas/1.jpg
@@ -17,7 +17,7 @@ images:
 
 # Secret Santa rules and gift exchange ideas
 
-By Arhum Waheed · Published 2026-10-19 · Updated 2026-10-19
+By Arhum Waheed · Published 2026-10-19 · Updated 2026-10-20
 
 A Secret Santa goes wrong in predictable ways. Someone draws their own partner. Someone spends four times the budget. Someone in another city ships late. The organizer redraws, and half the group still has the old result. None of that is bad luck. It comes from rules nobody wrote down.
 

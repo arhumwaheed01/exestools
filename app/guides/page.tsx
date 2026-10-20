@@ -25,19 +25,23 @@ function loadHubMeta(): { title: string; description: string; introMarkdown: str
 
 const hub = loadHubMeta();
 
-/** "Who it's for" line per guide card (quality audit 2026-10-19). Falls back to meta_description. */
-const WHO_ITS_FOR: Record<string, string> = {
+/**
+ * One- or two-sentence card blurb: who it's for and what it answers.
+ * Falls back to meta_description for unknown slugs.
+ */
+const CARD_SUMMARY: Record<string, string> = {
   "bingo-games-for-classrooms-and-parties":
-    "For a teacher planning a 15-minute vocabulary round, or a host with 30 guests and one caller.",
+    "For a teacher planning a 15-minute vocabulary round, or a host with 30 guests and one caller. Covers list length, calls per round, avoiding ties, and classroom or party variations.",
   "cold-calling-students-fairly":
-    "For teachers who want every student answering, without the 'frozen in front of the class' moment.",
+    "For teachers who want every student answering, without the frozen-in-front-of-the-class moment. Explains wait-time research, repeats vs no repeats, question scripts, and support for anxious students.",
   "how-to-make-balanced-random-teams":
-    "For PE, workshops and quiz nights where 'random' keeps landing all the strong players together.",
+    "For PE, workshops and quiz nights where random keeps landing all the strong players together. Walks through odd numbers and pairs, how often random goes lopsided, and a skill-mix method.",
   "secret-santa-rules-and-budget-ideas":
-    "For the organizer: rules to send before the draw, dropouts, budgets.",
-  "how-random-is-a-spinner-wheel": "For anyone who's been asked 'is this wheel rigged?'",
+    "For the organizer writing rules before the draw. Covers budgets, couples and dropouts, why hat draws fail, and gift themes for offices and families.",
+  "how-random-is-a-spinner-wheel":
+    "For anyone who's been asked \"is this wheel rigged?\" Explains how ExesTools picks a result, why streaks look suspicious, and where the honest limits are.",
   "how-to-run-a-fair-online-giveaway":
-    "For creators and small businesses running a comment or form giveaway.",
+    "For creators and small businesses running a comment or form giveaway. Covers the rules to publish first, which tool to use, and how to record a draw people can trust.",
 };
 
 export const metadata: Metadata = {
@@ -70,7 +74,7 @@ export default function GuidesHubPage() {
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
       <header className="max-w-3xl">
         <h1 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">Guides</h1>
-        <PageMeta updated={guides[0]?.frontmatter.updated ?? "2026-10-13"} />
+        <PageMeta updated="2026-10-20" />
         <div className="mt-6">
           <GuideMarkdown content={introMarkdown} />
         </div>
@@ -85,7 +89,7 @@ export default function GuidesHubPage() {
             >
               <h2 className="text-lg font-bold text-foreground">{guide.title}</h2>
               <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">
-                {WHO_ITS_FOR[guide.slug] ?? guide.frontmatter.meta_description}
+                {CARD_SUMMARY[guide.slug] ?? guide.frontmatter.meta_description}
               </p>
               <p className="mt-3 text-xs font-medium text-muted">
                 Published{" "}

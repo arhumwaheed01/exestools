@@ -1,11 +1,11 @@
 ---
 slug: /guides/cold-calling-students-fairly
-meta_title: "Fair Ways to Call on Students | ExesTools"
-meta_description: "How to call on students fairly: wait-time research, no-repeat cold calling, question scripts, and tips for anxious students and absences."
+meta_title: "Cold Calling in the Classroom: Fair Ways to Call on Students"
+meta_description: "How to cold call students fairly: what wait-time research found, repeats vs no repeats, question scripts, and ways to support anxious students."
 author: Arhum Waheed
 author_url: /about#arhum
 published: "2026-10-19"
-updated: "2026-10-19"
+updated: "2026-10-20"
 related_tools: [/classroom-spinner, /random-name-picker, /random-team-generator]
 images:
   - file: /guides/cold-calling-students-fairly/1.jpg
@@ -17,7 +17,7 @@ images:
 
 # Fair ways to call on students
 
-By Arhum Waheed · Published 2026-10-19 · Updated 2026-10-19
+By Arhum Waheed · Published 2026-10-19 · Updated 2026-10-20
 
 With hands-up questioning, the same five students answer everything and the rest learn they can switch off. Random calling solves that, but done badly it creates a new problem: a student frozen in front of the class, facing a question they had no time to think about.
 

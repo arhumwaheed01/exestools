@@ -1,11 +1,11 @@
 ---
 slug: /guides/how-to-make-balanced-random-teams
-meta_title: "How to Make Balanced Random Teams | ExesTools"
-meta_description: "Split groups into fair teams: odd numbers, pairs, how often random goes lopsided, captains vs random, and a tiered skill-mix method."
+meta_title: "How to Make Fair Random Teams: Odd Numbers, Pairs, Skill Mix"
+meta_description: "Split a class or group into fair teams: handling odd numbers and pairs, how often random teams go lopsided, captains vs random, and a skill-mix method."
 author: Arhum Waheed
 author_url: /about#arhum
 published: "2026-10-19"
-updated: "2026-10-19"
+updated: "2026-10-20"
 related_tools: [/random-team-generator, /classroom-spinner, /random-name-picker]
 images:
   - file: /guides/how-to-make-balanced-random-teams/1.jpg
@@ -17,7 +17,7 @@ images:
 
 # How to make balanced teams
 
-By Arhum Waheed · Published 2026-10-19 · Updated 2026-10-19
+By Arhum Waheed · Published 2026-10-19 · Updated 2026-10-20
 
 "Balanced" means different things to different people. A PE teacher wants teams that can actually compete, a workshop host wants each table to mix departments, and a parent at a birthday party just wants nobody picked last. A random split handles some of this well and some of it not at all. This guide shows which is which, with the numbers. It also covers a tiered method that gets you close to skill-balanced teams using the [random team generator](/random-team-generator).
 
