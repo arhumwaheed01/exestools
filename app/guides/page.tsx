@@ -42,6 +42,8 @@ const CARD_SUMMARY: Record<string, string> = {
     "For anyone who's been asked \"is this wheel rigged?\" Explains how ExesTools picks a result, why streaks look suspicious, and where the honest limits are.",
   "how-to-run-a-fair-online-giveaway":
     "For creators and small businesses running a comment or form giveaway. Covers the rules to publish first, which tool to use, and how to record a draw people can trust.",
+  "office-secret-santa-planning-timeline":
+    "For the office organizer who got volunteered. A five-week plan for opt-ins, budgets, exclusions, private links, remote shipping and the party itself.",
 };
 
 export const metadata: Metadata = {
@@ -74,7 +76,7 @@ export default function GuidesHubPage() {
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
       <header className="max-w-3xl">
         <h1 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">Guides</h1>
-        <PageMeta updated="2026-10-20" />
+        <PageMeta updated="2026-10-21" />
         <div className="mt-6">
           <GuideMarkdown content={introMarkdown} />
         </div>

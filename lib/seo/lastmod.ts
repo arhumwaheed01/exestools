@@ -15,18 +15,18 @@ export const LASTMOD: Record<string, string> = {
   "/prize-wheel": "2026-10-19",
   "/yes-no-wheel": "2026-10-19",
   "/random-team-generator": "2026-10-19",
-  "/secret-santa-generator": "2026-10-19",
+  "/secret-santa-generator": "2026-10-21",
   "/random-number-wheel": "2026-10-19",
   "/raffle-generator": "2026-10-19",
   "/bingo-card-generator": "2026-10-19",
   // Trust / legal
-  "/about": "2026-10-20",
+  "/about": "2026-10-21",
   "/contact": "2026-10-19",
   "/privacy-policy": "2026-10-19",
   "/terms": "2026-10-19",
   "/dmca": "2026-10-12",
-  // Guides hub card copy (2026-10-20)
-  "/guides": "2026-10-20",
+  // Guides hub (office Secret Santa guide ship)
+  "/guides": "2026-10-21",
 };
 
 /** IndexNow key (also served at /{key}.txt). */

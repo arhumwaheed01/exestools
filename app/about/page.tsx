@@ -91,7 +91,7 @@ export default function AboutPage() {
       <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
         About ExesTools
       </h1>
-      <PageMeta updated="2026-10-20" />
+      <PageMeta updated="2026-10-21" />
       <div className="mt-6 space-y-8 text-sm leading-relaxed text-muted sm:text-base">
         <section>
           <p>
@@ -357,6 +357,13 @@ export default function AboutPage() {
           </h2>
           <p className="mt-2">Major changes to the site, newest first.</p>
           <ul className="mt-3 list-disc space-y-2 pl-5">
+            <li>
+              <strong className="text-foreground">2026-10-21:</strong> Published{" "}
+              <Link href="/guides/office-secret-santa-planning-timeline" className={linkCls}>
+                Office Secret Santa: a week-by-week plan for the organizer
+              </Link>
+              .
+            </li>
             <li>
               <strong className="text-foreground">2026-10-19:</strong> Contact page and Privacy Policy
               updated; worked examples, tips and new FAQs added to every tool page; published{" "}

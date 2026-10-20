@@ -46,8 +46,17 @@ export function extractMarkdownFaqs(body: string): MarkdownFaq[] {
   return faqs;
 }
 
+/** YYYY-MM-DD for guide publish gates. Uses the later of UTC and Asia/Karachi so a
+ *  guide dated for the operator's calendar day can ship that morning before UTC rolls. */
 export function todayUtcDateString(): string {
-  return new Date().toISOString().slice(0, 10);
+  const utc = new Date().toISOString().slice(0, 10);
+  const pkt = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Karachi",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  return pkt > utc ? pkt : utc;
 }
 
 export function isPublishedOnOrBefore(published: string, asOf: string): boolean {

@@ -5,7 +5,7 @@ meta_description: "Secret Santa rules worth writing down, why hat draws fail, ha
 author: Arhum Waheed
 author_url: /about#arhum
 published: "2026-10-19"
-updated: "2026-10-20"
+updated: "2026-10-21"
 related_tools: [/secret-santa-generator, /random-name-picker, /bingo-card-generator]
 images:
   - file: /guides/secret-santa-rules-and-budget-ideas/1.jpg
@@ -17,7 +17,7 @@ images:
 
 # Secret Santa rules and gift exchange ideas
 
-By Arhum Waheed · Published 2026-10-19 · Updated 2026-10-20
+By Arhum Waheed · Published 2026-10-19 · Updated 2026-10-21
 
 A Secret Santa goes wrong in predictable ways. Someone draws their own partner. Someone spends four times the budget. Someone in another city ships late. The organizer redraws, and half the group still has the old result. None of that is bad luck. It comes from rules nobody wrote down.
 
@@ -28,7 +28,7 @@ This guide covers the rules worth agreeing on, the math of why hat draws misfire
 
 ## The rules worth writing down
 
-Send these before the draw, and put a short version in the event note so it appears on everyone's reveal.
+Send these before the draw, and put a short version in the event note so it appears on everyone's reveal. Running it at work? The [week-by-week office plan](/guides/office-secret-santa-planning-timeline) covers opt-ins, remote coworkers and dropouts.
 
 1. **A budget range, not just a maximum.** "$20–$30" or "PKR 3,000–4,000" sets a floor as well as a ceiling. The budget field is free text, so any currency works.
 2. **The date and place.** Remote groups also need a ship-by date: "Gifts must arrive by 18 December."
