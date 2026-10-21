@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import { CLASSROOM_EMBED_CSP } from "@/lib/classroom-embed";
 import { EMBED_FRAME_CSP } from "@/lib/embed";
 
-const GONE = new Set(["/tools/jwt-decoder", "/tools/blog-title-generator"]);
+const GONE = new Set(["/tools/jwt-decoder"]);
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;

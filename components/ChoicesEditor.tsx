@@ -1,6 +1,7 @@
 "use client";
 
 import { ClipboardCopy, Eraser, RotateCcw, Shuffle } from "lucide-react";
+import Link from "next/link";
 import type { ReactNode } from "react";
 
 type Props = {
@@ -18,7 +19,11 @@ type Props = {
   heading?: string;
   /** Help line under the label. */
   helpText?: string;
+  /** Show a "try the raffle generator" note once the list reaches the 60-name cap. */
+  raffleHint?: boolean;
 };
+
+const WHEEL_CAP = 60;
 
 const DEFAULT_HELP =
   "One name or option per line, up to 60. Empty lines are ignored. Duplicate lines are skipped (capital letters don't count as different), so add an initial if two people share a name.";
@@ -36,6 +41,7 @@ export function ChoicesEditor({
   onCopy,
   heading = "Your choices",
   helpText = DEFAULT_HELP,
+  raffleHint = false,
 }: Props) {
   const labelId = "choices-label";
 
@@ -77,6 +83,15 @@ export function ChoicesEditor({
         <p className="text-xs font-medium text-amber-300" role="status">
           Only the first 60 are on the wheel. {overLimit} line
           {overLimit === 1 ? " was" : "s were"} left out.
+        </p>
+      ) : null}
+
+      {raffleHint && count >= WHEEL_CAP ? (
+        <p className="text-xs font-medium text-foreground" role="status">
+          Wheel holds {WHEEL_CAP}. Bigger list?{" "}
+          <Link href="/raffle-generator" className="font-semibold text-accent hover:underline">
+            Try the raffle generator →
+          </Link>
         </p>
       ) : null}
 

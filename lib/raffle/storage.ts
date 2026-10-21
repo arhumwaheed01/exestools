@@ -18,6 +18,9 @@ export interface RaffleState {
   draw: { picks: RafflePick[]; record: DrawRecord } | null;
 }
 
+/** First-time default so the alternates feature is visible. */
+export const DEFAULT_ALTERNATES = 2;
+
 export const STORAGE_KEY = "exestools.raffle.v1";
 export const HANDOFF_KEY = "exestools.raffle.hash.v1";
 
@@ -31,7 +34,7 @@ export function emptyState(): RaffleState {
     range: { start: "1", end: "100", prefix: "", pad: false, excludeText: "" },
     title: "",
     winners: 1,
-    alternates: 0,
+    alternates: DEFAULT_ALTERNATES,
     prizesText: "",
     allowRepeatWinners: false,
     reveal: "all",
@@ -61,7 +64,7 @@ export function saveState(state: RaffleState): void {
       !state.multipleTickets &&
       state.duplicates === "combine" &&
       state.winners === 1 &&
-      state.alternates === 0 &&
+      state.alternates === DEFAULT_ALTERNATES &&
       !state.prizesText &&
       !state.allowRepeatWinners &&
       state.reveal === "all" &&

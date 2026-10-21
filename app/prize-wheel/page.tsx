@@ -112,11 +112,11 @@ export default function PrizeWheelPage() {
           <li>
             Drawing more than one winner? Turn on &quot;Remove winner after spin&quot; so each winner
             leaves the wheel. For a ticket raffle with hundreds of numbers, people with several
-            tickets, or a written record, use the{" "}
+            tickets, or{" "}
             <Link href="/raffle-generator" className="font-semibold text-accent hover:underline">
-              raffle generator
+              multiple prizes and alternates
             </Link>
-            .
+            , use the raffle generator.
           </li>
           <li>Press Copy share link so others can open the same wheel.</li>
         </ol>

@@ -18,6 +18,11 @@ const nextConfig: NextConfig = {
       { source: "/blog/:slug", destination: "/guides/:slug", permanent: true },
       { source: "/guide", destination: "/guides", permanent: true },
       { source: "/guide/:slug", destination: "/guides/:slug", permanent: true },
+      {
+        source: "/tools/blog-title-generator",
+        destination: "/",
+        statusCode: 301,
+      },
     ];
   },
   async headers() {

@@ -360,6 +360,13 @@ export default function SecretSantaGeneratorPage() {
               >
                 office Secret Santa planning timeline
               </Link>
+              . Need breakout groups before the party?{" "}
+              <Link
+                href="/random-team-generator"
+                className="font-semibold text-accent hover:underline"
+              >
+                Split the office into teams
+              </Link>
               .
             </li>
             <li>

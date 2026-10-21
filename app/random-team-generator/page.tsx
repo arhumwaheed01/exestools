@@ -7,9 +7,9 @@ import { QueryHydratedTeams } from "@/components/QueryHydratedMounts";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
 
-const TITLE = "Random Team Generator — Groups & Pairs | ExesTools";
+const TITLE = "Random Team Generator – Free Group & Pair Maker | ExesTools";
 const META =
-  "Paste names and split them into random teams, groups or pairs. Reshuffle and share the result. Free, no account; your list stays in your browser.";
+  "Paste names, pick team count or size, and get random teams, groups or pairs in one click. Reshuffle, print or share the link. Free, no account needed.";
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -58,60 +58,28 @@ function FaqAnswer({ text }: { text: string }) {
 
 const FAQS = [
   {
-    q: "How does the random team generator pick teams?",
-    a: "It shuffles your whole list with a Fisher–Yates shuffle, using your browser's secure random number generator, then deals the names into teams one at a time. Every arrangement is equally likely, and nobody is placed on a team in advance. Learn more: [How ExesTools picks a result].",
+    q: "How do I split a list into random teams?",
+    a: "Paste the names one per line, choose a number of teams or a team size, and press Generate teams. Reshuffle for a new split.",
   },
   {
-    q: "What happens if the names don't split evenly?",
-    a: "Teams are kept as even as possible, so sizes never differ by more than one. For example, 11 names in 3 teams gives teams of 4, 4 and 3.",
+    q: "Can it make random pairs?",
+    a: "Yes. Use the pairs preset, or set 2 people per team. With an odd number, one group gets three.",
   },
   {
-    q: "Can I make random pairs?",
-    a: 'Yes. Tap Pairs, or set People per team to 2. With an odd number of names, the extra person joins one pair to make a group of three. Switch on "Leave one person out" if you\'d rather they sit out.',
-  },
-  {
-    q: "Will it avoid putting the same partners together next time?",
-    a: "No. Each split is independent and the tool doesn't keep a history of past pairs. If two people land together again, press Reshuffle.",
+    q: "What happens if the names don't divide evenly?",
+    a: "Teams are filled as evenly as possible, so sizes differ by at most one person.",
   },
   {
     q: "Can I share the teams with my group?",
-    a: "Yes. Copy share link makes a link that opens the same names and the same teams. The list is stored in the part of the link after the # sign, which browsers don't send to our server. Copy teams gives you plain text for chat or email.",
+    a: "Yes. Copy share link sends the same names and teams, Copy teams gives plain text for chat, and Print makes a handout.",
   },
   {
-    q: "Are the names I enter uploaded anywhere?",
-    a: "No. Teams are made in your browser, and your last list is saved only on this device so it's still there next time. See the [Privacy Policy] for details.",
+    q: "Can I name the teams?",
+    a: "Yes. Add your own team names before you generate.",
   },
   {
-    q: "Can I balance teams by skill or keep certain people together?",
-    a: "Not yet. Every split is fully random. If a split doesn't work for your group, press Reshuffle.",
-  },
-  {
-    q: "How is this different from the classroom spinner or name picker?",
-    a: "This page splits a whole list into several groups at once. The [classroom spinner] and [random name picker] pick one name at a time with a wheel. Use this tool when you need project groups, lab partners, or game teams in one step.",
-  },
-  {
-    q: "How many names can I add?",
-    a: "Up to 200 names. You can make up to 50 teams, or up to 100 people per team. If you only need to call on one person at a time, the wheel tools (60 names max) are a better fit.",
-  },
-  {
-    q: "Can I give the teams names?",
-    a: "Yes. Add optional team names, such as Red and Blue, and they appear on the team cards.",
-  },
-  {
-    q: "What's a good team size for group projects?",
-    a: "Three or four people usually works best. Set People per team to 3 or 4 and the generator works out how many groups you need.",
-  },
-  {
-    q: "Can I make a tournament bracket with this?",
-    a: "No. It splits a list into teams. Once you have teams, you'll need to set up the matchups yourself.",
-  },
-  {
-    q: "How do I pick a captain for each team?",
-    a: "After generating, paste each team's names into the random name picker and spin once per team.",
-  },
-  {
-    q: "Does Reshuffle change my list?",
-    a: "No. Reshuffle keeps your list and settings and makes a completely new random split.",
+    q: "Is it free, and are my names saved?",
+    a: "It's free with no account. Your list stays in your browser.",
   },
 ];
 
@@ -175,13 +143,14 @@ export default function RandomTeamGeneratorPage() {
 
       <header className="mb-3 max-w-3xl print:hidden">
         <h1 className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl lg:text-3xl">
-          Random team generator: split names into groups
+          Random Team Generator: Split Names into Teams, Groups or Pairs
         </h1>
-        <PageMeta updated="2026-10-19" />
+        <PageMeta updated="2026-10-21" />
         <p className="mt-1 text-sm leading-relaxed text-muted sm:text-base">
-          Paste one name per line, choose how many teams you need (or how many people per team), and
-          press Generate teams. Names are shuffled and dealt out so team sizes never differ by more
-          than one. It&apos;s free, there&apos;s no signup, and your list stays in this browser.
+          Paste your names, choose how many teams (or how many people per team), and hit Generate.
+          Don&apos;t like the split? Reshuffle. Then print it, copy it into the group chat, or send a
+          link so everyone sees the same teams. It&apos;s free and there&apos;s no account; your list
+          stays in your browser.
         </p>
       </header>
 
@@ -190,64 +159,35 @@ export default function RandomTeamGeneratorPage() {
       <div className="mt-12 space-y-10 border-t border-border pt-10 print:hidden">
         <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Split a list of names into groups
+            How to make random teams
           </h2>
-          <p className="mt-3">You have two ways to split a list:</p>
-          <ul className="mt-3 list-disc space-y-3 pl-5">
+          <ol className="mt-3 list-decimal space-y-2 pl-5">
+            <li>Paste names, one per line. A column copied from a spreadsheet works.</li>
             <li>
-              <span className="font-semibold text-foreground">Number of teams.</span> You decide how
-              many groups you want, and the tool works out the size. For example, 30 names into 6
-              teams gives 6 groups of 5. 25 names into 4 teams gives 7, 6, 6, 6, because sizes never
-              differ by more than one.
+              Choose <span className="font-semibold text-foreground">number of teams</span>{" "}
+              (&quot;4 teams&quot;) or{" "}
+              <span className="font-semibold text-foreground">people per team</span> (&quot;3
+              each&quot;).
             </li>
             <li>
-              <span className="font-semibold text-foreground">People per team.</span> You decide the
-              group size, and the tool works out how many groups. For example, 30 names with 3 per
-              team gives 10 groups of 3. Choose 2 per team, or open{" "}
+              Press <span className="font-semibold text-foreground">Generate teams</span>. Want
+              partners instead? Open the{" "}
               <Link
                 href="/random-team-generator?preset=pairs"
                 className="font-semibold text-accent hover:underline"
               >
-                pairs mode
+                pairs preset
               </Link>
-              , to randomly pair names for partner work.
-            </li>
-          </ul>
-          <p className="mt-3">
-            Paste one name per line, pick a mode, and press Generate teams. Press Reshuffle for a new
-            random split, Print for a handout, or copy a share link.
-          </p>
-        </section>
-
-        <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            How to make random teams
-          </h2>
-          <ol className="mt-3 list-decimal space-y-2 pl-5">
-            <li>
-              Paste or type names, one per line (up to 200). Empty lines are ignored. If the same
-              name appears more than once, you&apos;ll see a notice so you can add an initial and
-              tell people apart.
+              .
             </li>
             <li>
-              Choose Number of teams (2–50) or People per team (1–100). Tap Pairs when you want
-              groups of two. Optional team names let you label the cards, for example Red and Blue.
-            </li>
-            <li>
-              Press Generate teams. Each team appears as a card with its members and a count. Team
-              sizes stay as even as possible—never more than one person apart.
-            </li>
-            <li>
-              Press Reshuffle for a new random split of the same list, Copy teams to paste the
-              result into chat or a document, Print for a paper handout, or Copy share link to send
-              the exact same names and teams to someone else.
+              Press <span className="font-semibold text-foreground">Reshuffle</span> if you want a
+              different mix, <span className="font-semibold text-foreground">Print</span> for a
+              handout, <span className="font-semibold text-foreground">Copy teams</span> to paste
+              into chat, or{" "}
+              <span className="font-semibold text-foreground">Copy share link</span>.
             </li>
           </ol>
-          <p className="mt-3">
-            The split runs entirely in your browser. Nothing about your roster is sent to ExesTools
-            servers when you generate teams. A share link packs the list into the part of the URL
-            after the # sign, so only people who receive that link can open the same result.
-          </p>
         </section>
 
         <section
@@ -255,7 +195,7 @@ export default function RandomTeamGeneratorPage() {
           className="max-w-3xl scroll-mt-24 text-sm leading-relaxed text-muted sm:text-base"
         >
           <h2 id="pairs" className="scroll-mt-24 text-xl font-bold tracking-tight text-foreground">
-            Classroom groups and pairs
+            Random group generator for classrooms and pairs
           </h2>
           <p className="mt-3">
             For table groups, set Number of teams; for groups of 3 or 4, set People per team. With 26
@@ -274,84 +214,55 @@ export default function RandomTeamGeneratorPage() {
 
         <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Ways to use a random team generator
+            Where people actually use it
           </h2>
           <ul className="mt-3 list-disc space-y-3 pl-5">
             <li>
-              <span className="font-semibold text-foreground">Classroom groups.</span> Split a
-              class into project teams, lab partners, or reading circles without picking favorites.
-              Paste the roster, set the number of groups you need, generate, then Print or Copy
-              teams for the board. If you only need to call on one student at a time, use the{" "}
-              <Link href="/classroom-spinner" className="font-semibold text-accent hover:underline">
-                classroom spinner
-              </Link>{" "}
-              instead.
+              <span className="font-semibold text-foreground">Thursday five-a-side.</span> Twelve
+              people turn up, so you need two sides of six. Paste the WhatsApp list, choose 2 teams,
+              and post the share link before anyone starts a captain argument.
             </li>
             <li>
-              <span className="font-semibold text-foreground">Workshops and breakouts.</span>{" "}
-              Divide attendees into discussion tables or breakout rooms. Set People per team to the
-              room size you want, generate once, and paste the cards into the chat so everyone can
-              find their group.
+              <span className="font-semibold text-foreground">Year 8 science lab.</span> 29 students,
+              groups of 4. Choose People per team = 4 and you get eight groups: five of 4 and three of
+              3. Prefer fewer groups? Choose 7 teams instead and you get six groups of 4 and one of 5.
+              Print it and stick it on the door.
             </li>
             <li>
-              <span className="font-semibold text-foreground">Sports and pickup games.</span> Avoid
-              the captain pick, where the same people get chosen last. Make two or more sides with
-              Number of teams, or use Pairs for doubles. Press Reshuffle if the first split looks
-              lopsided by chance—each reshuffle is a fresh, independent deal.
+              <span className="font-semibold text-foreground">Workshop breakouts.</span> 40
+              attendees across 5 rooms. Generate, Copy teams, and paste into the facilitator doc
+              before the coffee break ends.
             </li>
             <li>
-              <span className="font-semibold text-foreground">Events, trivia, and parties.</span>{" "}
-              Split guests into quiz teams or scavenger-hunt crews as people arrive. Add optional team
-              names so the cards match your theme and the scoreboard reads well, then Copy share
-              link so phones in the room can open the same groups.
+              <span className="font-semibold text-foreground">Quiz night.</span> Names on the left,
+              team names like &quot;Quizteama Aguilera&quot; on top, then generate and read the teams
+              out.
             </li>
           </ul>
         </section>
 
         <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Tips for balanced teams and odd counts
-          </h2>
-          <p className="mt-3">
-            Odd counts are normal. Eleven people into three teams becomes 4, 4, and 3. With Pairs
-            and an odd roster, one group becomes three unless you switch on Leave one person out.
-            That option is useful when you need strict pairs and one person can sit out a round.
-          </p>
-          <p className="mt-3">
-            If two people share a first name, add a last initial before you generate—otherwise the
-            duplicate notice flags them and the cards can look confusing later. After a generate,
-            skim the cards once: typos that split one person into two lines (Maria and Mariah) are
-            the most common mistake. Fix the list and press Reshuffle.
-          </p>
-          <p className="mt-3">
-            Reshuffle keeps your settings and list, but builds a completely new random split. Use
-            it when chance put close friends on every team together, or when you simply want another
-            draw for a second activity. It does not remember previous teams, so the same two people
-            can land together again—that is expected with real randomness.
-          </p>
+          <h2 className="text-xl font-bold tracking-tight text-foreground">Tips</h2>
           <ul className="mt-3 list-disc space-y-3 pl-5">
             <li>
-              <span className="font-semibold text-foreground">Pick team size, not team count, for projects.</span>{" "}
-              Groups of three or four tend to keep everyone involved.
+              Odd number? Pick the number of teams, not the team size, and the extra people get
+              spread across teams.
             </li>
             <li>
-              <span className="font-semibold text-foreground">Choose captains after the split.</span>{" "}
-              Use the{" "}
-              <Link href="/random-name-picker" className="font-semibold text-accent hover:underline">random name picker</Link>{" "}
-              on each team&apos;s names if you need a leader.
+              If two people must not be together, reshuffle until they&apos;re apart. The tool has no
+              keep-apart rule, and we&apos;d rather say so.
             </li>
             <li>
-              <span className="font-semibold text-foreground">Say up front that teams are random.</span>{" "}
-              It heads off the &quot;why am I with him?&quot; conversation.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Print the teams</span>{" "}
-              for in-person events so tables can find their group without crowding a screen.
+              To pick a captain or the first presenter for each team, paste that team into the{" "}
+              <Link href="/random-name-picker" className="font-semibold text-accent hover:underline">
+                random name picker
+              </Link>
+              .
             </li>
           </ul>
           <p className="mt-3">
-            For odd counts, pairs, how often pure random goes lopsided, and a tiered method for
-            mixing skill levels, read{" "}
+            For odd counts, how often pure random goes lopsided, and a tiered method for mixing skill
+            levels, read{" "}
             <Link
               href="/guides/how-to-make-balanced-random-teams"
               className="font-semibold text-accent hover:underline"
@@ -363,48 +274,18 @@ export default function RandomTeamGeneratorPage() {
         </section>
 
         <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Worked example: 23 people, 4 teams
-          </h2>
+          <h2 className="text-xl font-bold tracking-tight text-foreground">How it compares</h2>
           <p className="mt-3">
-            A trivia night has 23 players and four tables. Choose{" "}
-            <span className="font-semibold text-foreground">Number of teams</span>
-            , set it to 4, and press{" "}
-            <span className="font-semibold text-foreground">Generate teams</span>
-            . 23 doesn&apos;t divide evenly by 4, so the generator deals 6, 6, 6 and 5. That&apos;s as even
-            as 23 can get.
-          </p>
-          <p className="mt-3">
-            Add team names if you like, say &quot;Owls,&quot; &quot;Foxes,&quot; &quot;Bears&quot; and
-            &quot;Otters,&quot; and the cards show them. Press{" "}
-            <span className="font-semibold text-foreground">Copy teams</span>{" "}
-            to drop the line-ups into the group chat, or{" "}
-            <span className="font-semibold text-foreground">Copy share link</span>{" "}
-            so anyone with the link can open the same teams on their phone.
-          </p>
-          <p className="mt-3">
-            If chance puts all four regulars from last week on one table, press{" "}
-            <span className="font-semibold text-foreground">Reshuffle</span>
-            . Each reshuffle is a fresh, independent deal, so you might need two.
-          </p>
-        </section>
-
-        <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            What this tool does not do
-          </h2>
-          <p className="mt-3">
-            It does not weight people by skill, keep partners apart with rules, or sync with Google
-            Classroom or a grade book. Those jobs need other systems. ExesTools stays a fast,
-            browser-only splitter: paste, choose a size, generate, share or print. For a private
-            gift exchange with exclusions, use the{" "}
+            Some generators let you lock players to a team, balance by skill or import Excel files. If
+            you need those, use them. ExesTools is the quick option: paste, split, print or share,
+            with a one-click pairs mode and no sign-up screen. For a gift exchange with exclusions,
+            use the{" "}
             <Link href="/secret-santa-generator" className="font-semibold text-accent hover:underline">
               Secret Santa generator
             </Link>
-            ; for one name at a time on a wheel, stay with the name picker or classroom spinner.
+            .
           </p>
         </section>
-
         <RelatedLinks toolId="random-team-generator" />
 
         <section className="max-w-3xl" aria-labelledby="team-faq">

@@ -337,6 +337,40 @@ export function TeamGenerator({ initialPresetQuery = null }: Props) {
               One name per line, up to 200. Empty lines ignored. Duplicates are kept but flagged.
             </p>
           </div>
+          <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Quick split presets">
+            <Chip
+              label="2 teams"
+              onClick={() => {
+                setMode("groups");
+                setN(2);
+                setResult(null);
+              }}
+            />
+            <Chip
+              label="4 teams"
+              onClick={() => {
+                setMode("groups");
+                setN(4);
+                setResult(null);
+              }}
+            />
+            <Chip
+              label="Pairs"
+              onClick={() => {
+                setMode("size");
+                setN(2);
+                setResult(null);
+              }}
+            />
+            <Chip
+              label="Groups of 3"
+              onClick={() => {
+                setMode("size");
+                setN(3);
+                setResult(null);
+              }}
+            />
+          </div>
           <label className="sr-only" htmlFor="team-names">
             Names list
           </label>

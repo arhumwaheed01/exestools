@@ -3,14 +3,14 @@ import type { ToolId } from "@/lib/tools";
 
 const RELATED: Record<ToolId, { href: string; label: string }[]> = {
   home: [
-    { href: "/random-name-picker", label: "Random name picker" },
+    { href: "/random-name-picker", label: "Random Name Picker" },
     { href: "/classroom-spinner", label: "Classroom spinner" },
     { href: "/prize-wheel", label: "Prize wheel" },
     { href: "/yes-no-wheel", label: "Yes or no wheel" },
-    { href: "/random-team-generator", label: "Random team generator" },
+    { href: "/random-team-generator", label: "Random Team Generator" },
     { href: "/secret-santa-generator", label: "Secret Santa generator" },
     { href: "/random-number-wheel", label: "Random number wheel" },
-    { href: "/raffle-generator", label: "Raffle generator" },
+    { href: "/raffle-generator", label: "Raffle Generator" },
     { href: "/bingo-card-generator", label: "Bingo card generator" },
   ],
   "random-name-picker": [
@@ -54,7 +54,7 @@ const RELATED: Record<ToolId, { href: string; label: string }[]> = {
   ],
   "secret-santa-generator": [
     { href: "/random-name-picker", label: "Random name picker (white elephant turn order)" },
-    { href: "/random-team-generator", label: "Random team generator" },
+    { href: "/random-team-generator", label: "Split the office into teams" },
     { href: "/", label: "Free spinner wheel" },
     { href: "/prize-wheel", label: "Prize / giveaway wheel" },
     { href: "/bingo-card-generator", label: "Bingo card generator (holiday party games)" },

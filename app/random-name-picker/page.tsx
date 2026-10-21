@@ -4,9 +4,9 @@ import { GuideSection, UseCaseToolPage } from "@/components/UseCaseToolPage";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph } from "@/lib/seo/jsonld";
 
-const TITLE = "Random Name Picker – Free Name Wheel, Remove Winner & Share";
+const TITLE = "Random Name Picker Wheel – Free, Remove Winner | ExesTools";
 const META =
-  "Paste up to 60 names and spin to pick one at random. Remove each winner, share the wheel with a link, and keep your list in your browser. Free, no account.";
+  "Paste up to 60 names and spin the wheel to pick one at random. Remove each winner, share the wheel by link, and keep the list in your browser. Free.";
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -29,52 +29,28 @@ export const metadata: Metadata = {
 
 const FAQS = [
   {
-    q: "How do I pick a random name from a list?",
-    a: "Paste or type your list in the Your choices box, one name per line, then press SPIN. You can paste a column straight from a spreadsheet or document. Empty lines are ignored, and up to 60 names fit on the wheel.",
+    q: "How do I pick a random name?",
+    a: "Paste names one per line, press Spin (or Space), and the wheel lands on one at random.",
   },
   {
-    q: "Can the random name picker avoid repeats?",
-    a: 'Yes. "Remove winner after spin (no repeats)" is on by default on this page, so each picked name comes off the wheel until you reset the list. Turn it off if you want every name to stay in for every spin.',
-  },
-  {
-    q: "Can I pick more than one winner?",
-    a: "Yes, one at a time. With remove-winner on, spin once for each winner you need. Each winner leaves the wheel, so nobody can be picked twice.",
-  },
-  {
-    q: "What happens with duplicate names?",
-    a: 'Duplicate lines are skipped, and capital letters don\'t count as a difference, so each name appears once. If two people share a name, add an initial, like "Sam K." and "Sam P."',
-  },
-  {
-    q: "Does Shuffle change the odds?",
-    a: "No. Shuffle only changes the order of names around the wheel. Every name has the same chance on each spin. Learn more: [How ExesTools picks a result].",
-  },
-  {
-    q: "I'm a teacher. Which picker should I use?",
-    a: "Use the [Classroom spinner]. It opens with a sample class roster and classroom example wheels, and it has the same no-repeat option.",
-  },
-  {
-    q: "Is this the same as the team generator?",
-    a: "No. This page picks one name at a time on a wheel. The [random team generator] splits a whole list into several groups in one step. Use the wheel when you need a speaking order or a single winner; use teams when you need many groups at once.",
+    q: "Can I stop the same name being picked twice?",
+    a: "Yes. Turn on Remove winner after spin.",
   },
   {
     q: "How many names can I add?",
-    a: "Up to 60 names, one per line. Empty lines are ignored and duplicate lines are skipped. For bigger lists, or for people with more than one ticket, use the [raffle generator].",
+    a: "Up to 60.",
   },
   {
-    q: "Can I use the name picker for a giveaway?",
-    a: "Yes, for a simple draw. Paste the entrant names, leave remove-winner on, and spin once per prize. For multiple entries per person or alternates, use the [raffle generator].",
+    q: "Can I share my wheel?",
+    a: "Yes. Copy share link opens the same list on another device.",
   },
   {
-    q: "How do I bring back the names that were already picked?",
-    a: "Paste your full list back in. With remove winner on, the saved list only keeps the names still on the wheel, so it helps to press Copy before your first spin.",
+    q: "How do I bring back removed names?",
+    a: "Re-paste your list to restore names. Fresh wheel loads the starter sample again.",
   },
   {
-    q: "Can I use the name picker on my phone?",
-    a: "Yes. It runs in a modern mobile browser with no app to install. Your list is saved in that phone's browser.",
-  },
-  {
-    q: "Is there a limit to how many times I can spin?",
-    a: "No. You can spin as often as you like, and it's free with no account.",
+    q: "Is it free? Is my list saved?",
+    a: "Free, no account, and the list stays in your browser.",
   },
 ];
 
@@ -83,12 +59,12 @@ export default function RandomNamePickerPage() {
     <UseCaseToolPage
       toolId="random-name-picker"
       breadcrumbLabel="Random name picker"
-      title="Random name picker wheel"
-      intro="Paste your names, one per line, and press SPIN. The wheel picks one name at random, and every name has the same chance. Add up to 60 names. Switch on remove-winner to stop anyone being picked twice, then copy a share link so others can open the same wheel. It's free and needs no account, and your list stays in this browser."
+      title="Random Name Picker Wheel"
+      intro="Paste a list of up to 60 names and spin. Turn on Remove winner, and nobody gets picked twice, which suits cold-calling a class or setting stand-up order. Copy the share link, and your co-teacher opens the exact same wheel. It's free with no account."
       faqs={FAQS}
       schemaName="Random Name Picker Wheel"
       schemaDescription={META}
-      pageUpdated="2026-10-19"
+      pageUpdated="2026-10-21"
     >
       <GuideSection title="How to pick a name">
         <ol className="list-decimal space-y-2 pl-5">
@@ -130,69 +106,38 @@ export default function RandomNamePickerPage() {
         </p>
       </GuideSection>
 
-      <GuideSection title="Ways to use a random name picker">
+      <GuideSection title="Where it earns its keep">
         <ul className="list-disc space-y-3 pl-5">
           <li>
-            <span className="font-semibold text-foreground">Parties and icebreakers.</span> Load
-            Party / icebreakers or type guest names. Spin for who starts a game, who picks the next
-            song, or who tells a story. Turn remove-winner off if repeats are fine.
-          </li>
-          <li>
-            <span className="font-semibold text-foreground">White elephant turn order.</span> Paste
-            every player&apos;s name, leave remove-winner on, and spin until one name is left. The
-            order names come off the wheel is the order people choose or steal gifts, and the last
-            name goes last. Running a gift exchange where everyone buys for one person instead? Use
-            the{" "}
+            <span className="font-semibold text-foreground">Cold-calling in class.</span> 28 names,
+            Remove winner on. By Friday everyone has answered once, and no one can say you always
+            pick the front row. See{" "}
             <Link
-              href="/secret-santa-generator"
+              href="/guides/cold-calling-students-fairly"
               className="font-semibold text-accent hover:underline"
             >
-              Secret Santa generator
+              calling on students fairly
             </Link>
             .
           </li>
           <li>
-            <span className="font-semibold text-foreground">Simple raffles and door prizes.</span>{" "}
-            Paste entrant names, show the wheel where people can see it, and spin once per prize
-            with remove-winner on. Want to spin for rewards instead of names? Use the{" "}
-            <Link href="/prize-wheel" className="font-semibold text-accent hover:underline">
-              prize wheel spinner
-            </Link>
-            . For prize lists or stream giveaways with themed slices, that same tool is built for
-            that. For ticket raffles (numbered tickets, people with several tickets, or
-            many winners at once), use the{" "}
+            <span className="font-semibold text-foreground">Monday stand-up.</span> Spin for who
+            goes first, keep Remove winner on, and spin until the wheel is empty. That&apos;s your
+            order.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Three presenters from fourteen.</span>{" "}
+            Spin three times with Remove winner on. Done in under a minute.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Small giveaway.</span> For 1–3 winners
+            from a short comment list the wheel is fine. For ticket books or alternates, use the{" "}
             <Link href="/raffle-generator" className="font-semibold text-accent hover:underline">
               raffle generator
             </Link>
             .
           </li>
-          <li>
-            <span className="font-semibold text-foreground">Book clubs and supper clubs.</span> Who
-            hosts next month, or who picks the next book.
-          </li>
-          <li>
-            <span className="font-semibold text-foreground">Sign-up sheets.</span> Eleven people
-            want the one spare concert ticket: paste their names and spin once.
-          </li>
         </ul>
-      </GuideSection>
-
-      <GuideSection title="Picking a giveaway winner">
-        <p>
-          Paste the entrant names, spin once per prize with remove winner on, and record the screen.
-          If people have several entries or you need alternates, the{" "}
-          <Link href="/raffle-generator" className="font-semibold text-accent hover:underline">
-            raffle generator
-          </Link>{" "}
-          is the better fit. The{" "}
-          <Link
-            href="/guides/how-to-run-a-fair-online-giveaway"
-            className="font-semibold text-accent hover:underline"
-          >
-            giveaway guide
-          </Link>{" "}
-          covers the rules to publish first.
-        </p>
       </GuideSection>
 
       <GuideSection title="Using the name picker for stand-ups and meeting order">
@@ -251,27 +196,48 @@ export default function RandomNamePickerPage() {
       </GuideSection>
       <GuideSection title="Tips">
         <ul className="list-disc space-y-2 pl-5">
+          <li>Press Space to spin when the wheel is focused, which is handy when you&apos;re presenting.</li>
+          <li>Turn Sound on for a classroom and off for a meeting.</li>
           <li>
-            <span className="font-semibold text-foreground">Read the name out, then pause.</span>{" "}
-            People are slower to react than you&apos;d think.
+            More than 60 names? Split them across two wheels, or use the{" "}
+            <Link href="/raffle-generator" className="font-semibold text-accent hover:underline">
+              raffle generator
+            </Link>
+            .
           </li>
           <li>
-            <span className="font-semibold text-foreground">Add initials for shared names.</span>{" "}
-            Duplicate lines are skipped, so two &quot;Sam&quot; lines become one slice.
-          </li>
-          <li>
-            <span className="font-semibold text-foreground">Show the list first</span>{" "}
-            when the result matters, so everyone can check they&apos;re on it.
-          </li>
-          <li>
-            <span className="font-semibold text-foreground">Send a co-host the same list</span>{" "}
-            with Copy share link. Anyone with the link can see the names, so keep sensitive lists off it.
-          </li>
-          <li>
-            <span className="font-semibold text-foreground">Turn remove winner off</span>{" "}
-            for games where the same person being picked twice is part of the fun.
+            Need the whole room in groups rather than one name?{" "}
+            <Link
+              href="/random-team-generator"
+              className="font-semibold text-accent hover:underline"
+            >
+              Random team generator
+            </Link>
+            .
           </li>
         </ul>
+      </GuideSection>
+      <GuideSection title="Compared with the big wheel sites">
+        <p>
+          Bigger wheel sites offer themes, images and huge lists. ExesTools keeps it small: one
+          list, one wheel, remove-winner, a share link, and sister tools for{" "}
+          <Link href="/random-team-generator" className="font-semibold text-accent hover:underline">
+            teams
+          </Link>
+          ,{" "}
+          <Link href="/raffle-generator" className="font-semibold text-accent hover:underline">
+            raffles
+          </Link>{" "}
+          and{" "}
+          <Link href="/secret-santa-generator" className="font-semibold text-accent hover:underline">
+            Secret Santa
+          </Link>{" "}
+          on the same site. Spinning for prizes rather than names? Try the{" "}
+          <Link href="/prize-wheel" className="font-semibold text-accent hover:underline">
+            prize wheel spinner
+          </Link>
+          .
+        </p>
       </GuideSection>
       <GuideSection title="Privacy">
         <p>

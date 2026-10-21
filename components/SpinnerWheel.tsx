@@ -684,6 +684,11 @@ export function SpinnerWheel({
             overLimit={overLimit}
             heading={editorLabels.heading}
             helpText={editorLabels.helpText}
+            raffleHint={
+              toolId === "random-name-picker" ||
+              toolId === "classroom-spinner" ||
+              toolId === "home"
+            }
             onChange={onTextChange}
             onShuffle={onShuffle}
             onClear={onClear}

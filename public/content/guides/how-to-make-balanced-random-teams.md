@@ -5,7 +5,7 @@ meta_description: "Split a class or group into fair teams: handling odd numbers 
 author: Arhum Waheed
 author_url: /about#arhum
 published: "2026-10-19"
-updated: "2026-10-20"
+updated: "2026-10-21"
 related_tools: [/random-team-generator, /classroom-spinner, /random-name-picker]
 images:
   - file: /guides/how-to-make-balanced-random-teams/1.jpg
@@ -17,7 +17,7 @@ images:
 
 # How to make balanced teams
 
-By Arhum Waheed · Published 2026-10-19 · Updated 2026-10-20
+By Arhum Waheed · Published 2026-10-19 · Updated 2026-10-21
 
 "Balanced" means different things to different people. A PE teacher wants teams that can actually compete, a workshop host wants each table to mix departments, and a parent at a birthday party just wants nobody picked last. A random split handles some of this well and some of it not at all. This guide shows which is which, with the numbers. It also covers a tiered method that gets you close to skill-balanced teams using the [random team generator](/random-team-generator).
 
@@ -101,7 +101,7 @@ Captain picks are quick, but the same people get picked last, in public, every t
 
 Paste your class list once. The roster, settings and optional team names stay in this browser, so they're there next lesson. The last generated split is not saved — press **Generate teams** again (or **Reshuffle**) when you need the cards back, or **Copy teams** / **Print** if you want a record.
 
-- **Groups of 3** suit short tasks where everyone needs to talk. **Groups of 4** suit projects with distinct roles, such as researcher, writer, presenter and checker.
+- **Groups of 3** suit short tasks where everyone needs to talk. **Groups of 4** suit projects with distinct roles, such as researcher, writer, presenter and checker. For [random pairs](/random-team-generator?preset=pairs), set People per team to 2 or open the pairs preset.
 - **Print** makes a paper handout, and **Copy share link** sends the same names and teams to a co-teacher.
 - **Fix typos first.** "Maria" and "Mariah" can split one student into two lines. If the same name appears twice, the tool shows a notice so you can add an initial.
 - **Reshuffle doesn't give new partners.** The tool has no memory of earlier rounds. Over a term, keep a note of past groups and swap by hand if a pair repeats.

@@ -5,7 +5,7 @@ meta_description: "Bingo ideas for classrooms and parties: how long your word li
 author: Arhum Waheed
 author_url: /about#arhum
 published: "2026-10-19"
-updated: "2026-10-20"
+updated: "2026-10-21"
 related_tools: [/bingo-card-generator, /random-number-wheel, /classroom-spinner, /raffle-generator]
 images:
   - file: /guides/bingo-games-for-classrooms-and-parties/1.jpg
@@ -17,7 +17,7 @@ images:
 
 # Bingo game ideas for classrooms and parties
 
-By Arhum Waheed · Published 2026-10-19 · Updated 2026-10-20
+By Arhum Waheed · Published 2026-10-19 · Updated 2026-10-21
 
 Bingo asks very little of players: listen, look, mark. Most bingo that falls flat has the same few causes. The word list is too short, so half the room wins at once. Or nobody knows how long a round will take, so the "quick game" eats the lesson. This guide starts with the numbers that fix both, then gets into game ideas. The cards and caller mentioned are from the [bingo card generator](/bingo-card-generator).
 
@@ -110,7 +110,7 @@ When someone shouts "Bingo!", type their card number into **Check a card** and c
 
 ## Prizes
 
-Keep prizes small: stickers, a homework pass, first choice of the next game. The bingo tool is for classrooms, parties and team events, not paid or cash games. For door prizes after the bingo, draw from ticket numbers with the [raffle generator](/raffle-generator).
+Keep prizes small: stickers, a homework pass, first choice of the next game. The bingo tool is for classrooms, parties and team events, not paid or cash games. For door prizes after the bingo, draw from ticket numbers with the [raffle tool](/raffle-generator).
 
 ## Frequently asked questions
 

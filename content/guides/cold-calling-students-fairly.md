@@ -5,7 +5,7 @@ meta_description: "How to cold call students fairly: what wait-time research fou
 author: Arhum Waheed
 author_url: /about#arhum
 published: "2026-10-19"
-updated: "2026-10-20"
+updated: "2026-10-21"
 related_tools: [/classroom-spinner, /random-name-picker, /random-team-generator]
 images:
   - file: /guides/cold-calling-students-fairly/1.jpg
@@ -17,7 +17,7 @@ images:
 
 # Fair ways to call on students
 
-By Arhum Waheed · Published 2026-10-19 · Updated 2026-10-20
+By Arhum Waheed · Published 2026-10-19 · Updated 2026-10-21
 
 With hands-up questioning, the same five students answer everything and the rest learn they can switch off. Random calling solves that, but done badly it creates a new problem: a student frozen in front of the class, facing a question they had no time to think about.
 
@@ -74,7 +74,7 @@ The routine stays the same: **ask, wait, then spin.** If you spin first, 27 stud
 
 ## Making it kind as well as fair
 
-- **Warm call.** "After the pair discussion I'll spin for two people to share what their partner said." Reporting a partner's idea is less exposing than defending your own. For quick partners, use the **Pairs** option on the [random team generator](/random-team-generator). With an odd number, one pair becomes a group of three.
+- **Warm call.** "After the pair discussion I'll spin for two people to share what their partner said." Reporting a partner's idea is less exposing than defending your own. For quick partners, use the **Pairs** option on the [random group generator](/random-team-generator). With an odd number, one pair becomes a group of three. For a general list outside class, the [random name picker wheel](/random-name-picker) works the same way with remove-winner on.
 - **"Can you come back to me?"** The student can ask this. Spin again, then return to them after one or two answers. When you come back, ask them which answer they found most convincing so far. They still answer, just with more time.
 - **Partial answers count.** "I got as far as the second step" is a real answer. Spin for the next student: "Can you take it from there?"
 - **Use the second pause.** When a student stops talking, wait three seconds before you respond. They often add the most useful part of their answer in that gap.

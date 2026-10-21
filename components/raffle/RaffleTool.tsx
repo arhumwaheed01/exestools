@@ -258,7 +258,7 @@ export function RaffleTool() {
   const [range, setRange] = useState(emptyState().range);
   const [title, setTitle] = useState("");
   const [winners, setWinners] = useState(1);
-  const [alternates, setAlternates] = useState(0);
+  const [alternates, setAlternates] = useState(emptyState().alternates);
   const [prizesText, setPrizesText] = useState("");
   const [allowRepeatWinners, setAllowRepeatWinners] = useState(false);
   const [reveal, setReveal] = useState<"all" | "one">("all");

@@ -5,13 +5,13 @@ meta_description: "Checklist for a fair online giveaway: rules to publish, clean
 author: Arhum Waheed
 author_url: /about#arhum
 published: "2026-10-13"
-updated: "2026-10-19"
+updated: "2026-10-21"
 related_tools: [/prize-wheel, /raffle-generator, /random-name-picker]
 ---
 
 # How to run a fair online giveaway
 
-By Arhum Waheed · Published 2026-10-13 · Updated 2026-10-19
+By Arhum Waheed · Published 2026-10-13 · Updated 2026-10-21
 
 Most giveaway complaints are not about the draw itself. They come from things decided too late: a rule nobody wrote down, an entry window that ended in a different time zone than people assumed, or a winner who went quiet and a host who quietly picked someone else. A random picker solves only one step. The rest is planning, and that is what this guide covers.
 
@@ -57,7 +57,7 @@ The [prize wheel](/prize-wheel) holds up to 60 entries. Tap **Entrant names**, p
 
 ### A big list, several winners, or numbered tickets: raffle generator
 
-If you have more names than a wheel's 60-slice limit, need several winners and alternates in one draw, or are drawing from numbered tickets, use the [raffle generator](/raffle-generator). Paste one eligible name per line (or use Number range for ticket numbers), set winners and alternates, and draw. By default each person can win only once: when someone wins, they leave the draw. Keep a copy or print of the draw record with your recording.
+If you have more names than a wheel's 60-slice limit, need several winners and alternates in one draw, or are drawing from numbered tickets, use the [online raffle generator](/raffle-generator). Paste one eligible name per line (or use Number range for ticket numbers), set winners and [draw alternates](/raffle-generator), and draw. By default each person can win only once: when someone wins, they leave the draw. Keep a copy or print of the draw record with your recording.
 
 ### Spinning for the prize, not the person
 

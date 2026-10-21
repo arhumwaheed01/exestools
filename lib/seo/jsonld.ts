@@ -7,9 +7,10 @@ export function organizationLd() {
     "@id": "https://www.exestools.com/#organization",
     name: "ExesTools",
     url: "https://www.exestools.com/",
-    logo: "https://www.exestools.com/icon.svg",
+    logo: "https://www.exestools.com/favicon.svg",
     email: "hello@exestools.com",
     founder: { "@type": "Person", name: "Arhum Waheed" },
+    sameAs: ["https://www.youtube.com/@exestools"],
   };
 }
 

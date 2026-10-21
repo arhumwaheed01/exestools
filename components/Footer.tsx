@@ -9,6 +9,11 @@ const FOOTER_LINKS = [
   { href: "/guides", label: "Guides" },
   { href: "/about", label: "About Us" },
   { href: "/contact", label: "Contact" },
+  {
+    href: "https://www.youtube.com/@exestools",
+    label: "YouTube",
+    external: true,
+  },
   { href: "/privacy-policy", label: "Privacy Policy" },
   { href: "/terms", label: "Terms of Service" },
   { href: "/dmca", label: "DMCA" },
@@ -35,15 +40,27 @@ export function Footer() {
           aria-label="Footer"
           className="flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-muted"
         >
-          {FOOTER_LINKS.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              className="hover:text-accent outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
-            >
-              {l.label}
-            </Link>
-          ))}
+          {FOOTER_LINKS.map((l) =>
+            "external" in l && l.external ? (
+              <a
+                key={l.href}
+                href={l.href}
+                target="_blank"
+                rel="noopener me"
+                className="hover:text-accent outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
+              >
+                {l.label}
+              </a>
+            ) : (
+              <Link
+                key={l.href}
+                href={l.href}
+                className="hover:text-accent outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
+              >
+                {l.label}
+              </Link>
+            ),
+          )}
           <PrivacySettingsLink className="cursor-pointer bg-transparent p-0 font-medium text-inherit hover:text-accent outline-none focus-visible:ring-2 focus-visible:ring-accent rounded" />
         </nav>
       </div>

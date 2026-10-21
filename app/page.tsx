@@ -408,7 +408,7 @@ export default function HomePage() {
                   </td>
                   <td className="py-2.5 pr-3 font-semibold text-foreground">
                     <Link href="/random-name-picker" className="text-accent hover:underline">
-                      Random name picker
+                      Random Name Picker
                     </Link>
                   </td>
                   <td className="py-2.5">Name-focused presets and a &quot;no repeats&quot; round</td>
@@ -456,7 +456,7 @@ export default function HomePage() {
                   <td className="py-2.5 pr-3">Split a list into teams, groups or pairs</td>
                   <td className="py-2.5 pr-3 font-semibold text-foreground">
                     <Link href="/random-team-generator" className="text-accent hover:underline">
-                      Random team generator
+                      Random Team Generator
                     </Link>
                   </td>
                   <td className="py-2.5">Set team count or team size, then print or share</td>
@@ -476,7 +476,7 @@ export default function HomePage() {
                   <td className="py-2.5 pr-3">Draw raffle winners from tickets</td>
                   <td className="py-2.5 pr-3 font-semibold text-foreground">
                     <Link href="/raffle-generator" className="text-accent hover:underline">
-                      Raffle generator
+                      Raffle Generator
                     </Link>
                   </td>
                   <td className="py-2.5">

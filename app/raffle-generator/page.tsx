@@ -8,9 +8,9 @@ import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
 
 const PAGE_URL = "https://www.exestools.com/raffle-generator";
-const TITLE = "Raffle Generator — Winners & Alternates | ExesTools";
+const TITLE = "Online Raffle Generator – Winners & Alternates | ExesTools";
 const DESCRIPTION =
-  "Free raffle generator. Paste names or a ticket range, draw winners and alternates, and keep a draw record. No signup; your list stays in the browser.";
+  "Free raffle tool: paste names or a ticket range, draw up to 100 winners plus alternates, then copy or print the draw record. No signup, runs in browser.";
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -40,71 +40,28 @@ const FAQ_LINK_HREFS: Record<string, string> = {
 
 const FAQ = [
   {
-    q: "Is this raffle generator free?",
-    a: "Yes. There's no account, signup or download. Your list, settings and latest draw are saved only in this browser.",
-    aPlain:
-      "Yes. There's no account, signup or download. Your list, settings and latest draw are saved only in this browser.",
+    q: "How does an online raffle generator work?",
+    a: "You add entries or a ticket range, choose how many winners, and the tool picks at random in your browser. Nobody wins twice unless you allow it.",
   },
   {
-    q: "Can the same person win twice?",
-    a: "Not by default: when someone wins, they leave the draw. Switch off Each person can win only once only if your rules allow the same person to win more than once. The same ticket can never be drawn twice. If you entered ticket numbers rather than names, each number counts separately, so set a house rule for people who hold several.",
-    aPlain:
-      "Not by default: when someone wins, they leave the draw. Switch off Each person can win only once only if your rules allow the same person to win more than once. The same ticket can never be drawn twice. If you entered ticket numbers rather than names, each number counts separately, so set a house rule for people who hold several.",
+    q: "Can I draw several prizes at once?",
+    a: "Yes. Up to 100 winners, each matched to a prize name you type.",
   },
   {
-    q: "How many entries and winners can I have?",
-    a: "Up to 10,000 tickets, 100 winners and 20 alternates in one draw. Ticket numbers in a range can go up to 9,999,999.",
-    aPlain:
-      "Up to 10,000 tickets, 100 winners and 20 alternates in one draw. Ticket numbers in a range can go up to 9,999,999.",
+    q: "What are alternates?",
+    a: "Backup winners in order. If winner 2 doesn't claim, alternate 1 gets the prize. You can draw up to 20, plus extra ones later.",
   },
   {
-    q: "How do I draw numbered raffle tickets?",
-    a: "Choose Number range and enter your first and last ticket numbers. Add a prefix and zero padding if your tickets read A-001, and list unsold tickets under Leave out. Each ticket still in the draw has the same chance.",
-    aPlain:
-      "Choose Number range and enter your first and last ticket numbers. Add a prefix and zero padding if your tickets read A-001, and list unsold tickets under Leave out. Each ticket still in the draw has the same chance.",
+    q: "Can I use ticket numbers instead of names?",
+    a: "Yes. Set the first and last ticket number and the tool draws from that range.",
   },
   {
-    q: "Is the draw random?",
-    a: "Yes. Each pick uses your browser's secure random number generator (crypto.getRandomValues) with rejection sampling, so every ticket still in the draw has exactly the same chance. The winner is chosen before the animation starts.",
-    aPlain:
-      "Yes. Each pick uses your browser's secure random number generator (crypto.getRandomValues) with rejection sampling, so every ticket still in the draw has exactly the same chance. The winner is chosen before the animation starts.",
+    q: "How do I prove the draw was fair?",
+    a: "Copy or print the draw record, or share the result link with entrants.",
   },
   {
-    q: "Is this an official raffle draw?",
-    a: "No. It's a free picker that gives you a written record. Raffle and lottery rules vary by place, and some require a license or a supervised draw. If yours does, use that service.",
-    aPlain:
-      "No. It's a free picker that gives you a written record. Raffle and lottery rules vary by place, and some require a license or a supervised draw. If yours does, use that service.",
-  },
-  {
-    q: "Are my entries uploaded anywhere?",
-    a: "No. The draw runs in your browser and your list stays on this device. A result link carries the winners' names, not your list, after the # sign, which browsers don't send to our server; anyone with the link can see them. Analytics counts draws but never receives names.",
-    aPlain:
-      "No. The draw runs in your browser and your list stays on this device. A result link carries the winners' names, not your list, after the # sign, which browsers don't send to our server; anyone with the link can see them. Analytics counts draws but never receives names.",
-  },
-  {
-    q: "Can I name each prize in the draw?",
-    a: "Yes. Type the prizes in draw order and each winner is shown with their prize. If you leave them blank, they're listed as 1st prize, 2nd prize and so on.",
-    aPlain: "Yes. Type the prizes in draw order and each winner is shown with their prize. If you leave them blank, they're listed as 1st prize, 2nd prize and so on.",
-  },
-  {
-    q: "How many alternates should I draw?",
-    a: "A good rule of thumb is one for every two or three prizes, and at least two for any draw where winners might not be present.",
-    aPlain: "A good rule of thumb is one for every two or three prizes, and at least two for any draw where winners might not be present.",
-  },
-  {
-    q: "What order should I draw the prizes in?",
-    a: "Many events draw the smallest prizes first and the main prize last, so people stay until the end. Say the order before you start.",
-    aPlain: "Many events draw the smallest prizes first and the main prize last, so people stay until the end. Say the order before you start.",
-  },
-  {
-    q: "Can I run a raffle draw on a livestream?",
-    a: "Yes. Show the page on screen, read out the number of entries, and choose One at a time to reveal each prize in turn.",
-    aPlain: "Yes. Show the page on screen, read out the number of entries, and choose One at a time to reveal each prize in turn.",
-  },
-  {
-    q: "Can I draw again if I make a mistake?",
-    a: "A new draw gives a completely new result. Only redraw if your published rules allow it, and say why before you do.",
-    aPlain: "A new draw gives a completely new result. Only redraw if your published rules allow it, and say why before you do.",
+    q: "Is this raffle tool free?",
+    a: "Yes. No signup, and your list stays in your browser.",
   },
 ];
 
@@ -157,7 +114,7 @@ export default function RaffleGeneratorPage() {
     mainEntity: FAQ.map((f) => ({
       "@type": "Question",
       name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.aPlain },
+      acceptedAnswer: { "@type": "Answer", text: f.a },
     })),
   };
 
@@ -181,24 +138,14 @@ export default function RaffleGeneratorPage() {
         </nav>
 
         <h1 className="mt-4 max-w-3xl text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
-          Raffle generator and winner picker
+          Online Raffle Generator: Draw Winners and Alternates
         </h1>
-        <PageMeta updated="2026-10-19" />
+        <PageMeta updated="2026-10-21" />
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          Paste your entrants or set a ticket number range, choose how many winners you need, and
-          press Draw. Nobody wins twice unless you allow it, and you get a draw record to copy or
-          print. It&apos;s free, there&apos;s no signup, and the draw happens in your browser. Your
-          list stays in this browser; use a result link if you want to share the winners.
-        </p>
-        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          Running a social giveaway with named entries? See{" "}
-          <Link
-            href="/guides/how-to-run-a-fair-online-giveaway"
-            className="font-semibold text-accent hover:underline"
-          >
-            how to run a fair online giveaway
-          </Link>{" "}
-          for rules to publish before you draw.
+          Paste your entrants or type a ticket range like 1–300, say how many prizes you&apos;re
+          giving away, and press Draw. You get the winners, backup alternates for anyone who
+          doesn&apos;t claim, and a draw record you can copy or print for the committee. It&apos;s
+          free with no signup.
         </p>
 
         <div className="raffle-tool-wrap mt-6 min-w-0">
@@ -207,33 +154,29 @@ export default function RaffleGeneratorPage() {
 
         <section className="mt-12 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           <h2 className="text-xl font-bold tracking-tight text-foreground">
-            How to run a raffle draw online
+            How to run a raffle online
           </h2>
           <ol className="mt-3 list-decimal space-y-3 pl-5">
             <li>
-              <span className="font-semibold text-foreground">Add your entries.</span> Paste names
-              or ticket numbers, one per line; a spreadsheet column works. Or choose Number range and
-              enter your first and last ticket, like 1 to 500, with an optional prefix such as A-.
-              One draw holds up to 10,000 tickets.
+              <span className="font-semibold text-foreground">Add entries.</span> Names one per
+              line, or choose numbered tickets and set the first and last ticket.
             </li>
             <li>
-              <span className="font-semibold text-foreground">Check the count.</span> The line under
-              your list shows names and tickets, like &quot;48 names · 120 tickets&quot;. Check it
-              against your sales.
+              <span className="font-semibold text-foreground">Check the counter</span> against your
+              sales sheet. &quot;120 tickets&quot; should mean 120 sold.
             </li>
             <li>
               <span className="font-semibold text-foreground">Set winners and alternates.</span>{" "}
-              Choose up to 100 winners and 20 alternates. Type your prizes in draw order, or leave
-              them as 1st prize, 2nd prize and so on.
+              Choose up to 100 winners and up to 20 alternates, and type the prize names.
             </li>
             <li>
-              <span className="font-semibold text-foreground">Draw.</span> Show every winner at once,
-              or choose One at a time to reveal each prize with a short animation (skipped if your
-              device is set to reduce motion).
+              <span className="font-semibold text-foreground">Press Draw.</span> If a winner
+              can&apos;t be reached, Draw another alternate adds one without touching the earlier
+              results.
             </li>
             <li>
-              <span className="font-semibold text-foreground">Keep the record.</span> Copy it, print
-              it, or copy a result link to share the winners.
+              <span className="font-semibold text-foreground">Keep the record.</span> Copy or print
+              the draw record, or share the result link.
             </li>
           </ol>
         </section>
@@ -307,53 +250,29 @@ export default function RaffleGeneratorPage() {
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Ways to use the raffle generator
-          </h2>
+          <h2 className="text-xl font-bold tracking-tight text-foreground">Real raffles</h2>
           <ul className="mt-3 list-disc space-y-3 pl-5">
             <li>
-              <span className="font-semibold text-foreground">School and PTA fundraisers.</span> Set
-              a range for your ticket books, leave out unsold numbers, and draw every basket prize in
-              one go, with alternates for families who&apos;ve gone home.
+              <span className="font-semibold text-foreground">PTA spring fair.</span> Tickets 1–300
+              sold from a book, 5 hamper prizes. Set the range, 5 winners, 3 alternates. Read the
+              numbers out, then pin the printed record by the prize table.
             </li>
             <li>
-              <span className="font-semibold text-foreground">Charity events and galas.</span> Set a
-              number range for sold ticket books, leave out unsold numbers, and print the record for
-              your treasurer.
+              <span className="font-semibold text-foreground">Office charity raffle.</span> 48 staff
+              and 120 tickets across names. Paste one line per ticket (repeat a name per ticket
+              bought) so the odds match what people paid.
             </li>
             <li>
-              <span className="font-semibold text-foreground">Giveaways and streams.</span> Paste
-              entrants from your form or comments, choose One entry per name if your rules say so,
-              and reveal winners one at a time on screen. Follow each platform&apos;s promotion
-              rules.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Office parties.</span> Draw door prizes
-              from the guest list, and name the prizes so the record reads &quot;Gift card:
-              Priya&quot;. For a gift exchange where everyone buys for someone, use the{" "}
+              <span className="font-semibold text-foreground">Instagram giveaway.</span> Paste
+              commenters&apos; handles, draw 1 winner and 2 alternates, and post the result link in
+              your story. For the full checklist, see{" "}
               <Link
-                href="/secret-santa-generator"
+                href="/guides/how-to-run-a-fair-online-giveaway"
                 className="font-semibold text-accent hover:underline"
               >
-                Secret Santa generator
+                how to run a fair online giveaway
               </Link>
               .
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Clubs and teams.</span> Draw a
-              members&apos; prize or the winning 50/50 ticket, then share the result link in your
-              group chat.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Prize draw at a bingo night.</span> Play
-              the games with cards from the{" "}
-              <Link
-                href="/bingo-card-generator"
-                className="font-semibold text-accent hover:underline"
-              >
-                bingo card generator
-              </Link>
-              , then draw door prizes here from everyone&apos;s ticket numbers.
             </li>
           </ul>
         </section>
@@ -391,47 +310,35 @@ export default function RaffleGeneratorPage() {
           </p>
         </section>
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Tips
-          </h2>
+          <h2 className="text-xl font-bold tracking-tight text-foreground">Tips</h2>
           <ul className="mt-3 list-disc space-y-3 pl-5">
             <li>
-              <span className="font-semibold text-foreground">Check the count before you draw.</span>{" "}
-              It should match the number of tickets you sold.
+              Draw alternates at the same time as the winners. Redrawing later looks suspicious.
             </li>
+            <li>Remove duplicate lines first if the rule is one entry per person.</li>
             <li>
-              <span className="font-semibold text-foreground">Draw on a screen people can see</span>
-              , or record your screen.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Write your claim rule down:</span>{" "}
-              how long winners have, and when you move to an alternate.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Draw a few more alternates than you think you need.</span>{" "}
-              It&apos;s easier than redrawing later.
+              A single prize, drawn live on a big screen? The{" "}
+              <Link href="/prize-wheel" className="font-semibold text-accent hover:underline">
+                prize wheel
+              </Link>{" "}
+              is more fun to watch.
             </li>
           </ul>
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Raffle generator, prize wheel or name picker?
+            Raffle generator vs other raffle tools
           </h2>
           <p className="mt-3">
-            Use this page for a long list, numbered tickets, several winners at once, alternates, or
-            a record to keep. To spin for one prize at a time on a wheel everyone
-            can watch, use the{" "}
-            <Link href="/prize-wheel" className="font-semibold text-accent hover:underline">
-              prize wheel spinner
-            </Link>
-            . To pick names one by one from a short list, use the{" "}
+            Some raffle tools add weighted entries or animated replays. ExesTools is the better fit
+            when you have several prizes and need{" "}
+            <span className="font-semibold text-foreground">backups you can trust</span>: up to 20
+            alternates drawn alongside the winners, an extra alternate on demand that never
+            reshuffles earlier results, and a printable record with the date and time. To pick
+            names one by one from a short list, use the{" "}
             <Link href="/random-name-picker" className="font-semibold text-accent hover:underline">
               random name picker
-            </Link>
-            . To call numbers on a wheel, like bingo or 1 to 100, use the{" "}
-            <Link href="/random-number-wheel" className="font-semibold text-accent hover:underline">
-              random number wheel
             </Link>
             .
           </p>

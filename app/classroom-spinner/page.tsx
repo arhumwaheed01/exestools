@@ -153,7 +153,14 @@ export default function ClassroomSpinnerPage() {
             >
               Split the class into groups
             </Link>{" "}
-            with the random team generator.
+            with the random team generator. For meetings or parties outside class,{" "}
+            <Link
+              href="/random-name-picker"
+              className="font-semibold text-accent hover:underline"
+            >
+              pick names with remove-winner
+            </Link>{" "}
+            on the name picker.
           </li>
           <li>
             <span className="font-semibold text-foreground">Review games.</span> Spin to pick who
