@@ -128,7 +128,7 @@ export default function PrivacyPolicyPage() {
             Google Consent Mode v2 is enabled. For visitors in the European Economic Area, the United
             Kingdom and Switzerland, analytics and advertising storage are denied by default until
             you make a choice in our consent message. Outside those regions, analytics storage is
-            granted by default so we can measure site usage. Google may process measurement data
+            granted by default so we can measure site usage.             Google may process measurement data
             under its own terms; see{" "}
             <a
               href="https://policies.google.com/privacy"
@@ -139,6 +139,25 @@ export default function PrivacyPolicyPage() {
               Google&apos;s Privacy Policy
             </a>
             .
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-lg font-bold text-foreground">Analytics (Microsoft Clarity)</h2>
+          <p className="mt-2">
+            We use Microsoft Clarity to understand how visitors use our tools, through heatmaps and
+            session replays. Clarity uses cookies and similar technologies to collect usage data such
+            as clicks, scrolls and page interactions. Text you type into the tools is masked.
+            Microsoft processes this data under its Privacy Statement (
+            <a
+              href="https://privacy.microsoft.com/privacystatement"
+              className="font-semibold text-accent hover:underline"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              privacy.microsoft.com/privacystatement
+            </a>
+            ).
           </p>
         </section>
 

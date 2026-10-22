@@ -21,7 +21,7 @@ export const LASTMOD: Record<string, string> = {
   // Trust / legal
   "/about": "2026-10-21",
   "/contact": "2026-10-19",
-  "/privacy-policy": "2026-10-19",
+  "/privacy-policy": "2026-10-22",
   "/terms": "2026-10-19",
   "/dmca": "2026-10-12",
   // Guides hub (office Secret Santa guide ship)
