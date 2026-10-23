@@ -11,7 +11,7 @@ The tools on this site take a second to pick a name or a ticket. These guides ar
 
 Each guide is written by Arhum Waheed, who builds the tools, and checked against the live tools on the date shown. Where a guide gives odds, it shows the math. Where a tool can't do something, the guide says so.
 
-**For teachers:** [Fair ways to call on students](/guides/cold-calling-students-fairly) · [Bingo game ideas for classrooms](/guides/bingo-games-for-classrooms-and-parties) · [How to make balanced teams](/guides/how-to-make-balanced-random-teams)
+**For teachers:** [Fair ways to call on students](/guides/cold-calling-students-fairly) · [Bingo game ideas for classrooms](/guides/bingo-games-for-classrooms-and-parties) · [How to make balanced teams](/guides/how-to-make-balanced-random-teams) · [10 classroom games with a spinner wheel](/guides/classroom-games-with-a-spinner-wheel)
 
 **For giveaways and draws:** [How to run a fair online giveaway](/guides/how-to-run-a-fair-online-giveaway) · [How random is a spinner wheel?](/guides/how-random-is-a-spinner-wheel)
 

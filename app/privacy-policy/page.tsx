@@ -128,7 +128,7 @@ export default function PrivacyPolicyPage() {
             Google Consent Mode v2 is enabled. For visitors in the European Economic Area, the United
             Kingdom and Switzerland, analytics and advertising storage are denied by default until
             you make a choice in our consent message. Outside those regions, analytics storage is
-            granted by default so we can measure site usage.             Google may process measurement data
+            granted by default so we can measure site usage. Google may process measurement data
             under its own terms; see{" "}
             <a
               href="https://policies.google.com/privacy"

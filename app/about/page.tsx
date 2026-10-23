@@ -91,7 +91,7 @@ export default function AboutPage() {
       <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
         About ExesTools
       </h1>
-      <PageMeta updated="2026-10-21" />
+      <PageMeta updated="2026-10-23" />
       <div className="mt-6 space-y-8 text-sm leading-relaxed text-muted sm:text-base">
         <section>
           <p>
@@ -357,6 +357,13 @@ export default function AboutPage() {
           </h2>
           <p className="mt-2">Major changes to the site, newest first.</p>
           <ul className="mt-3 list-disc space-y-2 pl-5">
+            <li>
+              <strong className="text-foreground">2026-10-23:</strong> Published{" "}
+              <Link href="/guides/classroom-games-with-a-spinner-wheel" className={linkCls}>
+                10 classroom games to play with a spinner wheel
+              </Link>
+              .
+            </li>
             <li>
               <strong className="text-foreground">2026-10-21:</strong> Published{" "}
               <Link href="/guides/office-secret-santa-planning-timeline" className={linkCls}>

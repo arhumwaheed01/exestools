@@ -86,7 +86,7 @@ export default function ClassroomSpinnerPage() {
       title="Classroom spinner wheel"
       intro="Paste your class list, one name per line, and hit SPIN to call on a student at random. It's a random student picker built for fair turn-taking: remove winner is on by default, so every student gets a turn before anyone repeats. Free for teachers, no signup, and your roster stays in this browser."
       faqs={ALL_FAQS}
-      pageUpdated="2026-10-19"
+      pageUpdated="2026-10-23"
       schemaName="Classroom Spinner Wheel"
       schemaDescription={META}
       schemaCategory="EducationalApplication"
@@ -125,7 +125,14 @@ export default function ClassroomSpinnerPage() {
           </li>
           <li>
             Brain breaks: spin the Brain break activities wheel for a quick energizer between
-            lessons.
+            lessons. Ten review, warm-up and brain-break games are in{" "}
+            <Link
+              href="/guides/classroom-games-with-a-spinner-wheel"
+              className="font-semibold text-accent hover:underline"
+            >
+              10 classroom games to play with a spinner wheel
+            </Link>
+            .
           </li>
           <li>
             Groups and presentations: use Reading groups to choose which group shares next, or spin

@@ -1,6 +1,6 @@
 ---
 slug: /guides/classroom-games-with-a-spinner-wheel
-meta_title: "10 Classroom Games to Play With a Spinner Wheel (Setup Included) | ExesTools"
+meta_title: "10 Classroom Games to Play With a Spinner Wheel"
 meta_description: "Ten low-prep classroom games for a spinner wheel: review games, warm-ups, brain breaks and end-of-day fillers, with the exact wheel setup, timing and tips for each."
 author: Arhum Waheed
 author_url: /about#arhum
