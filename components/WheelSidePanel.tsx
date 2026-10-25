@@ -279,7 +279,7 @@ function PanelBody({
       </div>
 
       {tab === "entries" ? (
-        <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-hidden p-3">
+        <div className="flex min-h-0 flex-1 flex-col gap-1.5 overflow-hidden p-2.5">
           <p id={labelId} className="sr-only">
             {heading}
           </p>
@@ -405,7 +405,7 @@ function PanelBody({
             type="button"
             onClick={onFreshWheel}
             disabled={disabled}
-            className="mt-auto inline-flex min-h-11 w-full shrink-0 items-center justify-center rounded-xl border border-border bg-surface-2 px-3 text-sm font-bold text-foreground outline-none hover:bg-border focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
+            className="mt-auto inline-flex min-h-10 w-full shrink-0 items-center justify-center rounded-xl border border-border bg-surface-2 px-3 text-sm font-bold text-foreground outline-none hover:bg-border focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
           >
             Add wheel
           </button>

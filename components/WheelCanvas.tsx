@@ -39,6 +39,54 @@ function darken(hex: string, amount: number): string {
   return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, "0")}`;
 }
 
+/** Fit a slice label into at most two lines; ellipsis only as last resort. */
+function wrapSliceLabel(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  maxW: number,
+): [string] | [string, string] {
+  if (ctx.measureText(text).width <= maxW) return [text];
+
+  const words = text.split(/\s+/).filter(Boolean);
+  if (words.length >= 2) {
+    let best: [string, string] | null = null;
+    let bestScore = Infinity;
+    for (let i = 1; i < words.length; i++) {
+      const a = words.slice(0, i).join(" ");
+      const b = words.slice(i).join(" ");
+      const wa = ctx.measureText(a).width;
+      const wb = ctx.measureText(b).width;
+      if (wa <= maxW && wb <= maxW) {
+        const score = Math.abs(wa - wb);
+        if (score < bestScore) {
+          bestScore = score;
+          best = [a, b];
+        }
+      }
+    }
+    if (best) return best;
+  }
+
+  // Long single token: split near the middle where both halves fit.
+  let mid = Math.ceil(text.length / 2);
+  for (let delta = 0; delta < text.length; delta++) {
+    for (const split of [mid - delta, mid + delta]) {
+      if (split <= 0 || split >= text.length) continue;
+      const a = text.slice(0, split);
+      const b = text.slice(split);
+      if (ctx.measureText(a).width <= maxW && ctx.measureText(b).width <= maxW) {
+        return [a, b];
+      }
+    }
+  }
+
+  let clipped = text;
+  while (clipped.length > 1 && ctx.measureText(`${clipped}…`).width > maxW) {
+    clipped = clipped.slice(0, -1);
+  }
+  return [`${clipped}…`];
+}
+
 /** Draw text along a circle. `flip` makes bottom arcs read left-to-right upright. */
 function drawArcText(
   ctx: CanvasRenderingContext2D,
@@ -307,8 +355,9 @@ export function WheelCanvas({
 
         const world = normalizeAngle(mid);
         const flip = world > Math.PI / 2 && world < (Math.PI * 3) / 2;
-        const labelR = radius * (n <= 6 ? 0.62 : 0.68);
-        const maxW = Math.max(28, 2 * labelR * Math.sin(slice / 2) * 0.78);
+        const labelR = radius * (n <= 6 ? 0.58 : 0.66);
+        const maxW = Math.max(32, 2 * labelR * Math.sin(slice / 2) * 0.88);
+        const maxLineH = Math.max(14, radius * Math.sin(slice / 2) * 0.7);
 
         octx.save();
         octx.rotate(mid);
@@ -319,20 +368,28 @@ export function WheelCanvas({
         octx.shadowColor = "rgba(0,0,0,0.4)";
         octx.shadowBlur = 3;
 
-        let fontSize = Math.max(12, Math.min(20, radius / (n > 10 ? 8.5 : 6.5)));
-        let text = choices[i]!.trim();
+        const raw = choices[i]!.trim();
+        let fontSize = Math.max(10, Math.min(20, radius / (n > 10 ? 8.5 : 6.5)));
         octx.font = `700 ${fontSize}px system-ui, sans-serif`;
-        while (fontSize > 11 && octx.measureText(text).width > maxW) {
+        while (fontSize > 8 && octx.measureText(raw).width > maxW) {
           fontSize -= 1;
           octx.font = `700 ${fontSize}px system-ui, sans-serif`;
         }
-        if (octx.measureText(text).width > maxW) {
-          while (text.length > 1 && octx.measureText(`${text}…`).width > maxW) {
-            text = text.slice(0, -1);
+
+        const x = flip ? -labelR : labelR;
+        if (octx.measureText(raw).width <= maxW) {
+          octx.fillText(raw, x, 0);
+        } else {
+          // Two-line wrap (prefer word break; else split long tokens).
+          const lines = wrapSliceLabel(octx, raw, maxW);
+          const lineH = Math.min(fontSize + 2, maxLineH / 2);
+          if (lines.length === 1) {
+            octx.fillText(lines[0]!, x, 0);
+          } else {
+            octx.fillText(lines[0]!, x, -lineH / 2);
+            octx.fillText(lines[1]!, x, lineH / 2);
           }
-          text = text.length < choices[i]!.trim().length ? `${text}…` : text;
         }
-        octx.fillText(text, flip ? -labelR : labelR, 0);
         octx.restore();
       }
       octx.restore();

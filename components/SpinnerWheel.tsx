@@ -18,7 +18,7 @@ import { SpinControls, StickySpinButton } from "@/components/SpinControls";
 import { WheelCanvas } from "@/components/WheelCanvas";
 import { WheelSidePanel, type PanelTab } from "@/components/WheelSidePanel";
 import { HistoryRow } from "@/components/tools/HistoryRow";
-import { NextStepsModal } from "@/components/tools/NextStepsModal";
+import { NextStepsInline } from "@/components/tools/NextStepsInline";
 import { ResultReveal } from "@/components/tools/ResultReveal";
 import { ThemeChips } from "@/components/tools/ThemeChips";
 import { ToolConfetti } from "@/components/tools/Confetti";
@@ -210,9 +210,12 @@ export function SpinnerWheel({
       const mobile = window.matchMedia("(max-width: 1023px)").matches;
       // Leave room above the square so the teardrop pointer isn't clipped.
       const pointerPad = 14;
+      // Cap height on short viewports so Spin + side-panel "Add wheel" stay on-screen.
+      const vh = window.innerHeight;
+      const shortCap = vh <= 760 ? Math.floor(vh * 0.5) : Math.floor(vh * 0.62);
       const next = mobile
-        ? Math.max(0, Math.floor(Math.min(w, window.innerHeight * 0.42 - pointerPad)))
-        : Math.max(0, Math.floor(Math.min(w, h - pointerPad)));
+        ? Math.max(0, Math.floor(Math.min(w, vh * 0.4 - pointerPad)))
+        : Math.max(0, Math.floor(Math.min(w, h - pointerPad, shortCap)));
       setWheelPx((prev) => (prev === next ? prev : next));
     };
 
@@ -647,6 +650,10 @@ export function SpinnerWheel({
           setRevealOpen(false);
           setShowNextSteps(true);
         }}
+        onHide={() => {
+          setRevealOpen(false);
+          setShowNextSteps(false);
+        }}
         onSpinAgain={() => {
           setRevealOpen(false);
           setShowNextSteps(false);
@@ -711,9 +718,9 @@ export function SpinnerWheel({
       <div className="space-y-2" data-tool-theme={resolvedTheme} style={rootStyle}>
         {livePreview}
         {sharedBanner}
-        {/* Fixed stage height so Share/controls stay in view; wheel sizes inside it. */}
+        {/* Fixed stage height — leave room for site header + H1 so "Add wheel" fits at 1280×720. */}
         <div
-          className="flex flex-col gap-2 lg:h-[calc(100dvh-10.25rem)] lg:max-h-[calc(100dvh-10.25rem)] lg:min-h-[20rem] lg:flex-row lg:items-stretch lg:gap-0 lg:overflow-hidden"
+          className="flex flex-col gap-2 lg:h-[calc(100dvh-13.5rem)] lg:max-h-[calc(100dvh-13.5rem)] lg:min-h-[18rem] lg:flex-row lg:items-stretch lg:gap-0 lg:overflow-hidden"
           ref={stageRef}
         >
           <div
@@ -783,7 +790,7 @@ export function SpinnerWheel({
 
             {/* Fixed-height status row — spin speed & share live in the ⋮ menu */}
             <p
-              className="flex h-8 shrink-0 items-center justify-center text-center text-xs text-muted"
+              className="flex h-7 shrink-0 items-center justify-center text-center text-xs text-muted"
               aria-live="polite"
             >
               {status}
@@ -842,9 +849,7 @@ export function SpinnerWheel({
           />
         </div>
 
-        {toastEl}
-        {winnerUi}
-        <NextStepsModal
+        <NextStepsInline
           open={showNextSteps && !revealOpen}
           toolId={toolId}
           onClose={() => setShowNextSteps(false)}
@@ -853,6 +858,9 @@ export function SpinnerWheel({
             spin();
           }}
         />
+
+        {toastEl}
+        {winnerUi}
       </div>
     );
   }
@@ -1053,9 +1061,7 @@ export function SpinnerWheel({
         </div>
       </div>
 
-      {toastEl}
-      {winnerUi}
-      <NextStepsModal
+      <NextStepsInline
         open={showNextSteps && !revealOpen}
         toolId={toolId}
         onClose={() => setShowNextSteps(false)}
@@ -1064,6 +1070,8 @@ export function SpinnerWheel({
           spin();
         }}
       />
+      {toastEl}
+      {winnerUi}
     </div>
   );
 }
