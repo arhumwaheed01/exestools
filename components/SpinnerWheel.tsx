@@ -991,11 +991,7 @@ export function SpinnerWheel({
         entryCount={pickedFromCount}
         showRemoveContinue={!autoRemove && v2Settings.showRemoveButton}
         titleBarText={v2Settings.popupMessage}
-        onClose={() => {
-          setRevealOpen(false);
-          setShowNextSteps(true);
-        }}
-        onHide={() => {
+        onDismiss={() => {
           setRevealOpen(false);
           setShowNextSteps(false);
         }}
@@ -1077,7 +1073,7 @@ export function SpinnerWheel({
   if (wheelFirst) {
     return (
       <div
-        className="space-y-2"
+        className="max-w-full space-y-2 overflow-x-hidden"
         data-tool-theme={resolvedTheme}
         style={{
           ...rootStyle,
@@ -1153,8 +1149,8 @@ export function SpinnerWheel({
           }}
         />
         {/* Mobile: wheel on top (order-1); toolbar under it. Desktop: toolbar above via flex-col wrapper. */}
-        <div className="flex w-full flex-col gap-2">
-        <div className="order-2 w-full lg:order-1">
+        <div className="flex w-full min-w-0 max-w-full flex-col gap-2">
+        <div className="order-2 w-full min-w-0 max-w-full lg:order-1">
           <WheelTopBar
             disabled={spinning}
             compact
@@ -1176,7 +1172,7 @@ export function SpinnerWheel({
         </div>
         {/* Fixed stage height — leave room for site header + H1 + top bar at 1280×720. */}
         <div
-          className="relative order-1 flex w-full flex-col gap-2 overflow-hidden rounded-3xl lg:order-2 lg:h-[calc(100dvh-15.75rem)] lg:max-h-[calc(100dvh-15.75rem)] lg:min-h-[18rem] lg:flex-row lg:items-stretch lg:gap-0"
+          className="relative order-1 flex w-full min-w-0 max-w-full flex-col gap-2 overflow-hidden rounded-3xl lg:order-2 lg:h-[calc(100dvh-15rem)] lg:max-h-[calc(100dvh-15rem)] lg:min-h-[18rem] lg:flex-row lg:items-stretch lg:gap-0"
           ref={stageRef}
         >
           {isFullscreen ? (
@@ -1280,7 +1276,7 @@ export function SpinnerWheel({
             </div>
 
             {!hasSpunOnce && !spinning && choices.length >= 2 ? (
-              <p className="shrink-0 pb-0.5 text-center text-[10px] font-bold tracking-wide text-muted sm:text-[11px]">
+              <p className="mx-auto shrink-0 rounded-full bg-background/85 px-3 py-0.5 text-center text-[10px] font-bold tracking-wide text-foreground shadow-sm [text-shadow:0_1px_2px_rgba(0,0,0,0.45)] sm:text-[11px]">
                 Click To Spin · Ctrl+Enter
               </p>
             ) : null}

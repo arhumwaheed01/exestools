@@ -16,6 +16,7 @@ import { PresetSelector } from "@/components/PresetSelector";
 import { ThemeChips } from "@/components/tools/ThemeChips";
 import type { WheelPreset } from "@/lib/presets";
 import type { ToolThemeId } from "@/lib/tools/theme";
+import { clampMenuBox, useFullscreenPortalRoot } from "@/lib/wheel-v2/portal";
 
 export type PanelTab = "entries" | "results";
 
@@ -605,15 +606,13 @@ function AddImageMenu({
   hasCenter?: boolean;
 }) {
   const [open, setOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
+  const [pos, setPos] = useState<{ top: number; left: number; width: number } | null>(null);
   const btnRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLInputElement>(null);
   const centerRef = useRef<HTMLInputElement>(null);
   const entryRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => setMounted(true), []);
+  const portalRoot = useFullscreenPortalRoot();
 
   useEffect(() => {
     if (!open || !btnRef.current) {
@@ -622,20 +621,18 @@ function AddImageMenu({
     }
     const place = () => {
       const r = btnRef.current!.getBoundingClientRect();
-      const width = 220;
-      setPos({
-        top: r.bottom + 4,
-        left: Math.min(Math.max(8, r.left), window.innerWidth - width - 8),
-      });
+      setPos(clampMenuBox(r.left, r.bottom + 4, 220));
     };
     place();
     window.addEventListener("resize", place);
     window.addEventListener("scroll", place, true);
+    document.addEventListener("fullscreenchange", place);
     return () => {
       window.removeEventListener("resize", place);
       window.removeEventListener("scroll", place, true);
+      document.removeEventListener("fullscreenchange", place);
     };
-  }, [open]);
+  }, [open, portalRoot]);
 
   useEffect(() => {
     if (!open) return;
@@ -658,12 +655,12 @@ function AddImageMenu({
   if (!onBackground && !onCenter && !onEntry) return null;
 
   const menu =
-    mounted && open && pos
+    portalRoot && open && pos
       ? createPortal(
           <div
             ref={menuRef}
-            className="fixed z-[200] w-[220px] rounded-xl border border-border bg-surface p-1.5 shadow-2xl"
-            style={{ top: pos.top, left: pos.left }}
+            className="fixed z-[200] max-w-[calc(100vw-16px)] rounded-xl border border-border bg-surface p-1.5 shadow-2xl"
+            style={{ top: pos.top, left: pos.left, width: pos.width }}
             role="menu"
           >
             {onBackground ? (
@@ -732,7 +729,7 @@ function AddImageMenu({
               </button>
             ) : null}
           </div>,
-          document.body,
+          portalRoot,
         )
       : null;
 

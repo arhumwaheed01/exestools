@@ -10,6 +10,7 @@ import {
   Settings2,
 } from "lucide-react";
 import type { SavedWheelFile } from "@/lib/wheel-v2/settings";
+import { clampMenuBox, useFullscreenPortalRoot } from "@/lib/wheel-v2/portal";
 
 type Props = {
   disabled?: boolean;
@@ -30,7 +31,7 @@ type Props = {
   compact?: boolean;
 };
 
-type MenuPos = { top: number; left: number; right?: number; width: number };
+type MenuPos = { top: number; left: number; width: number };
 
 export function WheelTopBar({
   disabled,
@@ -48,12 +49,12 @@ export function WheelTopBar({
   onImportCsv,
   onPreferences,
   faqHref = "#faq",
-  compact = false,
+  compact: _compact = false,
 }: Props) {
+  void _compact;
   const [openMenu, setOpenMenu] = useState<"open" | "more" | null>(null);
   const [csvOpen, setCsvOpen] = useState(false);
   const [csvText, setCsvText] = useState("");
-  const [mounted, setMounted] = useState(false);
   const [menuPos, setMenuPos] = useState<MenuPos | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const openBtnRef = useRef<HTMLButtonElement>(null);
@@ -61,8 +62,7 @@ export function WheelTopBar({
   const menuRef = useRef<HTMLDivElement>(null);
   const openId = useId();
   const moreId = useId();
-
-  useEffect(() => setMounted(true), []);
+  const portalRoot = useFullscreenPortalRoot();
 
   useLayoutEffect(() => {
     if (!openMenu) {
@@ -73,28 +73,21 @@ export function WheelTopBar({
     if (!btn) return;
     const place = () => {
       const r = btn.getBoundingClientRect();
-      if (openMenu === "more") {
-        setMenuPos({
-          top: r.bottom + 4,
-          left: Math.max(8, r.right - 224),
-          width: 224,
-        });
-      } else {
-        setMenuPos({
-          top: r.bottom + 4,
-          left: Math.min(r.left, window.innerWidth - 272),
-          width: 256,
-        });
-      }
+      const desired = openMenu === "more" ? 224 : 256;
+      const preferredLeft =
+        openMenu === "more" ? r.right - desired : r.left;
+      setMenuPos(clampMenuBox(preferredLeft, r.bottom + 4, desired));
     };
     place();
     window.addEventListener("resize", place);
     window.addEventListener("scroll", place, true);
+    document.addEventListener("fullscreenchange", place);
     return () => {
       window.removeEventListener("resize", place);
       window.removeEventListener("scroll", place, true);
+      document.removeEventListener("fullscreenchange", place);
     };
-  }, [openMenu]);
+  }, [openMenu, portalRoot]);
 
   useEffect(() => {
     if (!openMenu) return;
@@ -115,19 +108,31 @@ export function WheelTopBar({
     };
   }, [openMenu]);
 
+  useEffect(() => {
+    if (!csvOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setCsvOpen(false);
+        setCsvText("");
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [csvOpen]);
+
   const triggerOpenFile = () => {
     setOpenMenu(null);
     window.setTimeout(() => fileRef.current?.click(), 0);
   };
 
   const menuPortal =
-    mounted && openMenu && menuPos
+    portalRoot && openMenu && menuPos
       ? createPortal(
           <div
             ref={menuRef}
             id={openMenu === "open" ? openId : moreId}
             role="menu"
-            className="fixed z-[200] rounded-xl border border-border bg-surface p-1.5 shadow-2xl"
+            className="fixed z-[200] max-w-[calc(100vw-16px)] rounded-xl border border-border bg-surface p-1.5 shadow-2xl"
             style={{
               top: menuPos.top,
               left: menuPos.left,
@@ -179,6 +184,14 @@ export function WheelTopBar({
               </>
             ) : (
               <>
+                <Link
+                  href="/wheel-gallery"
+                  role="menuitem"
+                  className="flex min-h-10 items-center rounded-lg px-2 text-sm font-semibold hover:bg-surface-2 sm:hidden"
+                  onClick={() => setOpenMenu(null)}
+                >
+                  Gallery
+                </Link>
                 <a
                   href="mailto:hello@exestools.com?subject=Spinner%20wheel%20feedback"
                   role="menuitem"
@@ -220,12 +233,12 @@ export function WheelTopBar({
               </>
             )}
           </div>,
-          document.body,
+          portalRoot,
         )
       : null;
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full min-w-0 max-w-full">
       <input
         ref={fileRef}
         type="file"
@@ -238,12 +251,8 @@ export function WheelTopBar({
         }}
       />
 
-      {/* No overflow clip on the button row — menus are portaled */}
-      <div
-        className={`flex w-full items-center gap-1 rounded-2xl border border-border bg-surface px-1.5 py-1 sm:gap-1.5 sm:px-2 ${
-          compact ? "flex-nowrap" : "flex-wrap"
-        }`}
-      >
+      {/* Wrap on narrow screens so the page never scrolls sideways */}
+      <div className="flex w-full min-w-0 max-w-full flex-wrap items-center gap-1 rounded-2xl border border-border bg-surface px-1 py-1 sm:gap-1.5 sm:px-2">
         <BarBtn disabled={disabled} onClick={onCustomize} icon={<Settings2 className="h-3.5 w-3.5" />}>
           Customize
         </BarBtn>
@@ -269,7 +278,7 @@ export function WheelTopBar({
         </BarBtn>
         <Link
           href="/wheel-gallery"
-          className="inline-flex min-h-9 shrink-0 items-center rounded-lg px-2.5 text-xs font-bold text-foreground outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
+          className="hidden min-h-9 shrink-0 items-center rounded-lg px-2.5 text-xs font-bold text-foreground outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent sm:inline-flex"
         >
           Gallery
         </Link>
@@ -290,7 +299,7 @@ export function WheelTopBar({
         <BarBtn
           ref={moreBtnRef}
           disabled={disabled}
-          className="ml-auto"
+          className="sm:ml-auto"
           onClick={() => setOpenMenu((m) => (m === "more" ? null : "more"))}
           aria-expanded={openMenu === "more"}
           aria-controls={moreId}
@@ -304,7 +313,7 @@ export function WheelTopBar({
       {menuPortal}
 
       {shareUrl ? (
-        <div className="mt-2 flex w-full flex-col gap-2 rounded-xl border border-border bg-surface-2 p-3 sm:flex-row sm:items-center">
+        <div className="mt-2 flex w-full min-w-0 flex-col gap-2 rounded-xl border border-border bg-surface-2 p-3 sm:flex-row sm:items-center">
           <input
             readOnly
             value={shareUrl}
@@ -328,10 +337,21 @@ export function WheelTopBar({
         </div>
       ) : null}
 
-      {mounted && csvOpen
+      {portalRoot && csvOpen
         ? createPortal(
-            <div className="fixed inset-0 z-[220] flex items-center justify-center bg-black/70 p-4">
-              <div className="w-full max-w-md rounded-2xl border border-border bg-surface p-4 shadow-2xl">
+            <div
+              className="fixed inset-0 z-[220] flex items-center justify-center bg-black/70 p-4"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Import from pasted CSV"
+              onClick={(e) => {
+                if (e.target === e.currentTarget) {
+                  setCsvOpen(false);
+                  setCsvText("");
+                }
+              }}
+            >
+              <div className="w-full max-w-[min(28rem,calc(100vw-2rem))] rounded-2xl border border-border bg-surface p-4 shadow-2xl">
                 <h3 className="text-sm font-extrabold">Import from pasted CSV</h3>
                 <p className="mt-1 text-xs text-muted">
                   One name per line, or comma-separated values.
@@ -368,7 +388,7 @@ export function WheelTopBar({
                 </div>
               </div>
             </div>,
-            document.body,
+            portalRoot,
           )
         : null}
     </div>
@@ -396,7 +416,7 @@ const BarBtn = ({
     type="button"
     disabled={disabled}
     onClick={onClick}
-    className={`inline-flex min-h-9 shrink-0 items-center gap-1 rounded-lg px-2.5 text-xs font-bold text-foreground outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50 ${className}`}
+    className={`inline-flex min-h-9 shrink-0 items-center gap-1 rounded-lg px-2 text-xs font-bold text-foreground outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50 sm:px-2.5 ${className}`}
     {...rest}
   >
     {icon}

@@ -137,7 +137,7 @@ export function StickySpinButton({
 
       {docked ? (
         <div
-          className={`fixed inset-x-0 bottom-0 z-40 flex justify-center border-t border-border bg-background/95 px-3 pt-2 backdrop-blur pb-[max(0.5rem,env(safe-area-inset-bottom))] print:hidden ${
+          className={`fixed bottom-0 left-0 right-0 z-40 box-border flex w-full max-w-[100vw] justify-center border-t border-border bg-background/95 px-3 pt-2 backdrop-blur pb-[max(0.5rem,env(safe-area-inset-bottom))] print:hidden ${
             alwaysDockMobile ? "lg:hidden" : "sm:hidden"
           }`}
         >
@@ -147,7 +147,7 @@ export function StickySpinButton({
             data-et-spin=""
             onClick={onSpin}
             disabled={canSpin === false || spinning}
-            className={btnClass}
+            className={`${btnClass} max-w-[min(20rem,calc(100vw-1.5rem))]`}
             aria-busy={spinning}
           >
             {spinning ? "Spinning…" : "SPIN"}
