@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import {
@@ -27,9 +27,10 @@ type Props = {
   onImportCsv: (text: string) => void;
   onPreferences: () => void;
   faqHref?: string;
-  /** Compact single-row overflow on small screens. */
   compact?: boolean;
 };
+
+type MenuPos = { top: number; left: number; right?: number; width: number };
 
 export function WheelTopBar({
   disabled,
@@ -53,31 +54,178 @@ export function WheelTopBar({
   const [csvOpen, setCsvOpen] = useState(false);
   const [csvText, setCsvText] = useState("");
   const [mounted, setMounted] = useState(false);
+  const [menuPos, setMenuPos] = useState<MenuPos | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
-  const barRef = useRef<HTMLDivElement>(null);
+  const openBtnRef = useRef<HTMLButtonElement>(null);
+  const moreBtnRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const openId = useId();
   const moreId = useId();
 
   useEffect(() => setMounted(true), []);
 
+  useLayoutEffect(() => {
+    if (!openMenu) {
+      setMenuPos(null);
+      return;
+    }
+    const btn = openMenu === "open" ? openBtnRef.current : moreBtnRef.current;
+    if (!btn) return;
+    const place = () => {
+      const r = btn.getBoundingClientRect();
+      if (openMenu === "more") {
+        setMenuPos({
+          top: r.bottom + 4,
+          left: Math.max(8, r.right - 224),
+          width: 224,
+        });
+      } else {
+        setMenuPos({
+          top: r.bottom + 4,
+          left: Math.min(r.left, window.innerWidth - 272),
+          width: 256,
+        });
+      }
+    };
+    place();
+    window.addEventListener("resize", place);
+    window.addEventListener("scroll", place, true);
+    return () => {
+      window.removeEventListener("resize", place);
+      window.removeEventListener("scroll", place, true);
+    };
+  }, [openMenu]);
+
   useEffect(() => {
     if (!openMenu) return;
     const onDoc = (e: MouseEvent) => {
-      if (!barRef.current?.contains(e.target as Node)) setOpenMenu(null);
+      const t = e.target as Node;
+      if (menuRef.current?.contains(t)) return;
+      if (openBtnRef.current?.contains(t) || moreBtnRef.current?.contains(t)) return;
+      setOpenMenu(null);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpenMenu(null);
     };
     document.addEventListener("mousedown", onDoc);
-    return () => document.removeEventListener("mousedown", onDoc);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDoc);
+      document.removeEventListener("keydown", onKey);
+    };
   }, [openMenu]);
 
   const triggerOpenFile = () => {
     setOpenMenu(null);
-    // Keep input mounted outside the menu; defer so the picker opens after close.
     window.setTimeout(() => fileRef.current?.click(), 0);
   };
 
+  const menuPortal =
+    mounted && openMenu && menuPos
+      ? createPortal(
+          <div
+            ref={menuRef}
+            id={openMenu === "open" ? openId : moreId}
+            role="menu"
+            className="fixed z-[200] rounded-xl border border-border bg-surface p-1.5 shadow-2xl"
+            style={{
+              top: menuPos.top,
+              left: menuPos.left,
+              width: menuPos.width,
+            }}
+          >
+            {openMenu === "open" ? (
+              <>
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="flex min-h-10 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2"
+                  onClick={triggerOpenFile}
+                >
+                  Open JSON file…
+                </button>
+                {recent.length > 0 ? (
+                  <>
+                    <p className="mt-2 px-2 text-[10px] font-bold uppercase tracking-wide text-muted">
+                      Recently saved
+                    </p>
+                    <ul className="mt-1 max-h-40 overflow-y-auto">
+                      {recent.map((r) => (
+                        <li key={r.savedAt}>
+                          <button
+                            type="button"
+                            role="menuitem"
+                            className="flex min-h-9 w-full flex-col rounded-lg px-2 py-1 text-left hover:bg-surface-2"
+                            onClick={() => {
+                              onOpenRecent(r);
+                              setOpenMenu(null);
+                            }}
+                          >
+                            <span className="truncate text-sm font-semibold text-foreground">
+                              {r.title || "Untitled wheel"}
+                            </span>
+                            <span className="text-[10px] text-muted">
+                              {r.choices.length} entries ·{" "}
+                              {new Date(r.savedAt).toLocaleString()}
+                            </span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                ) : (
+                  <p className="mt-2 px-2 text-xs text-muted">No recent wheels yet.</p>
+                )}
+              </>
+            ) : (
+              <>
+                <a
+                  href="mailto:hello@exestools.com?subject=Spinner%20wheel%20feedback"
+                  role="menuitem"
+                  className="flex min-h-10 items-center rounded-lg px-2 text-sm font-semibold hover:bg-surface-2"
+                  onClick={() => setOpenMenu(null)}
+                >
+                  Feedback
+                </a>
+                <a
+                  href={faqHref}
+                  role="menuitem"
+                  className="flex min-h-10 items-center rounded-lg px-2 text-sm font-semibold hover:bg-surface-2"
+                  onClick={() => setOpenMenu(null)}
+                >
+                  FAQ
+                </a>
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="flex min-h-10 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2"
+                  onClick={() => {
+                    setOpenMenu(null);
+                    setCsvOpen(true);
+                  }}
+                >
+                  Import from pasted CSV
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="flex min-h-10 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2"
+                  onClick={() => {
+                    setOpenMenu(null);
+                    onPreferences();
+                  }}
+                >
+                  Preferences
+                </button>
+              </>
+            )}
+          </div>,
+          document.body,
+        )
+      : null;
+
   return (
-    <div ref={barRef} className="relative w-full">
-      {/* Always mounted — must survive Open menu close */}
+    <div className="relative w-full">
       <input
         ref={fileRef}
         type="file"
@@ -90,9 +238,10 @@ export function WheelTopBar({
         }}
       />
 
+      {/* No overflow clip on the button row — menus are portaled */}
       <div
         className={`flex w-full items-center gap-1 rounded-2xl border border-border bg-surface px-1.5 py-1 sm:gap-1.5 sm:px-2 ${
-          compact ? "flex-nowrap overflow-x-auto" : "flex-wrap"
+          compact ? "flex-nowrap" : "flex-wrap"
         }`}
       >
         <BarBtn disabled={disabled} onClick={onCustomize} icon={<Settings2 className="h-3.5 w-3.5" />}>
@@ -101,62 +250,17 @@ export function WheelTopBar({
         <BarBtn disabled={disabled} onClick={onNew}>
           New
         </BarBtn>
-        <div className="relative shrink-0">
-          <BarBtn
-            disabled={disabled}
-            onClick={() => setOpenMenu((m) => (m === "open" ? null : "open"))}
-            aria-expanded={openMenu === "open"}
-            aria-controls={openId}
-          >
-            Open
-            <ChevronDown className="h-3.5 w-3.5 opacity-70" aria-hidden />
-          </BarBtn>
-          {openMenu === "open" ? (
-            <div
-              id={openId}
-              className="absolute left-0 top-full z-40 mt-1 w-64 rounded-xl border border-border bg-surface p-2 shadow-xl"
-            >
-              <button
-                type="button"
-                className="flex min-h-10 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2"
-                onClick={triggerOpenFile}
-              >
-                Open JSON file…
-              </button>
-              {recent.length > 0 ? (
-                <>
-                  <p className="mt-2 px-2 text-[10px] font-bold uppercase tracking-wide text-muted">
-                    Recently saved
-                  </p>
-                  <ul className="mt-1 max-h-40 overflow-y-auto">
-                    {recent.map((r) => (
-                      <li key={r.savedAt}>
-                        <button
-                          type="button"
-                          className="flex min-h-9 w-full flex-col rounded-lg px-2 py-1 text-left hover:bg-surface-2"
-                          onClick={() => {
-                            onOpenRecent(r);
-                            setOpenMenu(null);
-                          }}
-                        >
-                          <span className="truncate text-sm font-semibold text-foreground">
-                            {r.title || "Untitled wheel"}
-                          </span>
-                          <span className="text-[10px] text-muted">
-                            {r.choices.length} entries ·{" "}
-                            {new Date(r.savedAt).toLocaleString()}
-                          </span>
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              ) : (
-                <p className="mt-2 px-2 text-xs text-muted">No recent wheels yet.</p>
-              )}
-            </div>
-          ) : null}
-        </div>
+        <BarBtn
+          ref={openBtnRef}
+          disabled={disabled}
+          onClick={() => setOpenMenu((m) => (m === "open" ? null : "open"))}
+          aria-expanded={openMenu === "open"}
+          aria-controls={openId}
+          aria-haspopup="menu"
+        >
+          Open
+          <ChevronDown className="h-3.5 w-3.5 opacity-70" aria-hidden />
+        </BarBtn>
         <BarBtn disabled={disabled} onClick={onSave}>
           Save
         </BarBtn>
@@ -183,59 +287,21 @@ export function WheelTopBar({
             <Maximize2 className="h-4 w-4" aria-hidden />
           )}
         </button>
-        <div className="relative ml-auto shrink-0">
-          <BarBtn
-            disabled={disabled}
-            onClick={() => setOpenMenu((m) => (m === "more" ? null : "more"))}
-            aria-expanded={openMenu === "more"}
-            aria-controls={moreId}
-          >
-            More
-            <ChevronDown className="h-3.5 w-3.5 opacity-70" aria-hidden />
-          </BarBtn>
-          {openMenu === "more" ? (
-            <div
-              id={moreId}
-              className="absolute right-0 top-full z-40 mt-1 w-56 rounded-xl border border-border bg-surface p-1.5 shadow-xl"
-            >
-              <a
-                href="mailto:hello@exestools.com?subject=Spinner%20wheel%20feedback"
-                className="flex min-h-10 items-center rounded-lg px-2 text-sm font-semibold hover:bg-surface-2"
-                onClick={() => setOpenMenu(null)}
-              >
-                Feedback
-              </a>
-              <a
-                href={faqHref}
-                className="flex min-h-10 items-center rounded-lg px-2 text-sm font-semibold hover:bg-surface-2"
-                onClick={() => setOpenMenu(null)}
-              >
-                FAQ
-              </a>
-              <button
-                type="button"
-                className="flex min-h-10 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2"
-                onClick={() => {
-                  setOpenMenu(null);
-                  setCsvOpen(true);
-                }}
-              >
-                Import from pasted CSV
-              </button>
-              <button
-                type="button"
-                className="flex min-h-10 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2"
-                onClick={() => {
-                  setOpenMenu(null);
-                  onPreferences();
-                }}
-              >
-                Preferences
-              </button>
-            </div>
-          ) : null}
-        </div>
+        <BarBtn
+          ref={moreBtnRef}
+          disabled={disabled}
+          className="ml-auto"
+          onClick={() => setOpenMenu((m) => (m === "more" ? null : "more"))}
+          aria-expanded={openMenu === "more"}
+          aria-controls={moreId}
+          aria-haspopup="menu"
+        >
+          More
+          <ChevronDown className="h-3.5 w-3.5 opacity-70" aria-hidden />
+        </BarBtn>
       </div>
+
+      {menuPortal}
 
       {shareUrl ? (
         <div className="mt-2 flex w-full flex-col gap-2 rounded-xl border border-border bg-surface-2 p-3 sm:flex-row sm:items-center">
@@ -264,7 +330,7 @@ export function WheelTopBar({
 
       {mounted && csvOpen
         ? createPortal(
-            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4">
+            <div className="fixed inset-0 z-[220] flex items-center justify-center bg-black/70 p-4">
               <div className="w-full max-w-md rounded-2xl border border-border bg-surface p-4 shadow-2xl">
                 <h3 className="text-sm font-extrabold">Import from pasted CSV</h3>
                 <p className="mt-1 text-xs text-muted">
@@ -309,28 +375,31 @@ export function WheelTopBar({
   );
 }
 
-function BarBtn({
+const BarBtn = ({
   children,
   onClick,
   disabled,
   icon,
+  className = "",
+  ref,
   ...rest
 }: {
   children: React.ReactNode;
   onClick: () => void;
   disabled?: boolean;
   icon?: React.ReactNode;
-} & React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  return (
-    <button
-      type="button"
-      disabled={disabled}
-      onClick={onClick}
-      className="inline-flex min-h-9 shrink-0 items-center gap-1 rounded-lg px-2.5 text-xs font-bold text-foreground outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
-      {...rest}
-    >
-      {icon}
-      {children}
-    </button>
-  );
-}
+  className?: string;
+  ref?: React.Ref<HTMLButtonElement>;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>) => (
+  <button
+    ref={ref}
+    type="button"
+    disabled={disabled}
+    onClick={onClick}
+    className={`inline-flex min-h-9 shrink-0 items-center gap-1 rounded-lg px-2.5 text-xs font-bold text-foreground outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50 ${className}`}
+    {...rest}
+  >
+    {icon}
+    {children}
+  </button>
+);

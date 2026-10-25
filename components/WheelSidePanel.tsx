@@ -10,7 +10,8 @@ import {
   Shuffle,
 } from "lucide-react";
 import Link from "next/link";
-import { useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { PresetSelector } from "@/components/PresetSelector";
 import { ThemeChips } from "@/components/tools/ThemeChips";
 import type { WheelPreset } from "@/lib/presets";
@@ -57,6 +58,10 @@ type Props = {
   onAddBackgroundImage?: (file: File) => void;
   onAddCenterImage?: (file: File) => void;
   onAddEntryImage?: (file: File) => void;
+  onRemoveBackgroundImage?: () => void;
+  onRemoveCenterImage?: () => void;
+  hasBackgroundImage?: boolean;
+  hasCenterImage?: boolean;
   onSortResults?: () => void;
   onExportResults?: (format: "csv" | "txt") => void;
   onOpenAdvanced?: () => void;
@@ -102,6 +107,10 @@ export function WheelSidePanel({
   onAddBackgroundImage,
   onAddCenterImage,
   onAddEntryImage,
+  onRemoveBackgroundImage,
+  onRemoveCenterImage,
+  hasBackgroundImage,
+  hasCenterImage,
   onSortResults,
   onExportResults,
   onOpenAdvanced,
@@ -169,6 +178,10 @@ export function WheelSidePanel({
               onAddBackgroundImage={onAddBackgroundImage}
               onAddCenterImage={onAddCenterImage}
               onAddEntryImage={onAddEntryImage}
+              onRemoveBackgroundImage={onRemoveBackgroundImage}
+              onRemoveCenterImage={onRemoveCenterImage}
+              hasBackgroundImage={hasBackgroundImage}
+              hasCenterImage={hasCenterImage}
               onSortResults={onSortResults}
               onExportResults={onExportResults}
               onOpenAdvanced={onOpenAdvanced}
@@ -249,6 +262,10 @@ export function WheelSidePanel({
         onAddBackgroundImage={onAddBackgroundImage}
         onAddCenterImage={onAddCenterImage}
         onAddEntryImage={onAddEntryImage}
+        onRemoveBackgroundImage={onRemoveBackgroundImage}
+        onRemoveCenterImage={onRemoveCenterImage}
+        hasBackgroundImage={hasBackgroundImage}
+        hasCenterImage={hasCenterImage}
         onSortResults={onSortResults}
         onExportResults={onExportResults}
         onOpenAdvanced={onOpenAdvanced}
@@ -293,6 +310,10 @@ function PanelBody({
   onAddBackgroundImage,
   onAddCenterImage,
   onAddEntryImage,
+  onRemoveBackgroundImage,
+  onRemoveCenterImage,
+  hasBackgroundImage,
+  hasCenterImage,
   onSortResults,
   onExportResults,
   onOpenAdvanced,
@@ -328,6 +349,10 @@ function PanelBody({
               onBackground={onAddBackgroundImage}
               onCenter={onAddCenterImage}
               onEntry={onAddEntryImage}
+              onRemoveBackground={onRemoveBackgroundImage}
+              onRemoveCenter={onRemoveCenterImage}
+              hasBackground={Boolean(hasBackgroundImage)}
+              hasCenter={Boolean(hasCenterImage)}
             />
             <ToolBtn
               disabled={disabled}
@@ -565,61 +590,166 @@ function AddImageMenu({
   onBackground,
   onCenter,
   onEntry,
+  onRemoveBackground,
+  onRemoveCenter,
+  hasBackground,
+  hasCenter,
 }: {
   disabled?: boolean;
   onBackground?: (file: File) => void;
   onCenter?: (file: File) => void;
   onEntry?: (file: File) => void;
+  onRemoveBackground?: () => void;
+  onRemoveCenter?: () => void;
+  hasBackground?: boolean;
+  hasCenter?: boolean;
 }) {
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLInputElement>(null);
   const centerRef = useRef<HTMLInputElement>(null);
   const entryRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => setMounted(true), []);
+
+  useEffect(() => {
+    if (!open || !btnRef.current) {
+      setPos(null);
+      return;
+    }
+    const place = () => {
+      const r = btnRef.current!.getBoundingClientRect();
+      const width = 220;
+      setPos({
+        top: r.bottom + 4,
+        left: Math.min(Math.max(8, r.left), window.innerWidth - width - 8),
+      });
+    };
+    place();
+    window.addEventListener("resize", place);
+    window.addEventListener("scroll", place, true);
+    return () => {
+      window.removeEventListener("resize", place);
+      window.removeEventListener("scroll", place, true);
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDoc = (e: MouseEvent) => {
+      const t = e.target as Node;
+      if (menuRef.current?.contains(t) || btnRef.current?.contains(t)) return;
+      setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("mousedown", onDoc);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDoc);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
   if (!onBackground && !onCenter && !onEntry) return null;
+
+  const menu =
+    mounted && open && pos
+      ? createPortal(
+          <div
+            ref={menuRef}
+            className="fixed z-[200] w-[220px] rounded-xl border border-border bg-surface p-1.5 shadow-2xl"
+            style={{ top: pos.top, left: pos.left }}
+            role="menu"
+          >
+            {onBackground ? (
+              <button
+                type="button"
+                role="menuitem"
+                className="flex min-h-9 w-full items-center rounded-lg px-2 text-left text-xs font-semibold hover:bg-surface-2"
+                onClick={() => {
+                  setOpen(false);
+                  window.setTimeout(() => bgRef.current?.click(), 0);
+                }}
+              >
+                Add background image
+              </button>
+            ) : null}
+            {onCenter ? (
+              <button
+                type="button"
+                role="menuitem"
+                className="flex min-h-9 w-full items-center rounded-lg px-2 text-left text-xs font-semibold hover:bg-surface-2"
+                onClick={() => {
+                  setOpen(false);
+                  window.setTimeout(() => centerRef.current?.click(), 0);
+                }}
+              >
+                Add center image
+              </button>
+            ) : null}
+            {onEntry ? (
+              <button
+                type="button"
+                role="menuitem"
+                className="flex min-h-9 w-full items-center rounded-lg px-2 text-left text-xs font-semibold hover:bg-surface-2"
+                onClick={() => {
+                  setOpen(false);
+                  window.setTimeout(() => entryRef.current?.click(), 0);
+                }}
+              >
+                Add image as entry
+              </button>
+            ) : null}
+            {hasBackground && onRemoveBackground ? (
+              <button
+                type="button"
+                role="menuitem"
+                className="flex min-h-9 w-full items-center rounded-lg px-2 text-left text-xs font-semibold text-rose-300 hover:bg-surface-2"
+                onClick={() => {
+                  setOpen(false);
+                  onRemoveBackground();
+                }}
+              >
+                Remove background image
+              </button>
+            ) : null}
+            {hasCenter && onRemoveCenter ? (
+              <button
+                type="button"
+                role="menuitem"
+                className="flex min-h-9 w-full items-center rounded-lg px-2 text-left text-xs font-semibold text-rose-300 hover:bg-surface-2"
+                onClick={() => {
+                  setOpen(false);
+                  onRemoveCenter();
+                }}
+              >
+                Remove center image
+              </button>
+            ) : null}
+          </div>,
+          document.body,
+        )
+      : null;
 
   return (
     <div className="relative">
-      <ToolBtn disabled={disabled} onClick={() => setOpen((v) => !v)} label="Add image ▾" />
-      {open ? (
-        <div className="absolute right-0 top-full z-50 mt-1 w-52 rounded-xl border border-border bg-surface p-1.5 shadow-xl sm:left-0 sm:right-auto">
-          {onBackground ? (
-            <button
-              type="button"
-              className="flex min-h-9 w-full items-center rounded-lg px-2 text-left text-xs font-semibold hover:bg-surface-2"
-              onClick={() => {
-                setOpen(false);
-                window.setTimeout(() => bgRef.current?.click(), 0);
-              }}
-            >
-              Add background image
-            </button>
-          ) : null}
-          {onCenter ? (
-            <button
-              type="button"
-              className="flex min-h-9 w-full items-center rounded-lg px-2 text-left text-xs font-semibold hover:bg-surface-2"
-              onClick={() => {
-                setOpen(false);
-                window.setTimeout(() => centerRef.current?.click(), 0);
-              }}
-            >
-              Add center image
-            </button>
-          ) : null}
-          {onEntry ? (
-            <button
-              type="button"
-              className="flex min-h-9 w-full items-center rounded-lg px-2 text-left text-xs font-semibold hover:bg-surface-2"
-              onClick={() => {
-                setOpen(false);
-                window.setTimeout(() => entryRef.current?.click(), 0);
-              }}
-            >
-              Add image as entry
-            </button>
-          ) : null}
-        </div>
-      ) : null}
+      <button
+        ref={btnRef}
+        type="button"
+        disabled={disabled}
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-haspopup="menu"
+        className="inline-flex min-h-9 shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-lg bg-surface-2 px-2.5 py-1.5 text-xs font-semibold text-foreground outline-none hover:bg-border focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
+      >
+        Add image ▾
+      </button>
+      {menu}
       <input
         ref={bgRef}
         type="file"

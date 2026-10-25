@@ -19,6 +19,8 @@ type Props = {
   onStopTick?: () => void;
   onPreviewWinner?: () => void;
   onStopWinner?: () => void;
+  /** Called when Reset appearance defaults is pressed (clear local images, etc.). */
+  onResetAppearance?: () => void;
 };
 
 export function CustomizeDialog({
@@ -30,6 +32,7 @@ export function CustomizeDialog({
   onStopTick,
   onPreviewWinner,
   onStopWinner,
+  onResetAppearance,
 }: Props) {
   const titleId = useId();
   const [tab, setTab] = useState<Tab>("during");
@@ -335,12 +338,13 @@ export function CustomizeDialog({
               </Field>
               <button
                 type="button"
-                onClick={() =>
+                onClick={() => {
                   setDraft({
                     ...DEFAULT_WHEEL_V2_SETTINGS,
                     swatches: [...DEFAULT_WHEEL_V2_SETTINGS.swatches],
-                  })
-                }
+                  });
+                  onResetAppearance?.();
+                }}
                 className="text-xs font-semibold text-accent hover:underline"
               >
                 Reset appearance defaults

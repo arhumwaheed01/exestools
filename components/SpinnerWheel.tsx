@@ -39,10 +39,13 @@ import { encodeShareHash, readShareFromLocation } from "@/lib/share-codec";
 import {
   autosaveLastWheel,
   DEFAULT_WHEEL_V2_SETTINGS,
+  loadEntryWeights,
   loadRecentWheels,
   loadWheelSettings,
   normalizeSettings,
+  normalizeWeights,
   pushRecentWheel,
+  saveEntryWeights,
   saveWheelSettings,
   settingsForShare,
   spinMsFromSettings,
@@ -259,9 +262,9 @@ export function SpinnerWheel({
       const pointerPad = 14;
       // Cap height on short viewports so Spin + side-panel "Add wheel" stay on-screen.
       const vh = window.innerHeight;
-      const shortCap = vh <= 760 ? Math.floor(vh * 0.46) : Math.floor(vh * 0.58);
+      const shortCap = vh <= 760 ? Math.floor(vh * 0.52) : Math.floor(vh * 0.62);
       const next = mobile
-        ? Math.max(0, Math.floor(Math.min(w - 8, vh * 0.52 - pointerPad)))
+        ? Math.max(0, Math.floor(Math.min(w - 8, vh * 0.55 - pointerPad)))
         : Math.max(0, Math.floor(Math.min(w, h - pointerPad, shortCap)));
       setWheelPx((prev) => (prev === next ? prev : next));
     };
@@ -362,12 +365,16 @@ export function SpinnerWheel({
     setV2Settings(loadWheelSettings(toolId));
     setRecentWheels(loadRecentWheels(toolId));
     setWheelImages(loadWheelImages(toolId));
+    setEntryWeights(loadEntryWeights(toolId));
 
     if (fromHash && fromHash.choices.length >= 1) {
       setText(choicesToText(fromHash.choices));
       if (fromHash.extra?.settings) {
         const sharedSettings = normalizeSettings(fromHash.extra.settings);
         setV2Settings(sharedSettings);
+      }
+      if (fromHash.extra?.weights) {
+        setEntryWeights(normalizeWeights(fromHash.extra.weights));
       }
       if (typeof fromHash.extra?.title === "string") {
         setWheelTitle(fromHash.extra.title.slice(0, 40));
@@ -438,8 +445,14 @@ export function SpinnerWheel({
       title: wheelTitle,
       choices,
       settings: v2Settings,
+      weights: entryWeights,
     });
-  }, [choices, wheelTitle, v2Settings, hydrated, toolId]);
+  }, [choices, wheelTitle, v2Settings, entryWeights, hydrated, toolId]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    saveEntryWeights(toolId, entryWeights);
+  }, [entryWeights, toolId, hydrated]);
 
   useEffect(() => {
     const onFs = () => setIsFullscreen(Boolean(document.fullscreenElement));
@@ -659,6 +672,7 @@ export function SpinnerWheel({
       const hash = encodeShareHash(choices, toolId, {
         settings: settingsForShare(v2Settings),
         title: wheelTitle || undefined,
+        weights: entryWeights,
       });
       const url = `${window.location.origin}${cleanPathFor(toolId)}${hash}`;
       setShareUrlBox(url);
@@ -681,6 +695,7 @@ export function SpinnerWheel({
   const applySavedWheel = (file: SavedWheelFile) => {
     setText(choicesToText(file.choices));
     setV2Settings(normalizeSettings(file.settings));
+    setEntryWeights(normalizeWeights(file.weights));
     setWheelTitle(file.title.slice(0, 40));
     setRotation(0);
     setWinner(null);
@@ -698,6 +713,7 @@ export function SpinnerWheel({
       title: wheelTitle || "My wheel",
       choices,
       settings: v2Settings,
+      weights: entryWeights,
       savedAt: Date.now(),
     };
     pushRecentWheel(toolId, file);
@@ -812,6 +828,11 @@ export function SpinnerWheel({
     setSharedMode(false);
   };
 
+  const persistImages = (next: WheelImages) => {
+    setWheelImages(next);
+    saveWheelImages(toolId, next);
+  };
+
   const onNewWheel = () => {
     setUndoBundle({ text, settings: v2Settings, title: wheelTitle });
     const themeSegs = segColors(resolveToolTheme("auto", toolId)).segs;
@@ -820,6 +841,8 @@ export function SpinnerWheel({
       ...DEFAULT_WHEEL_V2_SETTINGS,
       swatches: Array.from({ length: 6 }, (_, i) => themeSegs[i] ?? DEFAULT_WHEEL_V2_SETTINGS.swatches[i]!),
     });
+    setEntryWeights({});
+    persistImages({ background: null, center: null, entries: {} });
     setWheelTitle("");
     setRotation(0);
     setWinner(null);
@@ -840,11 +863,6 @@ export function SpinnerWheel({
     setUndoBundle(null);
     setToast("");
     showToast("Undone.");
-  };
-
-  const persistImages = (next: WheelImages) => {
-    setWheelImages(next);
-    saveWheelImages(toolId, next);
   };
 
   const onPickImage = async (
@@ -1033,6 +1051,16 @@ export function SpinnerWheel({
     onAddBackgroundImage: (f: File) => void onPickImage(f, "background"),
     onAddCenterImage: (f: File) => void onPickImage(f, "center"),
     onAddEntryImage: (f: File) => void onPickImage(f, "entry"),
+    onRemoveBackgroundImage: () => {
+      persistImages({ ...wheelImages, background: null });
+      showToast("Background image removed.");
+    },
+    onRemoveCenterImage: () => {
+      persistImages({ ...wheelImages, center: null });
+      showToast("Center image removed.");
+    },
+    hasBackgroundImage: Boolean(wheelImages.background),
+    hasCenterImage: Boolean(wheelImages.center),
     onSortResults: () => setHistory((h) => [...h].sort((a, b) => a.localeCompare(b))),
     onExportResults,
     onOpenAdvanced: () => setAdvancedOpen(true),
@@ -1093,6 +1121,9 @@ export function SpinnerWheel({
             sound.chime();
           }}
           onStopWinner={() => undefined}
+          onResetAppearance={() => {
+            persistImages({ background: null, center: null, entries: wheelImages.entries });
+          }}
         />
         <AdvancedEntriesDialog
           open={advancedOpen}
@@ -1121,15 +1152,6 @@ export function SpinnerWheel({
             showToast("Advanced entries applied.");
           }}
         />
-        {isFullscreen ? (
-          <button
-            type="button"
-            onClick={() => void onToggleFullscreen()}
-            className="fixed right-3 top-3 z-[90] inline-flex min-h-11 items-center gap-2 rounded-xl border border-border bg-surface px-4 text-sm font-bold text-foreground shadow-lg outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
-          >
-            Exit fullscreen
-          </button>
-        ) : null}
         {/* Mobile: wheel on top (order-1); toolbar under it. Desktop: toolbar above via flex-col wrapper. */}
         <div className="flex w-full flex-col gap-2">
         <div className="order-2 w-full lg:order-1">
@@ -1154,24 +1176,34 @@ export function SpinnerWheel({
         </div>
         {/* Fixed stage height — leave room for site header + H1 + top bar at 1280×720. */}
         <div
-          className="order-1 flex w-full flex-col gap-2 lg:order-2 lg:h-[calc(100dvh-16.25rem)] lg:max-h-[calc(100dvh-16.25rem)] lg:min-h-[17.5rem] lg:flex-row lg:items-stretch lg:gap-0 lg:overflow-hidden"
+          className="relative order-1 flex w-full flex-col gap-2 overflow-hidden rounded-3xl lg:order-2 lg:h-[calc(100dvh-15.75rem)] lg:max-h-[calc(100dvh-15.75rem)] lg:min-h-[18rem] lg:flex-row lg:items-stretch lg:gap-0"
           ref={stageRef}
-          style={
-            wheelImages.background
-              ? {
-                  backgroundImage: `linear-gradient(rgba(11,15,23,0.78), rgba(11,15,23,0.78)), url(${wheelImages.background})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  borderRadius: "1.5rem",
-                }
-              : undefined
-          }
         >
+          {isFullscreen ? (
+            <button
+              type="button"
+              onClick={() => void onToggleFullscreen()}
+              className="absolute right-3 top-3 z-[80] inline-flex min-h-11 items-center gap-2 rounded-xl border border-border bg-surface px-4 text-sm font-bold text-foreground shadow-lg outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              Exit fullscreen
+            </button>
+          ) : null}
           <div
-            className={`relative flex min-h-0 min-w-0 w-full flex-1 flex-col overflow-hidden rounded-3xl border border-border bg-surface/90 p-2 sm:p-2.5 ${
+            className={`relative flex min-h-0 min-w-0 w-full flex-1 flex-col overflow-hidden rounded-3xl border border-border p-2 sm:p-2.5 ${
               panelOpen ? "lg:rounded-r-none lg:border-r-0" : ""
-            }`}
+            } ${wheelImages.background ? "bg-transparent" : "bg-surface"}`}
           >
+            {wheelImages.background ? (
+              <>
+                <div
+                  className="pointer-events-none absolute inset-0 z-0 bg-cover bg-center"
+                  style={{ backgroundImage: `url(${wheelImages.background})` }}
+                  aria-hidden
+                />
+                <div className="pointer-events-none absolute inset-0 z-0 bg-background/72" aria-hidden />
+              </>
+            ) : null}
+            <div className="relative z-10 flex min-h-0 flex-1 flex-col">
             <div className="absolute left-2 top-2 z-30">
               <WheelOverflowMenu
                 disabled={spinning}
@@ -1213,9 +1245,7 @@ export function SpinnerWheel({
                     highlightIndex={revealOpen ? winnerIndex : null}
                     title={v2Settings.showTitle && wheelTitle ? wheelTitle : undefined}
                     hubLabel={spinning ? "…" : ""}
-                    spinPrompt={
-                      !hasSpunOnce && !spinning && !revealOpen && choices.length >= 2
-                    }
+                    spinPrompt={false}
                     weights={choiceWeights}
                     sliceImages={sliceImages}
                     fillContainer
@@ -1249,9 +1279,15 @@ export function SpinnerWheel({
               )}
             </div>
 
+            {!hasSpunOnce && !spinning && choices.length >= 2 ? (
+              <p className="shrink-0 pb-0.5 text-center text-[10px] font-bold tracking-wide text-muted sm:text-[11px]">
+                Click To Spin · Ctrl+Enter
+              </p>
+            ) : null}
+
             {/* Fixed-height status row — spin speed & share live in the ⋮ menu */}
             <p
-              className="flex h-7 shrink-0 items-center justify-center text-center text-xs text-muted"
+              className="flex h-6 shrink-0 items-center justify-center text-center text-xs text-muted"
               aria-live="polite"
             >
               {status}
@@ -1281,6 +1317,7 @@ export function SpinnerWheel({
             {showTally ? (
               <YesNoTally choices={choices} tally={tally} onReset={() => setTally({})} />
             ) : null}
+            </div>
           </div>
 
           <WheelSidePanel

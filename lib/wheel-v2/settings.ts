@@ -59,8 +59,47 @@ export type SavedWheelFile = {
   title: string;
   choices: string[];
   settings: WheelV2Settings;
+  /** Per-entry weights keyed by lowercased name. */
+  weights?: Record<string, number>;
   savedAt: number;
 };
+
+const WEIGHTS_KEY = (toolId: string) => `et:wheel-v2:weights:${toolId}`;
+
+export function loadEntryWeights(toolId: string): Record<string, number> {
+  try {
+    const raw = localStorage.getItem(WEIGHTS_KEY(toolId));
+    if (!raw) return {};
+    const parsed = JSON.parse(raw) as Record<string, unknown>;
+    if (!parsed || typeof parsed !== "object") return {};
+    const out: Record<string, number> = {};
+    for (const [k, v] of Object.entries(parsed)) {
+      const n = Number(v);
+      if (Number.isFinite(n) && n > 0) out[k] = n;
+    }
+    return out;
+  } catch {
+    return {};
+  }
+}
+
+export function saveEntryWeights(toolId: string, weights: Record<string, number>): void {
+  try {
+    localStorage.setItem(WEIGHTS_KEY(toolId), JSON.stringify(weights));
+  } catch {
+    /* ignore */
+  }
+}
+
+export function normalizeWeights(raw: unknown): Record<string, number> {
+  if (!raw || typeof raw !== "object") return {};
+  const out: Record<string, number> = {};
+  for (const [k, v] of Object.entries(raw as Record<string, unknown>)) {
+    const n = Number(v);
+    if (typeof k === "string" && Number.isFinite(n) && n > 0) out[k] = n;
+  }
+  return out;
+}
 
 function clamp(n: number, min: number, max: number) {
   return Math.min(max, Math.max(min, n));
@@ -129,7 +168,12 @@ export function saveWheelSettings(toolId: string, settings: WheelV2Settings): vo
 
 export function autosaveLastWheel(
   toolId: string,
-  payload: { title: string; choices: string[]; settings: WheelV2Settings },
+  payload: {
+    title: string;
+    choices: string[];
+    settings: WheelV2Settings;
+    weights?: Record<string, number>;
+  },
 ): void {
   try {
     const file: SavedWheelFile = {
@@ -138,6 +182,7 @@ export function autosaveLastWheel(
       title: payload.title,
       choices: payload.choices,
       settings: payload.settings,
+      weights: payload.weights,
       savedAt: Date.now(),
     };
     localStorage.setItem(LAST_WHEEL_KEY(toolId), JSON.stringify(file));
