@@ -35,7 +35,14 @@ type Props = {
   compact?: boolean;
 };
 
-type MenuPos = { top: number; left: number; width: number; maxHeight: number };
+type MenuPos = {
+  left: number;
+  width: number;
+  maxHeight: number;
+  placement: "below" | "above";
+  top?: number;
+  bottom?: number;
+};
 
 export function WheelTopBar({
   disabled,
@@ -65,8 +72,10 @@ export function WheelTopBar({
   const [saveOpen, setSaveOpen] = useState(false);
   const [saveTitle, setSaveTitle] = useState(defaultSaveTitle);
   const [saveDownload, setSaveDownload] = useState(false);
+  const [saveError, setSaveError] = useState("");
   const [menuPos, setMenuPos] = useState<MenuPos | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const saveTitleRef = useRef<HTMLInputElement>(null);
   const openBtnRef = useRef<HTMLButtonElement>(null);
   const moreBtnRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -116,9 +125,13 @@ export function WheelTopBar({
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpenMenu(null);
     };
-    document.addEventListener("mousedown", onDoc);
+    // Defer so the opening click doesn't immediately dismiss the menu.
+    const t = window.setTimeout(() => {
+      document.addEventListener("mousedown", onDoc);
+    }, 0);
     document.addEventListener("keydown", onKey);
     return () => {
+      window.clearTimeout(t);
       document.removeEventListener("mousedown", onDoc);
       document.removeEventListener("keydown", onKey);
     };
@@ -133,11 +146,37 @@ export function WheelTopBar({
         setCsvText("");
         setCsvError("");
       }
-      if (saveOpen) setSaveOpen(false);
+      if (saveOpen) {
+        setSaveOpen(false);
+        setSaveError("");
+      }
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [csvOpen, saveOpen]);
+
+  useEffect(() => {
+    if (!saveOpen) return;
+    const t = window.setTimeout(() => {
+      saveTitleRef.current?.focus();
+      saveTitleRef.current?.select();
+    }, 50);
+    return () => window.clearTimeout(t);
+  }, [saveOpen]);
+
+  const commitSave = () => {
+    const title = saveTitle.trim() || "My wheel";
+    const dup = recent.some(
+      (r) => r.title.trim().toLocaleLowerCase() === title.toLocaleLowerCase(),
+    );
+    if (dup) {
+      setSaveError(`“${title}” is already saved. Pick a new name or delete the old one.`);
+      return;
+    }
+    onSave({ title, download: saveDownload });
+    setSaveOpen(false);
+    setSaveError("");
+  };
 
   const triggerOpenFile = () => {
     setOpenMenu(null);
@@ -153,10 +192,12 @@ export function WheelTopBar({
             role="menu"
             className="fixed z-[300] max-w-[calc(100vw-16px)] overflow-y-auto overscroll-contain rounded-xl border border-border bg-surface p-1.5 shadow-2xl"
             style={{
-              top: menuPos.top,
               left: menuPos.left,
               width: menuPos.width,
               maxHeight: menuPos.maxHeight,
+              ...(menuPos.placement === "above"
+                ? { bottom: menuPos.bottom, top: "auto" }
+                : { top: menuPos.top, bottom: "auto" }),
             }}
           >
             {openMenu === "open" ? (
@@ -225,14 +266,18 @@ export function WheelTopBar({
                 >
                   Gallery
                 </Link>
-                <a
-                  href="mailto:hello@exestools.com?subject=Spinner%20wheel%20feedback"
+                <button
+                  type="button"
                   role="menuitem"
-                  className="flex min-h-11 items-center rounded-lg px-2 text-sm font-semibold hover:bg-surface-2"
-                  onClick={() => setOpenMenu(null)}
+                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2"
+                  onClick={() => {
+                    setOpenMenu(null);
+                    window.location.href =
+                      "mailto:hello@exestools.com?subject=Spinner%20wheel%20feedback";
+                  }}
                 >
                   Feedback
-                </a>
+                </button>
                 <a
                   href={faqHref}
                   role="menuitem"
@@ -262,7 +307,7 @@ export function WheelTopBar({
                     onPreferences();
                   }}
                 >
-                  Preferences
+                  Customize
                 </button>
               </>
             )}
@@ -308,6 +353,7 @@ export function WheelTopBar({
           onClick={() => {
             setSaveTitle(defaultSaveTitle || "My wheel");
             setSaveDownload(false);
+            setSaveError("");
             setSaveOpen(true);
           }}
         >
@@ -350,9 +396,9 @@ export function WheelTopBar({
 
       {menuPortal}
 
-      {/* Absolute share panel — no layout shift of the wheel */}
+      {/* Absolute share panel — no layout shift; pad below so Close clears sticky SPIN */}
       {shareUrl ? (
-        <div className="absolute left-0 right-0 top-full z-[60] mt-1 flex w-full min-w-0 flex-col gap-2 rounded-xl border border-border bg-surface p-3 shadow-xl sm:flex-row sm:items-center">
+        <div className="absolute left-0 right-0 top-full z-[60] mt-1 flex w-full min-w-0 flex-col gap-2 rounded-xl border border-border bg-surface p-3 pb-[calc(0.75rem+4.5rem)] shadow-xl sm:flex-row sm:items-center sm:pb-3 lg:pb-3">
           <input
             readOnly
             value={shareUrl}
@@ -460,21 +506,40 @@ export function WheelTopBar({
               aria-modal="true"
               aria-label="Save wheel"
               onClick={(e) => {
-                if (e.target === e.currentTarget) setSaveOpen(false);
+                if (e.target === e.currentTarget) {
+                  setSaveOpen(false);
+                  setSaveError("");
+                }
               }}
             >
-              <div className="w-full max-w-sm rounded-2xl border border-border bg-surface p-4 shadow-2xl">
+              <form
+                className="w-full max-w-sm rounded-2xl border border-border bg-surface p-4 shadow-2xl"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  commitSave();
+                }}
+              >
                 <h3 className="text-sm font-extrabold">Save wheel</h3>
                 <label className="mt-3 block text-xs font-bold text-muted" htmlFor="et-save-title">
                   Name
                 </label>
                 <input
+                  ref={saveTitleRef}
                   id="et-save-title"
                   value={saveTitle}
-                  onChange={(e) => setSaveTitle(e.target.value)}
+                  onChange={(e) => {
+                    setSaveTitle(e.target.value);
+                    setSaveError("");
+                  }}
                   className="mt-1 min-h-11 w-full rounded-xl border border-border bg-surface-2 px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   maxLength={80}
+                  autoComplete="off"
                 />
+                {saveError ? (
+                  <p className="mt-2 text-xs font-semibold text-rose-300" role="alert">
+                    {saveError}
+                  </p>
+                ) : null}
                 <label className="mt-3 flex min-h-11 cursor-pointer items-center gap-2 text-sm">
                   <input
                     type="checkbox"
@@ -488,25 +553,21 @@ export function WheelTopBar({
                   <button
                     type="button"
                     className="min-h-11 rounded-lg border border-border px-3 text-sm font-bold"
-                    onClick={() => setSaveOpen(false)}
+                    onClick={() => {
+                      setSaveOpen(false);
+                      setSaveError("");
+                    }}
                   >
                     Cancel
                   </button>
                   <button
-                    type="button"
+                    type="submit"
                     className="min-h-11 rounded-lg bg-accent-strong px-3 text-sm font-bold text-slate-950"
-                    onClick={() => {
-                      onSave({
-                        title: saveTitle.trim() || "My wheel",
-                        download: saveDownload,
-                      });
-                      setSaveOpen(false);
-                    }}
                   >
                     Save
                   </button>
                 </div>
-              </div>
+              </form>
             </div>,
             portalRoot,
           )

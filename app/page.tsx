@@ -100,7 +100,7 @@ const HOME_FAQS = [
   },
   {
     q: "Can I save or share my wheel?",
-    a: "Your list is saved in this browser automatically, so it's there next time you visit. Press Copy share link to send the same wheel to someone else. Anyone with the link can see the list.",
+    a: "Your list is saved in this browser automatically, so it's there next time you visit. Press Share to copy a link for someone else. Anyone with the link can see the list.",
   },
   {
     q: "Can I spin a random letter?",
@@ -120,7 +120,7 @@ const HOME_FAQS = [
   },
   {
     q: "What happens to my wheel if I clear my browser data?",
-    a: "It's deleted, because the list is stored in your browser on that device. If you want to keep a wheel, press Copy share link first and save the link somewhere safe.",
+    a: "It's deleted, because the list is stored in your browser on that device. If you want to keep a wheel, press Share first and save the link somewhere safe.",
   },
   {
     q: "If I send a share link, will we see the same result?",
@@ -325,8 +325,8 @@ export default function HomePage() {
           </p>
           <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
             Want a partner to see the same options? Press{" "}
-            <span className="font-semibold text-foreground">Copy share link</span>{" "}
-            and send it. The link carries the list, so they&apos;ll open the exact same wheel.
+            <span className="font-semibold text-foreground">Share</span>{" "}
+            and send the link. It carries the list, so they&apos;ll open the exact same wheel.
           </p>
         </section>
         <section className="max-w-3xl">
@@ -508,7 +508,7 @@ export default function HomePage() {
 
         <RelatedTools toolId="home" />
 
-        <section className="max-w-3xl" aria-labelledby="faq-heading">
+        <section id="faq" className="max-w-3xl scroll-mt-24" aria-labelledby="faq-heading">
           <h2 id="faq-heading" className="text-2xl font-bold tracking-tight text-foreground">
             Frequently asked questions
           </h2>

@@ -17,15 +17,21 @@ export function useFullscreenPortalRoot(): HTMLElement | null {
 }
 
 export type ClampedMenuBox = {
-  top: number;
   left: number;
   width: number;
   maxHeight: number;
+  /** Open below the anchor (set `top`). */
+  placement: "below" | "above";
+  /** Distance from viewport top — only when placement === "below". */
+  top?: number;
+  /** Distance from viewport bottom — only when placement === "above" (keeps menu next to the button). */
+  bottom?: number;
 };
 
 /**
  * Clamp a fixed menu into the viewport.
- * On mobile (sticky SPIN), prefer opening upward when space below is tight.
+ * When flipping up, use `bottom` so the menu stays attached to the button
+ * (never jump to y=8 with a large empty max-height box).
  */
 export function clampMenuBox(
   anchor: { left: number; right: number; top: number; bottom: number },
@@ -36,7 +42,6 @@ export function clampMenuBox(
   const gap = 4;
   const vw = window.innerWidth;
   const vh = window.innerHeight;
-  // Sticky SPIN (~64px) + safe area breathing room.
   const mobile = vw < 1024;
   const bottomClearance = mobile ? 96 : margin;
   const bottomLimit = vh - bottomClearance;
@@ -49,11 +54,11 @@ export function clampMenuBox(
   const spaceBelow = bottomLimit - (anchor.bottom + gap);
   const spaceAbove = anchor.top - gap - margin;
 
-  // Prefer flip whenever below-room is short (toolbar sits under the wheel on mobile).
   const openBelow = spaceBelow >= 280 && spaceBelow >= spaceAbove;
 
   if (openBelow) {
     return {
+      placement: "below",
       top: anchor.bottom + gap,
       left,
       width,
@@ -61,12 +66,13 @@ export function clampMenuBox(
     };
   }
 
-  const maxHeight = Math.min(maxCap, Math.max(120, spaceAbove));
+  // Anchor the menu's bottom edge just above the button.
   return {
-    top: Math.max(margin, anchor.top - gap - maxHeight),
+    placement: "above",
+    bottom: Math.max(margin, vh - anchor.top + gap),
     left,
     width,
-    maxHeight,
+    maxHeight: Math.min(maxCap, Math.max(120, spaceAbove)),
   };
 }
 

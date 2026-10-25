@@ -311,23 +311,36 @@ export function WheelCanvas({
         octx.arc(cx, cy, radius, 0, Math.PI * 2);
         octx.fillStyle = "#1c2430";
         octx.fill();
-        octx.fillStyle = "#94a3b8";
-        octx.font = "600 16px system-ui, sans-serif";
-        octx.textAlign = "center";
-        octx.textBaseline = "middle";
-        octx.fillText("Add choices", cx, cy);
-        // Skip hub chrome glyph for empty wheels.
+        // Rim only — no hub — so "Add choices" stays readable in the center.
         const ctx = canvas.getContext("2d");
         if (ctx) {
           const { css: c, dpr: d, radius: r } = sizeRef.current;
+          const rcx = c / 2;
+          const rcy = c / 2;
           ctx.setTransform(d, 0, 0, d, 0, 0);
           ctx.clearRect(0, 0, c, c);
           ctx.beginPath();
-          ctx.arc(c / 2, c / 2 + 6, r + 10, 0, Math.PI * 2);
+          ctx.arc(rcx, rcy + 6, r + 10, 0, Math.PI * 2);
           ctx.fillStyle = "rgba(0,0,0,0.35)";
           ctx.fill();
           ctx.drawImage(off, 0, 0, c, c);
-          drawFixedChrome(ctx, c / 2, c / 2, r, "", false);
+          // Gold rim without hub disk
+          const rimOuter = r + 12;
+          const rimInner = r + 2;
+          const rimGrad = ctx.createLinearGradient(rcx - rimOuter, rcy, rcx + rimOuter, rcy);
+          rimGrad.addColorStop(0, "#b45309");
+          rimGrad.addColorStop(0.5, "#fde68a");
+          rimGrad.addColorStop(1, "#92400e");
+          ctx.beginPath();
+          ctx.arc(rcx, rcy, rimOuter, 0, Math.PI * 2);
+          ctx.arc(rcx, rcy, rimInner, 0, Math.PI * 2, true);
+          ctx.fillStyle = rimGrad;
+          ctx.fill();
+          ctx.fillStyle = "#94a3b8";
+          ctx.font = `600 ${Math.max(14, Math.min(20, r * 0.12))}px system-ui, sans-serif`;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText("Add choices", rcx, rcy);
         }
         return;
       }

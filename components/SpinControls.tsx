@@ -116,7 +116,13 @@ export function StickySpinButton({
   return (
     <>
       <div
-        className={`mt-1 flex w-full justify-center sm:mt-0 ${docked ? "invisible h-0 overflow-hidden m-0 p-0 sm:visible sm:h-auto sm:overflow-visible" : ""}`}
+        className={`mt-1 flex w-full justify-center sm:mt-0 ${
+          docked
+            ? alwaysDockMobile
+              ? "invisible m-0 h-0 overflow-hidden p-0"
+              : "invisible m-0 h-0 overflow-hidden p-0 sm:visible sm:h-auto sm:overflow-visible"
+            : ""
+        }`}
         aria-hidden={docked ? true : undefined}
       >
         <button

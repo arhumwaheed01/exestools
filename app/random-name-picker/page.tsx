@@ -42,7 +42,7 @@ const FAQS = [
   },
   {
     q: "Can I share my wheel?",
-    a: "Yes. Copy share link opens the same list on another device.",
+    a: "Yes. Press Share to copy a link that opens the same list on another device.",
   },
   {
     q: "How do I bring back removed names?",

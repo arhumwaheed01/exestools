@@ -43,7 +43,11 @@ export function PrivacySettingsLink({ className }: Props) {
   }
 
   return (
-    <button type="button" onClick={onClick} className={className}>
+    <button
+      type="button"
+      onClick={onClick}
+      className={`inline-flex min-h-11 items-center ${className ?? ""}`}
+    >
       Privacy and cookie settings
     </button>
   );

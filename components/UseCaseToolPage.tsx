@@ -201,7 +201,7 @@ export function UseCaseToolPage({
 
         <RelatedLinks toolId={toolId} />
 
-        <section className="max-w-3xl" aria-labelledby="usecase-faq">
+        <section id="faq" className="max-w-3xl scroll-mt-24" aria-labelledby="usecase-faq">
           <h2 id="usecase-faq" className="text-2xl font-bold tracking-tight text-foreground">
             Frequently asked questions
           </h2>

@@ -72,7 +72,7 @@ const FAQS = [
   },
   {
     q: "Can students spin it on their own devices?",
-    a: "Yes, if you share the link. Copy share link carries the list, so students open the same wheel. Their spins are separate from yours, so for a whole-class pick, spin on the board.",
+    a: "Yes, if you share the link. Share copies a link that carries the list, so students open the same wheel. Their spins are separate from yours, so for a whole-class pick, spin on the board.",
   },
 ];
 
@@ -204,9 +204,9 @@ export default function ClassroomSpinnerPage() {
           <span className="font-semibold text-foreground">Remove winner after spin</span> on, only
           the names still on the wheel are saved—picked students leave the saved list until you paste
           the full roster back in. Student names are not sent anywhere when you spin. If you press
-          Copy share link, the names are packed into the link itself, so anyone who opens it can see
-          them. Follow your school&apos;s policy before you share a roster, and use first names or
-          initials if you prefer. Read our{" "}
+          Share, the names are packed into the link itself, so anyone who opens it can see them.
+          Follow your school&apos;s policy before you share a roster, and use first names or initials
+          if you prefer. Read our{" "}
           <Link href="/privacy-policy" className="font-semibold text-accent hover:underline">
             Privacy Policy
           </Link>

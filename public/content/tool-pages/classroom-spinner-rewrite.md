@@ -31,7 +31,7 @@ Some teachers like a reminder card taped next to the keyboard, especially in the
 > - Paste the full roster back in for the next round.
 >
 > **End of the day**
-> - Shared computer? Press **Clear all**.
+> - Shared computer? Press **Clear**.
 
 ![The ExesTools classroom spinner with a class roster and Remove winner after spin switched on.](/tools/classroom-spinner/1.png)
 
@@ -107,7 +107,7 @@ Fairness and comfort are not in conflict. A student who knows the pick is genuin
 The page saves one list in this browser. If you teach several classes, you don't have to retype rosters each lesson:
 
 1. Paste the roster for your first class. Optionally, type the class name in **Wheel title**.
-2. Press **Copy share link** and save the link as a bookmark named after the class, such as "Period 3 Year 8."
+2. Press **Share** and save the link as a bookmark named after the class, such as "Period 3 Year 8."
 3. Repeat for each class.
 
 Opening a bookmark loads that class's wheel. Because the names are inside the link, keep these bookmarks in your own browser profile, not on a shared school bookmark bar, and follow your school's policy on student names.
@@ -120,7 +120,7 @@ A cover teacher doesn't know who is who, which is exactly when a random pick is 
 - **The routine card above**, so the procedure is the same as with you.
 - **One instruction about absences:** "Delete the names of anyone absent before spinning."
 
-Ask them to press **Clear all** at the end of the day if they're using a shared computer, so the next teacher doesn't open the page to find your class list.
+Ask them to press **Clear** at the end of the day if they're using a shared computer, so the next teacher doesn't open the page to find your class list.
 
 ## Habits that keep the spinner working all year
 
@@ -138,7 +138,7 @@ The spinner is most useful when students trust it, and a few habits protect that
 
 ### Can I save a separate wheel for each class?
 
-The page keeps one list in this browser at a time. For several classes, make a share link for each roster with Copy share link and bookmark each one with the class name. Opening a bookmark brings back that class's wheel.
+The page keeps one list in this browser at a time. For several classes, make a share link for each roster with Share and bookmark each one with the class name. Opening a bookmark brings back that class's wheel.
 
 ### How do I make sure every student gets a turn?
 
@@ -150,4 +150,4 @@ Your list is saved only in this browser on this device, and names are not sent a
 
 ### Can I share the wheel with a substitute teacher?
 
-Yes. Press Copy share link and send it through your school's usual channels. Anyone who opens the link sees the same list of names, so only send it to the teacher who needs it.
+Yes. Press Share and send the link through your school's usual channels. Anyone who opens the link sees the same list of names, so only send it to the teacher who needs it.

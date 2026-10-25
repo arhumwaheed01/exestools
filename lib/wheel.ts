@@ -146,7 +146,7 @@ export function parseChoicesWithStats(
   const unique: string[] = [];
   let duplicatesSkipped = 0;
   for (const line of lines) {
-    const truncated = line.slice(0, 64);
+    const truncated = line.length > 64 ? `${line.slice(0, 63)}…` : line;
     if (opts?.allowDuplicates) {
       unique.push(truncated);
       continue;

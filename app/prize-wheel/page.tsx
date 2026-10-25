@@ -96,7 +96,7 @@ export default function PrizeWheelPage() {
       schemaFeatureList={[
         "Up to 60 prizes or names",
         "Remove winner after spin",
-        "Copy share link",
+        "Share",
         "Sound on/off",
         "No signup",
       ]}
@@ -210,7 +210,7 @@ export default function PrizeWheelPage() {
             raffle generator with multiple entries
           </Link>{" "}
           instead. Press{" "}
-          <span className="font-semibold text-foreground">Copy share link</span> when you&apos;re done
+          <span className="font-semibold text-foreground">Share</span> when you&apos;re done
           so entrants can open the exact list you spun.
         </p>
       </GuideSection>
@@ -307,7 +307,7 @@ export default function PrizeWheelPage() {
         <p>
           Every entrant had the same 3 in 40 chance of winning something, and each winner had an equal
           shot at each prize still left. Press{" "}
-          <span className="font-semibold text-foreground">Copy share link</span>{" "}
+          <span className="font-semibold text-foreground">Share</span>{" "}
           on the entrant wheel before you start if you want to post the exact list you used.
         </p>
       </GuideSection>

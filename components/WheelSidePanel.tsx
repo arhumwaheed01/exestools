@@ -472,7 +472,7 @@ function PanelBody({
             type="button"
             onClick={onFreshWheel}
             disabled={disabled}
-            className="mt-auto inline-flex min-h-10 w-full shrink-0 items-center justify-center rounded-xl border border-border bg-surface-2 px-3 text-sm font-bold text-foreground outline-none hover:bg-border focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
+            className="mt-auto inline-flex min-h-11 w-full shrink-0 items-center justify-center rounded-xl border border-border bg-surface-2 px-3 text-sm font-bold text-foreground outline-none hover:bg-border focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
           >
             Add wheel
           </button>
@@ -582,7 +582,7 @@ function ToolBtn({
       type="button"
       disabled={disabled}
       onClick={onClick}
-      className={`inline-flex min-h-9 shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-xs font-semibold outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50 ${
+      className={`inline-flex min-h-11 shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-xs font-semibold outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50 ${
         danger
           ? "bg-rose-950/60 text-rose-300 hover:bg-rose-900/70"
           : "bg-surface-2 text-foreground hover:bg-border"
@@ -614,12 +614,7 @@ function AddImageMenu({
   hasCenter?: boolean;
 }) {
   const [open, setOpen] = useState(false);
-  const [pos, setPos] = useState<{
-    top: number;
-    left: number;
-    width: number;
-    maxHeight: number;
-  } | null>(null);
+  const [pos, setPos] = useState<ReturnType<typeof clampMenuBox> | null>(null);
   const btnRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLInputElement>(null);
@@ -662,9 +657,12 @@ function AddImageMenu({
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
     };
-    document.addEventListener("mousedown", onDoc);
+    const t = window.setTimeout(() => {
+      document.addEventListener("mousedown", onDoc);
+    }, 0);
     document.addEventListener("keydown", onKey);
     return () => {
+      window.clearTimeout(t);
       document.removeEventListener("mousedown", onDoc);
       document.removeEventListener("keydown", onKey);
     };
@@ -679,10 +677,12 @@ function AddImageMenu({
             ref={menuRef}
             className="fixed z-[300] max-h-[calc(100dvh-120px)] max-w-[calc(100vw-16px)] overflow-y-auto overscroll-contain rounded-xl border border-border bg-surface p-1.5 shadow-2xl"
             style={{
-              top: pos.top,
               left: pos.left,
               width: pos.width,
               maxHeight: pos.maxHeight,
+              ...(pos.placement === "above"
+                ? { bottom: pos.bottom, top: "auto" }
+                : { top: pos.top, bottom: "auto" }),
             }}
             role="menu"
           >
@@ -690,7 +690,7 @@ function AddImageMenu({
               <button
                 type="button"
                 role="menuitem"
-                className="flex min-h-9 w-full items-center rounded-lg px-2 text-left text-xs font-semibold hover:bg-surface-2"
+                className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-xs font-semibold hover:bg-surface-2"
                 onClick={() => {
                   setOpen(false);
                   window.setTimeout(() => bgRef.current?.click(), 0);
@@ -703,7 +703,7 @@ function AddImageMenu({
               <button
                 type="button"
                 role="menuitem"
-                className="flex min-h-9 w-full items-center rounded-lg px-2 text-left text-xs font-semibold hover:bg-surface-2"
+                className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-xs font-semibold hover:bg-surface-2"
                 onClick={() => {
                   setOpen(false);
                   window.setTimeout(() => centerRef.current?.click(), 0);
@@ -716,7 +716,7 @@ function AddImageMenu({
               <button
                 type="button"
                 role="menuitem"
-                className="flex min-h-9 w-full items-center rounded-lg px-2 text-left text-xs font-semibold hover:bg-surface-2"
+                className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-xs font-semibold hover:bg-surface-2"
                 onClick={() => {
                   setOpen(false);
                   window.setTimeout(() => entryRef.current?.click(), 0);
@@ -729,7 +729,7 @@ function AddImageMenu({
               <button
                 type="button"
                 role="menuitem"
-                className="flex min-h-9 w-full items-center rounded-lg px-2 text-left text-xs font-semibold text-rose-300 hover:bg-surface-2"
+                className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-xs font-semibold text-rose-300 hover:bg-surface-2"
                 onClick={() => {
                   setOpen(false);
                   onRemoveBackground();
@@ -742,7 +742,7 @@ function AddImageMenu({
               <button
                 type="button"
                 role="menuitem"
-                className="flex min-h-9 w-full items-center rounded-lg px-2 text-left text-xs font-semibold text-rose-300 hover:bg-surface-2"
+                className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-xs font-semibold text-rose-300 hover:bg-surface-2"
                 onClick={() => {
                   setOpen(false);
                   onRemoveCenter();
@@ -765,7 +765,7 @@ function AddImageMenu({
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-haspopup="menu"
-        className="inline-flex min-h-9 shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-lg bg-surface-2 px-2.5 py-1.5 text-xs font-semibold text-foreground outline-none hover:bg-border focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
+        className="inline-flex min-h-11 shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-lg bg-surface-2 px-2.5 py-1.5 text-xs font-semibold text-foreground outline-none hover:bg-border focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
       >
         Add image ▾
       </button>

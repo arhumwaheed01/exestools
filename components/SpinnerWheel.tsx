@@ -69,9 +69,9 @@ import { randomInt, shuffle } from "@/lib/random";
 import { track } from "@/lib/track";
 import { cleanPathFor, defaultAutoRemoveWinner, type ToolId } from "@/lib/tools";
 import { spinDurationMs, useSound, type SpinLength } from "@/lib/tools/sound";
+import { labelInkForBg } from "@/lib/tools/contrast";
 import {
   loadToolTheme,
-  onSegColor,
   resolveToolTheme,
   saveToolTheme,
   segColor,
@@ -296,8 +296,8 @@ export function SpinnerWheel({
     [resolvedTheme, v2Settings.swatches],
   );
   const themeLabels = useMemo(
-    () => Array.from({ length: 8 }, (_, i) => onSegColor(resolvedTheme, i)),
-    [resolvedTheme],
+    () => themeColors.map((c) => labelInkForBg(c)),
+    [themeColors],
   );
 
   const { choices, duplicatesSkipped, overLimit } = useMemo(
@@ -985,7 +985,7 @@ export function SpinnerWheel({
 
   const toastEl = toast ? (
     <div
-      className="fixed bottom-[calc(5.75rem+env(safe-area-inset-bottom,0px))] left-1/2 z-[60] flex max-w-[min(24rem,calc(100vw-1.5rem))] -translate-x-1/2 items-center gap-2 rounded-full bg-accent-strong px-4 py-2.5 text-xs font-semibold text-slate-950 shadow-lg lg:bottom-6"
+      className="fixed left-1/2 top-[max(4.5rem,env(safe-area-inset-top,0px)+3.5rem)] z-[60] flex max-w-[min(24rem,calc(100vw-1.5rem))] -translate-x-1/2 items-center gap-2 rounded-full bg-accent-strong px-4 py-2.5 text-xs font-semibold text-slate-950 shadow-lg"
       role="status"
     >
       {toast === "NEW_UNDO" ? (
@@ -1528,7 +1528,7 @@ export function SpinnerWheel({
                 className="inline-flex min-h-11 min-w-11 items-center gap-1.5 rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm font-semibold text-foreground hover:bg-border disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
                 <Share2 className="h-3.5 w-3.5" aria-hidden />
-                Copy share link
+                Share
               </button>
               <button
                 type="button"

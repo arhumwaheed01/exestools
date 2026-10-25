@@ -81,7 +81,7 @@ export function WheelOverflowMenu({
           setSpeedOpen(false);
           setOpen((v) => !v);
         }}
-        className="inline-flex h-9 w-9 items-center justify-center rounded-lg border-0 bg-transparent text-foreground outline-none hover:bg-surface-2/60 focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
+        className="inline-flex h-11 w-11 items-center justify-center rounded-lg border-0 bg-transparent text-foreground outline-none hover:bg-surface-2/60 focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
       >
         <MoreVertical className="h-4 w-4" aria-hidden />
       </button>
