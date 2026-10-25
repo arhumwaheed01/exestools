@@ -116,3 +116,19 @@ export function isGuidePublished(slug: string, asOf: string = todayUtcDateString
   if (!guide || guide.frontmatter.draft) return false;
   return isPublishedOnOrBefore(guide.frontmatter.published, asOf);
 }
+
+/**
+ * Turn [label](/guides/slug) into plain label when that guide is not live yet
+ * (draft, missing, or published date in the future). Keeps hub intros and
+ * in-guide cross-links from pointing at 404s.
+ */
+export function stripUnpublishedGuideLinks(
+  markdown: string,
+  asOf: string = todayUtcDateString(),
+): string {
+  return markdown.replace(
+    /\[([^\]]+)\]\(\/guides\/([a-z0-9-]+)(?:#[^)]*)?\)/g,
+    (full, label: string, slug: string) =>
+      isGuidePublished(slug, asOf) ? full : label,
+  );
+}

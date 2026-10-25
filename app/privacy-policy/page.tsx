@@ -30,7 +30,7 @@ export default function PrivacyPolicyPage() {
       <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
         Privacy Policy
       </h1>
-      <p className="mt-2 text-sm text-muted">Last updated: October 22, 2026</p>
+      <p className="mt-2 text-sm text-muted">Last updated: October 26, 2026</p>
       <div className="mt-6 space-y-5 text-sm leading-relaxed text-muted sm:text-base">
         <p>
           This Privacy Policy explains how ExesTools (https://www.exestools.com) handles information
@@ -173,6 +173,20 @@ export default function PrivacyPolicyPage() {
             </strong>{" "}
             Google&apos;s use of advertising cookies enables it and its partners to serve ads to you
             based on your visit to ExesTools and/or other sites on the internet.
+          </p>
+          <p className="mt-2">
+            Google, as a third-party vendor, uses cookies, including the DoubleClick cookie, to serve
+            ads based on your visits to this and other websites. You can opt out of personalized
+            advertising at Google&apos;s Ads Settings (
+            <a
+              href="https://adssettings.google.com/"
+              className="font-semibold text-accent hover:underline"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              adssettings.google.com
+            </a>
+            ).
           </p>
           <p className="mt-2">
             When an ad is shown, Google and its partners may place or read cookies in your browser,
@@ -370,25 +384,28 @@ export default function PrivacyPolicyPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-bold text-foreground">Your privacy rights</h2>
+          <h2 className="text-lg font-bold text-foreground">
+            Your privacy rights (GDPR and CCPA)
+          </h2>
           <p className="mt-2">
-            ExesTools holds very little information about you. Lists and draws stay in your browser,
-            and there are no accounts. The data that does exist is analytics data (Google Analytics
-            4) and advertising data handled by Google and its partners.
-          </p>
-          <p className="mt-2">
-            Depending on where you live, you may have the right to ask for access to personal
-            information about you, to ask for it to be corrected or deleted, to object to certain
-            uses, and to withdraw consent you gave earlier. To make a request about data ExesTools
-            controls, email{" "}
+            If you are in the EEA, UK or California, you may have the right to access, correct, delete
+            or restrict the use of your personal data, and to opt out of the sale or sharing of
+            personal information. ExesTools does not sell personal information. Your wheel lists and
+            entries stay in your browser and are not sent to our servers. To make a request, contact{" "}
             <a
-              href={`mailto:${siteConfig.contactEmail}?subject=Privacy`}
+              href={`mailto:${siteConfig.contactEmail}`}
               className="font-semibold text-accent hover:underline"
             >
               {siteConfig.contactEmail}
-            </a>{" "}
-            with &quot;Privacy&quot; in the subject line. We&apos;ll reply within 30 days. For data
-            Google holds, you can also use Google&apos;s own tools, such as{" "}
+            </a>
+            .
+          </p>
+          <p className="mt-2">
+            ExesTools holds very little information about you. Lists and draws stay in your browser,
+            and there are no accounts. The data that does exist is analytics data (Google Analytics
+            4) and advertising data handled by Google and its partners. We&apos;ll reply to privacy
+            requests within 30 days. For data Google holds, you can also use Google&apos;s own tools,
+            such as{" "}
             <a
               href="https://myadcenter.google.com/"
               className="font-semibold text-accent hover:underline"

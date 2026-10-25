@@ -4,6 +4,7 @@ import PageMeta from "@/components/PageMeta";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { RelatedTools } from "@/components/RelatedTools";
 import { QueryHydratedTeams } from "@/components/QueryHydratedMounts";
+import { isGuidePublished } from "@/lib/guides";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
 
@@ -80,6 +81,10 @@ const FAQS = [
   {
     q: "Is it free, and are my names saved?",
     a: "It's free with no account. Your list stays in your browser.",
+  },
+  {
+    q: "Can I keep two people from landing on the same team?",
+    a: "Not automatically. Reshuffle until they're apart. If you need that often, place one of them on each team in a quick first pass, then generate the rest at random — the balanced teams guide on this page covers that pattern.",
   },
 ];
 
@@ -274,6 +279,30 @@ export default function RandomTeamGeneratorPage() {
         </section>
 
         <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
+          <h2 className="text-xl font-bold tracking-tight text-foreground">Tips for fair teams</h2>
+          <p className="mt-3">
+            Show the full name list on a screen before you generate, so everyone can see who is in
+            the draw. Generate once where the group can watch, then reshuffle only if you agreed
+            beforehand that one re-roll is allowed (for example when two people who must stay apart
+            land together). Write the teams down or press Print before anyone starts moving chairs —
+            arguing about a second reshuffle is how a fair split stops feeling fair. Keep the same
+            rule for the whole session so late arrivals join the next round instead of forcing a
+            redo.
+          </p>
+          <p className="mt-3">
+            For PE or quiz nights where skill matters more than pure chance, split the strongest
+            players into a small first pass (one per team), then deal everyone else at random. The{" "}
+            <Link
+              href="/guides/how-to-make-balanced-random-teams"
+              className="font-semibold text-accent hover:underline"
+            >
+              balanced teams guide
+            </Link>{" "}
+            walks through that tiered method without turning the tool into a spreadsheet.
+          </p>
+        </section>
+
+        <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           <h2 className="text-xl font-bold tracking-tight text-foreground">How it compares</h2>
           <p className="mt-3">
             Some generators let you lock players to a team, balance by skill or import Excel files. If
@@ -283,14 +312,20 @@ export default function RandomTeamGeneratorPage() {
             <Link href="/secret-santa-generator" className="font-semibold text-accent hover:underline">
               Secret Santa generator
             </Link>
-            . Hosting Friendsgiving or Thanksgiving games? See{" "}
-            <Link
-              href="/guides/friendsgiving-thanksgiving-team-games"
-              className="font-semibold text-accent hover:underline"
-            >
-              Friendsgiving and Thanksgiving team games
-            </Link>
             .
+            {isGuidePublished("friendsgiving-thanksgiving-team-games") ? (
+              <>
+                {" "}
+                Hosting Friendsgiving or Thanksgiving games? See{" "}
+                <Link
+                  href="/guides/friendsgiving-thanksgiving-team-games"
+                  className="font-semibold text-accent hover:underline"
+                >
+                  Friendsgiving and Thanksgiving team games
+                </Link>
+                .
+              </>
+            ) : null}
           </p>
         </section>
         <RelatedLinks toolId="random-team-generator" />

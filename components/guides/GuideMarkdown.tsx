@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { Components } from "react-markdown";
+import { isGuidePublished, stripUnpublishedGuideLinks } from "@/lib/guides";
 
 type Props = {
   content: string;
@@ -18,6 +19,10 @@ function isInternalHref(href: string): boolean {
 function markdownLink(href: string | undefined, children: ReactNode) {
   if (!href) return <span>{children}</span>;
   if (isInternalHref(href)) {
+    const guideMatch = /^\/guides\/([a-z0-9-]+)(?:#.*)?$/.exec(href);
+    if (guideMatch && !isGuidePublished(guideMatch[1]!)) {
+      return <span>{children}</span>;
+    }
     return (
       <Link href={href} className="font-semibold text-accent hover:underline">
         {children}
@@ -32,6 +37,7 @@ function markdownLink(href: string | undefined, children: ReactNode) {
 }
 
 export function GuideMarkdown({ content, routineCardAside }: Props) {
+  const safeContent = stripUnpublishedGuideLinks(content);
   let blockquoteCount = 0;
 
   const components: Components = {
@@ -132,7 +138,7 @@ export function GuideMarkdown({ content, routineCardAside }: Props) {
   return (
     <div className="guide-markdown max-w-3xl">
       <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
-        {content}
+        {safeContent}
       </ReactMarkdown>
     </div>
   );
