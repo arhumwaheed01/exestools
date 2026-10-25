@@ -204,7 +204,7 @@ export function WheelCanvas({
     if (!canvas || !wrap) return;
 
     const palette = colors?.length ? colors : WHEEL_COLORS;
-    const labels = labelColors;
+    void labelColors; // ink is derived from each slice fill (lighten + contrast)
 
     const blit = () => {
       const off = offscreenRef.current;
