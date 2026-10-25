@@ -33,6 +33,8 @@ export const metadata: Metadata = {
 const FAQ_LINK_HREFS: Record<string, string> = {
   "random name picker": "/random-name-picker",
   "white elephant gift exchange rules": "/guides/white-elephant-gift-exchange-rules",
+  "Secret Santa rules and gift exchange ideas": "/guides/secret-santa-rules-and-budget-ideas",
+  "office Secret Santa planning timeline": "/guides/office-secret-santa-planning-timeline",
   "Privacy Policy": "/privacy-policy",
   "How ExesTools draws names": "/about#how-it-works",
 };
@@ -116,8 +118,9 @@ const FAQ = [
   },
   {
     q: "What should I put in the event note?",
-    a: "The things people forget: the exchange date, a shipping deadline for remote people, \"wrap and label it,\" and any theme or gift ideas.",
-    aPlain: "The things people forget: the exchange date, a shipping deadline for remote people, \"wrap and label it,\" and any theme or gift ideas.",
+    a: "The things people forget: the exchange date, a shipping deadline for remote people, \"wrap and label it,\" and any theme or gift ideas. For budget ranges and themes, see [Secret Santa rules and gift exchange ideas]. For an office schedule, see the [office Secret Santa planning timeline].",
+    aPlain:
+      "The things people forget: the exchange date, a shipping deadline for remote people, \"wrap and label it,\" and any theme or gift ideas. For budget ranges and themes, see Secret Santa rules and gift exchange ideas. For an office schedule, see the office Secret Santa planning timeline.",
   },
   {
     q: "Can two people organize the same Secret Santa?",

@@ -374,7 +374,15 @@ export default function BingoCardGeneratorPage() {
             phrases. Swap in the guest of honor&apos;s name, the office in-jokes, or this year&apos;s
             party menu. A theme only works if the players recognize the squares, so cut anything your
             group wouldn&apos;t say out loud. For an office call, send each colleague their player
-            link before the meeting starts and run the caller on your shared screen.
+            link before the meeting starts and run the caller on your shared screen. If the same
+            party needs a named gift draw, use the{" "}
+            <Link
+              href="/secret-santa-generator"
+              className="font-semibold text-accent hover:underline"
+            >
+              Secret Santa generator
+            </Link>
+            .
           </p>
         </section>
 

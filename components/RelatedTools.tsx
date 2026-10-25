@@ -70,6 +70,7 @@ const RELATED: Record<ToolId, { href: string; label: string }[]> = {
   "raffle-generator": [
     { href: "/prize-wheel", label: "Prize wheel (spin for a prize on screen)" },
     { href: "/random-name-picker", label: "Random name picker" },
+    { href: "/secret-santa-generator", label: "Secret Santa generator (gift exchange)" },
     { href: "/random-number-wheel", label: "Random number wheel" },
     { href: "/", label: "Free spinner wheel" },
     { href: "/bingo-card-generator", label: "Bingo card generator" },

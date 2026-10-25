@@ -260,7 +260,15 @@ export default function RaffleGeneratorPage() {
             <li>
               <span className="font-semibold text-foreground">Office charity raffle.</span> 48 staff
               and 120 tickets across names. Paste one line per ticket (repeat a name per ticket
-              bought) so the odds match what people paid.
+              bought) so the odds match what people paid. Running a named gift exchange at the same
+              party? Draw matches on the{" "}
+              <Link
+                href="/secret-santa-generator"
+                className="font-semibold text-accent hover:underline"
+              >
+                Secret Santa generator
+              </Link>
+              .
             </li>
             <li>
               <span className="font-semibold text-foreground">Instagram giveaway.</span> Paste

@@ -5,8 +5,8 @@ meta_description: "Bingo ideas for classrooms and parties: how long your word li
 author: Arhum Waheed
 author_url: /about#arhum
 published: "2026-10-19"
-updated: "2026-10-21"
-related_tools: [/bingo-card-generator, /random-number-wheel, /classroom-spinner, /raffle-generator]
+updated: "2026-10-25"
+related_tools: [/bingo-card-generator, /random-number-wheel, /classroom-spinner, /raffle-generator, /secret-santa-generator]
 images:
   - file: /guides/bingo-games-for-classrooms-and-parties/1.jpg
     alt: "Colorful stacks of printed bingo cards in yellow, green, pink and blue beside a pink numbered ball on a wooden table"
@@ -17,7 +17,7 @@ images:
 
 # Bingo game ideas for classrooms and parties
 
-By Arhum Waheed · Published 2026-10-19 · Updated 2026-10-21
+By Arhum Waheed · Published 2026-10-19 · Updated 2026-10-25
 
 Bingo asks very little of players: listen, look, mark. Most bingo that falls flat has the same few causes. The word list is too short, so half the room wins at once. Or nobody knows how long a round will take, so the "quick game" eats the lesson. This guide starts with the numbers that fix both, then gets into game ideas. The cards and caller mentioned are from the [bingo card generator](/bingo-card-generator).
 
@@ -89,7 +89,7 @@ Call the country, students find the capital. Call the event, they find the year.
 
 - **Shower gift bingo.** Cards list likely gifts, and guests mark them as presents are unwrapped, so no caller is needed. Edit the **Baby shower** or **Bridal shower** theme to match the registry. If only 15 or 20 gifts will be opened, use a 4×4 card and play for a line, not a full card.
 - **Spotting bingo.** Use the Christmas, Halloween, Thanksgiving or New Year's list during a holiday film or a walk to see the lights. Players mark things as they see them, and a six-year-old spots a reindeer as fast as an adult.
-- **Office mixer.** The **Office party** theme is "find someone who…". Each square is a trait like "Plays an instrument," and each colleague's name can be used only once.
+- **Office mixer.** The **Office party** theme is "find someone who…". Each square is a trait like "Plays an instrument," and each colleague's name can be used only once. Pair it with a named gift draw on the [Secret Santa generator](/secret-santa-generator) if the same party needs both a mixer game and a gift exchange.
 - **Meeting bingo.** Phrases like "You're on mute," marked on each player's own card link. Skip anything that points at one colleague.
 
 ## Playing on phones

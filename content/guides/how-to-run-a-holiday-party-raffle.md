@@ -6,7 +6,7 @@ author: Arhum Waheed
 author_url: /about#arhum
 published: "2026-11-10"
 updated: "2026-11-10"
-related_tools: [/raffle-generator, /prize-wheel, /random-name-picker, /bingo-card-generator]
+related_tools: [/raffle-generator, /prize-wheel, /random-name-picker, /bingo-card-generator, /secret-santa-generator]
 ---
 
 # How to run a holiday party raffle (at work, school or a club)
@@ -116,7 +116,7 @@ A free company raffle, where everyone is entered and nobody pays, is generally t
 
 ## Other games for the same party
 
-A raffle takes 15 minutes. If you want something to fill the time before it, holiday bingo works for groups of any size: print cards from the [bingo card generator](/bingo-card-generator) with its Christmas list, or make office bingo squares ("someone says 'circle back'," "the projector fails"). If you're also running a gift exchange, our [White Elephant rules](/guides/white-elephant-rules-and-variations) and [Secret Santa guide](/guides/secret-santa-rules-and-budget-ideas) cover both. For more on running a draw people trust, see [how to run a fair online giveaway](/guides/how-to-run-a-fair-online-giveaway).
+A raffle takes 15 minutes. If you want something to fill the time before it, holiday bingo works for groups of any size: print cards from the [bingo card generator](/bingo-card-generator) with its Christmas list, or make office bingo squares ("someone says 'circle back'," "the projector fails"). If you're also running a gift exchange, draw names on the [Secret Santa generator](/secret-santa-generator); our [White Elephant rules](/guides/white-elephant-rules-and-variations) and [Secret Santa guide](/guides/secret-santa-rules-and-budget-ideas) cover both formats. For more on running a draw people trust, see [how to run a fair online giveaway](/guides/how-to-run-a-fair-online-giveaway).
 
 ## Frequently asked questions
 
