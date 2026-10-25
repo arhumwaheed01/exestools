@@ -43,54 +43,6 @@ function darken(hex: string, amount: number): string {
   return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, "0")}`;
 }
 
-/** Fit a slice label into at most two lines; ellipsis only as last resort. */
-function wrapSliceLabel(
-  ctx: CanvasRenderingContext2D,
-  text: string,
-  maxW: number,
-): [string] | [string, string] {
-  if (ctx.measureText(text).width <= maxW) return [text];
-
-  const words = text.split(/\s+/).filter(Boolean);
-  if (words.length >= 2) {
-    let best: [string, string] | null = null;
-    let bestScore = Infinity;
-    for (let i = 1; i < words.length; i++) {
-      const a = words.slice(0, i).join(" ");
-      const b = words.slice(i).join(" ");
-      const wa = ctx.measureText(a).width;
-      const wb = ctx.measureText(b).width;
-      if (wa <= maxW && wb <= maxW) {
-        const score = Math.abs(wa - wb);
-        if (score < bestScore) {
-          bestScore = score;
-          best = [a, b];
-        }
-      }
-    }
-    if (best) return best;
-  }
-
-  // Long single token: split near the middle where both halves fit.
-  let mid = Math.ceil(text.length / 2);
-  for (let delta = 0; delta < text.length; delta++) {
-    for (const split of [mid - delta, mid + delta]) {
-      if (split <= 0 || split >= text.length) continue;
-      const a = text.slice(0, split);
-      const b = text.slice(split);
-      if (ctx.measureText(a).width <= maxW && ctx.measureText(b).width <= maxW) {
-        return [a, b];
-      }
-    }
-  }
-
-  let clipped = text;
-  while (clipped.length > 1 && ctx.measureText(`${clipped}…`).width > maxW) {
-    clipped = clipped.slice(0, -1);
-  }
-  return [`${clipped}…`];
-}
-
 /** Draw text along a circle. `flip` makes bottom arcs read left-to-right upright. */
 function drawArcText(
   ctx: CanvasRenderingContext2D,
@@ -453,7 +405,6 @@ export function WheelCanvas({
         );
         const radialMax = Math.max(20, 2 * (radius - rimPad - labelR));
         const maxW = Math.min(chordMax, radialMax);
-        const maxLineH = Math.max(14, radius * Math.sin(Math.min(slice, equal) / 2) * 0.6);
 
         octx.save();
         octx.rotate(mid);
@@ -465,40 +416,37 @@ export function WheelCanvas({
         octx.shadowBlur = 3;
 
         const raw = choices[i]!.trim();
-        // Cap length before measuring so we never shrink to unreadable sizes.
-        const charCap = n <= 4 ? 20 : n <= 8 ? 14 : n <= 12 ? 11 : 9;
-        let display =
-          raw.length > charCap ? `${raw.slice(0, Math.max(1, charCap - 1))}…` : raw;
-
-        const shortLabel = raw.length <= 2;
-        let fontSize = shortLabel
-          ? Math.max(14, Math.min(26, radius / (n > 10 ? 5.5 : 4.5)))
-          : Math.max(12, Math.min(hasImg ? 15 : 18, radius / (n > 10 ? 7 : 5.8)));
-        octx.font = `700 ${fontSize}px system-ui, sans-serif`;
-        const minPx = shortLabel ? 13 : 11;
-        while (fontSize > minPx && octx.measureText(display).width > maxW) {
-          fontSize -= 1;
-          octx.font = `700 ${fontSize}px system-ui, sans-serif`;
-        }
-        if (octx.measureText(display).width > maxW) {
-          while (display.length > 1 && octx.measureText(`${display.slice(0, -1)}…`).width > maxW) {
-            display = display.slice(0, -1);
-          }
-          display = display.endsWith("…") ? display : `${display}…`;
-        }
-
         const x = flip ? -labelR : labelR;
-        if (octx.measureText(display).width <= maxW || display.length <= 2) {
-          octx.fillText(display, x, 0);
+        const shortLabel = raw.length <= 2;
+
+        if (shortLabel) {
+          // A–F style labels: keep them large like short names.
+          const fontSize = Math.max(14, Math.min(26, radius / (n > 10 ? 5.5 : 4.5)));
+          octx.font = `700 ${fontSize}px system-ui, sans-serif`;
+          octx.fillText(raw, x, 0);
         } else {
-          const lines = wrapSliceLabel(octx, display.replace(/…$/, ""), maxW);
-          const lineH = Math.min(fontSize + 2, maxLineH / 2);
-          if (lines.length === 1) {
-            octx.fillText(lines[0]!, x, 0);
-          } else {
-            octx.fillText(lines[0]!, x, -lineH / 2);
-            octx.fillText(lines[1]!, x, lineH / 2);
+          // Prefer a readable size; fit by truncating with "…" (never shrink to ~9px).
+          const minPx = 12;
+          const fontSize = Math.min(
+            hasImg ? 15 : 16,
+            Math.max(minPx, radius / (n > 10 ? 6.2 : 5.4)),
+          );
+          octx.font = `700 ${fontSize}px system-ui, sans-serif`;
+
+          const softCap = n <= 4 ? 16 : n <= 8 ? 12 : 9;
+          let display = raw.length > softCap ? raw.slice(0, softCap) : raw;
+          if (octx.measureText(display).width > maxW) {
+            while (
+              display.length > 1 &&
+              octx.measureText(`${display.slice(0, -1)}…`).width > maxW
+            ) {
+              display = display.slice(0, -1);
+            }
           }
+          if (display.length < raw.length) {
+            display = `${display.replace(/…$/u, "")}…`;
+          }
+          octx.fillText(display, x, 0);
         }
         octx.restore();
       }
