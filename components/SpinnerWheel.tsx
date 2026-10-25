@@ -315,6 +315,11 @@ export function SpinnerWheel({
     [choices, entryWeights],
   );
 
+  const weightsActive = useMemo(
+    () => choiceWeights.some((w) => Math.abs(w - 1) > 0.001),
+    [choiceWeights],
+  );
+
   const sliceImages = useMemo(
     () => choices.map((c) => wheelImages.entries[c.toLocaleLowerCase()] ?? null),
     [choices, wheelImages.entries],
@@ -977,11 +982,6 @@ export function SpinnerWheel({
       </div>
     </div>
   ) : null;
-
-  const weightsActive = useMemo(
-    () => choiceWeights.some((w) => Math.abs(w - 1) > 0.001),
-    [choiceWeights],
-  );
 
   const toastEl = toast ? (
     <div
