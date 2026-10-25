@@ -88,7 +88,7 @@ const HOME_FAQS = [
   },
   {
     q: "Can results repeat?",
-    a: 'Yes. By default any option can come up again, and streaks can happen by chance. To stop repeats, switch on "Remove winner after spin" in the toolbar, or press Remove on the winner popup.',
+    a: 'Yes. By default any option can come up again, and streaks can happen by chance. To stop repeats, switch on "Remove winner after spin" in the toolbar.',
   },
   {
     q: "Why can't I spin with one option?",
@@ -108,7 +108,7 @@ const HOME_FAQS = [
   },
   {
     q: "Can I remove the winner after each spin?",
-    a: 'Yes. Switch on "Remove winner after spin" in the toolbar before you spin, or press Remove on the winner popup. The picked option leaves the wheel, so it can\'t come up again until you add it back.',
+    a: 'Yes. Switch on "Remove winner after spin" in the toolbar before you spin. The picked option leaves the wheel, so it can\'t come up again until you add it back.',
   },
   {
     q: "Can I put an option on the wheel twice to make it more likely?",

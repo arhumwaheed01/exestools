@@ -1546,7 +1546,7 @@ export function SpinnerWheel({
                 <input
                   type="checkbox"
                   checked={autoRemove}
-                  onChange={(e) => setAutoRemove(e.target.checked)}
+                  onChange={(e) => persistAutoRemove(e.target.checked)}
                   className="h-4 w-4 accent-cyan-500"
                 />
                 Remove winner after spin (no repeats)
