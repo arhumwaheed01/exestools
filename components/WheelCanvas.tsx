@@ -15,6 +15,8 @@ type Props = {
   hubLabel?: string;
   /** When true, size to the wrapper (no 420px cap). */
   fillContainer?: boolean;
+  /** Curved idle CTA: "Click To Spin" (top) + "Ctrl+Enter" (bottom). */
+  spinPrompt?: boolean;
 };
 
 function lighten(hex: string, amount: number): string {
@@ -37,6 +39,128 @@ function darken(hex: string, amount: number): string {
   return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, "0")}`;
 }
 
+/** Draw text along a circle. `flip` makes bottom arcs read left-to-right upright. */
+function drawArcText(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  cx: number,
+  cy: number,
+  radius: number,
+  centerAngle: number,
+  flip: boolean,
+) {
+  const chars = Array.from(text);
+  if (!chars.length) return;
+
+  const widths = chars.map((ch) => ctx.measureText(ch).width);
+  const total = widths.reduce((a, b) => a + b, 0);
+  const dir = flip ? -1 : 1;
+  let angle = centerAngle - dir * (total / 2 / radius);
+
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillStyle = "#ffffff";
+  ctx.shadowColor = "rgba(0,0,0,0.75)";
+  ctx.shadowBlur = 4;
+  ctx.shadowOffsetY = 1;
+
+  for (let i = 0; i < chars.length; i++) {
+    const w = widths[i]!;
+    const a = angle + dir * (w / 2 / radius);
+    ctx.save();
+    ctx.translate(cx + Math.cos(a) * radius, cy + Math.sin(a) * radius);
+    ctx.rotate(a + (flip ? -Math.PI / 2 : Math.PI / 2));
+    ctx.fillText(chars[i]!, 0, 0);
+    ctx.restore();
+    angle += dir * (w / radius);
+  }
+
+  ctx.shadowBlur = 0;
+  ctx.shadowOffsetY = 0;
+}
+
+function drawFixedChrome(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  radius: number,
+  hubLabel: string,
+  spinPrompt: boolean,
+) {
+  const rimOuter = radius + 12;
+  const rimInner = radius + 2;
+  const rimGrad = ctx.createLinearGradient(cx - rimOuter, cy, cx + rimOuter, cy);
+  rimGrad.addColorStop(0, "#b45309");
+  rimGrad.addColorStop(0.35, "#fbbf24");
+  rimGrad.addColorStop(0.55, "#fde68a");
+  rimGrad.addColorStop(0.75, "#f59e0b");
+  rimGrad.addColorStop(1, "#92400e");
+  ctx.beginPath();
+  ctx.arc(cx, cy, rimOuter, 0, Math.PI * 2);
+  ctx.arc(cx, cy, rimInner, 0, Math.PI * 2, true);
+  ctx.fillStyle = rimGrad;
+  ctx.fill();
+
+  const bulbs = 24;
+  for (let i = 0; i < bulbs; i++) {
+    const a = (i / bulbs) * Math.PI * 2 - Math.PI / 2;
+    const bx = cx + Math.cos(a) * (radius + 7);
+    const by = cy + Math.sin(a) * (radius + 7);
+    const bulb = ctx.createRadialGradient(bx, by, 0, bx, by, 4.5);
+    bulb.addColorStop(0, "#fffbeb");
+    bulb.addColorStop(0.4, "#fde047");
+    bulb.addColorStop(1, "rgba(251,191,36,0)");
+    ctx.beginPath();
+    ctx.arc(bx, by, 4.5, 0, Math.PI * 2);
+    ctx.fillStyle = bulb;
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(bx, by, 2.2, 0, Math.PI * 2);
+    ctx.fillStyle = "#fef08a";
+    ctx.fill();
+  }
+
+  if (spinPrompt) {
+    const fontPx = Math.max(13, Math.min(22, radius * 0.095));
+    ctx.font = `800 ${fontPx}px system-ui, sans-serif`;
+    const promptR = radius * 0.42;
+    drawArcText(ctx, "Click To Spin", cx, cy, promptR, -Math.PI / 2, false);
+    drawArcText(ctx, "Ctrl+Enter", cx, cy, promptR, Math.PI / 2, true);
+  }
+
+  const hubR = Math.max(22, radius * 0.12);
+  if (spinPrompt) {
+    ctx.beginPath();
+    ctx.arc(cx, cy, hubR, 0, Math.PI * 2);
+    ctx.fillStyle = "#ffffff";
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "rgba(15,23,42,0.15)";
+    ctx.stroke();
+  } else {
+    const hubGrad = ctx.createRadialGradient(cx - 4, cy - 4, 2, cx, cy, hubR);
+    hubGrad.addColorStop(0, "#1e293b");
+    hubGrad.addColorStop(1, "#0b0f17");
+    ctx.beginPath();
+    ctx.arc(cx, cy, hubR, 0, Math.PI * 2);
+    ctx.fillStyle = hubGrad;
+    ctx.fill();
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = "#e2e8f0";
+    ctx.stroke();
+    const label = hubLabel.trim();
+    if (label) {
+      ctx.fillStyle = "#e2e8f0";
+      const fontPx =
+        label.length > 4 ? Math.max(8, hubR * 0.38) : Math.max(10, hubR * 0.7);
+      ctx.font = `800 ${fontPx}px system-ui, sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(label, cx, cy + 1);
+    }
+  }
+}
+
 /**
  * Segments painted once to an offscreen canvas; the visible canvas rotates that
  * bitmap each frame. Rim, bulbs, hub and pointer stay fixed. Always blits after
@@ -52,6 +176,7 @@ export function WheelCanvas({
   title,
   hubLabel = "ET",
   fillContainer = false,
+  spinPrompt = false,
 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -59,6 +184,10 @@ export function WheelCanvas({
   const sizeRef = useRef({ css: 420, dpr: 1, radius: 190 });
   const rotationRef = useRef(rotation);
   rotationRef.current = rotation;
+  const hubLabelRef = useRef(hubLabel);
+  hubLabelRef.current = hubLabel;
+  const spinPromptRef = useRef(spinPrompt);
+  spinPromptRef.current = spinPrompt;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -90,60 +219,7 @@ export function WheelCanvas({
       ctx.drawImage(off, -cx, -cy, css, css);
       ctx.restore();
 
-      const rimOuter = radius + 12;
-      const rimInner = radius + 2;
-      const rimGrad = ctx.createLinearGradient(cx - rimOuter, cy, cx + rimOuter, cy);
-      rimGrad.addColorStop(0, "#b45309");
-      rimGrad.addColorStop(0.35, "#fbbf24");
-      rimGrad.addColorStop(0.55, "#fde68a");
-      rimGrad.addColorStop(0.75, "#f59e0b");
-      rimGrad.addColorStop(1, "#92400e");
-      ctx.beginPath();
-      ctx.arc(cx, cy, rimOuter, 0, Math.PI * 2);
-      ctx.arc(cx, cy, rimInner, 0, Math.PI * 2, true);
-      ctx.fillStyle = rimGrad;
-      ctx.fill();
-
-      const bulbs = 24;
-      for (let i = 0; i < bulbs; i++) {
-        const a = (i / bulbs) * Math.PI * 2 - Math.PI / 2;
-        const bx = cx + Math.cos(a) * (radius + 7);
-        const by = cy + Math.sin(a) * (radius + 7);
-        const bulb = ctx.createRadialGradient(bx, by, 0, bx, by, 4.5);
-        bulb.addColorStop(0, "#fffbeb");
-        bulb.addColorStop(0.4, "#fde047");
-        bulb.addColorStop(1, "rgba(251,191,36,0)");
-        ctx.beginPath();
-        ctx.arc(bx, by, 4.5, 0, Math.PI * 2);
-        ctx.fillStyle = bulb;
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(bx, by, 2.2, 0, Math.PI * 2);
-        ctx.fillStyle = "#fef08a";
-        ctx.fill();
-      }
-
-      const hubR = Math.max(22, radius * 0.12);
-      const hubGrad = ctx.createRadialGradient(cx - 4, cy - 4, 2, cx, cy, hubR);
-      hubGrad.addColorStop(0, "#1e293b");
-      hubGrad.addColorStop(1, "#0b0f17");
-      ctx.beginPath();
-      ctx.arc(cx, cy, hubR, 0, Math.PI * 2);
-      ctx.fillStyle = hubGrad;
-      ctx.fill();
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = "#e2e8f0";
-      ctx.stroke();
-      ctx.fillStyle = "#e2e8f0";
-      const label = hubLabel.trim() || "ET";
-      const fontPx =
-        label.length > 4
-          ? Math.max(8, hubR * 0.38)
-          : Math.max(10, hubR * 0.7);
-      ctx.font = `800 ${fontPx}px system-ui, sans-serif`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(label, cx, cy + 1);
+      drawFixedChrome(ctx, cx, cy, radius, hubLabelRef.current, spinPromptRef.current);
     };
 
     const paintOffscreen = () => {
@@ -267,7 +343,7 @@ export function WheelCanvas({
     const ro = new ResizeObserver(() => paintOffscreen());
     ro.observe(wrap);
     return () => ro.disconnect();
-  }, [choices, colors, labelColors, highlightIndex, hubLabel, fillContainer]);
+  }, [choices, colors, labelColors, highlightIndex, hubLabel, fillContainer, spinPrompt]);
 
   // Re-blit when rotation changes during a spin (disk already painted).
   useEffect(() => {
@@ -295,59 +371,8 @@ export function WheelCanvas({
     ctx.drawImage(off, -cx, -cy, css, css);
     ctx.restore();
 
-    const rimOuter = radius + 12;
-    const rimInner = radius + 2;
-    const rimGrad = ctx.createLinearGradient(cx - rimOuter, cy, cx + rimOuter, cy);
-    rimGrad.addColorStop(0, "#b45309");
-    rimGrad.addColorStop(0.35, "#fbbf24");
-    rimGrad.addColorStop(0.55, "#fde68a");
-    rimGrad.addColorStop(0.75, "#f59e0b");
-    rimGrad.addColorStop(1, "#92400e");
-    ctx.beginPath();
-    ctx.arc(cx, cy, rimOuter, 0, Math.PI * 2);
-    ctx.arc(cx, cy, rimInner, 0, Math.PI * 2, true);
-    ctx.fillStyle = rimGrad;
-    ctx.fill();
-
-    const bulbs = 24;
-    for (let i = 0; i < bulbs; i++) {
-      const a = (i / bulbs) * Math.PI * 2 - Math.PI / 2;
-      const bx = cx + Math.cos(a) * (radius + 7);
-      const by = cy + Math.sin(a) * (radius + 7);
-      const bulb = ctx.createRadialGradient(bx, by, 0, bx, by, 4.5);
-      bulb.addColorStop(0, "#fffbeb");
-      bulb.addColorStop(0.4, "#fde047");
-      bulb.addColorStop(1, "rgba(251,191,36,0)");
-      ctx.beginPath();
-      ctx.arc(bx, by, 4.5, 0, Math.PI * 2);
-      ctx.fillStyle = bulb;
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(bx, by, 2.2, 0, Math.PI * 2);
-      ctx.fillStyle = "#fef08a";
-      ctx.fill();
-    }
-
-    const hubR = Math.max(22, radius * 0.12);
-    const hubGrad = ctx.createRadialGradient(cx - 4, cy - 4, 2, cx, cy, hubR);
-    hubGrad.addColorStop(0, "#1e293b");
-    hubGrad.addColorStop(1, "#0b0f17");
-    ctx.beginPath();
-    ctx.arc(cx, cy, hubR, 0, Math.PI * 2);
-    ctx.fillStyle = hubGrad;
-    ctx.fill();
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = "#e2e8f0";
-    ctx.stroke();
-    ctx.fillStyle = "#e2e8f0";
-    const label = hubLabel.trim() || "ET";
-    const fontPx =
-      label.length > 4 ? Math.max(8, hubR * 0.38) : Math.max(10, hubR * 0.7);
-    ctx.font = `800 ${fontPx}px system-ui, sans-serif`;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(label, cx, cy + 1);
-  }, [rotation, hubLabel]);
+    drawFixedChrome(ctx, cx, cy, radius, hubLabel, spinPrompt);
+  }, [rotation, hubLabel, spinPrompt]);
 
   return (
     <div

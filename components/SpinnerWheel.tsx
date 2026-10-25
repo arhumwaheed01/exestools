@@ -174,6 +174,7 @@ export function SpinnerWheel({
   const savedNote = useMemo(() => listSavedNote(toolId), [toolId]);
   const rotationRef = useRef(0);
   const rafRef = useRef(0);
+  const idleRafRef = useRef(0);
   const lastSegRef = useRef(-1);
   const allowSaveRef = useRef(true);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -257,6 +258,23 @@ export function SpinnerWheel({
     spinningRef.current = spinning;
   }, [spinning]);
 
+  // Slow continuous idle drift until the user starts a real spin.
+  useEffect(() => {
+    if (spinning || revealOpen || reduceMotion || choices.length < 2) return;
+    let last = performance.now();
+    const radPerSec = 0.22;
+    const tick = (now: number) => {
+      const dt = Math.min(0.064, (now - last) / 1000);
+      last = now;
+      const next = rotationRef.current + radPerSec * dt;
+      rotationRef.current = next;
+      setRotation(next);
+      idleRafRef.current = requestAnimationFrame(tick);
+    };
+    idleRafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(idleRafRef.current);
+  }, [spinning, revealOpen, reduceMotion, choices.length]);
+
   useEffect(() => {
     setAutoRemove(defaultAutoRemoveWinner(toolId));
     setThemeChoice(loadToolTheme(toolId));
@@ -314,6 +332,7 @@ export function SpinnerWheel({
 
     return () => {
       cancelAnimationFrame(rafRef.current);
+      cancelAnimationFrame(idleRafRef.current);
     };
   }, [initialEncoded, initialPresetQuery, toolId, defaults]);
 
@@ -393,6 +412,7 @@ export function SpinnerWheel({
     const t0 = performance.now();
 
     cancelAnimationFrame(rafRef.current);
+    cancelAnimationFrame(idleRafRef.current);
     const tick = (now: number) => {
       const elapsed = now - t0;
       if (elapsed < duration) {
@@ -709,6 +729,10 @@ export function SpinnerWheel({
                   sound.unlock();
                   sound.setEnabled(!sound.enabled);
                 }}
+                spinLength={spinLength}
+                onSpinLength={setSpinLength}
+                onShare={() => void onShare()}
+                shareDisabled={choices.length < 1 || spinning}
                 onEmbed={() => setEmbedPanelOpen(true)}
               />
             </div>
@@ -737,7 +761,8 @@ export function SpinnerWheel({
                     labelColors={themeLabels}
                     highlightIndex={revealOpen ? winnerIndex : null}
                     title={wheelTitle || undefined}
-                    hubLabel={spinning ? "…" : "SPIN"}
+                    hubLabel={spinning ? "…" : ""}
+                    spinPrompt={!spinning && !revealOpen && choices.length >= 2}
                     fillContainer
                     className="!max-w-none h-full"
                   />
@@ -746,69 +771,23 @@ export function SpinnerWheel({
                     data-et-spin=""
                     onClick={spin}
                     disabled={!canSpin}
-                    aria-label="Click to spin"
+                    aria-label="Click To Spin Ctrl+Enter"
                     aria-busy={spinning}
                     className="absolute inset-[12%] z-20 rounded-full focus:outline-none focus-visible:ring-4 focus-visible:ring-accent/50 disabled:cursor-not-allowed"
                   />
-                  {!spinning ? (
-                    <p className="pointer-events-none absolute inset-x-0 bottom-2 z-10 text-center text-[10px] font-bold uppercase tracking-wide text-white/90 drop-shadow sm:text-[11px]">
-                      Click to spin
-                    </p>
-                  ) : null}
                 </div>
               ) : (
                 <div className="aspect-square h-full max-h-full w-auto bg-surface-2/30" aria-hidden />
               )}
             </div>
 
-            {/* Fixed-height controls row — never collapses the wheel box */}
-            <div className="flex h-10 shrink-0 flex-wrap items-center justify-center gap-1.5">
-              <div
-                role="radiogroup"
-                aria-label="Spin length"
-                className="flex flex-wrap items-center justify-center gap-1"
-              >
-                {(
-                  [
-                    ["short", "Short"],
-                    ["normal", "Normal"],
-                    ["long", "Long"],
-                  ] as const
-                ).map(([id, label]) => (
-                  <label
-                    key={id}
-                    className={`inline-flex h-8 cursor-pointer items-center justify-center rounded-full border px-2.5 text-xs font-bold outline-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-accent ${
-                      spinLength === id
-                        ? "border-accent bg-accent/10 text-foreground"
-                        : "border-border text-muted hover:bg-surface-2"
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="spin-length-wf"
-                      className="sr-only"
-                      checked={spinLength === id}
-                      onChange={() => setSpinLength(id)}
-                    />
-                    {label}
-                  </label>
-                ))}
-              </div>
-              <button
-                type="button"
-                onClick={() => void onShare()}
-                disabled={choices.length < 1 || spinning}
-                className="inline-flex h-8 items-center gap-1 rounded-lg border border-border bg-surface-2 px-2.5 text-xs font-semibold text-foreground hover:bg-border disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              >
-                <Share2 className="h-3.5 w-3.5" aria-hidden />
-                Share
-              </button>
-              <p className="hidden text-xs text-muted pointer-fine:inline" aria-live="polite">
-                {status}
-                <span className="mx-1.5 text-border">·</span>
-                Ctrl+Enter
-              </p>
-            </div>
+            {/* Fixed-height status row — spin speed & share live in the ⋮ menu */}
+            <p
+              className="flex h-8 shrink-0 items-center justify-center text-center text-xs text-muted"
+              aria-live="polite"
+            >
+              {status}
+            </p>
 
             {toolId === "prize-wheel" || toolId === "yes-no-wheel" ? (
               <ResultReveal
@@ -902,6 +881,10 @@ export function SpinnerWheel({
                   sound.unlock();
                   sound.setEnabled(!sound.enabled);
                 }}
+                spinLength={spinLength}
+                onSpinLength={setSpinLength}
+                onShare={() => void onShare()}
+                shareDisabled={choices.length < 1 || spinning}
                 onEmbed={() => setEmbedPanelOpen(true)}
               />
             </div>

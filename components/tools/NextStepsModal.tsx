@@ -185,15 +185,6 @@ export function NextStepsModal({ open, toolId, onClose, onSpinAgain }: Props) {
               </ul>
             </div>
 
-            <div className="border-t border-border px-5 py-3 sm:px-6">
-              <button
-                type="button"
-                onClick={onClose}
-                className="text-sm font-semibold text-muted underline outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-accent"
-              >
-                Dismiss
-              </button>
-            </div>
           </motion.div>
         </motion.div>
       ) : null}
