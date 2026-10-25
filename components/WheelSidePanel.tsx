@@ -199,7 +199,7 @@ export function WheelSidePanel({
       <button
         type="button"
         onClick={onToggle}
-        className="relative z-20 hidden h-10 w-10 shrink-0 self-center rounded-full border border-border bg-surface text-foreground shadow-sm outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent lg:inline-flex lg:items-center lg:justify-center"
+        className="relative z-20 hidden h-11 w-11 shrink-0 self-center rounded-full border border-border bg-surface text-foreground shadow-sm outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent lg:inline-flex lg:items-center lg:justify-center"
         aria-expanded={false}
         aria-controls="wheel-side-panel"
         title="Expand panel"
