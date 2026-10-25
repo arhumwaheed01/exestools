@@ -179,12 +179,24 @@ export function SpinnerWheel({
   const [hydrated, setHydrated] = useState(false);
   const [toast, setToast] = useState("");
   const [sharedMode, setSharedMode] = useState(false);
-  const [autoRemove, setAutoRemove] = useState(() => defaultAutoRemoveWinner(toolId));
+  const [autoRemove, setAutoRemove] = useState(() => {
+    if (typeof window === "undefined") return defaultAutoRemoveWinner(toolId);
+    const session = loadSession(toolId);
+    return typeof session?.autoRemove === "boolean"
+      ? session.autoRemove
+      : defaultAutoRemoveWinner(toolId);
+  });
   const [ready, setReady] = useState(false);
   const [showNextSteps, setShowNextSteps] = useState(false);
   const [themeChoice, setThemeChoice] = useState<ToolThemeId>("auto");
   const [spinLength, setSpinLength] = useState<SpinLength>("normal");
-  const [wheelTitle, setWheelTitle] = useState("");
+  const [wheelTitle, setWheelTitle] = useState(() => {
+    if (typeof window === "undefined") return "";
+    const session = loadSession(toolId);
+    if (typeof session?.title === "string" && session.title) return session.title.slice(0, 40);
+    const last = loadLastWheel(toolId);
+    return typeof last?.title === "string" ? last.title.slice(0, 40) : "";
+  });
   const [history, setHistory] = useState<string[]>([]);
   const [confettiFire, setConfettiFire] = useState(0);
   const [v2Settings, setV2Settings] = useState<WheelV2Settings>(() =>
@@ -232,6 +244,8 @@ export function SpinnerWheel({
   const idleRafRef = useRef(0);
   const lastSegRef = useRef(-1);
   const allowSaveRef = useRef(true);
+  /** Only flush storage for this tool after its hydrate finished (blocks cross-page bleed). */
+  const hydratedToolIdRef = useRef<ToolId | null>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const wheelBoxRef = useRef<HTMLDivElement>(null);
   const stickySpinRef = useRef<HTMLButtonElement>(null);
@@ -326,8 +340,13 @@ export function SpinnerWheel({
   wheelTitleRef.current = wheelTitle;
   autoRemoveRef.current = autoRemove;
 
+  // Client navigations reuse this component; block writes until the new toolId hydrates.
+  if (hydratedToolIdRef.current !== null && hydratedToolIdRef.current !== toolId) {
+    allowSaveRef.current = false;
+  }
+
   const flushSession = (overrides?: { autoRemove?: boolean; title?: string }) => {
-    if (!allowSaveRef.current) return;
+    if (!allowSaveRef.current || hydratedToolIdRef.current !== toolId) return;
     saveSession(toolId, choicesRef.current, {
       autoRemove:
         typeof overrides?.autoRemove === "boolean"
@@ -338,7 +357,7 @@ export function SpinnerWheel({
   };
 
   const flushLastWheel = (overrides?: { title?: string }) => {
-    if (!allowSaveRef.current) return;
+    if (!allowSaveRef.current || hydratedToolIdRef.current !== toolId) return;
     autosaveLastWheel(toolId, {
       title: typeof overrides?.title === "string" ? overrides.title : wheelTitleRef.current,
       choices: choicesRef.current,
@@ -396,6 +415,12 @@ export function SpinnerWheel({
   }, [spinning, revealOpen, reduceMotion, choices.length, hasSpunOnce]);
 
   useEffect(() => {
+    // Pause persistence while we swap tool storage namespaces.
+    allowSaveRef.current = false;
+    hydratedToolIdRef.current = null;
+    setHydrated(false);
+    autoRemoveTouchedRef.current = false;
+
     setThemeChoice(loadToolTheme(toolId));
 
     // Hydrate: #w= → ?preset= → legacy ?c= → localStorage → default
@@ -484,23 +509,29 @@ export function SpinnerWheel({
       allowSaveRef.current = true;
     }
 
+    hydratedToolIdRef.current = toolId;
     setHydrated(true);
     // Reveal canvas after first paint of reserved shell
     requestAnimationFrame(() => setReady(true));
 
     return () => {
+      // Stop writes for this tool as soon as we leave / remount for another.
+      if (hydratedToolIdRef.current === toolId) {
+        hydratedToolIdRef.current = null;
+        allowSaveRef.current = false;
+      }
       cancelAnimationFrame(rafRef.current);
       cancelAnimationFrame(idleRafRef.current);
     };
   }, [initialEncoded, initialPresetQuery, toolId, defaults]);
 
   useEffect(() => {
-    if (!hydrated || !allowSaveRef.current) return;
+    if (!hydrated || !allowSaveRef.current || hydratedToolIdRef.current !== toolId) return;
     flushSession();
   }, [choices, autoRemove, wheelTitle, hydrated, toolId]);
 
   useEffect(() => {
-    if (!hydrated) return;
+    if (!hydrated || hydratedToolIdRef.current !== toolId) return;
     saveWheelSettings(toolId, v2Settings);
     if (isToolThemeId(v2Settings.themeId) && v2Settings.themeId !== "auto") {
       setThemeChoice(v2Settings.themeId);
@@ -509,7 +540,7 @@ export function SpinnerWheel({
   }, [v2Settings, toolId, hydrated]);
 
   useEffect(() => {
-    if (!hydrated || !allowSaveRef.current) return;
+    if (!hydrated || !allowSaveRef.current || hydratedToolIdRef.current !== toolId) return;
     flushLastWheel();
   }, [choices, wheelTitle, v2Settings, entryWeights, hydrated, toolId]);
 
