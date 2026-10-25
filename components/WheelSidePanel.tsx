@@ -10,7 +10,7 @@ import {
   Shuffle,
 } from "lucide-react";
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { PresetSelector } from "@/components/PresetSelector";
 import { ThemeChips } from "@/components/tools/ThemeChips";
 import type { WheelPreset } from "@/lib/presets";
@@ -54,6 +54,12 @@ type Props = {
   homeLinks?: { href: string; label: string }[];
   /** Mobile: render as expandable sheet under the wheel. */
   mobileSheet?: boolean;
+  onAddBackgroundImage?: (file: File) => void;
+  onAddCenterImage?: (file: File) => void;
+  onAddEntryImage?: (file: File) => void;
+  onSortResults?: () => void;
+  onExportResults?: (format: "csv" | "txt") => void;
+  onOpenAdvanced?: () => void;
 };
 
 const WHEEL_CAP = 60;
@@ -93,6 +99,12 @@ export function WheelSidePanel({
   onPreset,
   homeLinks,
   mobileSheet = false,
+  onAddBackgroundImage,
+  onAddCenterImage,
+  onAddEntryImage,
+  onSortResults,
+  onExportResults,
+  onOpenAdvanced,
 }: Props) {
   const labelId = "wf-choices-label";
 
@@ -154,6 +166,12 @@ export function WheelSidePanel({
               onPreset={onPreset}
               homeLinks={homeLinks}
               labelId={labelId}
+              onAddBackgroundImage={onAddBackgroundImage}
+              onAddCenterImage={onAddCenterImage}
+              onAddEntryImage={onAddEntryImage}
+              onSortResults={onSortResults}
+              onExportResults={onExportResults}
+              onOpenAdvanced={onOpenAdvanced}
             />
           </div>
         ) : null}
@@ -228,6 +246,12 @@ export function WheelSidePanel({
         onPreset={onPreset}
         homeLinks={homeLinks}
         labelId={labelId}
+        onAddBackgroundImage={onAddBackgroundImage}
+        onAddCenterImage={onAddCenterImage}
+        onAddEntryImage={onAddEntryImage}
+        onSortResults={onSortResults}
+        onExportResults={onExportResults}
+        onOpenAdvanced={onOpenAdvanced}
       />
     </aside>
   );
@@ -266,6 +290,12 @@ function PanelBody({
   onPreset,
   homeLinks,
   labelId,
+  onAddBackgroundImage,
+  onAddCenterImage,
+  onAddEntryImage,
+  onSortResults,
+  onExportResults,
+  onOpenAdvanced,
 }: Omit<Props, "open" | "onToggle" | "mobileSheet"> & { labelId: string }) {
   return (
     <>
@@ -293,6 +323,12 @@ function PanelBody({
               icon={<ArrowUpDown className="h-3.5 w-3.5" />}
               label="Sort"
             />
+            <AddImageMenu
+              disabled={disabled}
+              onBackground={onAddBackgroundImage}
+              onCenter={onAddCenterImage}
+              onEntry={onAddEntryImage}
+            />
             <ToolBtn
               disabled={disabled}
               onClick={onCopy}
@@ -312,6 +348,9 @@ function PanelBody({
               label="Clear"
               danger
             />
+            {onOpenAdvanced ? (
+              <ToolBtn disabled={disabled} onClick={onOpenAdvanced} label="Advanced…" />
+            ) : null}
           </div>
 
           <label className="sr-only" htmlFor="wf-choices-textarea">
@@ -412,6 +451,33 @@ function PanelBody({
         </div>
       ) : (
         <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-3">
+          {results.length > 0 ? (
+            <div className="flex shrink-0 flex-wrap gap-1.5">
+              {onSortResults ? (
+                <ToolBtn
+                  disabled={disabled}
+                  onClick={onSortResults}
+                  icon={<ArrowUpDown className="h-3.5 w-3.5" />}
+                  label="Sort"
+                />
+              ) : null}
+              <ToolBtn disabled={disabled} onClick={onClearResults} label="Clear the list" danger />
+              {onExportResults ? (
+                <>
+                  <ToolBtn
+                    disabled={disabled}
+                    onClick={() => onExportResults("csv")}
+                    label="Export CSV"
+                  />
+                  <ToolBtn
+                    disabled={disabled}
+                    onClick={() => onExportResults("txt")}
+                    label="Export TXT"
+                  />
+                </>
+              ) : null}
+            </div>
+          ) : null}
           {results.length === 0 ? (
             <p className="text-sm text-muted">No spins yet. Click the wheel or press Ctrl+Enter.</p>
           ) : (
@@ -427,15 +493,6 @@ function PanelBody({
               ))}
             </ul>
           )}
-          {results.length > 0 ? (
-            <button
-              type="button"
-              onClick={onClearResults}
-              className="mt-2 self-start text-sm font-semibold text-muted underline outline-none focus-visible:ring-2 focus-visible:ring-accent"
-            >
-              Clear results
-            </button>
-          ) : null}
         </div>
       )}
     </>
@@ -481,7 +538,7 @@ function ToolBtn({
   danger,
 }: {
   label: string;
-  icon: ReactNode;
+  icon?: ReactNode;
   onClick: () => void;
   disabled?: boolean;
   danger?: boolean;
@@ -500,5 +557,102 @@ function ToolBtn({
       {icon}
       {label}
     </button>
+  );
+}
+
+function AddImageMenu({
+  disabled,
+  onBackground,
+  onCenter,
+  onEntry,
+}: {
+  disabled?: boolean;
+  onBackground?: (file: File) => void;
+  onCenter?: (file: File) => void;
+  onEntry?: (file: File) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const bgRef = useRef<HTMLInputElement>(null);
+  const centerRef = useRef<HTMLInputElement>(null);
+  const entryRef = useRef<HTMLInputElement>(null);
+  if (!onBackground && !onCenter && !onEntry) return null;
+
+  return (
+    <div className="relative">
+      <ToolBtn disabled={disabled} onClick={() => setOpen((v) => !v)} label="Add image ▾" />
+      {open ? (
+        <div className="absolute left-0 top-full z-30 mt-1 w-52 rounded-xl border border-border bg-surface p-1.5 shadow-xl">
+          {onBackground ? (
+            <button
+              type="button"
+              className="flex min-h-9 w-full items-center rounded-lg px-2 text-left text-xs font-semibold hover:bg-surface-2"
+              onClick={() => {
+                setOpen(false);
+                bgRef.current?.click();
+              }}
+            >
+              Add background image
+            </button>
+          ) : null}
+          {onCenter ? (
+            <button
+              type="button"
+              className="flex min-h-9 w-full items-center rounded-lg px-2 text-left text-xs font-semibold hover:bg-surface-2"
+              onClick={() => {
+                setOpen(false);
+                centerRef.current?.click();
+              }}
+            >
+              Add center image
+            </button>
+          ) : null}
+          {onEntry ? (
+            <button
+              type="button"
+              className="flex min-h-9 w-full items-center rounded-lg px-2 text-left text-xs font-semibold hover:bg-surface-2"
+              onClick={() => {
+                setOpen(false);
+                entryRef.current?.click();
+              }}
+            >
+              Add image as entry
+            </button>
+          ) : null}
+        </div>
+      ) : null}
+      <input
+        ref={bgRef}
+        type="file"
+        accept="image/png,image/jpeg,image/webp"
+        className="hidden"
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          if (f && onBackground) onBackground(f);
+          e.target.value = "";
+        }}
+      />
+      <input
+        ref={centerRef}
+        type="file"
+        accept="image/png,image/jpeg,image/webp"
+        className="hidden"
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          if (f && onCenter) onCenter(f);
+          e.target.value = "";
+        }}
+      />
+      <input
+        ref={entryRef}
+        type="file"
+        accept="image/png,image/jpeg,image/webp"
+        className="hidden"
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          if (f && onEntry) onEntry(f);
+          e.target.value = "";
+        }}
+      />
+    </div>
   );
 }

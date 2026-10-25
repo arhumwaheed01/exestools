@@ -25,8 +25,15 @@ import { ToolConfetti } from "@/components/tools/Confetti";
 import { WinnerModal } from "@/components/WinnerModal";
 import { YesNoTally } from "@/components/tools/YesNoTally";
 import { WheelOverflowMenu } from "@/components/tools/WheelOverflowMenu";
+import { AdvancedEntriesDialog } from "@/components/wheel-v2/AdvancedEntriesDialog";
 import { CustomizeDialog } from "@/components/wheel-v2/CustomizeDialog";
 import { WheelTopBar } from "@/components/wheel-v2/WheelTopBar";
+import {
+  fileToResizedDataUrl,
+  loadWheelImages,
+  saveWheelImages,
+  type WheelImages,
+} from "@/lib/wheel-v2/images";
 import { EmbedSnippet } from "@/components/embed/EmbedSnippet";
 import { encodeShareHash, readShareFromLocation } from "@/lib/share-codec";
 import {
@@ -185,6 +192,12 @@ export function SpinnerWheel({
     settings: WheelV2Settings;
     title: string;
   } | null>(null);
+  const [wheelImages, setWheelImages] = useState<WheelImages>({
+    background: null,
+    center: null,
+    entries: {},
+  });
+  const [advancedOpen, setAdvancedOpen] = useState(false);
   /** Yes/No page only: spin result tallies (session state, not persisted). */
   const [tally, setTally] = useState<Record<string, { label: string; count: number }>>({});
   const [panelOpen, setPanelOpen] = useState(true);
@@ -334,6 +347,7 @@ export function SpinnerWheel({
 
     setV2Settings(loadWheelSettings(toolId));
     setRecentWheels(loadRecentWheels(toolId));
+    setWheelImages(loadWheelImages(toolId));
 
     if (fromHash && fromHash.choices.length >= 1) {
       setText(choicesToText(fromHash.choices));
@@ -795,6 +809,61 @@ export function SpinnerWheel({
     showToast("Undone.");
   };
 
+  const persistImages = (next: WheelImages) => {
+    setWheelImages(next);
+    saveWheelImages(toolId, next);
+  };
+
+  const onPickImage = async (
+    file: File,
+    kind: "background" | "center" | "entry",
+  ) => {
+    try {
+      const dataUrl = await fileToResizedDataUrl(file);
+      if (kind === "background") {
+        persistImages({ ...wheelImages, background: dataUrl });
+        showToast("Background image saved on this device.");
+      } else if (kind === "center") {
+        persistImages({ ...wheelImages, center: dataUrl });
+        showToast("Center image saved on this device.");
+      } else {
+        const label = (file.name.replace(/\.[^.]+$/, "") || "Image").slice(0, 40);
+        persistImages({
+          ...wheelImages,
+          entries: { ...wheelImages.entries, [label.toLocaleLowerCase()]: dataUrl },
+        });
+        setText((prev) => (prev.trim() ? `${prev.trim()}\n${label}` : label));
+        showToast("Image added as an entry (stored locally).");
+      }
+    } catch (err) {
+      const code = err instanceof Error ? err.message : "";
+      showToast(
+        code === "SIZE"
+          ? "Image must be 3 MB or smaller."
+          : code === "TYPE"
+            ? "Use PNG, JPG, or WebP."
+            : "Could not read that image.",
+      );
+    }
+  };
+
+  const onExportResults = (format: "csv" | "txt") => {
+    if (!history.length) {
+      showToast("No results to export.");
+      return;
+    }
+    const body =
+      format === "csv"
+        ? ["rank,result", ...history.map((h, i) => `${i + 1},"${h.replace(/"/g, '""')}"`)].join("\n")
+        : history.map((h, i) => `${i + 1}. ${h}`).join("\n");
+    const blob = new Blob([body], { type: format === "csv" ? "text/csv" : "text/plain" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `spin-results.${format}`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
+
   const sharedBanner = sharedMode ? (
     <div
       className="flex max-h-16 flex-wrap items-center gap-2 rounded-xl border border-accent/40 bg-surface-2 px-3 py-2 text-xs text-foreground sm:text-sm"
@@ -916,6 +985,12 @@ export function SpinnerWheel({
     presets: toolPresets,
     onPreset,
     homeLinks,
+    onAddBackgroundImage: (f: File) => void onPickImage(f, "background"),
+    onAddCenterImage: (f: File) => void onPickImage(f, "center"),
+    onAddEntryImage: (f: File) => void onPickImage(f, "entry"),
+    onSortResults: () => setHistory((h) => [...h].sort((a, b) => a.localeCompare(b))),
+    onExportResults,
+    onOpenAdvanced: () => setAdvancedOpen(true),
   };
 
   const livePreview = (
@@ -989,6 +1064,18 @@ export function SpinnerWheel({
           }}
           onStopWinner={() => undefined}
         />
+        <AdvancedEntriesDialog
+          open={advancedOpen}
+          entries={choices}
+          swatches={v2Settings.swatches}
+          onCancel={() => setAdvancedOpen(false)}
+          onOk={(nextEntries) => {
+            setText(choicesToText(nextEntries));
+            setV2Settings((s) => ({ ...s, displayDuplicates: true }));
+            setAdvancedOpen(false);
+            showToast("Advanced entries applied.");
+          }}
+        />
         {/* Fixed stage height — leave room for site header + H1 + top bar at 1280×720. */}
         <div
           className="flex flex-col gap-2 lg:h-[calc(100dvh-15.5rem)] lg:max-h-[calc(100dvh-15.5rem)] lg:min-h-[18rem] lg:flex-row lg:items-stretch lg:gap-0 lg:overflow-hidden"
@@ -998,6 +1085,15 @@ export function SpinnerWheel({
             className={`relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-3xl border border-border bg-surface p-2 sm:p-2.5 ${
               panelOpen ? "lg:rounded-r-none lg:border-r-0" : ""
             }`}
+            style={
+              wheelImages.background
+                ? {
+                    backgroundImage: `linear-gradient(rgba(11,15,23,0.72), rgba(11,15,23,0.72)), url(${wheelImages.background})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }
+                : undefined
+            }
           >
             <div className="absolute left-2 top-2 z-30">
               <WheelOverflowMenu
@@ -1051,8 +1147,21 @@ export function SpinnerWheel({
                     disabled={!canSpin}
                     aria-label="Click To Spin Ctrl+Enter"
                     aria-busy={spinning}
-                    className="absolute inset-[12%] z-20 rounded-full focus:outline-none focus-visible:ring-4 focus-visible:ring-accent/50 disabled:cursor-not-allowed"
+                    className="absolute inset-[4%] z-20 rounded-full focus:outline-none focus-visible:ring-4 focus-visible:ring-accent/50 disabled:cursor-not-allowed"
                   />
+                  {wheelImages.center ? (
+                    <img
+                      src={wheelImages.center}
+                      alt=""
+                      className={`pointer-events-none absolute left-1/2 top-1/2 z-[15] -translate-x-1/2 -translate-y-1/2 rounded-full object-cover shadow ${
+                        v2Settings.centerImageSize === "S"
+                          ? "h-[12%] w-[12%]"
+                          : v2Settings.centerImageSize === "L"
+                            ? "h-[22%] w-[22%]"
+                            : "h-[16%] w-[16%]"
+                      }`}
+                    />
+                  ) : null}
                 </div>
               ) : (
                 <div className="aspect-square h-full max-h-full w-auto bg-surface-2/30" aria-hidden />
