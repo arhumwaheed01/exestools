@@ -216,17 +216,6 @@ export function WheelSidePanel({
       className="relative hidden h-full min-h-0 w-[320px] shrink-0 flex-col overflow-hidden rounded-r-3xl border border-border border-l-0 bg-surface lg:flex"
       aria-hidden={false}
     >
-      <button
-        type="button"
-        onClick={onToggle}
-        className="absolute -left-5 top-1/2 z-20 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-surface text-foreground shadow-sm outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
-        aria-expanded={true}
-        aria-controls="wheel-side-panel"
-        title="Collapse panel"
-      >
-        <ChevronRight className="h-4 w-4" aria-hidden />
-        <span className="sr-only">Collapse entries panel</span>
-      </button>
       <PanelBody
         tab={tab}
         onTab={onTab}
@@ -271,6 +260,18 @@ export function WheelSidePanel({
         onExportResults={onExportResults}
         onOpenAdvanced={onOpenAdvanced}
       />
+      {/* After tabs in tab order (visually floats on the seam) */}
+      <button
+        type="button"
+        onClick={onToggle}
+        className="absolute -left-5 top-1/2 z-20 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-surface text-foreground shadow-sm outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
+        aria-expanded={true}
+        aria-controls="wheel-side-panel"
+        title="Collapse panel"
+      >
+        <ChevronRight className="h-4 w-4" aria-hidden />
+        <span className="sr-only">Collapse entries panel</span>
+      </button>
     </aside>
   );
 }
@@ -336,6 +337,18 @@ function PanelBody({
             {heading}
           </p>
           <p className="shrink-0 text-[11px] leading-snug text-muted">{helpText}</p>
+
+          {showAutoRemove ? (
+            <label className="flex min-h-11 shrink-0 cursor-pointer items-center gap-2 rounded-xl border border-border bg-surface-2 px-3 text-sm text-foreground">
+              <input
+                type="checkbox"
+                checked={autoRemove}
+                onChange={(e) => onAutoRemove(e.target.checked)}
+                className="h-4 w-4 accent-cyan-500"
+              />
+              Remove winner after spin
+            </label>
+          ) : null}
 
           <div className="flex shrink-0 flex-wrap gap-1.5">
             <ToolBtn disabled={disabled} onClick={onShuffle} icon={<Shuffle className="h-3.5 w-3.5" />} label="Shuffle" />
@@ -423,17 +436,6 @@ function PanelBody({
               </span>
             </summary>
             <div className="space-y-3 border-t border-border px-3 pt-3">
-              {showAutoRemove ? (
-                <label className="flex min-h-11 cursor-pointer items-center gap-2 text-sm text-foreground">
-                  <input
-                    type="checkbox"
-                    checked={autoRemove}
-                    onChange={(e) => onAutoRemove(e.target.checked)}
-                    className="h-4 w-4 accent-cyan-500"
-                  />
-                  Remove winner after spin
-                </label>
-              ) : null}
               <label className="block">
                 <span className="mb-1 block text-xs font-bold uppercase tracking-wide text-muted">
                   Wheel title
@@ -505,9 +507,15 @@ function PanelBody({
             </div>
           ) : null}
           {results.length === 0 ? (
-            <p className="text-sm text-muted">No spins yet. Click the wheel or press Ctrl+Enter.</p>
+            <p className="text-sm text-muted">
+              No spins yet. Results stay for this session only (cleared on reload). Click the wheel
+              or press Ctrl+Enter.
+            </p>
           ) : (
             <ul className="space-y-1.5">
+              <li className="list-none text-[11px] text-muted">
+                Session only — cleared if you reload the page.
+              </li>
               {results.map((item, i) => (
                 <li
                   key={`${item}-${i}`}
@@ -669,7 +677,7 @@ function AddImageMenu({
       ? createPortal(
           <div
             ref={menuRef}
-            className="fixed z-[200] max-h-[calc(100dvh-120px)] max-w-[calc(100vw-16px)] overflow-y-auto overscroll-contain rounded-xl border border-border bg-surface p-1.5 shadow-2xl"
+            className="fixed z-[300] max-h-[calc(100dvh-120px)] max-w-[calc(100vw-16px)] overflow-y-auto overscroll-contain rounded-xl border border-border bg-surface p-1.5 shadow-2xl"
             style={{
               top: pos.top,
               left: pos.left,

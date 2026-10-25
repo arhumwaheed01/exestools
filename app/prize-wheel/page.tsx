@@ -110,15 +110,15 @@ export default function PrizeWheelPage() {
           <li>Share your rules and the full list with entrants before you spin.</li>
           <li>Press SPIN where everyone can see it, or record your screen.</li>
           <li>
-            Drawing more than one winner? Turn on &quot;Remove winner after spin&quot; so each winner
-            leaves the wheel. For a ticket raffle with hundreds of numbers, people with several
+            Drawing more than one winner? Turn on &quot;Remove winner after spin&quot; under Entries
+            so each winner leaves the wheel. For a ticket raffle with hundreds of numbers, people with several
             tickets, or{" "}
             <Link href="/raffle-generator" className="font-semibold text-accent hover:underline">
               multiple prizes and alternates
             </Link>
             , use the raffle generator.
           </li>
-          <li>Press Copy share link so others can open the same wheel.</li>
+          <li>Press Share so others can open the same wheel.</li>
         </ol>
       </GuideSection>
       <GuideSection title="What to put on a prize wheel">

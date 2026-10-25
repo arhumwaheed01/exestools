@@ -77,12 +77,12 @@ export default function RandomNamePickerPage() {
             here), that name leaves the wheel so it cannot come up again until you restore the list.
           </li>
           <li>
-            Press Spin again for the next person, or Close when you are done. Sound and Reset
-            rotation sit beside SPIN if you need them.
+            Press Spin again for the next person, or Remove on the winner popup if you want that name
+            off the wheel. Sound and spin length are in the ⋮ menu on the wheel.
           </li>
           <li>
-            Press Copy share link to send the same list to someone else, or Fresh wheel to bring
-            back the starter sample. Shuffle only reorders the slices; it does not change the odds.
+            Use Share to copy a link to the same list, or New / Open to start fresh or reload a saved
+            wheel. Shuffle only reorders the slices; it does not change the odds.
           </li>
         </ol>
       </GuideSection>

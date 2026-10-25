@@ -99,16 +99,16 @@ export default function ClassroomSpinnerPage() {
           </li>
           <li>Press SPIN. The student under the pointer is picked.</li>
           <li>
-            Keep &quot;Remove winner after spin (no repeats)&quot; switched on. Each picked student
-            comes off the wheel, so everyone gets one turn per round.
+            Keep &quot;Remove winner after spin&quot; switched on under Entries (on by default here).
+            Each picked student comes off the wheel, so everyone gets one turn per round.
           </li>
           <li>
-            With Remove winner on, the list saved in your browser is only the names still left. Paste
+            With Remove winner on, the list saved in this browser is only the names still left. Paste
             your full roster again to start a new round.
           </li>
           <li>
             When the round is over, paste your full roster back in. Tip: click Copy before your first
-            spin so the whole list is on your clipboard. Fresh wheel brings back the sample roster.
+            spin so the whole list is on your clipboard. New restores the sample roster.
           </li>
         </ol>
       </GuideSection>

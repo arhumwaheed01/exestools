@@ -44,6 +44,7 @@ import {
   loadWheelSettings,
   normalizeSettings,
   normalizeWeights,
+  deleteRecentWheel,
   pushRecentWheel,
   saveEntryWeights,
   saveWheelSettings,
@@ -85,6 +86,7 @@ import {
   targetRotationForIndex,
   winnerIndexAt,
 } from "@/lib/wheel";
+import { parseCsvEntries } from "@/lib/wheel-v2/portal";
 import "@/app/styles/tools-themes.css";
 
 const CHOICES_HELP_BASE =
@@ -332,9 +334,11 @@ export function SpinnerWheel({
     spinningRef.current = spinning;
   }, [spinning]);
 
-  // Slow continuous idle drift until the user starts a real spin.
+  // Slow idle drift only before the first real spin — hold the winner after that.
   useEffect(() => {
-    if (spinning || revealOpen || reduceMotion || choices.length < 2) return;
+    if (spinning || revealOpen || reduceMotion || choices.length < 2 || hasSpunOnce) {
+      return;
+    }
     let last = performance.now();
     const radPerSec = 0.22;
     const tick = (now: number) => {
@@ -347,7 +351,7 @@ export function SpinnerWheel({
     };
     idleRafRef.current = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(idleRafRef.current);
-  }, [spinning, revealOpen, reduceMotion, choices.length]);
+  }, [spinning, revealOpen, reduceMotion, choices.length, hasSpunOnce]);
 
   useEffect(() => {
     setAutoRemove(defaultAutoRemoveWinner(toolId));
@@ -459,6 +463,17 @@ export function SpinnerWheel({
     document.addEventListener("fullscreenchange", onFs);
     return () => document.removeEventListener("fullscreenchange", onFs);
   }, []);
+
+  useEffect(() => {
+    if (!isFullscreen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && document.fullscreenElement) {
+        void document.exitFullscreen().catch(() => undefined);
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [isFullscreen]);
 
   const showToast = useCallback((msg: string) => {
     setToast(msg);
@@ -706,25 +721,31 @@ export function SpinnerWheel({
     setSharedMode(false);
   };
 
-  const onSaveWheelFile = () => {
+  const onSaveWheelFile = (opts: { title: string; download: boolean }) => {
+    const title = opts.title.trim() || wheelTitle || "My wheel";
     const file: SavedWheelFile = {
       v: 1,
       toolId,
-      title: wheelTitle || "My wheel",
+      title,
       choices,
       settings: v2Settings,
       weights: entryWeights,
       savedAt: Date.now(),
     };
+    if (title !== wheelTitle) setWheelTitle(title.slice(0, 40));
     pushRecentWheel(toolId, file);
     setRecentWheels(loadRecentWheels(toolId));
-    const blob = new Blob([JSON.stringify(file, null, 2)], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = `${(wheelTitle || "wheel").replace(/[^\w\-]+/g, "-").slice(0, 40)}.json`;
-    a.click();
-    URL.revokeObjectURL(a.href);
-    showToast("Wheel saved as JSON.");
+    if (opts.download) {
+      const blob = new Blob([JSON.stringify(file, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `${title.replace(/[^\w\-]+/g, "-").slice(0, 40) || "wheel"}.json`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+      showToast("Wheel saved and downloaded.");
+    } else {
+      showToast("Wheel saved on this device.");
+    }
   };
 
   const onOpenWheelFile = async (f: File) => {
@@ -738,17 +759,12 @@ export function SpinnerWheel({
     }
   };
 
-  const onImportCsv = (raw: string) => {
-    const parts = raw
-      .split(/[\n,]+/)
-      .map((s) => s.trim())
-      .filter(Boolean);
-    if (parts.length < 2) {
-      showToast("Need at least 2 entries to import.");
-      return;
-    }
+  const onImportCsv = (raw: string): boolean => {
+    const parts = parseCsvEntries(raw);
+    if (parts.length < 2) return false;
     setText(choicesToText(parts));
     showToast(`Imported ${parts.length} entries.`);
+    return true;
   };
 
   const onToggleFullscreen = async () => {
@@ -849,6 +865,7 @@ export function SpinnerWheel({
     setWinnerIndex(null);
     setRevealOpen(false);
     setShowNextSteps(false);
+    setHasSpunOnce(false);
     allowSaveRef.current = true;
     setSharedMode(false);
     setToast("NEW_UNDO");
@@ -961,9 +978,14 @@ export function SpinnerWheel({
     </div>
   ) : null;
 
+  const weightsActive = useMemo(
+    () => choiceWeights.some((w) => Math.abs(w - 1) > 0.001),
+    [choiceWeights],
+  );
+
   const toastEl = toast ? (
     <div
-      className="fixed bottom-20 left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-full bg-accent-strong px-4 py-2 text-xs font-semibold text-slate-950 shadow-lg sm:bottom-4"
+      className="fixed bottom-[calc(5.75rem+env(safe-area-inset-bottom,0px))] left-1/2 z-[60] flex max-w-[min(24rem,calc(100vw-1.5rem))] -translate-x-1/2 items-center gap-2 rounded-full bg-accent-strong px-4 py-2.5 text-xs font-semibold text-slate-950 shadow-lg lg:bottom-6"
       role="status"
     >
       {toast === "NEW_UNDO" ? (
@@ -989,6 +1011,7 @@ export function SpinnerWheel({
         open={revealOpen}
         winner={winner}
         entryCount={pickedFromCount}
+        weighted={weightsActive}
         showRemoveContinue={!autoRemove && v2Settings.showRemoveButton}
         titleBarText={v2Settings.popupMessage}
         onDismiss={() => {
@@ -1065,7 +1088,13 @@ export function SpinnerWheel({
   const livePreview = (
     <p className="sr-only" aria-live="polite">
       {choices.length > 0
-        ? `${choices.length} choices on the wheel: ${choices.join(", ")}.`
+        ? (() => {
+            const noun = choices.length === 1 ? "choice" : "choices";
+            const listed = choices
+              .map((c) => (c.length > 64 ? `${c.slice(0, 64)}…` : c))
+              .join(", ");
+            return `${choices.length} ${noun} on the wheel: ${listed}.`;
+          })()
         : "No choices on the wheel yet."}
     </p>
   );
@@ -1160,6 +1189,11 @@ export function SpinnerWheel({
             onOpenFile={(f) => void onOpenWheelFile(f)}
             recent={recentWheels}
             onOpenRecent={applySavedWheel}
+            onDeleteRecent={(savedAt) => {
+              deleteRecentWheel(toolId, savedAt);
+              setRecentWheels(loadRecentWheels(toolId));
+            }}
+            defaultSaveTitle={wheelTitle || "My wheel"}
             onShare={() => void onShare()}
             shareUrl={shareUrlBox}
             onClearShare={() => setShareUrlBox(null)}
@@ -1275,8 +1309,13 @@ export function SpinnerWheel({
               )}
             </div>
 
+            {weightsActive ? (
+              <p className="mx-auto shrink-0 rounded-full border border-amber-500/40 bg-amber-500/15 px-2.5 py-0.5 text-center text-[10px] font-bold tracking-wide text-amber-200">
+                Weighted
+              </p>
+            ) : null}
             {!hasSpunOnce && !spinning && choices.length >= 2 ? (
-              <p className="mx-auto shrink-0 rounded-full bg-background/85 px-3 py-0.5 text-center text-[10px] font-bold tracking-wide text-foreground shadow-sm [text-shadow:0_1px_2px_rgba(0,0,0,0.45)] sm:text-[11px]">
+              <p className="mx-auto hidden shrink-0 rounded-full bg-background/85 px-3 py-0.5 text-center text-[10px] font-bold tracking-wide text-foreground shadow-sm [text-shadow:0_1px_2px_rgba(0,0,0,0.45)] pointer-fine:block sm:text-[11px]">
                 Click To Spin · Ctrl+Enter
               </p>
             ) : null}

@@ -316,6 +316,41 @@ export function WheelCanvas({
         octx.textAlign = "center";
         octx.textBaseline = "middle";
         octx.fillText("Add choices", cx, cy);
+        // Skip hub chrome glyph for empty wheels.
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          const { css: c, dpr: d, radius: r } = sizeRef.current;
+          ctx.setTransform(d, 0, 0, d, 0, 0);
+          ctx.clearRect(0, 0, c, c);
+          ctx.beginPath();
+          ctx.arc(c / 2, c / 2 + 6, r + 10, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(0,0,0,0.35)";
+          ctx.fill();
+          ctx.drawImage(off, 0, 0, c, c);
+          drawFixedChrome(ctx, c / 2, c / 2, r, "", false);
+        }
+        return;
+      }
+
+      if (n === 1) {
+        const base = palette[0]!;
+        octx.beginPath();
+        octx.arc(cx, cy, radius, 0, Math.PI * 2);
+        const grad = octx.createRadialGradient(cx, cy - radius * 0.2, radius * 0.1, cx, cy, radius);
+        grad.addColorStop(0, lighten(base, 55));
+        grad.addColorStop(0.5, base);
+        grad.addColorStop(1, darken(base, 40));
+        octx.fillStyle = grad;
+        octx.fill();
+        octx.fillStyle = labels?.[0] ?? "#ffffff";
+        octx.font = `700 ${Math.max(14, Math.min(22, radius * 0.12))}px system-ui, sans-serif`;
+        octx.textAlign = "center";
+        octx.textBaseline = "middle";
+        octx.shadowColor = "rgba(0,0,0,0.4)";
+        octx.shadowBlur = 3;
+        const label = choices[0]!.trim().slice(0, 28);
+        octx.fillText(label, cx, cy - radius * 0.35);
+        octx.shadowBlur = 0;
         blit();
         return;
       }
@@ -393,9 +428,12 @@ export function WheelCanvas({
 
         const world = normalizeAngle(mid);
         const flip = world > Math.PI / 2 && world < (Math.PI * 3) / 2;
-        // Keep labels inset from the rim so text isn't clipped by the pointer / chrome.
-        const labelR = radius * (n <= 6 ? 0.64 : 0.66);
-        const maxW = Math.max(28, 2 * labelR * Math.sin(Math.min(slice, equal) / 2) * 0.82);
+        // Image entries: keep label upright near the rim, outside the image circle.
+        const hasImg = Boolean(imgUrl);
+        const labelR = hasImg
+          ? radius * 0.86
+          : radius * (n <= 6 ? 0.64 : 0.66);
+        const maxW = Math.max(28, 2 * labelR * Math.sin(Math.min(slice, equal) / 2) * (hasImg ? 0.7 : 0.82));
         const maxLineH = Math.max(14, radius * Math.sin(Math.min(slice, equal) / 2) * 0.65);
 
         octx.save();
@@ -408,7 +446,7 @@ export function WheelCanvas({
         octx.shadowBlur = 3;
 
         const raw = choices[i]!.trim();
-        let fontSize = Math.max(10, Math.min(20, radius / (n > 10 ? 8.5 : 6.5)));
+        let fontSize = Math.max(10, Math.min(hasImg ? 16 : 20, radius / (n > 10 ? 8.5 : 6.5)));
         octx.font = `700 ${fontSize}px system-ui, sans-serif`;
         while (fontSize > 8 && octx.measureText(raw).width > maxW) {
           fontSize -= 1;

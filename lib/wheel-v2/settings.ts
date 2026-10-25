@@ -216,6 +216,15 @@ export function pushRecentWheel(toolId: string, file: SavedWheelFile): void {
   }
 }
 
+export function deleteRecentWheel(toolId: string, savedAt: number): void {
+  try {
+    const list = loadRecentWheels(toolId).filter((r) => r.savedAt !== savedAt);
+    localStorage.setItem(RECENT_KEY(toolId), JSON.stringify(list));
+  } catch {
+    /* ignore */
+  }
+}
+
 export function loadRecentWheels(toolId: string): SavedWheelFile[] {
   try {
     const raw = localStorage.getItem(RECENT_KEY(toolId));

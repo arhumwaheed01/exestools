@@ -3,29 +3,33 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
-import {
-  ChevronDown,
-  Maximize2,
-  Minimize2,
-  Settings2,
-} from "lucide-react";
+import { ChevronDown, Maximize2, Settings2, Trash2 } from "lucide-react";
 import type { SavedWheelFile } from "@/lib/wheel-v2/settings";
-import { clampMenuBox, useFullscreenPortalRoot } from "@/lib/wheel-v2/portal";
+import {
+  clampMenuBox,
+  parseCsvEntries,
+  useFullscreenPortalRoot,
+} from "@/lib/wheel-v2/portal";
+
+export type SaveWheelOpts = { title: string; download: boolean };
 
 type Props = {
   disabled?: boolean;
   onCustomize: () => void;
   onNew: () => void;
-  onSave: () => void;
+  onSave: (opts: SaveWheelOpts) => void;
   onOpenFile: (file: File) => void;
   recent: SavedWheelFile[];
   onOpenRecent: (file: SavedWheelFile) => void;
+  onDeleteRecent?: (savedAt: number) => void;
+  defaultSaveTitle?: string;
   onShare: () => void;
   shareUrl: string | null;
   onClearShare: () => void;
   onFullscreen: () => void;
   isFullscreen: boolean;
-  onImportCsv: (text: string) => void;
+  /** Return false to keep the CSV dialog open (validation failed). */
+  onImportCsv: (text: string) => boolean;
   onPreferences: () => void;
   faqHref?: string;
   compact?: boolean;
@@ -41,6 +45,8 @@ export function WheelTopBar({
   onOpenFile,
   recent,
   onOpenRecent,
+  onDeleteRecent,
+  defaultSaveTitle = "My wheel",
   onShare,
   shareUrl,
   onClearShare,
@@ -55,6 +61,10 @@ export function WheelTopBar({
   const [openMenu, setOpenMenu] = useState<"open" | "more" | null>(null);
   const [csvOpen, setCsvOpen] = useState(false);
   const [csvText, setCsvText] = useState("");
+  const [csvError, setCsvError] = useState("");
+  const [saveOpen, setSaveOpen] = useState(false);
+  const [saveTitle, setSaveTitle] = useState(defaultSaveTitle);
+  const [saveDownload, setSaveDownload] = useState(false);
   const [menuPos, setMenuPos] = useState<MenuPos | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const openBtnRef = useRef<HTMLButtonElement>(null);
@@ -83,6 +93,8 @@ export function WheelTopBar({
       );
     };
     place();
+    // Re-measure after paint so max-height / flip use real content height.
+    requestAnimationFrame(place);
     window.addEventListener("resize", place);
     window.addEventListener("scroll", place, true);
     document.addEventListener("fullscreenchange", place);
@@ -91,7 +103,7 @@ export function WheelTopBar({
       window.removeEventListener("scroll", place, true);
       document.removeEventListener("fullscreenchange", place);
     };
-  }, [openMenu, portalRoot]);
+  }, [openMenu, portalRoot, recent.length]);
 
   useEffect(() => {
     if (!openMenu) return;
@@ -113,16 +125,19 @@ export function WheelTopBar({
   }, [openMenu]);
 
   useEffect(() => {
-    if (!csvOpen) return;
+    if (!csvOpen && !saveOpen) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
+      if (e.key !== "Escape") return;
+      if (csvOpen) {
         setCsvOpen(false);
         setCsvText("");
+        setCsvError("");
       }
+      if (saveOpen) setSaveOpen(false);
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [csvOpen]);
+  }, [csvOpen, saveOpen]);
 
   const triggerOpenFile = () => {
     setOpenMenu(null);
@@ -136,7 +151,7 @@ export function WheelTopBar({
             ref={menuRef}
             id={openMenu === "open" ? openId : moreId}
             role="menu"
-            className="fixed z-[200] max-h-[calc(100dvh-120px)] max-w-[calc(100vw-16px)] overflow-y-auto overscroll-contain rounded-xl border border-border bg-surface p-1.5 shadow-2xl"
+            className="fixed z-[300] max-w-[calc(100vw-16px)] overflow-y-auto overscroll-contain rounded-xl border border-border bg-surface p-1.5 shadow-2xl"
             style={{
               top: menuPos.top,
               left: menuPos.left,
@@ -149,7 +164,7 @@ export function WheelTopBar({
                 <button
                   type="button"
                   role="menuitem"
-                  className="flex min-h-10 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2"
+                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2"
                   onClick={triggerOpenFile}
                 >
                   Open JSON file…
@@ -159,13 +174,13 @@ export function WheelTopBar({
                     <p className="mt-2 px-2 text-[10px] font-bold uppercase tracking-wide text-muted">
                       Recently saved
                     </p>
-                    <ul className="mt-1 max-h-40 overflow-y-auto">
+                    <ul className="mt-1 max-h-48 overflow-y-auto">
                       {recent.map((r) => (
-                        <li key={r.savedAt}>
+                        <li key={r.savedAt} className="flex items-stretch gap-0.5">
                           <button
                             type="button"
                             role="menuitem"
-                            className="flex min-h-9 w-full flex-col rounded-lg px-2 py-1 text-left hover:bg-surface-2"
+                            className="flex min-h-11 min-w-0 flex-1 flex-col rounded-lg px-2 py-1 text-left hover:bg-surface-2"
                             onClick={() => {
                               onOpenRecent(r);
                               setOpenMenu(null);
@@ -179,6 +194,19 @@ export function WheelTopBar({
                               {new Date(r.savedAt).toLocaleString()}
                             </span>
                           </button>
+                          {onDeleteRecent ? (
+                            <button
+                              type="button"
+                              className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-muted hover:bg-rose-950/40 hover:text-rose-300"
+                              aria-label={`Delete ${r.title || "saved wheel"}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onDeleteRecent(r.savedAt);
+                              }}
+                            >
+                              <Trash2 className="h-3.5 w-3.5" aria-hidden />
+                            </button>
+                          ) : null}
                         </li>
                       ))}
                     </ul>
@@ -192,7 +220,7 @@ export function WheelTopBar({
                 <Link
                   href="/wheel-gallery"
                   role="menuitem"
-                  className="flex min-h-10 items-center rounded-lg px-2 text-sm font-semibold hover:bg-surface-2 sm:hidden"
+                  className="flex min-h-11 items-center rounded-lg px-2 text-sm font-semibold hover:bg-surface-2 sm:hidden"
                   onClick={() => setOpenMenu(null)}
                 >
                   Gallery
@@ -200,7 +228,7 @@ export function WheelTopBar({
                 <a
                   href="mailto:hello@exestools.com?subject=Spinner%20wheel%20feedback"
                   role="menuitem"
-                  className="flex min-h-10 items-center rounded-lg px-2 text-sm font-semibold hover:bg-surface-2"
+                  className="flex min-h-11 items-center rounded-lg px-2 text-sm font-semibold hover:bg-surface-2"
                   onClick={() => setOpenMenu(null)}
                 >
                   Feedback
@@ -208,7 +236,7 @@ export function WheelTopBar({
                 <a
                   href={faqHref}
                   role="menuitem"
-                  className="flex min-h-10 items-center rounded-lg px-2 text-sm font-semibold hover:bg-surface-2"
+                  className="flex min-h-11 items-center rounded-lg px-2 text-sm font-semibold hover:bg-surface-2"
                   onClick={() => setOpenMenu(null)}
                 >
                   FAQ
@@ -216,9 +244,10 @@ export function WheelTopBar({
                 <button
                   type="button"
                   role="menuitem"
-                  className="flex min-h-10 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2"
+                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2"
                   onClick={() => {
                     setOpenMenu(null);
+                    setCsvError("");
                     setCsvOpen(true);
                   }}
                 >
@@ -227,7 +256,7 @@ export function WheelTopBar({
                 <button
                   type="button"
                   role="menuitem"
-                  className="flex min-h-10 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2"
+                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2"
                   onClick={() => {
                     setOpenMenu(null);
                     onPreferences();
@@ -256,7 +285,6 @@ export function WheelTopBar({
         }}
       />
 
-      {/* Wrap on narrow screens so the page never scrolls sideways */}
       <div className="flex w-full min-w-0 max-w-full flex-wrap items-center gap-1 rounded-2xl border border-border bg-surface px-1 py-1 sm:gap-1.5 sm:px-2">
         <BarBtn disabled={disabled} onClick={onCustomize} icon={<Settings2 className="h-3.5 w-3.5" />}>
           Customize
@@ -275,7 +303,14 @@ export function WheelTopBar({
           Open
           <ChevronDown className="h-3.5 w-3.5 opacity-70" aria-hidden />
         </BarBtn>
-        <BarBtn disabled={disabled} onClick={onSave}>
+        <BarBtn
+          disabled={disabled}
+          onClick={() => {
+            setSaveTitle(defaultSaveTitle || "My wheel");
+            setSaveDownload(false);
+            setSaveOpen(true);
+          }}
+        >
           Save
         </BarBtn>
         <BarBtn disabled={disabled} onClick={onShare}>
@@ -283,24 +318,22 @@ export function WheelTopBar({
         </BarBtn>
         <Link
           href="/wheel-gallery"
-          className="hidden min-h-9 shrink-0 items-center rounded-lg px-2.5 text-xs font-bold text-foreground outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent sm:inline-flex"
+          className="hidden min-h-11 shrink-0 items-center rounded-lg px-2.5 text-xs font-bold text-foreground outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent sm:inline-flex"
         >
           Gallery
         </Link>
-        <button
-          type="button"
-          disabled={disabled}
-          onClick={onFullscreen}
-          className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-foreground outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
-          aria-label={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
-          title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
-        >
-          {isFullscreen ? (
-            <Minimize2 className="h-4 w-4" aria-hidden />
-          ) : (
+        {!isFullscreen ? (
+          <button
+            type="button"
+            disabled={disabled}
+            onClick={onFullscreen}
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-foreground outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
+            aria-label="Fullscreen"
+            title="Fullscreen"
+          >
             <Maximize2 className="h-4 w-4" aria-hidden />
-          )}
-        </button>
+          </button>
+        ) : null}
         <BarBtn
           ref={moreBtnRef}
           disabled={disabled}
@@ -317,24 +350,25 @@ export function WheelTopBar({
 
       {menuPortal}
 
+      {/* Absolute share panel — no layout shift of the wheel */}
       {shareUrl ? (
-        <div className="mt-2 flex w-full min-w-0 flex-col gap-2 rounded-xl border border-border bg-surface-2 p-3 sm:flex-row sm:items-center">
+        <div className="absolute left-0 right-0 top-full z-[60] mt-1 flex w-full min-w-0 flex-col gap-2 rounded-xl border border-border bg-surface p-3 shadow-xl sm:flex-row sm:items-center">
           <input
             readOnly
             value={shareUrl}
-            className="min-h-10 min-w-0 flex-1 truncate rounded-lg border border-border bg-surface px-3 text-xs text-foreground"
+            className="min-h-11 min-w-0 flex-1 truncate rounded-lg border border-border bg-surface-2 px-3 text-xs text-foreground"
             onFocus={(e) => e.currentTarget.select()}
           />
           <button
             type="button"
-            className="inline-flex min-h-10 items-center justify-center rounded-lg bg-accent-strong px-3 text-xs font-bold text-slate-950"
+            className="inline-flex min-h-11 items-center justify-center rounded-lg bg-accent-strong px-3 text-xs font-bold text-slate-950"
             onClick={() => void navigator.clipboard.writeText(shareUrl)}
           >
             Copy link
           </button>
           <button
             type="button"
-            className="inline-flex min-h-10 items-center justify-center rounded-lg border border-border px-3 text-xs font-bold"
+            className="inline-flex min-h-11 items-center justify-center rounded-lg border border-border px-3 text-xs font-bold"
             onClick={onClearShare}
           >
             Close
@@ -345,7 +379,7 @@ export function WheelTopBar({
       {portalRoot && csvOpen
         ? createPortal(
             <div
-              className="fixed inset-0 z-[220] flex items-center justify-center bg-black/70 p-4"
+              className="fixed inset-0 z-[320] flex items-center justify-center bg-black/70 p-4"
               role="dialog"
               aria-modal="true"
               aria-label="Import from pasted CSV"
@@ -353,42 +387,123 @@ export function WheelTopBar({
                 if (e.target === e.currentTarget) {
                   setCsvOpen(false);
                   setCsvText("");
+                  setCsvError("");
                 }
               }}
             >
               <div className="w-full max-w-[min(28rem,calc(100vw-2rem))] rounded-2xl border border-border bg-surface p-4 shadow-2xl">
                 <h3 className="text-sm font-extrabold">Import from pasted CSV</h3>
                 <p className="mt-1 text-xs text-muted">
-                  One name per line, or comma-separated values.
+                  One name per line, or comma-separated values. Use quotes for commas inside a
+                  name.
                 </p>
                 <textarea
                   value={csvText}
-                  onChange={(e) => setCsvText(e.target.value)}
+                  onChange={(e) => {
+                    setCsvText(e.target.value);
+                    setCsvError("");
+                  }}
                   rows={6}
                   className="mt-3 w-full rounded-xl border border-border bg-surface-2 p-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                  placeholder="Alex, Jordan, Sam"
+                  placeholder={'Alex, Jordan, Sam\nor: a,b,"d, e"'}
                 />
+                {csvError ? (
+                  <p className="mt-2 text-xs font-semibold text-rose-300" role="alert">
+                    {csvError}
+                  </p>
+                ) : null}
                 <div className="mt-3 flex justify-end gap-2">
                   <button
                     type="button"
-                    className="min-h-10 rounded-lg border border-border px-3 text-sm font-bold"
+                    className="min-h-11 rounded-lg border border-border px-3 text-sm font-bold"
                     onClick={() => {
                       setCsvOpen(false);
                       setCsvText("");
+                      setCsvError("");
                     }}
                   >
                     Cancel
                   </button>
                   <button
                     type="button"
-                    className="min-h-10 rounded-lg bg-accent-strong px-3 text-sm font-bold text-slate-950"
+                    className="min-h-11 rounded-lg bg-accent-strong px-3 text-sm font-bold text-slate-950"
                     onClick={() => {
-                      onImportCsv(csvText);
-                      setCsvOpen(false);
-                      setCsvText("");
+                      const parts = parseCsvEntries(csvText);
+                      if (parts.length < 2) {
+                        setCsvError("Need at least 2 entries to import.");
+                        return;
+                      }
+                      const ok = onImportCsv(csvText);
+                      if (ok) {
+                        setCsvOpen(false);
+                        setCsvText("");
+                        setCsvError("");
+                      } else {
+                        setCsvError("Need at least 2 entries to import.");
+                      }
                     }}
                   >
                     Import
+                  </button>
+                </div>
+              </div>
+            </div>,
+            portalRoot,
+          )
+        : null}
+
+      {portalRoot && saveOpen
+        ? createPortal(
+            <div
+              className="fixed inset-0 z-[320] flex items-center justify-center bg-black/70 p-4"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Save wheel"
+              onClick={(e) => {
+                if (e.target === e.currentTarget) setSaveOpen(false);
+              }}
+            >
+              <div className="w-full max-w-sm rounded-2xl border border-border bg-surface p-4 shadow-2xl">
+                <h3 className="text-sm font-extrabold">Save wheel</h3>
+                <label className="mt-3 block text-xs font-bold text-muted" htmlFor="et-save-title">
+                  Name
+                </label>
+                <input
+                  id="et-save-title"
+                  value={saveTitle}
+                  onChange={(e) => setSaveTitle(e.target.value)}
+                  className="mt-1 min-h-11 w-full rounded-xl border border-border bg-surface-2 px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  maxLength={80}
+                />
+                <label className="mt-3 flex min-h-11 cursor-pointer items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={saveDownload}
+                    onChange={(e) => setSaveDownload(e.target.checked)}
+                    className="h-4 w-4 rounded border-border"
+                  />
+                  Also download JSON file
+                </label>
+                <div className="mt-4 flex justify-end gap-2">
+                  <button
+                    type="button"
+                    className="min-h-11 rounded-lg border border-border px-3 text-sm font-bold"
+                    onClick={() => setSaveOpen(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    className="min-h-11 rounded-lg bg-accent-strong px-3 text-sm font-bold text-slate-950"
+                    onClick={() => {
+                      onSave({
+                        title: saveTitle.trim() || "My wheel",
+                        download: saveDownload,
+                      });
+                      setSaveOpen(false);
+                    }}
+                  >
+                    Save
                   </button>
                 </div>
               </div>
@@ -421,7 +536,7 @@ const BarBtn = ({
     type="button"
     disabled={disabled}
     onClick={onClick}
-    className={`inline-flex min-h-9 shrink-0 items-center gap-1 rounded-lg px-2 text-xs font-bold text-foreground outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50 sm:px-2.5 ${className}`}
+    className={`inline-flex min-h-11 shrink-0 items-center gap-1 rounded-lg px-2.5 text-xs font-bold text-foreground outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50 ${className}`}
     {...rest}
   >
     {icon}

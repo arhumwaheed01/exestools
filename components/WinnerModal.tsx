@@ -9,6 +9,8 @@ type Props = {
   open: boolean;
   winner: string | null;
   entryCount?: number;
+  /** When true, odds were weighted — don't say "fairly". */
+  weighted?: boolean;
   showRemoveContinue?: boolean;
   titleBarText?: string;
   /** Dismiss without opening next steps (Escape / backdrop). */
@@ -21,6 +23,7 @@ export function WinnerModal({
   open,
   winner,
   entryCount,
+  weighted = false,
   showRemoveContinue = true,
   titleBarText = "We have a winner!",
   onDismiss,
@@ -60,7 +63,9 @@ export function WinnerModal({
 
   const subtitle =
     typeof entryCount === "number" && entryCount > 0
-      ? `Picked fairly from ${entryCount} ${entryCount === 1 ? "entry" : "entries"}.`
+      ? weighted
+        ? `Picked by weight from ${entryCount} ${entryCount === 1 ? "entry" : "entries"}.`
+        : `Picked fairly from ${entryCount} ${entryCount === 1 ? "entry" : "entries"}.`
       : "Nice pick! Spin again anytime.";
 
   return (

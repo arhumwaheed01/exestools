@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import { AdSenseLoader } from "@/components/AdSenseLoader";
 import { AppShell } from "@/components/AppShell";
 import { GoogleTag } from "@/components/GoogleTag";
 import { siteConfig } from "@/lib/seo";
@@ -61,15 +62,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const adsense = ADSENSE_CLIENT ? (
-    <Script
-      id="adsense-loader"
-      async
-      strategy="lazyOnload"
-      crossOrigin="anonymous"
-      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
-    />
-  ) : null;
+  const adsense = ADSENSE_CLIENT ? <AdSenseLoader client={ADSENSE_CLIENT} /> : null;
 
   return (
     <html

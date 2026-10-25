@@ -25,7 +25,7 @@ export type ClampedMenuBox = {
 
 /**
  * Clamp a fixed menu into the viewport.
- * Flips above the anchor when there isn't enough room below (sticky SPIN clearance on mobile).
+ * On mobile (sticky SPIN), prefer opening upward when space below is tight.
  */
 export function clampMenuBox(
   anchor: { left: number; right: number; top: number; bottom: number },
@@ -36,10 +36,11 @@ export function clampMenuBox(
   const gap = 4;
   const vw = window.innerWidth;
   const vh = window.innerHeight;
-  // Sticky SPIN bar (~64px) + safe breathing room on small screens.
-  const bottomClearance = vw < 1024 ? 88 : margin;
+  // Sticky SPIN (~64px) + safe area breathing room.
+  const mobile = vw < 1024;
+  const bottomClearance = mobile ? 96 : margin;
   const bottomLimit = vh - bottomClearance;
-  const maxCap = Math.max(120, vh - 120);
+  const maxCap = Math.max(140, vh - 120);
 
   const width = Math.min(desiredWidth, Math.max(0, vw - margin * 2));
   let left = opts?.preferRightAlign ? anchor.right - width : anchor.left;
@@ -48,23 +49,75 @@ export function clampMenuBox(
   const spaceBelow = bottomLimit - (anchor.bottom + gap);
   const spaceAbove = anchor.top - gap - margin;
 
-  const openBelow = spaceBelow >= 160 || spaceBelow >= spaceAbove;
+  // Prefer flip whenever below-room is short (toolbar sits under the wheel on mobile).
+  const openBelow = spaceBelow >= 280 && spaceBelow >= spaceAbove;
 
   if (openBelow) {
-    const maxHeight = Math.min(maxCap, Math.max(96, spaceBelow));
     return {
       top: anchor.bottom + gap,
       left,
       width,
-      maxHeight,
+      maxHeight: Math.min(maxCap, Math.max(120, spaceBelow)),
     };
   }
 
-  const maxHeight = Math.min(maxCap, Math.max(96, spaceAbove));
+  const maxHeight = Math.min(maxCap, Math.max(120, spaceAbove));
   return {
     top: Math.max(margin, anchor.top - gap - maxHeight),
     left,
     width,
     maxHeight,
   };
+}
+
+/** Parse CSV / pasted lists with quoted fields (e.g. a,b,"d, e"). */
+export function parseCsvEntries(raw: string): string[] {
+  const text = raw.replace(/^\uFEFF/, "").trim();
+  if (!text) return [];
+
+  const lines = text.split(/\r?\n/);
+  const out: string[] = [];
+
+  for (const line of lines) {
+    if (!line.trim()) continue;
+    let i = 0;
+    let field = "";
+    let inQuotes = false;
+    while (i < line.length) {
+      const ch = line[i]!;
+      if (inQuotes) {
+        if (ch === '"') {
+          if (line[i + 1] === '"') {
+            field += '"';
+            i += 2;
+            continue;
+          }
+          inQuotes = false;
+          i += 1;
+          continue;
+        }
+        field += ch;
+        i += 1;
+        continue;
+      }
+      if (ch === '"') {
+        inQuotes = true;
+        i += 1;
+        continue;
+      }
+      if (ch === ",") {
+        const t = field.trim();
+        if (t) out.push(t);
+        field = "";
+        i += 1;
+        continue;
+      }
+      field += ch;
+      i += 1;
+    }
+    const t = field.trim();
+    if (t) out.push(t);
+  }
+
+  return out;
 }
