@@ -13,7 +13,7 @@ export const LASTMOD: Record<string, string> = {
   "/classroom-spinner": "2026-10-23",
   "/prize-wheel": "2026-10-21",
   "/yes-no-wheel": "2026-10-19",
-  "/random-team-generator": "2026-10-21",
+  "/random-team-generator": "2026-10-25",
   "/secret-santa-generator": "2026-10-25",
   "/random-number-wheel": "2026-10-19",
   "/raffle-generator": "2026-10-25",

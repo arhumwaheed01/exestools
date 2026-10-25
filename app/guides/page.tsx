@@ -48,6 +48,8 @@ const CARD_SUMMARY: Record<string, string> = {
     "For teachers who want low-prep review games, warm-ups and brain breaks. Ten setups with timing, wheel lists and tips from kindergarten through about eighth grade.",
   "white-elephant-gift-exchange-rules":
     "For the host who needs rules everyone can hear once. Covers steals and freeze limits, what the first player gets, fair turn order, and variations for kids or big groups.",
+  "friendsgiving-thanksgiving-team-games":
+    "For Friendsgiving or Thanksgiving hosts with a mixed guest list. Covers fair team splits, trivia and cooking stations, bingo, duties spins and gift-exchange options.",
 };
 
 export const metadata: Metadata = {

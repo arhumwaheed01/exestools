@@ -87,7 +87,7 @@ The generator can't keep two people apart by rule. Three practical options:
 - **One agreed reshuffle.** If the first deal puts them together, reshuffle. Say beforehand that you'll do this.
 - **Swap by hand, openly.** Move one person and swap someone of a similar tier back.
 
-For gift exchanges, where keeping people apart is the whole point, the [Secret Santa generator](/secret-santa-generator) has proper exclusions.
+For gift exchanges, where keeping people apart is the whole point, the [Secret Santa generator](/secret-santa-generator) has proper exclusions. For holiday party games that need a quick fair split, see [Friendsgiving and Thanksgiving team games](/guides/friendsgiving-thanksgiving-team-games).
 
 ## Captains, if you must
 

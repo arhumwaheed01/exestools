@@ -283,6 +283,13 @@ export default function RandomTeamGeneratorPage() {
             <Link href="/secret-santa-generator" className="font-semibold text-accent hover:underline">
               Secret Santa generator
             </Link>
+            . Hosting Friendsgiving or Thanksgiving games? See{" "}
+            <Link
+              href="/guides/friendsgiving-thanksgiving-team-games"
+              className="font-semibold text-accent hover:underline"
+            >
+              Friendsgiving and Thanksgiving team games
+            </Link>
             .
           </p>
         </section>
