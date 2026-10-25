@@ -577,7 +577,7 @@ export function WheelTopBar({
                 <button
                   type="button"
                   role="menuitem"
-                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2"
+                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
                   onClick={() => {
                     setOpenMenu(null);
                     onPreferences();

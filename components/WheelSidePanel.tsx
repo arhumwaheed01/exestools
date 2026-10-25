@@ -79,7 +79,7 @@ export function WheelSidePanel({
         {open ? (
           <div
             id="wheel-side-panel-mobile"
-            className="mt-2 flex max-h-[min(50svh,26rem)] flex-col overflow-hidden rounded-2xl border border-border bg-surface"
+            className="mt-2 flex max-h-[min(70svh,34rem)] flex-col overflow-hidden rounded-2xl border border-border bg-surface"
           >
             <PanelBody
               tab={tab}
@@ -219,7 +219,7 @@ function PanelBody({
             onChange={(e) => onChange(e.target.value)}
             spellCheck={false}
             placeholder={"Alex\nJordan\nSam\n…"}
-            className="min-h-[6rem] w-full flex-1 resize-none rounded-xl border border-border bg-surface-2 px-3 py-2 font-mono text-sm leading-relaxed text-foreground outline-none focus:border-accent focus:ring-2 focus:ring-accent/30 disabled:opacity-60"
+            className="min-h-[12rem] w-full flex-1 resize-none rounded-xl border border-border bg-surface-2 px-3 py-2 font-mono text-sm leading-relaxed text-foreground outline-none focus:border-accent focus:ring-2 focus:ring-accent/30 disabled:opacity-60"
           />
 
           {(duplicatesSkipped ?? 0) > 0 ? (

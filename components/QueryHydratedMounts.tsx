@@ -18,6 +18,7 @@ const WHEEL_FIRST_TOOLS: ReadonlySet<ToolId> = new Set([
   "random-name-picker",
   "prize-wheel",
   "classroom-spinner",
+  "yes-no-wheel",
 ]);
 
 function SpinnerFromQuery({ toolId }: { toolId: ToolId }) {

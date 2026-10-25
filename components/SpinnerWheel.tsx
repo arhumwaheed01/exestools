@@ -40,6 +40,7 @@ import {
   autosaveLastWheel,
   DEFAULT_WHEEL_V2_SETTINGS,
   loadEntryWeights,
+  loadLastWheel,
   loadRecentWheels,
   loadWheelSettings,
   normalizeSettings,
@@ -90,7 +91,7 @@ import { parseCsvEntries } from "@/lib/wheel-v2/portal";
 import "@/app/styles/tools-themes.css";
 
 const CHOICES_HELP_BASE =
-  "Up to 60. Empty lines are ignored. Duplicate lines are skipped (capital letters don't count as different), so add an initial if two people share a name.";
+  "up to 60. Empty lines are ignored. Duplicate lines are skipped (capital letters don't count as different), so add an initial if two people share a name.";
 
 function choicesEditorLabels(toolId: ToolId): { heading: string; helpText: string } {
   switch (toolId) {
@@ -112,7 +113,8 @@ function choicesEditorLabels(toolId: ToolId): { heading: string; helpText: strin
     case "prize-wheel":
       return {
         heading: "Your prizes",
-        helpText: `One prize or reward per line, ${CHOICES_HELP_BASE}`,
+        helpText:
+          "One prize or reward per line, up to 60. Empty lines are ignored. Duplicate lines are skipped.",
       };
     case "yes-no-wheel":
       return {
@@ -379,6 +381,7 @@ export function SpinnerWheel({
     setRecentWheels(loadRecentWheels(toolId));
     setWheelImages(loadWheelImages(toolId));
     setEntryWeights(loadEntryWeights(toolId));
+    const lastWheel = loadLastWheel(toolId);
 
     if (fromHash && fromHash.choices.length >= 1) {
       setText(choicesToText(fromHash.choices));
@@ -426,6 +429,11 @@ export function SpinnerWheel({
     } else {
       setText(choicesToText(defaults));
       allowSaveRef.current = true;
+    }
+
+    // Title lives on the last-wheel autosave (not in WheelV2Settings). Restore unless a share set it.
+    if (!(fromHash && typeof fromHash.extra?.title === "string") && lastWheel?.title) {
+      setWheelTitle(String(lastWheel.title).slice(0, 40));
     }
 
     setHydrated(true);
@@ -657,8 +665,15 @@ export function SpinnerWheel({
     setText(choicesToText([...choices].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }))));
   };
 
+  const offerListUndo = (message: string) => {
+    setUndoBundle({ text, settings: v2Settings, title: wheelTitle });
+    setToast(`UNDO:${message}`);
+    window.setTimeout(() => setToast((t) => (t.startsWith("UNDO:") ? "" : t)), 5000);
+  };
+
   const onClear = () => {
     if (spinningRef.current) return;
+    offerListUndo("Cleared — Undo to restore.");
     setText("");
     setRotation(0);
     setWinner(null);
@@ -666,11 +681,11 @@ export function SpinnerWheel({
     setRevealOpen(false);
     setShowNextSteps(false);
     allowSaveRef.current = true;
-    showToast("Cleared — add at least 2 choices to spin.");
   };
 
   const onRestoreDefaults = () => {
     if (spinningRef.current) return;
+    offerListUndo("Defaults restored — Undo to go back.");
     setText(choicesToText(defaults));
     setShowNextSteps(false);
   };
@@ -877,11 +892,11 @@ export function SpinnerWheel({
     setHasSpunOnce(false);
     allowSaveRef.current = true;
     setSharedMode(false);
-    setToast("NEW_UNDO");
-    window.setTimeout(() => setToast((t) => (t === "NEW_UNDO" ? "" : t)), 5000);
+    setToast("UNDO:New wheel ready.");
+    window.setTimeout(() => setToast((t) => (t.startsWith("UNDO:") ? "" : t)), 5000);
   };
 
-  const onUndoNew = () => {
+  const onUndoList = () => {
     if (!undoBundle) return;
     setText(undoBundle.text);
     setV2Settings(undoBundle.settings);
@@ -889,6 +904,13 @@ export function SpinnerWheel({
     setUndoBundle(null);
     setToast("");
     showToast("Undone.");
+  };
+
+  const persistAutoRemove = (v: boolean) => {
+    setAutoRemove(v);
+    if (allowSaveRef.current) {
+      saveSession(toolId, choices, { autoRemove: v });
+    }
   };
 
   const onPickImage = async (
@@ -992,12 +1014,12 @@ export function SpinnerWheel({
       className="fixed bottom-[calc(5.75rem+env(safe-area-inset-bottom,0px))] left-1/2 z-[60] flex max-w-[min(24rem,calc(100vw-1.5rem))] -translate-x-1/2 items-center gap-2 rounded-full bg-accent-strong px-4 py-2.5 text-xs font-semibold text-slate-950 shadow-lg lg:bottom-auto lg:top-20"
       role="status"
     >
-      {toast === "NEW_UNDO" ? (
+      {toast.startsWith("UNDO:") ? (
         <>
-          <span>New wheel ready.</span>
+          <span>{toast.slice(5)}</span>
           <button
             type="button"
-            onClick={onUndoNew}
+            onClick={onUndoList}
             className="rounded-full bg-slate-950/20 px-2.5 py-1 font-bold underline-offset-2 hover:underline"
           >
             Undo
@@ -1197,7 +1219,7 @@ export function SpinnerWheel({
             onCopy={() => void onCopy()}
             onOpenAdvanced={() => setAdvancedOpen(true)}
             autoRemove={autoRemove}
-            onAutoRemove={setAutoRemove}
+            onAutoRemove={persistAutoRemove}
             showAutoRemove={toolId !== "yes-no-wheel"}
             onAddBackgroundImage={(f) => void onPickImage(f, "background")}
             onAddCenterImage={(f) => void onPickImage(f, "center")}

@@ -77,8 +77,8 @@ export default function RandomNamePickerPage() {
             here), that name leaves the wheel so it cannot come up again until you restore the list.
           </li>
           <li>
-            Press Spin again for the next person, or Remove on the winner popup if you want that name
-            off the wheel. Sound and spin length are in the ⋮ menu on the wheel.
+            Press Spin again for the next person. Keep Remove winner after spin on in the toolbar so
+            each pick leaves the wheel. Sound and spin length are in the ⋮ menu on the wheel.
           </li>
           <li>
             Use Share to copy a link to the same list, or New / Open to start fresh or reload a saved
