@@ -1,18 +1,8 @@
 "use client";
 
-import {
-  ChevronLeft,
-  ChevronRight,
-  ClipboardCopy,
-  Eraser,
-  ArrowUpDown,
-  RotateCcw,
-  Shuffle,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowUpDown } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useRef, useState, type ReactNode } from "react";
-import { createPortal } from "react-dom";
-import { clampMenuBox, useFullscreenPortalRoot } from "@/lib/wheel-v2/portal";
+import type { ReactNode } from "react";
 
 export type PanelTab = "entries" | "results";
 
@@ -34,26 +24,10 @@ type Props = {
   raffleHint?: boolean;
   savedNote: string;
   onChange: (text: string) => void;
-  onShuffle: () => void;
-  onSort: () => void;
-  onClear: () => void;
-  onRestoreDefaults: () => void;
-  onCopy: () => void;
-  autoRemove: boolean;
-  onAutoRemove: (v: boolean) => void;
-  showAutoRemove: boolean;
   /** Mobile: render as expandable sheet under the wheel. */
   mobileSheet?: boolean;
-  onAddBackgroundImage?: (file: File) => void;
-  onAddCenterImage?: (file: File) => void;
-  onAddEntryImage?: (file: File) => void;
-  onRemoveBackgroundImage?: () => void;
-  onRemoveCenterImage?: () => void;
-  hasBackgroundImage?: boolean;
-  hasCenterImage?: boolean;
   onSortResults?: () => void;
   onExportResults?: (format: "csv" | "txt") => void;
-  onOpenAdvanced?: () => void;
 };
 
 const WHEEL_CAP = 60;
@@ -76,25 +50,9 @@ export function WheelSidePanel({
   raffleHint = false,
   savedNote,
   onChange,
-  onShuffle,
-  onSort,
-  onClear,
-  onRestoreDefaults,
-  onCopy,
-  autoRemove,
-  onAutoRemove,
-  showAutoRemove,
   mobileSheet = false,
-  onAddBackgroundImage,
-  onAddCenterImage,
-  onAddEntryImage,
-  onRemoveBackgroundImage,
-  onRemoveCenterImage,
-  hasBackgroundImage,
-  hasCenterImage,
   onSortResults,
   onExportResults,
-  onOpenAdvanced,
 }: Props) {
   const labelId = "wf-choices-label";
 
@@ -139,25 +97,9 @@ export function WheelSidePanel({
               raffleHint={raffleHint}
               savedNote={savedNote}
               onChange={onChange}
-              onShuffle={onShuffle}
-              onSort={onSort}
-              onClear={onClear}
-              onRestoreDefaults={onRestoreDefaults}
-              onCopy={onCopy}
-              autoRemove={autoRemove}
-              onAutoRemove={onAutoRemove}
-              showAutoRemove={showAutoRemove}
               labelId={labelId}
-              onAddBackgroundImage={onAddBackgroundImage}
-              onAddCenterImage={onAddCenterImage}
-              onAddEntryImage={onAddEntryImage}
-              onRemoveBackgroundImage={onRemoveBackgroundImage}
-              onRemoveCenterImage={onRemoveCenterImage}
-              hasBackgroundImage={hasBackgroundImage}
-              hasCenterImage={hasCenterImage}
               onSortResults={onSortResults}
               onExportResults={onExportResults}
-              onOpenAdvanced={onOpenAdvanced}
             />
           </div>
         ) : null}
@@ -165,7 +107,6 @@ export function WheelSidePanel({
     );
   }
 
-  // Desktop: when closed, only a single expand chevron (no empty panel shell).
   if (!open) {
     return (
       <button
@@ -204,27 +145,10 @@ export function WheelSidePanel({
         raffleHint={raffleHint}
         savedNote={savedNote}
         onChange={onChange}
-        onShuffle={onShuffle}
-        onSort={onSort}
-        onClear={onClear}
-        onRestoreDefaults={onRestoreDefaults}
-        onCopy={onCopy}
-        autoRemove={autoRemove}
-        onAutoRemove={onAutoRemove}
-        showAutoRemove={showAutoRemove}
         labelId={labelId}
-        onAddBackgroundImage={onAddBackgroundImage}
-        onAddCenterImage={onAddCenterImage}
-        onAddEntryImage={onAddEntryImage}
-        onRemoveBackgroundImage={onRemoveBackgroundImage}
-        onRemoveCenterImage={onRemoveCenterImage}
-        hasBackgroundImage={hasBackgroundImage}
-        hasCenterImage={hasCenterImage}
         onSortResults={onSortResults}
         onExportResults={onExportResults}
-        onOpenAdvanced={onOpenAdvanced}
       />
-      {/* Fully outside the panel so it never covers Copy / tool buttons */}
       <button
         type="button"
         onClick={onToggle}
@@ -256,25 +180,9 @@ function PanelBody({
   raffleHint,
   savedNote,
   onChange,
-  onShuffle,
-  onSort,
-  onClear,
-  onRestoreDefaults,
-  onCopy,
-  autoRemove,
-  onAutoRemove,
-  showAutoRemove,
   labelId,
-  onAddBackgroundImage,
-  onAddCenterImage,
-  onAddEntryImage,
-  onRemoveBackgroundImage,
-  onRemoveCenterImage,
-  hasBackgroundImage,
-  hasCenterImage,
   onSortResults,
   onExportResults,
-  onOpenAdvanced,
 }: Omit<Props, "open" | "onToggle" | "mobileSheet"> & { labelId: string }) {
   return (
     <>
@@ -299,60 +207,6 @@ function PanelBody({
               Privacy Policy
             </Link>
           </p>
-
-          {showAutoRemove ? (
-            <label className="flex min-h-11 shrink-0 cursor-pointer items-center gap-2 rounded-xl border border-border bg-surface-2 px-3 text-sm text-foreground">
-              <input
-                type="checkbox"
-                checked={autoRemove}
-                onChange={(e) => onAutoRemove(e.target.checked)}
-                className="h-4 w-4 accent-cyan-500"
-              />
-              Remove winner after spin
-            </label>
-          ) : null}
-
-          <div className="flex shrink-0 flex-wrap gap-1.5">
-            <ToolBtn disabled={disabled} onClick={onShuffle} icon={<Shuffle className="h-3.5 w-3.5" />} label="Shuffle" />
-            <ToolBtn
-              disabled={disabled}
-              onClick={onSort}
-              icon={<ArrowUpDown className="h-3.5 w-3.5" />}
-              label="Sort"
-            />
-            <AddImageMenu
-              disabled={disabled}
-              onBackground={onAddBackgroundImage}
-              onCenter={onAddCenterImage}
-              onEntry={onAddEntryImage}
-              onRemoveBackground={onRemoveBackgroundImage}
-              onRemoveCenter={onRemoveCenterImage}
-              hasBackground={Boolean(hasBackgroundImage)}
-              hasCenter={Boolean(hasCenterImage)}
-            />
-            <ToolBtn
-              disabled={disabled}
-              onClick={onCopy}
-              icon={<ClipboardCopy className="h-3.5 w-3.5" />}
-              label="Copy"
-            />
-            <ToolBtn
-              disabled={disabled}
-              onClick={onRestoreDefaults}
-              icon={<RotateCcw className="h-3.5 w-3.5" />}
-              label="Defaults"
-            />
-            <ToolBtn
-              disabled={disabled}
-              onClick={onClear}
-              icon={<Eraser className="h-3.5 w-3.5" />}
-              label="Clear"
-              danger
-            />
-            {onOpenAdvanced ? (
-              <ToolBtn disabled={disabled} onClick={onOpenAdvanced} label="Advanced…" />
-            ) : null}
-          </div>
 
           <label className="sr-only" htmlFor="wf-choices-textarea">
             {heading}
@@ -502,218 +356,5 @@ function ToolBtn({
       {icon}
       {label}
     </button>
-  );
-}
-
-function AddImageMenu({
-  disabled,
-  onBackground,
-  onCenter,
-  onEntry,
-  onRemoveBackground,
-  onRemoveCenter,
-  hasBackground,
-  hasCenter,
-}: {
-  disabled?: boolean;
-  onBackground?: (file: File) => void;
-  onCenter?: (file: File) => void;
-  onEntry?: (file: File) => void;
-  onRemoveBackground?: () => void;
-  onRemoveCenter?: () => void;
-  hasBackground?: boolean;
-  hasCenter?: boolean;
-}) {
-  const [open, setOpen] = useState(false);
-  const [pos, setPos] = useState<ReturnType<typeof clampMenuBox> | null>(null);
-  const btnRef = useRef<HTMLButtonElement>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
-  const bgRef = useRef<HTMLInputElement>(null);
-  const centerRef = useRef<HTMLInputElement>(null);
-  const entryRef = useRef<HTMLInputElement>(null);
-  const portalRoot = useFullscreenPortalRoot();
-
-  useEffect(() => {
-    if (!open || !btnRef.current) {
-      setPos(null);
-      return;
-    }
-    const place = () => {
-      const r = btnRef.current!.getBoundingClientRect();
-      setPos(
-        clampMenuBox(
-          { left: r.left, right: r.right, top: r.top, bottom: r.bottom },
-          220,
-        ),
-      );
-    };
-    place();
-    window.addEventListener("resize", place);
-    window.addEventListener("scroll", place, true);
-    document.addEventListener("fullscreenchange", place);
-    return () => {
-      window.removeEventListener("resize", place);
-      window.removeEventListener("scroll", place, true);
-      document.removeEventListener("fullscreenchange", place);
-    };
-  }, [open, portalRoot]);
-
-  useEffect(() => {
-    if (!open) return;
-    const onDoc = (e: MouseEvent) => {
-      const t = e.target as Node;
-      if (menuRef.current?.contains(t) || btnRef.current?.contains(t)) return;
-      setOpen(false);
-    };
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
-    };
-    const t = window.setTimeout(() => {
-      document.addEventListener("mousedown", onDoc);
-    }, 0);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      window.clearTimeout(t);
-      document.removeEventListener("mousedown", onDoc);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [open]);
-
-  if (!onBackground && !onCenter && !onEntry) return null;
-
-  const menu =
-    portalRoot && open && pos
-      ? createPortal(
-          <div
-            ref={menuRef}
-            className="fixed z-[300] max-h-[calc(100dvh-120px)] max-w-[calc(100vw-16px)] overflow-y-auto overscroll-contain rounded-xl border border-border bg-surface p-1.5 shadow-2xl"
-            style={{
-              left: pos.left,
-              width: pos.width,
-              maxHeight: pos.maxHeight,
-              ...(pos.placement === "above"
-                ? { bottom: pos.bottom, top: "auto" }
-                : { top: pos.top, bottom: "auto" }),
-            }}
-            role="menu"
-          >
-            {onBackground ? (
-              <button
-                type="button"
-                role="menuitem"
-                className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-xs font-semibold hover:bg-surface-2"
-                onClick={() => {
-                  setOpen(false);
-                  window.setTimeout(() => bgRef.current?.click(), 0);
-                }}
-              >
-                Add background image
-              </button>
-            ) : null}
-            {onCenter ? (
-              <button
-                type="button"
-                role="menuitem"
-                className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-xs font-semibold hover:bg-surface-2"
-                onClick={() => {
-                  setOpen(false);
-                  window.setTimeout(() => centerRef.current?.click(), 0);
-                }}
-              >
-                Add center image
-              </button>
-            ) : null}
-            {onEntry ? (
-              <button
-                type="button"
-                role="menuitem"
-                className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-xs font-semibold hover:bg-surface-2"
-                onClick={() => {
-                  setOpen(false);
-                  window.setTimeout(() => entryRef.current?.click(), 0);
-                }}
-              >
-                Add image as entry
-              </button>
-            ) : null}
-            {hasBackground && onRemoveBackground ? (
-              <button
-                type="button"
-                role="menuitem"
-                className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-xs font-semibold text-rose-300 hover:bg-surface-2"
-                onClick={() => {
-                  setOpen(false);
-                  onRemoveBackground();
-                }}
-              >
-                Remove background image
-              </button>
-            ) : null}
-            {hasCenter && onRemoveCenter ? (
-              <button
-                type="button"
-                role="menuitem"
-                className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-xs font-semibold text-rose-300 hover:bg-surface-2"
-                onClick={() => {
-                  setOpen(false);
-                  onRemoveCenter();
-                }}
-              >
-                Remove center image
-              </button>
-            ) : null}
-          </div>,
-          portalRoot,
-        )
-      : null;
-
-  return (
-    <div className="relative">
-      <button
-        ref={btnRef}
-        type="button"
-        disabled={disabled}
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-        aria-haspopup="menu"
-        className="inline-flex min-h-11 shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-lg bg-surface-2 px-2.5 py-1.5 text-xs font-semibold text-foreground outline-none hover:bg-border focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
-      >
-        Add image ▾
-      </button>
-      {menu}
-      <input
-        ref={bgRef}
-        type="file"
-        accept="image/png,image/jpeg,image/webp"
-        className="hidden"
-        onChange={(e) => {
-          const f = e.target.files?.[0];
-          if (f && onBackground) onBackground(f);
-          e.target.value = "";
-        }}
-      />
-      <input
-        ref={centerRef}
-        type="file"
-        accept="image/png,image/jpeg,image/webp"
-        className="hidden"
-        onChange={(e) => {
-          const f = e.target.files?.[0];
-          if (f && onCenter) onCenter(f);
-          e.target.value = "";
-        }}
-      />
-      <input
-        ref={entryRef}
-        type="file"
-        accept="image/png,image/jpeg,image/webp"
-        className="hidden"
-        onChange={(e) => {
-          const f = e.target.files?.[0];
-          if (f && onEntry) onEntry(f);
-          e.target.value = "";
-        }}
-      />
-    </div>
   );
 }

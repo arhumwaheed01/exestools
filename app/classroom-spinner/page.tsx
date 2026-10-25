@@ -99,7 +99,7 @@ export default function ClassroomSpinnerPage() {
           </li>
           <li>Press SPIN. The student under the pointer is picked.</li>
           <li>
-            Keep &quot;Remove winner after spin&quot; switched on under Entries (on by default here).
+            Keep &quot;Remove winner after spin&quot; switched on in the toolbar (on by default here).
             Each picked student comes off the wheel, so everyone gets one turn per round.
           </li>
           <li>

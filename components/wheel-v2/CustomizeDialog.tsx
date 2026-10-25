@@ -317,7 +317,7 @@ export function CustomizeDialog({
                   ))}
                 </div>
                 <p className="mt-1 text-[11px] text-muted">
-                  Upload a center image from Add image next to Shuffle.
+                  Upload a center image from Add image in the toolbar.
                 </p>
               </Field>
               <Field label="Page background">

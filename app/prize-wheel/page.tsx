@@ -111,7 +111,7 @@ export default function PrizeWheelPage() {
           <li>Share your rules and the full list with entrants before you spin.</li>
           <li>Press SPIN where everyone can see it, or record your screen.</li>
           <li>
-            Drawing more than one winner? Turn on &quot;Remove winner after spin&quot; under Entries
+            Drawing more than one winner? Turn on &quot;Remove winner after spin&quot; in the toolbar
             so each winner leaves the wheel. For a ticket raffle with hundreds of numbers, people with several
             tickets, or{" "}
             <Link href="/raffle-generator" className="font-semibold text-accent hover:underline">

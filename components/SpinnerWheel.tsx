@@ -1055,30 +1055,8 @@ export function SpinnerWheel({
       toolId === "random-name-picker" || toolId === "classroom-spinner" || toolId === "home",
     savedNote,
     onChange: onTextChange,
-    onShuffle,
-    onSort,
-    onClear,
-    onRestoreDefaults,
-    onCopy: () => void onCopy(),
-    autoRemove,
-    onAutoRemove: setAutoRemove,
-    showAutoRemove: toolId !== "yes-no-wheel",
-    onAddBackgroundImage: (f: File) => void onPickImage(f, "background"),
-    onAddCenterImage: (f: File) => void onPickImage(f, "center"),
-    onAddEntryImage: (f: File) => void onPickImage(f, "entry"),
-    onRemoveBackgroundImage: () => {
-      persistImages({ ...wheelImages, background: null });
-      showToast("Background image removed.");
-    },
-    onRemoveCenterImage: () => {
-      persistImages({ ...wheelImages, center: null });
-      showToast("Center image removed.");
-    },
-    hasBackgroundImage: Boolean(wheelImages.background),
-    hasCenterImage: Boolean(wheelImages.center),
     onSortResults: () => setHistory((h) => [...h].sort((a, b) => a.localeCompare(b))),
     onExportResults,
-    onOpenAdvanced: () => setAdvancedOpen(true),
   };
 
   const livePreview = (
@@ -1212,11 +1190,33 @@ export function SpinnerWheel({
             presets={toolPresets}
             onPreset={onPreset}
             homeLinks={homeLinks}
+            onShuffle={onShuffle}
+            onSort={onSort}
+            onClear={onClear}
+            onRestoreDefaults={onRestoreDefaults}
+            onCopy={() => void onCopy()}
+            onOpenAdvanced={() => setAdvancedOpen(true)}
+            autoRemove={autoRemove}
+            onAutoRemove={setAutoRemove}
+            showAutoRemove={toolId !== "yes-no-wheel"}
+            onAddBackgroundImage={(f) => void onPickImage(f, "background")}
+            onAddCenterImage={(f) => void onPickImage(f, "center")}
+            onAddEntryImage={(f) => void onPickImage(f, "entry")}
+            onRemoveBackgroundImage={() => {
+              persistImages({ ...wheelImages, background: null });
+              showToast("Background image removed.");
+            }}
+            onRemoveCenterImage={() => {
+              persistImages({ ...wheelImages, center: null });
+              showToast("Center image removed.");
+            }}
+            hasBackgroundImage={Boolean(wheelImages.background)}
+            hasCenterImage={Boolean(wheelImages.center)}
           />
         </div>
-        {/* Fixed stage height — leave room for site header + H1 + top bar at 1280×720. */}
+        {/* Fixed stage height — leave room for site header + H1 + two toolbar rows at 1280×720. */}
         <div
-          className="relative order-1 flex w-full min-w-0 max-w-full flex-col gap-2 overflow-hidden rounded-3xl lg:order-2 lg:h-[calc(100dvh-18rem)] lg:max-h-[calc(100dvh-18rem)] lg:min-h-[17rem] lg:flex-row lg:items-stretch lg:gap-0"
+          className="relative order-1 flex w-full min-w-0 max-w-full flex-col gap-2 overflow-hidden rounded-3xl lg:order-2 lg:h-[calc(100dvh-20.5rem)] lg:max-h-[calc(100dvh-20.5rem)] lg:min-h-[16rem] lg:flex-row lg:items-stretch lg:gap-0"
           ref={stageRef}
         >
           {isFullscreen ? (

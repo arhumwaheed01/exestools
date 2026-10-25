@@ -3,7 +3,17 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
-import { ChevronDown, Maximize2, Settings2, Trash2 } from "lucide-react";
+import {
+  ArrowUpDown,
+  ChevronDown,
+  ClipboardCopy,
+  Eraser,
+  Maximize2,
+  RotateCcw,
+  Settings2,
+  Shuffle,
+  Trash2,
+} from "lucide-react";
 import type { WheelPreset } from "@/lib/presets";
 import type { SavedWheelFile } from "@/lib/wheel-v2/settings";
 import {
@@ -38,7 +48,25 @@ type Props = {
   presets: WheelPreset[];
   onPreset: (preset: WheelPreset) => void;
   homeLinks?: { href: string; label: string }[];
+  onShuffle: () => void;
+  onSort: () => void;
+  onClear: () => void;
+  onRestoreDefaults: () => void;
+  onCopy: () => void;
+  onOpenAdvanced: () => void;
+  autoRemove: boolean;
+  onAutoRemove: (v: boolean) => void;
+  showAutoRemove: boolean;
+  onAddBackgroundImage?: (file: File) => void;
+  onAddCenterImage?: (file: File) => void;
+  onAddEntryImage?: (file: File) => void;
+  onRemoveBackgroundImage?: () => void;
+  onRemoveCenterImage?: () => void;
+  hasBackgroundImage?: boolean;
+  hasCenterImage?: boolean;
 };
+
+type MenuKind = "open" | "more" | "examples" | "add-image" | null;
 
 type MenuPos = {
   left: number;
@@ -72,9 +100,25 @@ export function WheelTopBar({
   presets,
   onPreset,
   homeLinks,
+  onShuffle,
+  onSort,
+  onClear,
+  onRestoreDefaults,
+  onCopy,
+  onOpenAdvanced,
+  autoRemove,
+  onAutoRemove,
+  showAutoRemove,
+  onAddBackgroundImage,
+  onAddCenterImage,
+  onAddEntryImage,
+  onRemoveBackgroundImage,
+  onRemoveCenterImage,
+  hasBackgroundImage,
+  hasCenterImage,
 }: Props) {
   void _compact;
-  const [openMenu, setOpenMenu] = useState<"open" | "more" | "examples" | null>(null);
+  const [openMenu, setOpenMenu] = useState<MenuKind>(null);
   const [csvOpen, setCsvOpen] = useState(false);
   const [csvText, setCsvText] = useState("");
   const [csvError, setCsvError] = useState("");
@@ -88,10 +132,15 @@ export function WheelTopBar({
   const openBtnRef = useRef<HTMLButtonElement>(null);
   const moreBtnRef = useRef<HTMLButtonElement>(null);
   const examplesBtnRef = useRef<HTMLButtonElement>(null);
+  const addImageBtnRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const bgRef = useRef<HTMLInputElement>(null);
+  const centerRef = useRef<HTMLInputElement>(null);
+  const entryRef = useRef<HTMLInputElement>(null);
   const openId = useId();
   const moreId = useId();
   const examplesId = useId();
+  const addImageId = useId();
   const portalRoot = useFullscreenPortalRoot();
 
   useLayoutEffect(() => {
@@ -104,21 +153,26 @@ export function WheelTopBar({
         ? openBtnRef.current
         : openMenu === "examples"
           ? examplesBtnRef.current ?? moreBtnRef.current
-          : moreBtnRef.current;
+          : openMenu === "add-image"
+            ? addImageBtnRef.current ?? moreBtnRef.current
+            : moreBtnRef.current;
     if (!btn) return;
     const place = () => {
       const r = btn.getBoundingClientRect();
-      const desired = openMenu === "examples" ? 288 : openMenu === "more" ? 224 : 256;
+      const desired =
+        openMenu === "examples" ? 288 : openMenu === "add-image" ? 220 : openMenu === "more" ? 240 : 256;
       setMenuPos(
         clampMenuBox(
           { left: r.left, right: r.right, top: r.top, bottom: r.bottom },
           desired,
-          { preferRightAlign: openMenu === "more" || openMenu === "examples" },
+          {
+            preferRightAlign:
+              openMenu === "more" || openMenu === "examples" || openMenu === "add-image",
+          },
         ),
       );
     };
     place();
-    // Re-measure after paint so max-height / flip use real content height.
     requestAnimationFrame(place);
     window.addEventListener("resize", place);
     window.addEventListener("scroll", place, true);
@@ -136,13 +190,12 @@ export function WheelTopBar({
       const t = e.target as Node;
       if (menuRef.current?.contains(t)) return;
       if (openBtnRef.current?.contains(t) || moreBtnRef.current?.contains(t)) return;
-      if (examplesBtnRef.current?.contains(t)) return;
+      if (examplesBtnRef.current?.contains(t) || addImageBtnRef.current?.contains(t)) return;
       setOpenMenu(null);
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpenMenu(null);
     };
-    // Defer so the opening click doesn't immediately dismiss the menu.
     const t = window.setTimeout(() => {
       document.addEventListener("mousedown", onDoc);
     }, 0);
@@ -200,6 +253,11 @@ export function WheelTopBar({
     window.setTimeout(() => fileRef.current?.click(), 0);
   };
 
+  const runAndClose = (fn: () => void) => {
+    setOpenMenu(null);
+    fn();
+  };
+
   const examplesMenuBody = (
     <>
       <p className="px-2 pb-1 pt-0.5 text-[10px] font-bold uppercase tracking-wide text-muted">
@@ -212,10 +270,7 @@ export function WheelTopBar({
           type="button"
           role="menuitem"
           className="flex min-h-11 w-full flex-col rounded-lg px-2 py-1.5 text-left hover:bg-surface-2"
-          onClick={() => {
-            onPreset(p);
-            setOpenMenu(null);
-          }}
+          onClick={() => runAndClose(() => onPreset(p))}
         >
           <span className="text-sm font-semibold text-foreground">{p.name}</span>
           <span className="text-[11px] leading-snug text-muted">{p.description}</span>
@@ -242,12 +297,84 @@ export function WheelTopBar({
     </>
   );
 
+  const addImageMenuBody = (
+    <>
+      {onAddBackgroundImage ? (
+        <button
+          type="button"
+          role="menuitem"
+          className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2"
+          onClick={() => {
+            setOpenMenu(null);
+            window.setTimeout(() => bgRef.current?.click(), 0);
+          }}
+        >
+          Add background image
+        </button>
+      ) : null}
+      {onAddCenterImage ? (
+        <button
+          type="button"
+          role="menuitem"
+          className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2"
+          onClick={() => {
+            setOpenMenu(null);
+            window.setTimeout(() => centerRef.current?.click(), 0);
+          }}
+        >
+          Add center image
+        </button>
+      ) : null}
+      {onAddEntryImage ? (
+        <button
+          type="button"
+          role="menuitem"
+          className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2"
+          onClick={() => {
+            setOpenMenu(null);
+            window.setTimeout(() => entryRef.current?.click(), 0);
+          }}
+        >
+          Add image as entry
+        </button>
+      ) : null}
+      {hasBackgroundImage && onRemoveBackgroundImage ? (
+        <button
+          type="button"
+          role="menuitem"
+          className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold text-rose-300 hover:bg-surface-2"
+          onClick={() => runAndClose(onRemoveBackgroundImage)}
+        >
+          Remove background image
+        </button>
+      ) : null}
+      {hasCenterImage && onRemoveCenterImage ? (
+        <button
+          type="button"
+          role="menuitem"
+          className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold text-rose-300 hover:bg-surface-2"
+          onClick={() => runAndClose(onRemoveCenterImage)}
+        >
+          Remove center image
+        </button>
+      ) : null}
+    </>
+  );
+
   const menuPortal =
     portalRoot && openMenu && menuPos
       ? createPortal(
           <div
             ref={menuRef}
-            id={openMenu === "open" ? openId : openMenu === "examples" ? examplesId : moreId}
+            id={
+              openMenu === "open"
+                ? openId
+                : openMenu === "examples"
+                  ? examplesId
+                  : openMenu === "add-image"
+                    ? addImageId
+                    : moreId
+            }
             role="menu"
             className="fixed z-[300] max-w-[calc(100vw-16px)] overflow-y-auto overscroll-contain rounded-xl border border-border bg-surface p-1.5 shadow-2xl"
             style={{
@@ -317,6 +444,8 @@ export function WheelTopBar({
               </>
             ) : openMenu === "examples" ? (
               examplesMenuBody
+            ) : openMenu === "add-image" ? (
+              addImageMenuBody
             ) : (
               <>
                 <Link
@@ -331,10 +460,7 @@ export function WheelTopBar({
                   type="button"
                   role="menuitem"
                   className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
-                  onClick={() => {
-                    setOpenMenu(null);
-                    onAddWheel();
-                  }}
+                  onClick={() => runAndClose(onAddWheel)}
                 >
                   Add wheel
                 </button>
@@ -347,6 +473,79 @@ export function WheelTopBar({
                   Examples
                   <ChevronDown className="ml-auto h-3.5 w-3.5 opacity-70" aria-hidden />
                 </button>
+
+                <p className="mt-2 px-2 text-[10px] font-bold uppercase tracking-wide text-muted sm:hidden">
+                  Entries tools
+                </p>
+                {showAutoRemove ? (
+                  <label className="flex min-h-11 cursor-pointer items-center gap-2 rounded-lg px-2 text-sm font-semibold hover:bg-surface-2 sm:hidden">
+                    <input
+                      type="checkbox"
+                      checked={autoRemove}
+                      onChange={(e) => onAutoRemove(e.target.checked)}
+                      className="h-4 w-4 accent-cyan-500"
+                    />
+                    Remove winner after spin
+                  </label>
+                ) : null}
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
+                  onClick={() => runAndClose(onShuffle)}
+                >
+                  Shuffle
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
+                  onClick={() => runAndClose(onSort)}
+                >
+                  Sort
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
+                  onClick={() => setOpenMenu("add-image")}
+                >
+                  Add image
+                  <ChevronDown className="ml-auto h-3.5 w-3.5 opacity-70" aria-hidden />
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
+                  onClick={() => runAndClose(() => void onCopy())}
+                >
+                  Copy
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
+                  onClick={() => runAndClose(onRestoreDefaults)}
+                >
+                  Defaults
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold text-rose-300 hover:bg-surface-2 sm:hidden"
+                  onClick={() => runAndClose(onClear)}
+                >
+                  Clear
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
+                  onClick={() => runAndClose(onOpenAdvanced)}
+                >
+                  Advanced…
+                </button>
+
                 <a
                   href="mailto:hello@exestools.com?subject=Spinner%20wheel%20feedback"
                   role="menuitem"
@@ -394,7 +593,7 @@ export function WheelTopBar({
       : null;
 
   return (
-    <div className="relative w-full min-w-0 max-w-full">
+    <div className="relative w-full min-w-0 max-w-full space-y-1">
       <input
         ref={fileRef}
         type="file"
@@ -406,8 +605,42 @@ export function WheelTopBar({
           e.target.value = "";
         }}
       />
+      <input
+        ref={bgRef}
+        type="file"
+        accept="image/png,image/jpeg,image/webp"
+        className="hidden"
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          if (f && onAddBackgroundImage) onAddBackgroundImage(f);
+          e.target.value = "";
+        }}
+      />
+      <input
+        ref={centerRef}
+        type="file"
+        accept="image/png,image/jpeg,image/webp"
+        className="hidden"
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          if (f && onAddCenterImage) onAddCenterImage(f);
+          e.target.value = "";
+        }}
+      />
+      <input
+        ref={entryRef}
+        type="file"
+        accept="image/png,image/jpeg,image/webp"
+        className="hidden"
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          if (f && onAddEntryImage) onAddEntryImage(f);
+          e.target.value = "";
+        }}
+      />
 
-      <div className="flex w-full min-w-0 max-w-full flex-wrap items-center gap-1 rounded-2xl border border-border bg-surface px-1 py-1 sm:gap-1.5 sm:px-2">
+      {/* Row 1 — primary actions; no wrap on ≥sm */}
+      <div className="flex w-full min-w-0 max-w-full flex-wrap items-center gap-1 rounded-2xl border border-border bg-surface px-1 py-1 sm:flex-nowrap sm:gap-1 sm:overflow-x-auto sm:px-2">
         <BarBtn disabled={disabled} onClick={onCustomize} icon={<Settings2 className="h-3.5 w-3.5" />}>
           Customize
         </BarBtn>
@@ -493,9 +726,77 @@ export function WheelTopBar({
         </BarBtn>
       </div>
 
+      {/* Row 2 — entries tools (desktop only) */}
+      <div
+        className="hidden w-full min-w-0 max-w-full items-center gap-1 overflow-x-auto rounded-2xl border border-border bg-surface px-1 py-1 sm:flex sm:flex-nowrap sm:gap-1.5 sm:px-2"
+        aria-label="Entries tools"
+      >
+        {showAutoRemove ? (
+          <label className="inline-flex min-h-11 shrink-0 cursor-pointer items-center gap-2 rounded-lg px-2 text-xs font-bold text-foreground hover:bg-surface-2">
+            <input
+              type="checkbox"
+              checked={autoRemove}
+              onChange={(e) => onAutoRemove(e.target.checked)}
+              disabled={disabled}
+              className="h-4 w-4 accent-cyan-500 disabled:opacity-50"
+            />
+            Remove winner after spin
+          </label>
+        ) : null}
+        <BarBtn
+          disabled={disabled}
+          onClick={onShuffle}
+          icon={<Shuffle className="h-3.5 w-3.5" />}
+        >
+          Shuffle
+        </BarBtn>
+        <BarBtn
+          disabled={disabled}
+          onClick={onSort}
+          icon={<ArrowUpDown className="h-3.5 w-3.5" />}
+        >
+          Sort
+        </BarBtn>
+        <BarBtn
+          ref={addImageBtnRef}
+          disabled={disabled}
+          onClick={() => setOpenMenu((m) => (m === "add-image" ? null : "add-image"))}
+          aria-expanded={openMenu === "add-image"}
+          aria-controls={addImageId}
+          aria-haspopup="menu"
+        >
+          Add image
+          <ChevronDown className="h-3.5 w-3.5 opacity-70" aria-hidden />
+        </BarBtn>
+        <BarBtn
+          disabled={disabled}
+          onClick={() => void onCopy()}
+          icon={<ClipboardCopy className="h-3.5 w-3.5" />}
+        >
+          Copy
+        </BarBtn>
+        <BarBtn
+          disabled={disabled}
+          onClick={onRestoreDefaults}
+          icon={<RotateCcw className="h-3.5 w-3.5" />}
+        >
+          Defaults
+        </BarBtn>
+        <BarBtn
+          disabled={disabled}
+          onClick={onClear}
+          icon={<Eraser className="h-3.5 w-3.5" />}
+          className="text-rose-300 hover:bg-rose-950/40"
+        >
+          Clear
+        </BarBtn>
+        <BarBtn disabled={disabled} onClick={onOpenAdvanced}>
+          Advanced…
+        </BarBtn>
+      </div>
+
       {menuPortal}
 
-      {/* Absolute share panel — no layout shift; pad below so Close clears sticky SPIN */}
       {shareUrl ? (
         <div className="absolute left-0 right-0 top-full z-[60] mt-1 flex w-full min-w-0 flex-col gap-2 rounded-xl border border-border bg-surface p-3 pb-[calc(0.75rem+4.5rem)] shadow-xl sm:flex-row sm:items-center sm:pb-3 lg:pb-3">
           <input

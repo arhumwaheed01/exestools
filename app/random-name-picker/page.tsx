@@ -34,7 +34,7 @@ const FAQS = [
   },
   {
     q: "Can I stop the same name being picked twice?",
-    a: "Yes. Turn on Remove winner after spin.",
+    a: "Yes. Turn on Remove winner after spin in the toolbar.",
   },
   {
     q: "How many names can I add?",
