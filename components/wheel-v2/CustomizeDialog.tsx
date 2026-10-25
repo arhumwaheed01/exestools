@@ -21,6 +21,8 @@ type Props = {
   onStopWinner?: () => void;
   /** Called when Reset appearance defaults is pressed (clear local images, etc.). */
   onResetAppearance?: () => void;
+  wheelTitle?: string;
+  onWheelTitle?: (title: string) => void;
 };
 
 export function CustomizeDialog({
@@ -33,17 +35,21 @@ export function CustomizeDialog({
   onPreviewWinner,
   onStopWinner,
   onResetAppearance,
+  wheelTitle = "",
+  onWheelTitle,
 }: Props) {
   const titleId = useId();
   const [tab, setTab] = useState<Tab>("during");
   const [draft, setDraft] = useState(value);
+  const [titleDraft, setTitleDraft] = useState(wheelTitle);
 
   useEffect(() => {
     if (open) {
       setDraft(value);
+      setTitleDraft(wheelTitle);
       setTab("during");
     }
-  }, [open, value]);
+  }, [open, value, wheelTitle]);
 
   useEffect(() => {
     if (!open) return;
@@ -168,6 +174,18 @@ export function CustomizeDialog({
                 checked={draft.showTitle}
                 onChange={(v) => set("showTitle", v)}
               />
+              {onWheelTitle ? (
+                <Field label="Wheel title">
+                  <input
+                    type="text"
+                    value={titleDraft}
+                    onChange={(e) => setTitleDraft(e.target.value.slice(0, 40))}
+                    placeholder="e.g. Lunch picker"
+                    maxLength={40}
+                    className="min-h-10 w-full rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  />
+                </Field>
+              ) : null}
               <Toggle
                 label="Display duplicates"
                 checked={draft.displayDuplicates}
@@ -363,7 +381,10 @@ export function CustomizeDialog({
           </button>
           <button
             type="button"
-            onClick={() => onOk(draft)}
+            onClick={() => {
+              if (onWheelTitle) onWheelTitle(titleDraft.trim().slice(0, 40));
+              onOk(draft);
+            }}
             className="inline-flex min-h-11 items-center rounded-xl bg-accent-strong px-4 text-sm font-bold text-slate-950 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent"
           >
             OK

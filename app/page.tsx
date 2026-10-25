@@ -104,7 +104,7 @@ const HOME_FAQS = [
   },
   {
     q: "Can I spin a random letter?",
-    a: 'Yes. Under Example wheels, tap Letters A–Z to load all 26 letters, or Word game letters for a 20-letter set without Q, U, V, X, Y and Z. Every letter on the wheel has the same chance. Switch on "Remove winner after spin" if you don\'t want the same letter twice in one game.',
+    a: 'Yes. Open Examples in the toolbar, then tap Letters A–Z to load all 26 letters, or Word game letters for a 20-letter set without Q, U, V, X, Y and Z. Every letter on the wheel has the same chance. Switch on "Remove winner after spin" if you don\'t want the same letter twice in one game.',
   },
   {
     q: "Can I remove the winner after each spin?",
@@ -170,8 +170,8 @@ export default function HomePage() {
           </h2>
           <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm leading-relaxed text-muted sm:text-base">
             <li>
-              Type one option per line, or load an Example wheel such as What to eat or Weekend
-              activity.
+              Type one option per line, or open Examples in the toolbar and load a starter list such
+              as What to eat or Weekend activity.
             </li>
             <li>
               Press SPIN (or click the wheel). The option under the pointer when it stops is your
@@ -183,7 +183,8 @@ export default function HomePage() {
             </li>
             <li>
               Use Shuffle, Copy, Defaults, or Clear to manage your list. Share copies a link to this
-              wheel. New starts a fresh list; Open and Save keep named wheels on this device.
+              wheel. New starts a fresh list; Add wheel resets the list to the page default; Open and
+              Save keep named wheels on this device.
             </li>
           </ol>
         </section>

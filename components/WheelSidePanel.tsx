@@ -12,10 +12,6 @@ import {
 import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
-import { PresetSelector } from "@/components/PresetSelector";
-import { ThemeChips } from "@/components/tools/ThemeChips";
-import type { WheelPreset } from "@/lib/presets";
-import type { ToolThemeId } from "@/lib/tools/theme";
 import { clampMenuBox, useFullscreenPortalRoot } from "@/lib/wheel-v2/portal";
 
 export type PanelTab = "entries" | "results";
@@ -43,17 +39,9 @@ type Props = {
   onClear: () => void;
   onRestoreDefaults: () => void;
   onCopy: () => void;
-  onFreshWheel: () => void;
   autoRemove: boolean;
   onAutoRemove: (v: boolean) => void;
   showAutoRemove: boolean;
-  wheelTitle: string;
-  onWheelTitle: (v: string) => void;
-  themeChoice: ToolThemeId;
-  onThemeChange: (v: ToolThemeId) => void;
-  presets: WheelPreset[];
-  onPreset: (preset: WheelPreset) => void;
-  homeLinks?: { href: string; label: string }[];
   /** Mobile: render as expandable sheet under the wheel. */
   mobileSheet?: boolean;
   onAddBackgroundImage?: (file: File) => void;
@@ -93,17 +81,9 @@ export function WheelSidePanel({
   onClear,
   onRestoreDefaults,
   onCopy,
-  onFreshWheel,
   autoRemove,
   onAutoRemove,
   showAutoRemove,
-  wheelTitle,
-  onWheelTitle,
-  themeChoice,
-  onThemeChange,
-  presets,
-  onPreset,
-  homeLinks,
   mobileSheet = false,
   onAddBackgroundImage,
   onAddCenterImage,
@@ -164,17 +144,9 @@ export function WheelSidePanel({
               onClear={onClear}
               onRestoreDefaults={onRestoreDefaults}
               onCopy={onCopy}
-              onFreshWheel={onFreshWheel}
               autoRemove={autoRemove}
               onAutoRemove={onAutoRemove}
               showAutoRemove={showAutoRemove}
-              wheelTitle={wheelTitle}
-              onWheelTitle={onWheelTitle}
-              themeChoice={themeChoice}
-              onThemeChange={onThemeChange}
-              presets={presets}
-              onPreset={onPreset}
-              homeLinks={homeLinks}
               labelId={labelId}
               onAddBackgroundImage={onAddBackgroundImage}
               onAddCenterImage={onAddCenterImage}
@@ -237,17 +209,9 @@ export function WheelSidePanel({
         onClear={onClear}
         onRestoreDefaults={onRestoreDefaults}
         onCopy={onCopy}
-        onFreshWheel={onFreshWheel}
         autoRemove={autoRemove}
         onAutoRemove={onAutoRemove}
         showAutoRemove={showAutoRemove}
-        wheelTitle={wheelTitle}
-        onWheelTitle={onWheelTitle}
-        themeChoice={themeChoice}
-        onThemeChange={onThemeChange}
-        presets={presets}
-        onPreset={onPreset}
-        homeLinks={homeLinks}
         labelId={labelId}
         onAddBackgroundImage={onAddBackgroundImage}
         onAddCenterImage={onAddCenterImage}
@@ -297,17 +261,9 @@ function PanelBody({
   onClear,
   onRestoreDefaults,
   onCopy,
-  onFreshWheel,
   autoRemove,
   onAutoRemove,
   showAutoRemove,
-  wheelTitle,
-  onWheelTitle,
-  themeChoice,
-  onThemeChange,
-  presets,
-  onPreset,
-  homeLinks,
   labelId,
   onAddBackgroundImage,
   onAddCenterImage,
@@ -337,6 +293,12 @@ function PanelBody({
             {heading}
           </p>
           <p className="shrink-0 text-[11px] leading-snug text-muted">{helpText}</p>
+          <p className="shrink-0 text-[11px] leading-snug text-muted">
+            {savedNote}{" "}
+            <Link href="/privacy-policy" className="font-semibold text-accent hover:underline">
+              Privacy Policy
+            </Link>
+          </p>
 
           {showAutoRemove ? (
             <label className="flex min-h-11 shrink-0 cursor-pointer items-center gap-2 rounded-xl border border-border bg-surface-2 px-3 text-sm text-foreground">
@@ -425,57 +387,6 @@ function PanelBody({
               </Link>
             </p>
           ) : null}
-
-          <details className="group shrink-0 rounded-xl border border-border bg-surface-2 open:max-h-[40%] open:overflow-y-auto open:pb-2">
-            <summary className="cursor-pointer list-none px-3 py-2 text-xs font-bold uppercase tracking-wide text-muted outline-none marker:content-none focus-visible:ring-2 focus-visible:ring-accent [&::-webkit-details-marker]:hidden">
-              <span className="flex items-center justify-between gap-2">
-                Advanced
-                <span className="text-muted transition group-open:rotate-45" aria-hidden>
-                  +
-                </span>
-              </span>
-            </summary>
-            <div className="space-y-3 border-t border-border px-3 pt-3">
-              <label className="block">
-                <span className="mb-1 block text-xs font-bold uppercase tracking-wide text-muted">
-                  Wheel title
-                </span>
-                <input
-                  type="text"
-                  value={wheelTitle}
-                  onChange={(e) => onWheelTitle(e.target.value.slice(0, 40))}
-                  disabled={disabled}
-                  placeholder="e.g. Lunch picker"
-                  className="min-h-11 w-full rounded-xl border border-border bg-surface px-3 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
-                />
-              </label>
-              <div>
-                <p className="mb-2 text-xs font-bold uppercase tracking-wide text-muted">Theme</p>
-                <ThemeChips value={themeChoice} onChange={onThemeChange} />
-              </div>
-              <PresetSelector
-                presets={presets}
-                disabled={disabled}
-                onSelect={onPreset}
-                homeLinks={homeLinks}
-              />
-              <p className="text-xs text-muted">
-                {savedNote}{" "}
-                <Link href="/privacy-policy" className="font-semibold text-accent hover:underline">
-                  Privacy Policy
-                </Link>
-              </p>
-            </div>
-          </details>
-
-          <button
-            type="button"
-            onClick={onFreshWheel}
-            disabled={disabled}
-            className="mt-auto inline-flex min-h-11 w-full shrink-0 items-center justify-center rounded-xl border border-border bg-surface-2 px-3 text-sm font-bold text-foreground outline-none hover:bg-border focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
-          >
-            Add wheel
-          </button>
         </div>
       ) : (
         <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-3">

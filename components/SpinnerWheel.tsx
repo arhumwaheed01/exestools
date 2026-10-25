@@ -262,7 +262,7 @@ export function SpinnerWheel({
       const mobile = window.matchMedia("(max-width: 1023px)").matches;
       // Leave room above the square so the teardrop pointer + top labels aren't clipped.
       const pointerPad = 28;
-      // Cap height on short viewports so Spin + side-panel "Add wheel" stay on-screen.
+      // Cap height on short viewports so Spin stays on-screen.
       const vh = window.innerHeight;
       const shortCap = vh <= 760 ? Math.floor(vh * 0.4) : Math.floor(vh * 0.54);
       const next = mobile
@@ -1060,17 +1060,9 @@ export function SpinnerWheel({
     onClear,
     onRestoreDefaults,
     onCopy: () => void onCopy(),
-    onFreshWheel,
     autoRemove,
     onAutoRemove: setAutoRemove,
     showAutoRemove: toolId !== "yes-no-wheel",
-    wheelTitle,
-    onWheelTitle: setWheelTitle,
-    themeChoice,
-    onThemeChange,
-    presets: toolPresets,
-    onPreset,
-    homeLinks,
     onAddBackgroundImage: (f: File) => void onPickImage(f, "background"),
     onAddCenterImage: (f: File) => void onPickImage(f, "center"),
     onAddEntryImage: (f: File) => void onPickImage(f, "entry"),
@@ -1122,6 +1114,8 @@ export function SpinnerWheel({
         <CustomizeDialog
           open={customizeOpen}
           value={v2Settings}
+          wheelTitle={wheelTitle}
+          onWheelTitle={setWheelTitle}
           onCancel={() => setCustomizeOpen(false)}
           onOk={(next) => {
             let swatches = next.swatches;
@@ -1214,6 +1208,10 @@ export function SpinnerWheel({
             onImportCsv={onImportCsv}
             onPreferences={() => setCustomizeOpen(true)}
             faqHref="#faq"
+            onAddWheel={onFreshWheel}
+            presets={toolPresets}
+            onPreset={onPreset}
+            homeLinks={homeLinks}
           />
         </div>
         {/* Fixed stage height — leave room for site header + H1 + top bar at 1280×720. */}

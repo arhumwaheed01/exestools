@@ -56,7 +56,7 @@ const FAQS = [
   },
   {
     q: "Can I use it as an alphabet or letter wheel?",
-    a: 'Yes. Tap Letters A–Z under Example wheels to put all 26 letters on the wheel. With remove-winner on, each letter comes off after it\'s picked, so you can work through the whole alphabet without repeats. It works well for letter of the day, phonics warm-ups, and "name something that starts with…" games.',
+    a: 'Yes. Open Examples in the toolbar, then tap Letters A–Z to put all 26 letters on the wheel. With remove-winner on, each letter comes off after it\'s picked, so you can work through the whole alphabet without repeats. It works well for letter of the day, phonics warm-ups, and "name something that starts with…" games.',
   },
   {
     q: "What should I do if a picked student doesn't want to answer?",
@@ -120,11 +120,11 @@ export default function ClassroomSpinnerPage() {
             everyone has had a turn.
           </li>
           <li>
-            Classroom jobs: load the Classroom jobs wheel to hand out line leader, door holder, and
-            other helper roles.
+            Classroom jobs: open Examples in the toolbar and load Classroom jobs to hand out line
+            leader, door holder, and other helper roles.
           </li>
           <li>
-            Brain breaks: spin the Brain break activities wheel for a quick energizer between
+            Brain breaks: load Brain break activities from Examples for a quick energizer between
             lessons. Ten review, warm-up and brain-break games are in{" "}
             <Link
               href="/guides/classroom-games-with-a-spinner-wheel"

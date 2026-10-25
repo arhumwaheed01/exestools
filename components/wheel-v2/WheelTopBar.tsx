@@ -4,6 +4,7 @@ import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { ChevronDown, Maximize2, Settings2, Trash2 } from "lucide-react";
+import type { WheelPreset } from "@/lib/presets";
 import type { SavedWheelFile } from "@/lib/wheel-v2/settings";
 import {
   clampMenuBox,
@@ -33,6 +34,10 @@ type Props = {
   onPreferences: () => void;
   faqHref?: string;
   compact?: boolean;
+  onAddWheel: () => void;
+  presets: WheelPreset[];
+  onPreset: (preset: WheelPreset) => void;
+  homeLinks?: { href: string; label: string }[];
 };
 
 type MenuPos = {
@@ -63,9 +68,13 @@ export function WheelTopBar({
   onPreferences,
   faqHref = "#faq",
   compact: _compact = false,
+  onAddWheel,
+  presets,
+  onPreset,
+  homeLinks,
 }: Props) {
   void _compact;
-  const [openMenu, setOpenMenu] = useState<"open" | "more" | null>(null);
+  const [openMenu, setOpenMenu] = useState<"open" | "more" | "examples" | null>(null);
   const [csvOpen, setCsvOpen] = useState(false);
   const [csvText, setCsvText] = useState("");
   const [csvError, setCsvError] = useState("");
@@ -78,9 +87,11 @@ export function WheelTopBar({
   const saveTitleRef = useRef<HTMLInputElement>(null);
   const openBtnRef = useRef<HTMLButtonElement>(null);
   const moreBtnRef = useRef<HTMLButtonElement>(null);
+  const examplesBtnRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const openId = useId();
   const moreId = useId();
+  const examplesId = useId();
   const portalRoot = useFullscreenPortalRoot();
 
   useLayoutEffect(() => {
@@ -88,16 +99,21 @@ export function WheelTopBar({
       setMenuPos(null);
       return;
     }
-    const btn = openMenu === "open" ? openBtnRef.current : moreBtnRef.current;
+    const btn =
+      openMenu === "open"
+        ? openBtnRef.current
+        : openMenu === "examples"
+          ? examplesBtnRef.current ?? moreBtnRef.current
+          : moreBtnRef.current;
     if (!btn) return;
     const place = () => {
       const r = btn.getBoundingClientRect();
-      const desired = openMenu === "more" ? 224 : 256;
+      const desired = openMenu === "examples" ? 288 : openMenu === "more" ? 224 : 256;
       setMenuPos(
         clampMenuBox(
           { left: r.left, right: r.right, top: r.top, bottom: r.bottom },
           desired,
-          { preferRightAlign: openMenu === "more" },
+          { preferRightAlign: openMenu === "more" || openMenu === "examples" },
         ),
       );
     };
@@ -112,7 +128,7 @@ export function WheelTopBar({
       window.removeEventListener("scroll", place, true);
       document.removeEventListener("fullscreenchange", place);
     };
-  }, [openMenu, portalRoot, recent.length]);
+  }, [openMenu, portalRoot, recent.length, presets.length]);
 
   useEffect(() => {
     if (!openMenu) return;
@@ -120,6 +136,7 @@ export function WheelTopBar({
       const t = e.target as Node;
       if (menuRef.current?.contains(t)) return;
       if (openBtnRef.current?.contains(t) || moreBtnRef.current?.contains(t)) return;
+      if (examplesBtnRef.current?.contains(t)) return;
       setOpenMenu(null);
     };
     const onKey = (e: KeyboardEvent) => {
@@ -183,12 +200,54 @@ export function WheelTopBar({
     window.setTimeout(() => fileRef.current?.click(), 0);
   };
 
+  const examplesMenuBody = (
+    <>
+      <p className="px-2 pb-1 pt-0.5 text-[10px] font-bold uppercase tracking-wide text-muted">
+        Example wheels
+      </p>
+      <p className="px-2 pb-2 text-xs text-muted">Load a starter list, then customize freely.</p>
+      {presets.map((p) => (
+        <button
+          key={p.id}
+          type="button"
+          role="menuitem"
+          className="flex min-h-11 w-full flex-col rounded-lg px-2 py-1.5 text-left hover:bg-surface-2"
+          onClick={() => {
+            onPreset(p);
+            setOpenMenu(null);
+          }}
+        >
+          <span className="text-sm font-semibold text-foreground">{p.name}</span>
+          <span className="text-[11px] leading-snug text-muted">{p.description}</span>
+        </button>
+      ))}
+      {homeLinks && homeLinks.length > 0 ? (
+        <div className="mt-1 border-t border-border pt-1">
+          <p className="px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-muted">
+            Specialized tools
+          </p>
+          {homeLinks.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              role="menuitem"
+              className="flex min-h-11 items-center rounded-lg px-2 text-sm font-semibold text-accent hover:bg-surface-2"
+              onClick={() => setOpenMenu(null)}
+            >
+              {l.label} →
+            </Link>
+          ))}
+        </div>
+      ) : null}
+    </>
+  );
+
   const menuPortal =
     portalRoot && openMenu && menuPos
       ? createPortal(
           <div
             ref={menuRef}
-            id={openMenu === "open" ? openId : moreId}
+            id={openMenu === "open" ? openId : openMenu === "examples" ? examplesId : moreId}
             role="menu"
             className="fixed z-[300] max-w-[calc(100vw-16px)] overflow-y-auto overscroll-contain rounded-xl border border-border bg-surface p-1.5 shadow-2xl"
             style={{
@@ -256,6 +315,8 @@ export function WheelTopBar({
                   <p className="mt-2 px-2 text-xs text-muted">No recent wheels yet.</p>
                 )}
               </>
+            ) : openMenu === "examples" ? (
+              examplesMenuBody
             ) : (
               <>
                 <Link
@@ -266,6 +327,26 @@ export function WheelTopBar({
                 >
                   Gallery
                 </Link>
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
+                  onClick={() => {
+                    setOpenMenu(null);
+                    onAddWheel();
+                  }}
+                >
+                  Add wheel
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
+                  onClick={() => setOpenMenu("examples")}
+                >
+                  Examples
+                  <ChevronDown className="ml-auto h-3.5 w-3.5 opacity-70" aria-hidden />
+                </button>
                 <a
                   href="mailto:hello@exestools.com?subject=Spinner%20wheel%20feedback"
                   role="menuitem"
@@ -364,6 +445,28 @@ export function WheelTopBar({
         >
           Gallery
         </Link>
+        <BarBtn
+          disabled={disabled}
+          className="hidden sm:inline-flex"
+          onClick={() => {
+            setOpenMenu(null);
+            onAddWheel();
+          }}
+        >
+          Add wheel
+        </BarBtn>
+        <BarBtn
+          ref={examplesBtnRef}
+          disabled={disabled}
+          className="hidden sm:inline-flex"
+          onClick={() => setOpenMenu((m) => (m === "examples" ? null : "examples"))}
+          aria-expanded={openMenu === "examples"}
+          aria-controls={examplesId}
+          aria-haspopup="menu"
+        >
+          Examples
+          <ChevronDown className="h-3.5 w-3.5 opacity-70" aria-hidden />
+        </BarBtn>
         {!isFullscreen ? (
           <button
             type="button"

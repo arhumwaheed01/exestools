@@ -105,7 +105,8 @@ export default function PrizeWheelPage() {
       <GuideSection title="How to run a giveaway spin">
         <ol className="list-decimal space-y-2 pl-5">
           <li>
-            Pick an Example wheel, or type your own prizes or entrant names, one per line.
+            Open Examples in the toolbar for a starter list, or type your own prizes or entrant
+            names, one per line.
           </li>
           <li>Share your rules and the full list with entrants before you spin.</li>
           <li>Press SPIN where everyone can see it, or record your screen.</li>
@@ -149,11 +150,12 @@ export default function PrizeWheelPage() {
         </ul>
         <p>
           Every slice has the same chance, so a big prize is just as likely as a small one. Plan your
-          budget around that. To start fast, tap{" "}
+          budget around that. To start fast, open{" "}
+          <span className="font-semibold text-foreground">Examples</span> in the toolbar and tap{" "}
           <span className="font-semibold text-foreground">Prize rewards</span>,{" "}
           <span className="font-semibold text-foreground">Stream giveaway</span> or{" "}
-          <span className="font-semibold text-foreground">Classroom rewards</span> under Example
-          wheels and edit the list.
+          <span className="font-semibold text-foreground">Classroom rewards</span>, then edit the
+          list.
         </p>
       </GuideSection>
       <GuideSection title="Prize spins at events, booths and shops">

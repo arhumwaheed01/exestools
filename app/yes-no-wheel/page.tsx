@@ -58,7 +58,7 @@ const FAQS = [
   },
   {
     q: "Can I use this as a coin flip?",
-    a: 'Yes. Tap Heads / Tails under Example wheels and press SPIN. It\'s the same 50/50 spin as Yes / No, just with different labels. Call your side before you spin.',
+    a: 'Yes. Open Examples in the toolbar, tap Heads / Tails, and press SPIN. It\'s the same 50/50 spin as Yes / No, just with different labels. Call your side before you spin.',
   },
   {
     q: "Can I share my yes or no wheel?",
