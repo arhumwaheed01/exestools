@@ -172,14 +172,18 @@ export function UseCaseToolPage({
           {title}
         </h1>
         {pageUpdated ? (
-          <div className={wheelFirst ? "hidden xl:block" : undefined}>
+          <div
+            className={
+              wheelFirst ? "[&_p]:mt-0.5 [&_p]:text-xs [&_p]:leading-tight sm:[&_p]:text-sm" : undefined
+            }
+          >
             <PageMeta updated={pageUpdated} />
           </div>
         ) : null}
         <p
           className={
             wheelFirst
-              ? "mt-0.5 line-clamp-2 text-sm leading-snug text-muted xl:line-clamp-none"
+              ? "mt-0.5 line-clamp-2 text-sm leading-snug text-muted"
               : "mt-1 line-clamp-2 text-sm leading-snug text-muted sm:line-clamp-none sm:leading-relaxed"
           }
         >

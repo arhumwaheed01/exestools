@@ -90,14 +90,12 @@ export default function YesNoWheelPage() {
       title="Yes or no wheel"
       intro={
         <>
-          Ask your question, hit SPIN, and the wheel lands on Yes or No. Use it for the small calls
-          that eat ten minutes: dessert or not, run now or after work, who picks the film. Want a third option? Switch to
-          Yes / No / Maybe, or tap Heads / Tails for a coin flip. If you&apos;re choosing between
-          more than two options, use the{" "}
+          Ask a yes-or-no question and hit SPIN. Switch to Yes / No / Maybe, or Heads / Tails for a
+          coin flip. For more than two options, use the{" "}
           <Link href="/" className="font-semibold text-accent hover:underline">
             multi-option decision wheel
-          </Link>{" "}
-          on the homepage.
+          </Link>
+          .
         </>
       }
       faqs={FAQS}
@@ -120,8 +118,8 @@ export default function YesNoWheelPage() {
           <li>Press SPIN. The wheel lands on Yes or No.</li>
           <li>Spin again as often as you like — both answers stay on the wheel.</li>
           <li>
-            Want a Maybe? Choose Yes / No / Maybe. For a coin toss, choose Heads / Tails. Press Fresh
-            wheel to go back to plain Yes and No.
+            Want a Maybe? Choose Yes / No / Maybe. For a coin toss, choose Heads / Tails. Press Start
+            fresh to go back to plain Yes and No.
           </li>
         </ol>
         <p className="mt-3">

@@ -26,6 +26,7 @@ export function SpinnerMount({
 
   return (
     <SpinnerWheel
+      key={toolId}
       toolId={toolId}
       initialEncoded={initialEncoded}
       initialPresetQuery={safePreset}

@@ -512,13 +512,8 @@ export function WheelCanvas({
       className={`relative mx-auto aspect-square h-full w-full ${fillContainer ? "max-w-none" : "max-w-[420px]"} ${className}`}
       style={{ aspectRatio: "1 / 1" }}
     >
-      {title ? (
-        <p className="pointer-events-none absolute left-0 right-0 top-2 z-10 text-center text-sm font-bold text-foreground">
-          {title}
-        </p>
-      ) : null}
       <div
-        className="pointer-events-none absolute left-1/2 top-0 z-10 -translate-x-1/2"
+        className="pointer-events-none absolute left-1/2 top-0 z-20 -translate-x-1/2"
         aria-hidden
       >
         <svg width="36" height="48" viewBox="0 0 36 48" className="drop-shadow-lg">
@@ -537,6 +532,11 @@ export function WheelCanvas({
           <circle cx="18" cy="16" r="5" fill="#22d3ee" stroke="#0b0f17" strokeWidth="2" />
         </svg>
       </div>
+      {title ? (
+        <p className="pointer-events-none absolute left-2 right-2 top-12 z-10 text-center text-sm font-bold text-foreground">
+          {title}
+        </p>
+      ) : null}
       <canvas
         ref={canvasRef}
         width={420}

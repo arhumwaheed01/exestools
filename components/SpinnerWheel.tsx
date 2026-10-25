@@ -3,7 +3,6 @@
 import {
   useCallback,
   useEffect,
-  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -180,25 +179,19 @@ export function SpinnerWheel({
   const [hydrated, setHydrated] = useState(false);
   const [toast, setToast] = useState("");
   const [sharedMode, setSharedMode] = useState(false);
+  // Defaults only on first render (SSR + hydrate). Saved state loads in the hydrate effect.
   const [autoRemove, setAutoRemove] = useState(() => defaultAutoRemoveWinner(toolId));
   const [ready, setReady] = useState(false);
   const [showNextSteps, setShowNextSteps] = useState(false);
   const [themeChoice, setThemeChoice] = useState<ToolThemeId>("auto");
   const [spinLength, setSpinLength] = useState<SpinLength>("normal");
-  const [wheelTitle, setWheelTitle] = useState(() => {
-    if (typeof window === "undefined") return "";
-    const session = loadSession(toolId);
-    if (typeof session?.title === "string" && session.title) return session.title.slice(0, 40);
-    const last = loadLastWheel(toolId);
-    return typeof last?.title === "string" ? last.title.slice(0, 40) : "";
-  });
+  const [wheelTitle, setWheelTitle] = useState("");
   const [history, setHistory] = useState<string[]>([]);
   const [confettiFire, setConfettiFire] = useState(0);
-  const [v2Settings, setV2Settings] = useState<WheelV2Settings>(() =>
-    typeof window === "undefined"
-      ? loadWheelSettings(toolId)
-      : loadWheelSettings(toolId),
-  );
+  const [v2Settings, setV2Settings] = useState<WheelV2Settings>(() => ({
+    ...DEFAULT_WHEEL_V2_SETTINGS,
+    swatches: [...DEFAULT_WHEEL_V2_SETTINGS.swatches],
+  }));
   const [customizeOpen, setCustomizeOpen] = useState(false);
   const [shareUrlBox, setShareUrlBox] = useState<string | null>(null);
   const [recentWheels, setRecentWheels] = useState<SavedWheelFile[]>([]);
@@ -335,18 +328,6 @@ export function SpinnerWheel({
   wheelTitleRef.current = wheelTitle;
   autoRemoveRef.current = autoRemove;
 
-  // Restore Remove winner before first paint so the checkbox never flashes the tool default.
-  useLayoutEffect(() => {
-    if (autoRemoveTouchedRef.current) return;
-    const session = loadSession(toolId);
-    const next =
-      typeof session?.autoRemove === "boolean"
-        ? session.autoRemove
-        : defaultAutoRemoveWinner(toolId);
-    autoRemoveRef.current = next;
-    setAutoRemove(next);
-  }, [toolId]);
-
   // Client navigations reuse this component; block writes until the new toolId hydrates.
   if (hydratedToolIdRef.current !== null && hydratedToolIdRef.current !== toolId) {
     allowSaveRef.current = false;
@@ -426,6 +407,7 @@ export function SpinnerWheel({
     allowSaveRef.current = false;
     hydratedToolIdRef.current = null;
     setHydrated(false);
+    setReady(false);
     autoRemoveTouchedRef.current = false;
 
     setThemeChoice(loadToolTheme(toolId));
@@ -1191,8 +1173,9 @@ export function SpinnerWheel({
   if (wheelFirst) {
     return (
       <div
-        className="max-w-full space-y-2 overflow-x-hidden"
+        className={`max-w-full space-y-2 overflow-x-hidden ${hydrated ? "" : "invisible"}`}
         data-tool-theme={resolvedTheme}
+        aria-busy={!hydrated}
         style={{
           ...rootStyle,
           ...(v2Settings.pageGradient
@@ -1329,9 +1312,9 @@ export function SpinnerWheel({
             hasCenterImage={Boolean(wheelImages.center)}
           />
         </div>
-        {/* Fixed stage height — leave room for site header + H1 + two toolbar rows at 1280×720. */}
+        {/* Fixed stage height — site header + H1/byline/intro + two toolbar rows at 1280×720. */}
         <div
-          className="relative order-1 flex w-full min-w-0 max-w-full flex-col gap-2 overflow-hidden rounded-3xl lg:order-2 lg:h-[calc(100dvh-20.5rem)] lg:max-h-[calc(100dvh-20.5rem)] lg:min-h-[16rem] lg:flex-row lg:items-stretch lg:gap-0"
+          className="relative order-1 flex w-full min-w-0 max-w-full flex-col gap-2 overflow-hidden rounded-3xl lg:order-2 lg:h-[calc(100dvh-22rem)] lg:max-h-[calc(100dvh-22rem)] lg:min-h-[16rem] lg:flex-row lg:items-stretch lg:gap-0"
           ref={stageRef}
         >
           {isFullscreen ? (
@@ -1382,13 +1365,17 @@ export function SpinnerWheel({
             />
 
             {wheelTitle ? (
-              <p className="mb-0.5 shrink-0 text-center text-sm font-bold text-muted">{wheelTitle}</p>
+              <p className="relative z-20 mb-1 shrink-0 px-12 text-center text-sm font-bold text-muted">
+                {wheelTitle}
+              </p>
             ) : null}
 
             {/* Only this box feeds ResizeObserver — controls/next-steps never steal its height */}
             <div
               ref={wheelBoxRef}
-              className="relative flex min-h-0 w-full flex-1 items-center justify-center overflow-hidden pt-6"
+              className={`relative flex min-h-0 w-full flex-1 items-center justify-center overflow-hidden ${
+                wheelTitle ? "pt-2" : "pt-6"
+              }`}
             >
               {wheelPx > 0 ? (
                 <div className="relative shrink-0" style={{ width: wheelPx, height: wheelPx }}>
@@ -1542,7 +1529,12 @@ export function SpinnerWheel({
   } as const;
 
   return (
-    <div className="space-y-3" data-tool-theme={resolvedTheme} style={rootStyle}>
+    <div
+      className={`space-y-3 ${hydrated ? "" : "invisible"}`}
+      data-tool-theme={resolvedTheme}
+      aria-busy={!hydrated}
+      style={rootStyle}
+    >
       {livePreview}
       {sharedBanner}
 
@@ -1571,7 +1563,9 @@ export function SpinnerWheel({
               panel={{ open: embedPanelOpen, onClose: () => setEmbedPanelOpen(false) }}
             />
             {wheelTitle ? (
-              <p className="mb-2 text-center text-sm font-bold text-muted">{wheelTitle}</p>
+              <p className="relative z-20 mb-2 px-12 text-center text-sm font-bold text-muted">
+                {wheelTitle}
+              </p>
             ) : null}
           <div className="relative mx-auto" style={wheelShellStyle}>
             <div
