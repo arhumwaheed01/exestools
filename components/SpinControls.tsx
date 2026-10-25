@@ -119,7 +119,7 @@ export function StickySpinButton({
           className={btnClass}
           aria-busy={spinning}
         >
-          {spinning ? "Spinning…" : "SPIN (Space)"}
+          {spinning ? "Spinning…" : "SPIN"}
         </button>
       </div>
 
@@ -134,7 +134,7 @@ export function StickySpinButton({
             className={btnClass}
             aria-busy={spinning}
           >
-            {spinning ? "Spinning…" : "SPIN (Space)"}
+            {spinning ? "Spinning…" : "SPIN"}
           </button>
         </div>
       ) : null}
