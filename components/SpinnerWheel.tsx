@@ -25,8 +25,24 @@ import { ToolConfetti } from "@/components/tools/Confetti";
 import { WinnerModal } from "@/components/WinnerModal";
 import { YesNoTally } from "@/components/tools/YesNoTally";
 import { WheelOverflowMenu } from "@/components/tools/WheelOverflowMenu";
+import { CustomizeDialog } from "@/components/wheel-v2/CustomizeDialog";
+import { WheelTopBar } from "@/components/wheel-v2/WheelTopBar";
 import { EmbedSnippet } from "@/components/embed/EmbedSnippet";
 import { encodeShareHash, readShareFromLocation } from "@/lib/share-codec";
+import {
+  autosaveLastWheel,
+  DEFAULT_WHEEL_V2_SETTINGS,
+  loadRecentWheels,
+  loadWheelSettings,
+  normalizeSettings,
+  pushRecentWheel,
+  saveWheelSettings,
+  settingsForShare,
+  spinMsFromSettings,
+  type SavedWheelFile,
+  type WheelV2Settings,
+} from "@/lib/wheel-v2/settings";
+import { isToolThemeId } from "@/lib/tools/theme";
 import {
   defaultChoicesForTool,
   getPresetById,
@@ -155,6 +171,20 @@ export function SpinnerWheel({
   const [wheelTitle, setWheelTitle] = useState("");
   const [history, setHistory] = useState<string[]>([]);
   const [confettiFire, setConfettiFire] = useState(0);
+  const [v2Settings, setV2Settings] = useState<WheelV2Settings>(() =>
+    typeof window === "undefined"
+      ? loadWheelSettings(toolId)
+      : loadWheelSettings(toolId),
+  );
+  const [customizeOpen, setCustomizeOpen] = useState(false);
+  const [shareUrlBox, setShareUrlBox] = useState<string | null>(null);
+  const [recentWheels, setRecentWheels] = useState<SavedWheelFile[]>([]);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [undoBundle, setUndoBundle] = useState<{
+    text: string;
+    settings: WheelV2Settings;
+    title: string;
+  } | null>(null);
   /** Yes/No page only: spin result tallies (session state, not persisted). */
   const [tally, setTally] = useState<Record<string, { label: string; count: number }>>({});
   const [panelOpen, setPanelOpen] = useState(true);
@@ -231,10 +261,17 @@ export function SpinnerWheel({
     };
   }, [wheelFirst, panelOpen]);
 
-  const resolvedTheme = resolveToolTheme(themeChoice, toolId);
+  const resolvedTheme = resolveToolTheme(
+    isToolThemeId(v2Settings.themeId) ? v2Settings.themeId : themeChoice,
+    toolId,
+  );
   const themeColors = useMemo(
-    () => Array.from({ length: 8 }, (_, i) => segColor(resolvedTheme, i)),
-    [resolvedTheme],
+    () =>
+      Array.from(
+        { length: 8 },
+        (_, i) => v2Settings.swatches[i % v2Settings.swatches.length] ?? segColor(resolvedTheme, i),
+      ),
+    [resolvedTheme, v2Settings.swatches],
   );
   const themeLabels = useMemo(
     () => Array.from({ length: 8 }, (_, i) => onSegColor(resolvedTheme, i)),
@@ -242,8 +279,12 @@ export function SpinnerWheel({
   );
 
   const { choices, duplicatesSkipped, overLimit } = useMemo(
-    () => parseChoicesWithStats(text),
-    [text],
+    () =>
+      parseChoicesWithStats(text, {
+        allowDuplicates: v2Settings.displayDuplicates,
+        max: v2Settings.maxNamesVisible,
+      }),
+    [text, v2Settings.displayDuplicates, v2Settings.maxNamesVisible],
   );
   const canSpin = choices.length >= 2 && !spinning;
 
@@ -291,8 +332,18 @@ export function SpinnerWheel({
         : null;
     const session = loadSession(toolId);
 
+    setV2Settings(loadWheelSettings(toolId));
+    setRecentWheels(loadRecentWheels(toolId));
+
     if (fromHash && fromHash.choices.length >= 1) {
       setText(choicesToText(fromHash.choices));
+      if (fromHash.extra?.settings) {
+        const sharedSettings = normalizeSettings(fromHash.extra.settings);
+        setV2Settings(sharedSettings);
+      }
+      if (typeof fromHash.extra?.title === "string") {
+        setWheelTitle(fromHash.extra.title.slice(0, 40));
+      }
       setSharedMode(true);
       allowSaveRef.current = false;
       track("share_open", { toolId, via: "hash" });
@@ -344,6 +395,30 @@ export function SpinnerWheel({
     saveSession(toolId, choices);
   }, [choices, hydrated, toolId]);
 
+  useEffect(() => {
+    if (!hydrated) return;
+    saveWheelSettings(toolId, v2Settings);
+    if (isToolThemeId(v2Settings.themeId) && v2Settings.themeId !== "auto") {
+      setThemeChoice(v2Settings.themeId);
+      saveToolTheme(toolId, v2Settings.themeId);
+    }
+  }, [v2Settings, toolId, hydrated]);
+
+  useEffect(() => {
+    if (!hydrated || !allowSaveRef.current) return;
+    autosaveLastWheel(toolId, {
+      title: wheelTitle,
+      choices,
+      settings: v2Settings,
+    });
+  }, [choices, wheelTitle, v2Settings, hydrated, toolId]);
+
+  useEffect(() => {
+    const onFs = () => setIsFullscreen(Boolean(document.fullscreenElement));
+    document.addEventListener("fullscreenchange", onFs);
+    return () => document.removeEventListener("fullscreenchange", onFs);
+  }, []);
+
   const showToast = useCallback((msg: string) => {
     setToast(msg);
     window.setTimeout(() => setToast(""), 2200);
@@ -364,7 +439,7 @@ export function SpinnerWheel({
       } else {
         sound.chime();
       }
-      setConfettiFire((n) => n + 1);
+      if (v2Settings.confetti) setConfettiFire((n) => n + 1);
       if (name) setHistory((h) => [name, ...h].slice(0, 5));
       try {
         if (navigator.vibrate && sound.enabled) navigator.vibrate(30);
@@ -387,9 +462,22 @@ export function SpinnerWheel({
       if (autoRemove && name) {
         const next = choices.filter((c) => c !== name);
         setText(choicesToText(next));
+      } else if (v2Settings.autoRemoveAfterSec > 0 && name) {
+        window.setTimeout(() => {
+          setText((prev) => {
+            const list = parseChoicesWithStats(prev, {
+              allowDuplicates: v2Settings.displayDuplicates,
+              max: v2Settings.maxNamesVisible,
+            }).choices;
+            return choicesToText(list.filter((c) => c !== name));
+          });
+          setRevealOpen(false);
+          setWinner(null);
+          setWinnerIndex(null);
+        }, v2Settings.autoRemoveAfterSec * 1000);
       }
     },
-    [choices, autoRemove, toolId, showTally, sound],
+    [choices, autoRemove, toolId, showTally, sound, v2Settings],
   );
 
   const spin = useCallback(() => {
@@ -410,7 +498,9 @@ export function SpinnerWheel({
     // Slight overshoot then settle (skipped under reduced motion)
     const overshoot = reduceMotion ? 0 : (4 + randomInt(3)) * (Math.PI / 180);
     const peak = end + overshoot;
-    const duration = spinDurationMs(spinLength, Boolean(reduceMotion));
+    const duration = wheelFirst
+      ? spinMsFromSettings(v2Settings, Boolean(reduceMotion))
+      : spinDurationMs(spinLength, Boolean(reduceMotion));
     const settleMs = reduceMotion ? 0 : 250;
     const t0 = performance.now();
 
@@ -439,7 +529,7 @@ export function SpinnerWheel({
       }
     };
     rafRef.current = requestAnimationFrame(tick);
-  }, [choices, finishSpin, reduceMotion, sound, spinLength, toolId]);
+  }, [choices, finishSpin, reduceMotion, sound, spinLength, toolId, wheelFirst, v2Settings]);
 
   spinRef.current = spin;
 
@@ -519,17 +609,94 @@ export function SpinnerWheel({
 
   const onShare = async () => {
     try {
-      const hash = encodeShareHash(choices, toolId);
+      const hash = encodeShareHash(choices, toolId, {
+        settings: settingsForShare(v2Settings),
+        title: wheelTitle || undefined,
+      });
       const url = `${window.location.origin}${cleanPathFor(toolId)}${hash}`;
-      await navigator.clipboard.writeText(url);
+      setShareUrlBox(url);
+      try {
+        await navigator.clipboard.writeText(url);
+        showToast("Share link copied.");
+      } catch {
+        showToast("Share link ready — copy from the box.");
+      }
       track("share_create", { toolId });
-      showToast("Share link copied.");
     } catch (err) {
       const msg =
         err instanceof Error && err.message === "LIST_TOO_LONG"
           ? "List too long to share via URL."
           : "List too long to share, or clipboard blocked.";
       showToast(msg);
+    }
+  };
+
+  const applySavedWheel = (file: SavedWheelFile) => {
+    setText(choicesToText(file.choices));
+    setV2Settings(normalizeSettings(file.settings));
+    setWheelTitle(file.title.slice(0, 40));
+    setRotation(0);
+    setWinner(null);
+    setWinnerIndex(null);
+    setRevealOpen(false);
+    setShowNextSteps(false);
+    allowSaveRef.current = true;
+    setSharedMode(false);
+  };
+
+  const onSaveWheelFile = () => {
+    const file: SavedWheelFile = {
+      v: 1,
+      toolId,
+      title: wheelTitle || "My wheel",
+      choices,
+      settings: v2Settings,
+      savedAt: Date.now(),
+    };
+    pushRecentWheel(toolId, file);
+    setRecentWheels(loadRecentWheels(toolId));
+    const blob = new Blob([JSON.stringify(file, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `${(wheelTitle || "wheel").replace(/[^\w\-]+/g, "-").slice(0, 40)}.json`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    showToast("Wheel saved as JSON.");
+  };
+
+  const onOpenWheelFile = async (f: File) => {
+    try {
+      const raw = JSON.parse(await f.text()) as SavedWheelFile;
+      if (raw?.v !== 1 || !Array.isArray(raw.choices)) throw new Error("bad");
+      applySavedWheel({ ...raw, settings: normalizeSettings(raw.settings) });
+      showToast("Wheel opened.");
+    } catch {
+      showToast("Could not open that JSON file.");
+    }
+  };
+
+  const onImportCsv = (raw: string) => {
+    const parts = raw
+      .split(/[\n,]+/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+    if (parts.length < 2) {
+      showToast("Need at least 2 entries to import.");
+      return;
+    }
+    setText(choicesToText(parts));
+    showToast(`Imported ${parts.length} entries.`);
+  };
+
+  const onToggleFullscreen = async () => {
+    try {
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+      } else {
+        await (stageRef.current ?? document.documentElement).requestFullscreen();
+      }
+    } catch {
+      showToast("Fullscreen blocked by the browser.");
     }
   };
 
@@ -586,7 +753,9 @@ export function SpinnerWheel({
       : undefined;
 
   const onFreshWheel = () => {
+    setUndoBundle({ text, settings: v2Settings, title: wheelTitle });
     setText(choicesToText(defaults));
+    setV2Settings(loadWheelSettings(toolId)); // keep saved prefs; list resets
     setRotation(0);
     setWinner(null);
     setWinnerIndex(null);
@@ -594,6 +763,36 @@ export function SpinnerWheel({
     setShowNextSteps(false);
     allowSaveRef.current = true;
     setSharedMode(false);
+  };
+
+  const onNewWheel = () => {
+    setUndoBundle({ text, settings: v2Settings, title: wheelTitle });
+    const themeSegs = segColors(resolveToolTheme("auto", toolId)).segs;
+    setText(choicesToText(defaults));
+    setV2Settings({
+      ...DEFAULT_WHEEL_V2_SETTINGS,
+      swatches: Array.from({ length: 6 }, (_, i) => themeSegs[i] ?? DEFAULT_WHEEL_V2_SETTINGS.swatches[i]!),
+    });
+    setWheelTitle("");
+    setRotation(0);
+    setWinner(null);
+    setWinnerIndex(null);
+    setRevealOpen(false);
+    setShowNextSteps(false);
+    allowSaveRef.current = true;
+    setSharedMode(false);
+    setToast("NEW_UNDO");
+    window.setTimeout(() => setToast((t) => (t === "NEW_UNDO" ? "" : t)), 5000);
+  };
+
+  const onUndoNew = () => {
+    if (!undoBundle) return;
+    setText(undoBundle.text);
+    setV2Settings(undoBundle.settings);
+    setWheelTitle(undoBundle.title);
+    setUndoBundle(null);
+    setToast("");
+    showToast("Undone.");
   };
 
   const sharedBanner = sharedMode ? (
@@ -631,12 +830,25 @@ export function SpinnerWheel({
   ) : null;
 
   const toastEl = toast ? (
-    <p
-      className="fixed bottom-20 left-1/2 z-40 -translate-x-1/2 rounded-full bg-accent-strong px-4 py-2 text-xs font-semibold text-slate-950 shadow-lg sm:bottom-4"
+    <div
+      className="fixed bottom-20 left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-full bg-accent-strong px-4 py-2 text-xs font-semibold text-slate-950 shadow-lg sm:bottom-4"
       role="status"
     >
-      {toast}
-    </p>
+      {toast === "NEW_UNDO" ? (
+        <>
+          <span>New wheel ready.</span>
+          <button
+            type="button"
+            onClick={onUndoNew}
+            className="rounded-full bg-slate-950/20 px-2.5 py-1 font-bold underline-offset-2 hover:underline"
+          >
+            Undo
+          </button>
+        </>
+      ) : (
+        toast
+      )}
+    </div>
   ) : null;
 
   const winnerUi =
@@ -645,7 +857,8 @@ export function SpinnerWheel({
         open={revealOpen}
         winner={winner}
         entryCount={pickedFromCount}
-        showRemoveContinue={!autoRemove}
+        showRemoveContinue={!autoRemove && v2Settings.showRemoveButton}
+        titleBarText={v2Settings.popupMessage}
         onClose={() => {
           setRevealOpen(false);
           setShowNextSteps(true);
@@ -715,12 +928,70 @@ export function SpinnerWheel({
 
   if (wheelFirst) {
     return (
-      <div className="space-y-2" data-tool-theme={resolvedTheme} style={rootStyle}>
+      <div
+        className="space-y-2"
+        data-tool-theme={resolvedTheme}
+        style={{
+          ...rootStyle,
+          ...(v2Settings.pageGradient
+            ? {
+                background: `linear-gradient(180deg, ${v2Settings.pageBg} 0%, transparent 42%)`,
+              }
+            : { backgroundColor: "transparent" }),
+        }}
+      >
         {livePreview}
         {sharedBanner}
-        {/* Fixed stage height — leave room for site header + H1 so "Add wheel" fits at 1280×720. */}
+        <WheelTopBar
+          disabled={spinning}
+          onCustomize={() => setCustomizeOpen(true)}
+          onNew={onNewWheel}
+          onSave={onSaveWheelFile}
+          onOpenFile={(f) => void onOpenWheelFile(f)}
+          recent={recentWheels}
+          onOpenRecent={applySavedWheel}
+          onShare={() => void onShare()}
+          shareUrl={shareUrlBox}
+          onClearShare={() => setShareUrlBox(null)}
+          onFullscreen={() => void onToggleFullscreen()}
+          isFullscreen={isFullscreen}
+          onImportCsv={onImportCsv}
+          onPreferences={() => setCustomizeOpen(true)}
+          faqHref="#faq"
+        />
+        <CustomizeDialog
+          open={customizeOpen}
+          value={v2Settings}
+          onCancel={() => setCustomizeOpen(false)}
+          onOk={(next) => {
+            let swatches = next.swatches;
+            if (isToolThemeId(next.themeId) && next.themeId !== "auto") {
+              const segs = segColors(next.themeId).segs;
+              swatches = Array.from({ length: 6 }, (_, i) => segs[i] ?? next.swatches[i]!);
+            } else if (next.themeId === "auto") {
+              const segs = segColors(resolveToolTheme("auto", toolId)).segs;
+              swatches = Array.from({ length: 6 }, (_, i) => segs[i] ?? next.swatches[i]!);
+            }
+            setV2Settings({ ...next, swatches });
+            setCustomizeOpen(false);
+            showToast("Settings saved.");
+          }}
+          onPreviewTick={() => {
+            sound.unlock();
+            sound.setEnabled(true);
+            sound.tick();
+          }}
+          onStopTick={() => undefined}
+          onPreviewWinner={() => {
+            sound.unlock();
+            sound.setEnabled(true);
+            sound.chime();
+          }}
+          onStopWinner={() => undefined}
+        />
+        {/* Fixed stage height — leave room for site header + H1 + top bar at 1280×720. */}
         <div
-          className="flex flex-col gap-2 lg:h-[calc(100dvh-13.5rem)] lg:max-h-[calc(100dvh-13.5rem)] lg:min-h-[18rem] lg:flex-row lg:items-stretch lg:gap-0 lg:overflow-hidden"
+          className="flex flex-col gap-2 lg:h-[calc(100dvh-15.5rem)] lg:max-h-[calc(100dvh-15.5rem)] lg:min-h-[18rem] lg:flex-row lg:items-stretch lg:gap-0 lg:overflow-hidden"
           ref={stageRef}
         >
           <div
@@ -767,7 +1038,7 @@ export function SpinnerWheel({
                     colors={themeColors}
                     labelColors={themeLabels}
                     highlightIndex={revealOpen ? winnerIndex : null}
-                    title={wheelTitle || undefined}
+                    title={v2Settings.showTitle && wheelTitle ? wheelTitle : undefined}
                     hubLabel={spinning ? "…" : ""}
                     spinPrompt={!spinning && !revealOpen && choices.length >= 2}
                     fillContainer

@@ -85,8 +85,12 @@ export type ParsedChoices = {
 
 const MAX_CHOICES = 60;
 
-/** Deduplicate first, then cap at 60 so over-limit lines aren't mislabelled as duplicates. */
-export function parseChoicesWithStats(raw: string): ParsedChoices {
+/** Deduplicate first (unless allowDuplicates), then cap so over-limit lines aren't mislabelled as duplicates. */
+export function parseChoicesWithStats(
+  raw: string,
+  opts?: { allowDuplicates?: boolean; max?: number },
+): ParsedChoices {
+  const max = Math.min(MAX_CHOICES, Math.max(2, opts?.max ?? MAX_CHOICES));
   const lines = raw
     .split(/\r?\n/)
     .map((s) => s.trim())
@@ -96,6 +100,10 @@ export function parseChoicesWithStats(raw: string): ParsedChoices {
   let duplicatesSkipped = 0;
   for (const line of lines) {
     const truncated = line.slice(0, 64);
+    if (opts?.allowDuplicates) {
+      unique.push(truncated);
+      continue;
+    }
     const key = truncated.toLocaleLowerCase();
     if (seen.has(key)) {
       duplicatesSkipped++;
@@ -104,8 +112,8 @@ export function parseChoicesWithStats(raw: string): ParsedChoices {
     seen.add(key);
     unique.push(truncated);
   }
-  const choices = unique.slice(0, MAX_CHOICES);
-  const overLimit = Math.max(0, unique.length - MAX_CHOICES);
+  const choices = unique.slice(0, max);
+  const overLimit = Math.max(0, unique.length - max);
   return { choices, duplicatesSkipped, overLimit };
 }
 

@@ -18,6 +18,7 @@ export const LASTMOD: Record<string, string> = {
   "/random-number-wheel": "2026-10-19",
   "/raffle-generator": "2026-10-21",
   "/bingo-card-generator": "2026-10-19",
+  "/wheel-gallery": "2026-10-25",
   // Trust / legal
   "/about": "2026-10-25",
   "/contact": "2026-10-19",

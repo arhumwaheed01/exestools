@@ -10,6 +10,7 @@ type Props = {
   winner: string | null;
   entryCount?: number;
   showRemoveContinue?: boolean;
+  titleBarText?: string;
   onClose: () => void;
   /** Quiet dismiss — no next-steps strip. */
   onHide: () => void;
@@ -22,6 +23,7 @@ export function WinnerModal({
   winner,
   entryCount,
   showRemoveContinue = true,
+  titleBarText = "We have a winner!",
   onClose,
   onHide,
   onSpinAgain,
@@ -89,7 +91,7 @@ export function WinnerModal({
               <div className="flex items-center justify-center gap-2 text-white">
                 <Trophy className="h-5 w-5 drop-shadow" aria-hidden />
                 <p className="text-xs font-bold uppercase tracking-[0.2em] drop-shadow">
-                  We have a winner
+                  {titleBarText}
                 </p>
               </div>
               <button
