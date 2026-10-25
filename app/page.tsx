@@ -143,18 +143,18 @@ export default function HomePage() {
   });
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-3 sm:px-6 sm:py-4">
+    <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 sm:py-4">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homeLd) }}
       />
 
-      <header className="mb-3 max-w-3xl">
-        <h1 className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl lg:text-3xl">
+      <header className="mb-2 max-w-3xl">
+        <h1 className="text-lg font-extrabold tracking-tight text-foreground sm:text-xl lg:text-2xl">
           Free spinner wheel online
         </h1>
         <PageMeta updated="2026-10-20" />
-        <p className="mt-1 line-clamp-2 text-sm leading-snug text-muted sm:line-clamp-none sm:text-base sm:leading-relaxed">
+        <p className="mt-0.5 line-clamp-2 text-sm leading-snug text-muted">
           Add one option per line, hit SPIN, and land on a fair result. It works as a multi-option
           decision wheel when you have several choices, and there&apos;s no account to create. For
           names, classrooms, prizes, yes-or-no questions and teams, try the related tools below.

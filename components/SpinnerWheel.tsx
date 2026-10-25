@@ -15,8 +15,9 @@ import { StaticWheelPreview } from "@/components/StaticWheelPreview";
 import { ChoicesEditor } from "@/components/ChoicesEditor";
 import { PresetSelector } from "@/components/PresetSelector";
 import { RelatedTools } from "@/components/RelatedTools";
-import { SpinControls } from "@/components/SpinControls";
+import { SpinControls, StickySpinButton } from "@/components/SpinControls";
 import { WheelCanvas } from "@/components/WheelCanvas";
+import { WheelSidePanel, type PanelTab } from "@/components/WheelSidePanel";
 import { HistoryRow } from "@/components/tools/HistoryRow";
 import { ResultReveal } from "@/components/tools/ResultReveal";
 import { ThemeChips } from "@/components/tools/ThemeChips";
@@ -113,19 +114,25 @@ function listSavedNote(toolId: ToolId): string {
   }
 }
 
+export type SpinnerLayout = "classic" | "wheel-first";
+
 type Props = {
   toolId: ToolId;
   /** Legacy ?c= (read-only). */
   initialEncoded?: string | null;
   /** Optional ?preset= allowlisted id. */
   initialPresetQuery?: string | null;
+  /** Wheel-first: large wheel + collapsible entries panel (home / name picker). */
+  layout?: SpinnerLayout;
 };
 
 export function SpinnerWheel({
   toolId,
   initialEncoded = null,
   initialPresetQuery = null,
+  layout = "classic",
 }: Props) {
+  const wheelFirst = layout === "wheel-first";
   const reduceMotion = useReducedMotion();
   const defaults = useMemo(() => defaultChoicesForTool(toolId), [toolId]);
   const toolPresets = useMemo(() => presetsForTool(toolId), [toolId]);
@@ -149,6 +156,9 @@ export function SpinnerWheel({
   const [confettiFire, setConfettiFire] = useState(0);
   /** Yes/No page only: spin result tallies (session state, not persisted). */
   const [tally, setTally] = useState<Record<string, { label: string; count: number }>>({});
+  const [panelOpen, setPanelOpen] = useState(true);
+  const [panelTab, setPanelTab] = useState<PanelTab>("entries");
+  const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
 
   const sound = useSound();
   const spinningRef = useRef(false);
@@ -163,6 +173,22 @@ export function SpinnerWheel({
   const stageRef = useRef<HTMLDivElement>(null);
   const stickySpinRef = useRef<HTMLButtonElement>(null);
   const entryCountAtReveal = useRef(0);
+
+  useEffect(() => {
+    if (!wheelFirst) return;
+    const mq = window.matchMedia("(max-width: 1023px)");
+    const sync = () => {
+      if (mq.matches) {
+        setPanelOpen(false);
+        setMobilePanelOpen(false);
+      } else {
+        setPanelOpen(true);
+      }
+    };
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, [wheelFirst]);
 
   const resolvedTheme = resolveToolTheme(themeChoice, toolId);
   const themeColors = useMemo(
@@ -360,15 +386,18 @@ export function SpinnerWheel({
     const onKey = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement | null;
       const tag = t?.tagName;
-      if (tag === "TEXTAREA" || tag === "INPUT" || t?.isContentEditable) return;
+      const inField = tag === "TEXTAREA" || tag === "INPUT" || Boolean(t?.isContentEditable);
       if (spinningRef.current) return;
 
-      if (e.code === "Space" || e.key === " ") {
+      // Ctrl/Cmd+Enter spins even while editing the list.
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
         e.preventDefault();
         spinRef.current();
         return;
       }
-      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+      if (inField) return;
+
+      if (e.code === "Space" || e.key === " ") {
         e.preventDefault();
         spinRef.current();
       }
@@ -386,6 +415,11 @@ export function SpinnerWheel({
   const onShuffle = () => {
     if (spinningRef.current) return;
     setText(choicesToText(shuffle(choices)));
+  };
+
+  const onSort = () => {
+    if (spinningRef.current) return;
+    setText(choicesToText([...choices].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }))));
   };
 
   const onClear = () => {
@@ -475,6 +509,301 @@ export function SpinnerWheel({
 
   const themeVars = segColors(resolvedTheme);
 
+  const homeLinks =
+    toolId === "home"
+      ? [
+          { href: "/random-name-picker", label: "Name picker" },
+          { href: "/classroom-spinner", label: "Classroom spinner" },
+          { href: "/prize-wheel", label: "Prize wheel" },
+          { href: "/yes-no-wheel", label: "Yes or no wheel" },
+          { href: "/random-team-generator", label: "Team generator" },
+          { href: "/secret-santa-generator", label: "Secret Santa" },
+          { href: "/random-number-wheel", label: "Number wheel" },
+          { href: "/raffle-generator", label: "Raffle generator" },
+          { href: "/bingo-card-generator", label: "Bingo card generator" },
+        ]
+      : undefined;
+
+  const onFreshWheel = () => {
+    setText(choicesToText(defaults));
+    setRotation(0);
+    setWinner(null);
+    setWinnerIndex(null);
+    setRevealOpen(false);
+    setShowNextSteps(false);
+    allowSaveRef.current = true;
+    setSharedMode(false);
+  };
+
+  const sharedBanner = sharedMode ? (
+    <div
+      className="flex max-h-16 flex-wrap items-center gap-2 rounded-xl border border-accent/40 bg-surface-2 px-3 py-2 text-xs text-foreground sm:text-sm"
+      role="status"
+    >
+      <p className="min-w-0 flex-1 font-semibold leading-snug">
+        You’re viewing a shared wheel. Names stay here unless you keep it.
+      </p>
+      <div className="flex flex-wrap gap-1.5">
+        <button
+          type="button"
+          onClick={keepThisWheel}
+          className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg bg-accent-strong px-3 text-xs font-bold text-slate-950 hover:bg-accent"
+        >
+          Keep this wheel
+        </button>
+        <button
+          type="button"
+          onClick={backToMyWheel}
+          className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-border bg-surface px-3 text-xs font-bold text-foreground hover:bg-border"
+        >
+          Back to my wheel
+        </button>
+        <button
+          type="button"
+          onClick={() => setSharedMode(false)}
+          className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg px-3 text-xs font-bold text-muted hover:text-foreground"
+        >
+          Dismiss
+        </button>
+      </div>
+    </div>
+  ) : null;
+
+  const toastEl = toast ? (
+    <p
+      className="fixed bottom-20 left-1/2 z-40 -translate-x-1/2 rounded-full bg-accent-strong px-4 py-2 text-xs font-semibold text-slate-950 shadow-lg sm:bottom-4"
+      role="status"
+    >
+      {toast}
+    </p>
+  ) : null;
+
+  const winnerUi =
+    toolId !== "prize-wheel" && toolId !== "yes-no-wheel" ? (
+      <WinnerModal
+        open={revealOpen}
+        winner={winner}
+        entryCount={entryCountAtReveal.current || choices.length}
+        showRemoveContinue={!autoRemove}
+        onClose={() => {
+          setRevealOpen(false);
+          setShowNextSteps(true);
+        }}
+        onSpinAgain={() => {
+          setRevealOpen(false);
+          setShowNextSteps(false);
+          spin();
+        }}
+        onRemoveWinner={onRemoveWinner}
+      />
+    ) : (
+      <ToolConfetti fire={confettiFire} colors={[...themeColors]} />
+    );
+
+  const rootStyle = {
+    "--t-accent": themeVars.accent,
+    "--t-win": themeVars.win,
+  } as CSSProperties;
+
+  const panelProps = {
+    tab: panelTab,
+    onTab: setPanelTab,
+    text,
+    entryCount: choices.length,
+    resultCount: history.length,
+    results: history,
+    onClearResults: () => setHistory([]),
+    disabled: spinning,
+    duplicatesSkipped,
+    overLimit,
+    heading: editorLabels.heading,
+    helpText: editorLabels.helpText,
+    raffleHint:
+      toolId === "random-name-picker" || toolId === "classroom-spinner" || toolId === "home",
+    savedNote,
+    onChange: onTextChange,
+    onShuffle,
+    onSort,
+    onClear,
+    onRestoreDefaults,
+    onCopy: () => void onCopy(),
+    onFreshWheel,
+    autoRemove,
+    onAutoRemove: setAutoRemove,
+    showAutoRemove: toolId !== "yes-no-wheel",
+    wheelTitle,
+    onWheelTitle: setWheelTitle,
+    themeChoice,
+    onThemeChange,
+    presets: toolPresets,
+    onPreset,
+    homeLinks,
+  };
+
+  if (wheelFirst) {
+    const wheelShellStyle = {
+      aspectRatio: "1 / 1",
+      width: "min(100%, calc(100svh - 12rem))",
+      maxHeight: "calc(100svh - 12rem)",
+    } as const;
+
+    return (
+      <div className="space-y-2" data-tool-theme={resolvedTheme} style={rootStyle}>
+        {sharedBanner}
+        <div
+          className="flex flex-col gap-2 lg:h-[calc(100svh-10.5rem)] lg:min-h-[26rem] lg:flex-row lg:items-stretch lg:gap-0"
+          ref={stageRef}
+        >
+          <div className="relative flex min-h-0 min-w-0 flex-1 flex-col items-center justify-center rounded-3xl border border-border bg-surface p-2 sm:p-3 lg:rounded-r-none lg:border-r-0">
+            <button
+              type="button"
+              onClick={() => {
+                sound.unlock();
+                sound.setEnabled(!sound.enabled);
+              }}
+              className="absolute right-3 top-3 z-30 inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-surface-2 text-accent outline-none hover:bg-border focus-visible:ring-2 focus-visible:ring-accent"
+              aria-pressed={sound.enabled}
+              aria-label={sound.enabled ? "Mute spin sound" : "Enable spin sound"}
+              title={sound.enabled ? "Mute spin sound" : "Enable spin sound"}
+            >
+              {sound.enabled ? (
+                <Volume2 className="h-4 w-4" aria-hidden />
+              ) : (
+                <VolumeX className="h-4 w-4" aria-hidden />
+              )}
+            </button>
+            {wheelTitle ? (
+              <p className="mb-1 text-center text-sm font-bold text-muted">{wheelTitle}</p>
+            ) : null}
+            <div className="relative mx-auto max-h-full" style={wheelShellStyle}>
+              <div
+                className={`absolute inset-0 transition-opacity ${ready ? "pointer-events-none opacity-0" : "opacity-100"}`}
+              >
+                <StaticWheelPreview
+                  choices={choices.length ? choices : defaults}
+                  className="!max-w-none h-full"
+                />
+              </div>
+              <div
+                className={`absolute inset-0 transition-opacity ${ready ? "opacity-100" : "opacity-0"}`}
+              >
+                <WheelCanvas
+                  choices={choices}
+                  rotation={rotation}
+                  colors={themeColors}
+                  labelColors={themeLabels}
+                  highlightIndex={revealOpen ? winnerIndex : null}
+                  title={wheelTitle || undefined}
+                  hubLabel={spinning ? "…" : "SPIN"}
+                  fillContainer
+                  className="!max-w-none h-full"
+                />
+              </div>
+              <button
+                type="button"
+                data-et-spin=""
+                onClick={spin}
+                disabled={!canSpin}
+                aria-label="Click to spin"
+                aria-busy={spinning}
+                className="absolute inset-[12%] z-20 rounded-full focus:outline-none focus-visible:ring-4 focus-visible:ring-accent/50 disabled:cursor-not-allowed"
+              />
+              {!spinning ? (
+                <p className="pointer-events-none absolute inset-x-0 bottom-[14%] z-10 text-center text-[11px] font-bold uppercase tracking-wide text-white/90 drop-shadow sm:text-xs">
+                  Click to spin
+                </p>
+              ) : null}
+            </div>
+            <div className="mt-1 flex flex-wrap items-center justify-center gap-2">
+              <div
+                role="radiogroup"
+                aria-label="Spin length"
+                className="flex flex-wrap items-center justify-center gap-1.5"
+              >
+                {(
+                  [
+                    ["short", "Short"],
+                    ["normal", "Normal"],
+                    ["long", "Long"],
+                  ] as const
+                ).map(([id, label]) => (
+                  <label
+                    key={id}
+                    className={`inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full border px-3 text-xs font-bold outline-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-accent ${
+                      spinLength === id
+                        ? "border-accent bg-accent/10 text-foreground"
+                        : "border-border text-muted hover:bg-surface-2"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="spin-length-wf"
+                      className="sr-only"
+                      checked={spinLength === id}
+                      onChange={() => setSpinLength(id)}
+                    />
+                    {label}
+                  </label>
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={() => void onShare()}
+                disabled={choices.length < 1 || spinning}
+                className="inline-flex min-h-9 items-center gap-1 rounded-lg border border-border bg-surface-2 px-2.5 text-xs font-semibold text-foreground hover:bg-border disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              >
+                <Share2 className="h-3.5 w-3.5" aria-hidden />
+                Share
+              </button>
+              <p className="hidden text-xs text-muted pointer-fine:inline lg:ml-1" aria-live="polite">
+                {status}
+                <span className="mx-1.5 text-border">·</span>
+                Ctrl+Enter
+              </p>
+            </div>
+            <div className="mt-2 w-full lg:hidden">
+              <StickySpinButton
+                canSpin={canSpin}
+                spinning={spinning}
+                onSpin={spin}
+                buttonRef={stickySpinRef}
+                anchorRef={stageRef}
+              />
+            </div>
+            {showNextSteps ? (
+              <div className="mt-2 w-full max-w-lg rounded-xl border border-border bg-surface-2 px-3 py-2">
+                <p className="text-xs font-semibold text-foreground">
+                  Spin again, or try a related spinner below.
+                </p>
+                <div className="mt-1">
+                  <RelatedTools toolId={toolId} compact heading="Next steps" />
+                </div>
+              </div>
+            ) : null}
+          </div>
+
+          <WheelSidePanel
+            open={panelOpen}
+            onToggle={() => setPanelOpen((v) => !v)}
+            {...panelProps}
+          />
+        </div>
+
+        <WheelSidePanel
+          open={mobilePanelOpen}
+          onToggle={() => setMobilePanelOpen((v) => !v)}
+          mobileSheet
+          {...panelProps}
+        />
+
+        <EmbedSnippet toolId={toolId} choices={choices} disabled={spinning} />
+
+        {toastEl}
+        {winnerUi}
+      </div>
+    );
+  }
+
   const wheelShellStyle = {
     aspectRatio: "1 / 1",
     width: sharedMode
@@ -484,49 +813,8 @@ export function SpinnerWheel({
   } as const;
 
   return (
-    <div
-      className="space-y-3"
-      data-tool-theme={resolvedTheme}
-      style={
-        {
-          "--t-accent": themeVars.accent,
-          "--t-win": themeVars.win,
-        } as CSSProperties
-      }
-    >
-      {sharedMode ? (
-        <div
-          className="flex max-h-16 flex-wrap items-center gap-2 rounded-xl border border-accent/40 bg-surface-2 px-3 py-2 text-xs text-foreground sm:text-sm"
-          role="status"
-        >
-          <p className="min-w-0 flex-1 font-semibold leading-snug">
-            You’re viewing a shared wheel. Names stay here unless you keep it.
-          </p>
-          <div className="flex flex-wrap gap-1.5">
-            <button
-              type="button"
-              onClick={keepThisWheel}
-              className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg bg-accent-strong px-3 text-xs font-bold text-slate-950 hover:bg-accent"
-            >
-              Keep this wheel
-            </button>
-            <button
-              type="button"
-              onClick={backToMyWheel}
-              className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-border bg-surface px-3 text-xs font-bold text-foreground hover:bg-border"
-            >
-              Back to my wheel
-            </button>
-            <button
-              type="button"
-              onClick={() => setSharedMode(false)}
-              className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg px-3 text-xs font-bold text-muted hover:text-foreground"
-            >
-              Dismiss
-            </button>
-          </div>
-        </div>
-      ) : null}
+    <div className="space-y-3" data-tool-theme={resolvedTheme} style={rootStyle}>
+      {sharedBanner}
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:items-start lg:gap-6">
         <div className="flex min-w-0 flex-col gap-0">
@@ -644,16 +932,7 @@ export function SpinnerWheel({
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setText(choicesToText(defaults));
-                  setRotation(0);
-                  setWinner(null);
-                  setWinnerIndex(null);
-                  setRevealOpen(false);
-                  setShowNextSteps(false);
-                  allowSaveRef.current = true;
-                  setSharedMode(false);
-                }}
+                onClick={onFreshWheel}
                 disabled={spinning}
                 className="inline-flex min-h-11 min-w-11 items-center gap-1.5 rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm font-semibold text-foreground hover:bg-border disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
@@ -722,54 +1001,13 @@ export function SpinnerWheel({
             presets={toolPresets}
             disabled={spinning}
             onSelect={onPreset}
-            homeLinks={
-              toolId === "home"
-                ? [
-                    { href: "/random-name-picker", label: "Name picker" },
-                    { href: "/classroom-spinner", label: "Classroom spinner" },
-                    { href: "/prize-wheel", label: "Prize wheel" },
-                    { href: "/yes-no-wheel", label: "Yes or no wheel" },
-                    { href: "/random-team-generator", label: "Team generator" },
-                    { href: "/secret-santa-generator", label: "Secret Santa" },
-                    { href: "/random-number-wheel", label: "Number wheel" },
-                    { href: "/raffle-generator", label: "Raffle generator" },
-                    { href: "/bingo-card-generator", label: "Bingo card generator" },
-                  ]
-                : undefined
-            }
+            homeLinks={homeLinks}
           />
         </div>
       </div>
 
-      {toast ? (
-        <p
-          className="fixed bottom-20 left-1/2 z-40 -translate-x-1/2 rounded-full bg-accent-strong px-4 py-2 text-xs font-semibold text-slate-950 shadow-lg sm:bottom-4"
-          role="status"
-        >
-          {toast}
-        </p>
-      ) : null}
-
-      {toolId !== "prize-wheel" && toolId !== "yes-no-wheel" ? (
-        <WinnerModal
-          open={revealOpen}
-          winner={winner}
-          entryCount={entryCountAtReveal.current || choices.length}
-          showRemoveContinue={!autoRemove}
-          onClose={() => {
-            setRevealOpen(false);
-            setShowNextSteps(true);
-          }}
-          onSpinAgain={() => {
-            setRevealOpen(false);
-            setShowNextSteps(false);
-            spin();
-          }}
-          onRemoveWinner={onRemoveWinner}
-        />
-      ) : (
-        <ToolConfetti fire={confettiFire} colors={[...themeColors]} />
-      )}
+      {toastEl}
+      {winnerUi}
     </div>
   );
 }

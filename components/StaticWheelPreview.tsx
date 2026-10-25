@@ -5,6 +5,11 @@ type Props = {
   className?: string;
 };
 
+/** Stable float for SVG attrs — avoids SSR/client trig precision mismatches. */
+function f(n: number): number {
+  return Math.round(n * 1e6) / 1e6;
+}
+
 /** Server-renderable SVG wheel matching the glossy canvas look (gold rim + bulbs). */
 export function StaticWheelPreview({ choices, className = "" }: Props) {
   const n = Math.max(choices.length, 1);
@@ -22,14 +27,14 @@ export function StaticWheelPreview({ choices, className = "" }: Props) {
       : choices.map((label, i) => {
           const start = i * slice - Math.PI / 2;
           const end = start + slice;
-          const x1 = cx + r * Math.cos(start);
-          const y1 = cy + r * Math.sin(start);
-          const x2 = cx + r * Math.cos(end);
-          const y2 = cy + r * Math.sin(end);
+          const x1 = f(cx + r * Math.cos(start));
+          const y1 = f(cy + r * Math.sin(start));
+          const x2 = f(cx + r * Math.cos(end));
+          const y2 = f(cy + r * Math.sin(end));
           const large = slice > Math.PI ? 1 : 0;
           const mid = start + slice / 2;
-          const tx = cx + r * 0.62 * Math.cos(mid);
-          const ty = cy + r * 0.62 * Math.sin(mid);
+          const tx = f(cx + r * 0.62 * Math.cos(mid));
+          const ty = f(cy + r * 0.62 * Math.sin(mid));
           const fill = WHEEL_COLORS[i % WHEEL_COLORS.length]!;
           return (
             <g key={`${label}-${i}`}>
@@ -106,8 +111,8 @@ export function StaticWheelPreview({ choices, className = "" }: Props) {
         />
         {Array.from({ length: bulbs }, (_, i) => {
           const a = (i / bulbs) * Math.PI * 2 - Math.PI / 2;
-          const bx = cx + Math.cos(a) * (r + 7);
-          const by = cy + Math.sin(a) * (r + 7);
+          const bx = f(cx + Math.cos(a) * (r + 7));
+          const by = f(cy + Math.sin(a) * (r + 7));
           return (
             <circle key={i} cx={bx} cy={by} r={2.4} fill="#fef08a" stroke="#fde047" strokeWidth="1" />
           );

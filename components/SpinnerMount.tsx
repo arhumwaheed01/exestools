@@ -1,5 +1,5 @@
 import { StaticWheelPreview } from "@/components/StaticWheelPreview";
-import { SpinnerWheel } from "@/components/SpinnerWheel";
+import { SpinnerWheel, type SpinnerLayout } from "@/components/SpinnerWheel";
 import {
   ALLOWED_PRESET_QUERY,
   defaultChoicesForTool,
@@ -11,12 +11,14 @@ type Props = {
   toolId: ToolId;
   initialEncoded?: string | null;
   initialPresetQuery?: string | null;
+  layout?: SpinnerLayout;
 };
 
 export function SpinnerMount({
   toolId,
   initialEncoded = null,
   initialPresetQuery = null,
+  layout = "classic",
 }: Props) {
   const safePreset =
     initialPresetQuery && ALLOWED_PRESET_QUERY.has(initialPresetQuery)
@@ -35,6 +37,7 @@ export function SpinnerMount({
         toolId={toolId}
         initialEncoded={initialEncoded}
         initialPresetQuery={safePreset}
+        layout={layout}
       />
     </div>
   );

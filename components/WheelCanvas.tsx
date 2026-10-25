@@ -11,6 +11,10 @@ type Props = {
   labelColors?: readonly string[];
   highlightIndex?: number | null;
   title?: string;
+  /** Hub center label (default ET). Use short text — long strings clip. */
+  hubLabel?: string;
+  /** When true, size to the wrapper (no 420px cap). */
+  fillContainer?: boolean;
 };
 
 function lighten(hex: string, amount: number): string {
@@ -46,6 +50,8 @@ export function WheelCanvas({
   labelColors,
   highlightIndex = null,
   title,
+  hubLabel = "ET",
+  fillContainer = false,
 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -129,15 +135,22 @@ export function WheelCanvas({
       ctx.strokeStyle = "#e2e8f0";
       ctx.stroke();
       ctx.fillStyle = "#e2e8f0";
-      ctx.font = `800 ${Math.max(10, hubR * 0.7)}px system-ui, sans-serif`;
+      const label = hubLabel.trim() || "ET";
+      const fontPx =
+        label.length > 4
+          ? Math.max(8, hubR * 0.38)
+          : Math.max(10, hubR * 0.7);
+      ctx.font = `800 ${fontPx}px system-ui, sans-serif`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText("ET", cx, cy + 1);
+      ctx.fillText(label, cx, cy + 1);
     };
 
     const paintOffscreen = () => {
       const dpr = Math.max(1, window.devicePixelRatio || 1);
-      const css = Math.min(420, Math.max(1, wrap.clientWidth || 420));
+      const css = fillContainer
+        ? Math.max(1, wrap.clientWidth || 420)
+        : Math.min(420, Math.max(1, wrap.clientWidth || 420));
       const rimPad = 18;
       const radius = css / 2 - rimPad;
       sizeRef.current = { css, dpr, radius };
@@ -254,7 +267,7 @@ export function WheelCanvas({
     const ro = new ResizeObserver(() => paintOffscreen());
     ro.observe(wrap);
     return () => ro.disconnect();
-  }, [choices, colors, labelColors, highlightIndex]);
+  }, [choices, colors, labelColors, highlightIndex, hubLabel, fillContainer]);
 
   // Re-blit when rotation changes during a spin (disk already painted).
   useEffect(() => {
@@ -327,16 +340,19 @@ export function WheelCanvas({
     ctx.strokeStyle = "#e2e8f0";
     ctx.stroke();
     ctx.fillStyle = "#e2e8f0";
-    ctx.font = `800 ${Math.max(10, hubR * 0.7)}px system-ui, sans-serif`;
+    const label = hubLabel.trim() || "ET";
+    const fontPx =
+      label.length > 4 ? Math.max(8, hubR * 0.38) : Math.max(10, hubR * 0.7);
+    ctx.font = `800 ${fontPx}px system-ui, sans-serif`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText("ET", cx, cy + 1);
-  }, [rotation]);
+    ctx.fillText(label, cx, cy + 1);
+  }, [rotation, hubLabel]);
 
   return (
     <div
       ref={wrapRef}
-      className={`relative mx-auto aspect-square h-full w-full max-w-[420px] ${className}`}
+      className={`relative mx-auto aspect-square h-full w-full ${fillContainer ? "max-w-none" : "max-w-[420px]"} ${className}`}
       style={{ aspectRatio: "1 / 1" }}
     >
       {title ? (

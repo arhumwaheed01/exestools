@@ -122,8 +122,12 @@ export function UseCaseToolPage({
     ],
   };
 
+  const wheelFirst = toolId === "random-name-picker";
+
   return (
-    <div className="mx-auto max-w-6xl px-4 py-3 sm:px-6 sm:py-4">
+    <div
+      className={`mx-auto px-4 py-3 sm:px-6 sm:py-4 ${wheelFirst ? "max-w-7xl" : "max-w-6xl"}`}
+    >
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(appLd) }}
@@ -137,7 +141,7 @@ export function UseCaseToolPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(crumbLd) }}
       />
 
-      <nav className="mb-2 text-sm font-semibold" aria-label="Breadcrumb">
+      <nav className="mb-1.5 text-sm font-semibold" aria-label="Breadcrumb">
         <ol className="flex flex-wrap items-center gap-1.5">
           <li>
             <Link
@@ -156,12 +160,24 @@ export function UseCaseToolPage({
         </ol>
       </nav>
 
-      <header className="mb-3 max-w-3xl">
-        <h1 className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl lg:text-3xl">
+      <header className={`mb-2 max-w-3xl ${wheelFirst ? "mb-2" : "mb-3"}`}>
+        <h1
+          className={
+            wheelFirst
+              ? "text-lg font-extrabold tracking-tight text-foreground sm:text-xl lg:text-2xl"
+              : "text-xl font-extrabold tracking-tight text-foreground sm:text-2xl lg:text-3xl"
+          }
+        >
           {title}
         </h1>
         {pageUpdated ? <PageMeta updated={pageUpdated} /> : null}
-        <p className="mt-1 line-clamp-2 text-sm leading-snug text-muted sm:line-clamp-none sm:leading-relaxed">
+        <p
+          className={
+            wheelFirst
+              ? "mt-0.5 line-clamp-2 text-sm leading-snug text-muted"
+              : "mt-1 line-clamp-2 text-sm leading-snug text-muted sm:line-clamp-none sm:leading-relaxed"
+          }
+        >
           {intro}
         </p>
         {sectionHeading ? (

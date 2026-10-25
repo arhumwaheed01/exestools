@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { buildEmbedIframeSnippet, embedSlugForToolId } from "@/lib/embed";
+import { siteConfig } from "@/lib/seo";
 import { encodeShareHash } from "@/lib/share-codec";
 import type { ToolId } from "@/lib/tools";
 import { track } from "@/lib/track";
@@ -18,13 +19,12 @@ export function EmbedSnippet({ toolId, choices, disabled }: Props) {
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Always use the canonical origin so SSR and client markup match (no window.origin).
   const snippet = useMemo(() => {
     if (!slug || choices.length < 1) return null;
     try {
       const hash = encodeShareHash(choices, toolId);
-      const origin =
-        typeof window !== "undefined" ? window.location.origin : "https://www.exestools.com";
-      return buildEmbedIframeSnippet(origin, slug, hash);
+      return buildEmbedIframeSnippet(siteConfig.url, slug, hash);
     } catch {
       return null;
     }

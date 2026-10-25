@@ -1,5 +1,6 @@
 "use client";
 
+import { useId } from "react";
 import { TOOL_THEMES, type ToolThemeId } from "@/lib/tools/theme";
 
 const CHOICES: { id: ToolThemeId; label: string; swatch: string[] }[] = [
@@ -22,6 +23,8 @@ export function ThemeChips({
   value: ToolThemeId;
   onChange: (next: ToolThemeId) => void;
 }) {
+  const name = useId();
+
   return (
     <div role="radiogroup" aria-label="Theme" className="flex flex-wrap gap-2">
       {CHOICES.map((c) => {
@@ -35,15 +38,15 @@ export function ThemeChips({
           >
             <input
               type="radio"
-              name="et-theme"
+              name={name}
               className="sr-only"
               checked={checked}
               onChange={() => onChange(c.id)}
             />
             <span aria-hidden className="inline-flex h-5 items-end gap-px">
-              {c.swatch.map((color) => (
+              {c.swatch.map((color, i) => (
                 <span
-                  key={color}
+                  key={`${c.id}-${i}`}
                   className="inline-block h-4 w-1.5 rounded-sm"
                   style={{ background: color }}
                 />
