@@ -447,7 +447,7 @@ export function WheelTopBar({
         </Link>
         <BarBtn
           disabled={disabled}
-          className="hidden sm:inline-flex"
+          className="max-sm:hidden"
           onClick={() => {
             setOpenMenu(null);
             onAddWheel();
@@ -458,7 +458,7 @@ export function WheelTopBar({
         <BarBtn
           ref={examplesBtnRef}
           disabled={disabled}
-          className="hidden sm:inline-flex"
+          className="max-sm:hidden"
           onClick={() => setOpenMenu((m) => (m === "examples" ? null : "examples"))}
           aria-expanded={openMenu === "examples"}
           aria-controls={examplesId}
