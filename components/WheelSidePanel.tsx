@@ -260,11 +260,11 @@ export function WheelSidePanel({
         onExportResults={onExportResults}
         onOpenAdvanced={onOpenAdvanced}
       />
-      {/* After tabs in tab order (visually floats on the seam) */}
+      {/* Fully outside the panel so it never covers Copy / tool buttons */}
       <button
         type="button"
         onClick={onToggle}
-        className="absolute -left-5 top-1/2 z-20 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-surface text-foreground shadow-sm outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
+        className="absolute right-full top-1/2 z-20 mr-1.5 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-surface text-foreground shadow-sm outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
         aria-expanded={true}
         aria-controls="wheel-side-panel"
         title="Collapse panel"

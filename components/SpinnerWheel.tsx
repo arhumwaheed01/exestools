@@ -264,7 +264,7 @@ export function SpinnerWheel({
       const pointerPad = 28;
       // Cap height on short viewports so Spin + side-panel "Add wheel" stay on-screen.
       const vh = window.innerHeight;
-      const shortCap = vh <= 760 ? Math.floor(vh * 0.46) : Math.floor(vh * 0.58);
+      const shortCap = vh <= 760 ? Math.floor(vh * 0.4) : Math.floor(vh * 0.54);
       const next = mobile
         ? Math.max(0, Math.floor(Math.min(w - 8, vh * 0.48 - pointerPad)))
         : Math.max(0, Math.floor(Math.min(w, h - pointerPad, shortCap)));
@@ -359,7 +359,6 @@ export function SpinnerWheel({
   }, [spinning, revealOpen, reduceMotion, choices.length, hasSpunOnce]);
 
   useEffect(() => {
-    setAutoRemove(defaultAutoRemoveWinner(toolId));
     setThemeChoice(loadToolTheme(toolId));
 
     // Hydrate: #w= → ?preset= → legacy ?c= → localStorage → default
@@ -371,6 +370,11 @@ export function SpinnerWheel({
         : null;
     const session = loadSession(toolId);
 
+    setAutoRemove(
+      typeof session?.autoRemove === "boolean"
+        ? session.autoRemove
+        : defaultAutoRemoveWinner(toolId),
+    );
     setV2Settings(loadWheelSettings(toolId));
     setRecentWheels(loadRecentWheels(toolId));
     setWheelImages(loadWheelImages(toolId));
@@ -436,8 +440,8 @@ export function SpinnerWheel({
 
   useEffect(() => {
     if (!hydrated || !allowSaveRef.current) return;
-    saveSession(toolId, choices);
-  }, [choices, hydrated, toolId]);
+    saveSession(toolId, choices, { autoRemove });
+  }, [choices, autoRemove, hydrated, toolId]);
 
   useEffect(() => {
     if (!hydrated) return;
@@ -985,7 +989,7 @@ export function SpinnerWheel({
 
   const toastEl = toast ? (
     <div
-      className="fixed left-1/2 top-[max(4.5rem,env(safe-area-inset-top,0px)+3.5rem)] z-[60] flex max-w-[min(24rem,calc(100vw-1.5rem))] -translate-x-1/2 items-center gap-2 rounded-full bg-accent-strong px-4 py-2.5 text-xs font-semibold text-slate-950 shadow-lg"
+      className="fixed bottom-[calc(5.75rem+env(safe-area-inset-bottom,0px))] left-1/2 z-[60] flex max-w-[min(24rem,calc(100vw-1.5rem))] -translate-x-1/2 items-center gap-2 rounded-full bg-accent-strong px-4 py-2.5 text-xs font-semibold text-slate-950 shadow-lg lg:bottom-auto lg:top-20"
       role="status"
     >
       {toast === "NEW_UNDO" ? (
@@ -1190,8 +1194,16 @@ export function SpinnerWheel({
             recent={recentWheels}
             onOpenRecent={applySavedWheel}
             onDeleteRecent={(savedAt) => {
+              const deleted = recentWheels.find((r) => r.savedAt === savedAt);
               deleteRecentWheel(toolId, savedAt);
               setRecentWheels(loadRecentWheels(toolId));
+              if (
+                deleted &&
+                deleted.title.trim().toLocaleLowerCase() ===
+                  wheelTitle.trim().toLocaleLowerCase()
+              ) {
+                setWheelTitle("");
+              }
             }}
             defaultSaveTitle={wheelTitle || "My wheel"}
             onShare={() => void onShare()}
@@ -1206,7 +1218,7 @@ export function SpinnerWheel({
         </div>
         {/* Fixed stage height — leave room for site header + H1 + top bar at 1280×720. */}
         <div
-          className="relative order-1 flex w-full min-w-0 max-w-full flex-col gap-2 overflow-hidden rounded-3xl lg:order-2 lg:h-[calc(100dvh-16.5rem)] lg:max-h-[calc(100dvh-16.5rem)] lg:min-h-[18rem] lg:flex-row lg:items-stretch lg:gap-0"
+          className="relative order-1 flex w-full min-w-0 max-w-full flex-col gap-2 overflow-hidden rounded-3xl lg:order-2 lg:h-[calc(100dvh-18rem)] lg:max-h-[calc(100dvh-18rem)] lg:min-h-[17rem] lg:flex-row lg:items-stretch lg:gap-0"
           ref={stageRef}
         >
           {isFullscreen ? (

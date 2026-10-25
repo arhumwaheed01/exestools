@@ -128,7 +128,7 @@ export function UseCaseToolPage({
     toolId === "classroom-spinner";
 
   return (
-    <div className="mx-auto max-w-6xl overflow-x-hidden px-4 py-1.5 sm:px-6 sm:py-2.5">
+    <div className="mx-auto max-w-6xl overflow-x-hidden px-4 py-1 sm:px-6 sm:py-2">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(appLd) }}
@@ -165,7 +165,7 @@ export function UseCaseToolPage({
         <h1
           className={
             wheelFirst
-              ? "text-lg font-extrabold leading-tight tracking-tight text-foreground sm:text-xl"
+              ? "text-base font-extrabold leading-tight tracking-tight text-foreground sm:text-lg xl:text-xl"
               : "text-xl font-extrabold tracking-tight text-foreground sm:text-2xl lg:text-3xl"
           }
         >

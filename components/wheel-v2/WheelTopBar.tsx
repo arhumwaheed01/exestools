@@ -266,18 +266,14 @@ export function WheelTopBar({
                 >
                   Gallery
                 </Link>
-                <button
-                  type="button"
+                <a
+                  href="mailto:hello@exestools.com?subject=Spinner%20wheel%20feedback"
                   role="menuitem"
-                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2"
-                  onClick={() => {
-                    setOpenMenu(null);
-                    window.location.href =
-                      "mailto:hello@exestools.com?subject=Spinner%20wheel%20feedback";
-                  }}
+                  className="flex min-h-11 items-center rounded-lg px-2 text-sm font-semibold hover:bg-surface-2"
+                  onClick={() => setOpenMenu(null)}
                 >
                   Feedback
-                </button>
+                </a>
                 <a
                   href={faqHref}
                   role="menuitem"

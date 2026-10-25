@@ -441,13 +441,19 @@ export function WheelCanvas({
 
         const world = normalizeAngle(mid);
         const flip = world > Math.PI / 2 && world < (Math.PI * 3) / 2;
-        // Image entries: keep label upright near the rim, outside the image circle.
         const hasImg = Boolean(imgUrl);
+        // Keep labels inside the rim: radial half-width must fit (radius - labelR).
+        const rimPad = 8;
         const labelR = hasImg
-          ? radius * 0.86
-          : radius * (n <= 6 ? 0.64 : 0.66);
-        const maxW = Math.max(28, 2 * labelR * Math.sin(Math.min(slice, equal) / 2) * (hasImg ? 0.7 : 0.82));
-        const maxLineH = Math.max(14, radius * Math.sin(Math.min(slice, equal) / 2) * 0.65);
+          ? radius * 0.78
+          : radius * (n <= 6 ? 0.56 : 0.58);
+        const chordMax = Math.max(
+          24,
+          2 * labelR * Math.sin(Math.min(slice, equal) / 2) * 0.82,
+        );
+        const radialMax = Math.max(20, 2 * (radius - rimPad - labelR));
+        const maxW = Math.min(chordMax, radialMax);
+        const maxLineH = Math.max(14, radius * Math.sin(Math.min(slice, equal) / 2) * 0.6);
 
         octx.save();
         octx.rotate(mid);
@@ -459,18 +465,33 @@ export function WheelCanvas({
         octx.shadowBlur = 3;
 
         const raw = choices[i]!.trim();
-        let fontSize = Math.max(10, Math.min(hasImg ? 16 : 20, radius / (n > 10 ? 8.5 : 6.5)));
+        // Cap length before measuring so we never shrink to unreadable sizes.
+        const charCap = n <= 4 ? 20 : n <= 8 ? 14 : n <= 12 ? 11 : 9;
+        let display =
+          raw.length > charCap ? `${raw.slice(0, Math.max(1, charCap - 1))}…` : raw;
+
+        const shortLabel = raw.length <= 2;
+        let fontSize = shortLabel
+          ? Math.max(14, Math.min(26, radius / (n > 10 ? 5.5 : 4.5)))
+          : Math.max(12, Math.min(hasImg ? 15 : 18, radius / (n > 10 ? 7 : 5.8)));
         octx.font = `700 ${fontSize}px system-ui, sans-serif`;
-        while (fontSize > 8 && octx.measureText(raw).width > maxW) {
+        const minPx = shortLabel ? 13 : 11;
+        while (fontSize > minPx && octx.measureText(display).width > maxW) {
           fontSize -= 1;
           octx.font = `700 ${fontSize}px system-ui, sans-serif`;
         }
+        if (octx.measureText(display).width > maxW) {
+          while (display.length > 1 && octx.measureText(`${display.slice(0, -1)}…`).width > maxW) {
+            display = display.slice(0, -1);
+          }
+          display = display.endsWith("…") ? display : `${display}…`;
+        }
 
         const x = flip ? -labelR : labelR;
-        if (octx.measureText(raw).width <= maxW) {
-          octx.fillText(raw, x, 0);
+        if (octx.measureText(display).width <= maxW || display.length <= 2) {
+          octx.fillText(display, x, 0);
         } else {
-          const lines = wrapSliceLabel(octx, raw, maxW);
+          const lines = wrapSliceLabel(octx, display.replace(/…$/, ""), maxW);
           const lineH = Math.min(fontSize + 2, maxLineH / 2);
           if (lines.length === 1) {
             octx.fillText(lines[0]!, x, 0);

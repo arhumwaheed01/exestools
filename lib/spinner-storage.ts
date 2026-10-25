@@ -7,6 +7,8 @@ export type SpinnerPrefs = {
 export type SpinnerSession = {
   choices: string[];
   updatedAt: number;
+  /** Persisted "Remove winner after spin" — undefined means use tool default. */
+  autoRemove?: boolean;
 };
 
 export const PREFS_KEY = "exestools.spinner.prefs.v1";
@@ -28,16 +30,29 @@ export function loadSession(toolId: ToolId): SpinnerSession | null {
     return {
       choices: parsed.choices.filter((c) => typeof c === "string").slice(0, 60),
       updatedAt: typeof parsed.updatedAt === "number" ? parsed.updatedAt : Date.now(),
+      autoRemove: typeof parsed.autoRemove === "boolean" ? parsed.autoRemove : undefined,
     };
   } catch {
     return null;
   }
 }
 
-export function saveSession(toolId: ToolId, choices: string[]): void {
+export function saveSession(
+  toolId: ToolId,
+  choices: string[],
+  opts?: { autoRemove?: boolean },
+): void {
   if (typeof window === "undefined") return;
   try {
-    const payload: SpinnerSession = { choices: choices.slice(0, 60), updatedAt: Date.now() };
+    const prev = loadSession(toolId);
+    const payload: SpinnerSession = {
+      choices: choices.slice(0, 60),
+      updatedAt: Date.now(),
+      autoRemove:
+        typeof opts?.autoRemove === "boolean"
+          ? opts.autoRemove
+          : prev?.autoRemove,
+    };
     localStorage.setItem(choicesKey(toolId), JSON.stringify(payload));
   } catch {
     /* quota / private mode */
