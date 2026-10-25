@@ -128,9 +128,7 @@ export function UseCaseToolPage({
     toolId === "classroom-spinner";
 
   return (
-    <div
-      className={`mx-auto px-4 py-3 sm:px-6 sm:py-4 ${wheelFirst ? "max-w-7xl" : "max-w-6xl"}`}
-    >
+    <div className="mx-auto max-w-6xl px-4 py-2 sm:px-6 sm:py-3">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(appLd) }}
@@ -144,7 +142,7 @@ export function UseCaseToolPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(crumbLd) }}
       />
 
-      <nav className="mb-1.5 text-sm font-semibold" aria-label="Breadcrumb">
+      <nav className="mb-1 text-sm font-semibold" aria-label="Breadcrumb">
         <ol className="flex flex-wrap items-center gap-1.5">
           <li>
             <Link
@@ -163,11 +161,11 @@ export function UseCaseToolPage({
         </ol>
       </nav>
 
-      <header className={`mb-2 max-w-3xl ${wheelFirst ? "mb-2" : "mb-3"}`}>
+      <header className={`max-w-3xl ${wheelFirst ? "mb-1.5" : "mb-3"}`}>
         <h1
           className={
             wheelFirst
-              ? "text-lg font-extrabold tracking-tight text-foreground sm:text-xl lg:text-2xl"
+              ? "text-lg font-extrabold tracking-tight text-foreground sm:text-xl"
               : "text-xl font-extrabold tracking-tight text-foreground sm:text-2xl lg:text-3xl"
           }
         >

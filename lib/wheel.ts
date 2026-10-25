@@ -1,5 +1,7 @@
 /** Wheel geometry & spin math. Pointer is fixed at the top of the canvas. */
 
+import { randomFloat } from "@/lib/random";
+
 export const WHEEL_COLORS = [
   "#06b6d4",
   "#14b8a6",
@@ -52,7 +54,7 @@ export function targetRotationForIndex(
   const t =
     typeof sliceT === "number"
       ? Math.min(1 - edge, Math.max(edge, sliceT))
-      : edge + Math.random() * (1 - 2 * edge);
+      : edge + randomFloat() * (1 - 2 * edge);
   const within = index * slice + slice * t;
   const landing = normalizeAngle(-within);
   const current = normalizeAngle(currentRotation);

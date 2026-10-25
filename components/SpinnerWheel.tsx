@@ -204,19 +204,17 @@ export function SpinnerWheel({
     const measure = () => {
       const w = box.clientWidth;
       const h = box.clientHeight;
-      // Desktop: box has a real flex height. Mobile: height may be min-content only —
-      // fall back to a viewport-capped width so the wheel still sizes.
-      let next = Math.floor(Math.min(w, h));
-      if (h < 120) {
-        next = Math.floor(Math.min(w, window.innerHeight * 0.46));
-      }
-      next = Math.max(0, next);
+      const mobile = window.matchMedia("(max-width: 1023px)").matches;
+      // Desktop: size from the flex box only (never use a viewport fallback that
+      // ignores the reserved controls row). Mobile: width capped by ~42vh.
+      const next = mobile
+        ? Math.max(0, Math.floor(Math.min(w, window.innerHeight * 0.42)))
+        : Math.max(0, Math.floor(Math.min(w, h)));
       setWheelPx((prev) => (prev === next ? prev : next));
     };
 
     measure();
     const ro = new ResizeObserver(() => {
-      // rAF so we measure after flex reflow from panel width changes
       requestAnimationFrame(measure);
     });
     ro.observe(box);
@@ -678,17 +676,26 @@ export function SpinnerWheel({
     homeLinks,
   };
 
+  const livePreview = (
+    <p className="sr-only" aria-live="polite">
+      {choices.length > 0
+        ? `${choices.length} choices on the wheel: ${choices.join(", ")}.`
+        : "No choices on the wheel yet."}
+    </p>
+  );
+
   if (wheelFirst) {
     return (
       <div className="space-y-2" data-tool-theme={resolvedTheme} style={rootStyle}>
+        {livePreview}
         {sharedBanner}
-        {/* Desktop stage fits under header+intro; mobile stacks naturally. */}
+        {/* Fixed stage height so Share/controls stay in view; wheel sizes inside it. */}
         <div
-          className="flex flex-col gap-2 lg:h-[calc(100dvh-11rem)] lg:max-h-[calc(100dvh-11rem)] lg:min-h-[22rem] lg:flex-row lg:items-stretch lg:gap-0 lg:overflow-hidden"
+          className="flex flex-col gap-2 lg:h-[calc(100dvh-10.25rem)] lg:max-h-[calc(100dvh-10.25rem)] lg:min-h-[20rem] lg:flex-row lg:items-stretch lg:gap-0 lg:overflow-hidden"
           ref={stageRef}
         >
           <div
-            className={`relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-3xl border border-border bg-surface p-2 sm:p-3 ${
+            className={`relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-3xl border border-border bg-surface p-2 sm:p-2.5 ${
               panelOpen ? "lg:rounded-r-none lg:border-r-0" : ""
             }`}
           >
@@ -698,7 +705,7 @@ export function SpinnerWheel({
                 sound.unlock();
                 sound.setEnabled(!sound.enabled);
               }}
-              className="absolute right-3 top-3 z-30 inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-surface-2 text-accent outline-none hover:bg-border focus-visible:ring-2 focus-visible:ring-accent"
+              className="absolute right-2 top-2 z-30 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-surface-2 text-accent outline-none hover:bg-border focus-visible:ring-2 focus-visible:ring-accent"
               aria-pressed={sound.enabled}
               aria-label={sound.enabled ? "Mute spin sound" : "Enable spin sound"}
               title={sound.enabled ? "Mute spin sound" : "Enable spin sound"}
@@ -711,19 +718,16 @@ export function SpinnerWheel({
             </button>
 
             {wheelTitle ? (
-              <p className="mb-1 shrink-0 text-center text-sm font-bold text-muted">{wheelTitle}</p>
+              <p className="mb-0.5 shrink-0 text-center text-sm font-bold text-muted">{wheelTitle}</p>
             ) : null}
 
-            {/* Flex box that owns available height; wheel is min(width,height) via ResizeObserver */}
+            {/* Only this box feeds ResizeObserver — controls/next-steps never steal its height */}
             <div
               ref={wheelBoxRef}
-              className="relative flex min-h-[14rem] w-full flex-1 items-center justify-center overflow-hidden"
+              className="relative flex min-h-0 w-full flex-1 items-center justify-center overflow-hidden"
             >
               {wheelPx > 0 ? (
-                <div
-                  className="relative shrink-0"
-                  style={{ width: wheelPx, height: wheelPx }}
-                >
+                <div className="relative shrink-0" style={{ width: wheelPx, height: wheelPx }}>
                   <WheelCanvas
                     choices={choices}
                     rotation={rotation}
@@ -751,18 +755,16 @@ export function SpinnerWheel({
                   ) : null}
                 </div>
               ) : (
-                <div
-                  className="aspect-square w-full max-w-[min(100%,20rem)] bg-surface-2/40"
-                  aria-hidden
-                />
+                <div className="aspect-square h-full max-h-full w-auto bg-surface-2/30" aria-hidden />
               )}
             </div>
 
-            <div className="mt-1 flex shrink-0 flex-wrap items-center justify-center gap-2 pb-1">
+            {/* Fixed-height controls row — never collapses the wheel box */}
+            <div className="flex h-10 shrink-0 flex-wrap items-center justify-center gap-1.5">
               <div
                 role="radiogroup"
                 aria-label="Spin length"
-                className="flex flex-wrap items-center justify-center gap-1.5"
+                className="flex flex-wrap items-center justify-center gap-1"
               >
                 {(
                   [
@@ -773,7 +775,7 @@ export function SpinnerWheel({
                 ).map(([id, label]) => (
                   <label
                     key={id}
-                    className={`inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full border px-3 text-xs font-bold outline-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-accent ${
+                    className={`inline-flex h-8 cursor-pointer items-center justify-center rounded-full border px-2.5 text-xs font-bold outline-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-accent ${
                       spinLength === id
                         ? "border-accent bg-accent/10 text-foreground"
                         : "border-border text-muted hover:bg-surface-2"
@@ -794,7 +796,7 @@ export function SpinnerWheel({
                 type="button"
                 onClick={() => void onShare()}
                 disabled={choices.length < 1 || spinning}
-                className="inline-flex min-h-9 items-center gap-1 rounded-lg border border-border bg-surface-2 px-2.5 text-xs font-semibold text-foreground hover:bg-border disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                className="inline-flex h-8 items-center gap-1 rounded-lg border border-border bg-surface-2 px-2.5 text-xs font-semibold text-foreground hover:bg-border disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
                 <Share2 className="h-3.5 w-3.5" aria-hidden />
                 Share
@@ -805,28 +807,6 @@ export function SpinnerWheel({
                 Ctrl+Enter
               </p>
             </div>
-
-            {/* Mobile sticky SPIN — always docked so it stays visible */}
-            <div className="mt-1 w-full lg:hidden">
-              <StickySpinButton
-                canSpin={canSpin}
-                spinning={spinning}
-                onSpin={spin}
-                buttonRef={stickySpinRef}
-                alwaysDockMobile
-              />
-            </div>
-
-            {showNextSteps ? (
-              <div className="mt-1 w-full max-w-lg shrink-0 rounded-xl border border-border bg-surface-2 px-3 py-2">
-                <p className="text-xs font-semibold text-foreground">
-                  Spin again, or try a related spinner below.
-                </p>
-                <div className="mt-1">
-                  <RelatedTools toolId={toolId} compact heading="Next steps" />
-                </div>
-              </div>
-            ) : null}
 
             {toolId === "prize-wheel" || toolId === "yes-no-wheel" ? (
               <ResultReveal
@@ -861,7 +841,37 @@ export function SpinnerWheel({
           />
         </div>
 
-        <div className="pb-16 lg:pb-0">
+        {/* Outside the sized stage — cannot shrink the wheel */}
+        {showNextSteps ? (
+          <div className="flex flex-wrap items-center gap-2 rounded-xl border border-border bg-surface-2 px-3 py-2">
+            <p className="text-xs font-semibold text-foreground">
+              Spin again, or try a related spinner:
+            </p>
+            <div className="min-w-0 flex-1">
+              <RelatedTools toolId={toolId} compact heading="Next steps" />
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowNextSteps(false)}
+              className="shrink-0 text-xs font-semibold text-muted underline outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              Dismiss
+            </button>
+          </div>
+        ) : null}
+
+        {/* Mobile sticky SPIN + padding so the bar never covers the wheel */}
+        <div className="lg:hidden">
+          <StickySpinButton
+            canSpin={canSpin}
+            spinning={spinning}
+            onSpin={spin}
+            buttonRef={stickySpinRef}
+            alwaysDockMobile
+          />
+        </div>
+
+        <div className="pb-[4.5rem] lg:pb-0">
           <WheelSidePanel
             open={mobilePanelOpen}
             onToggle={() => setMobilePanelOpen((v) => !v)}
@@ -887,6 +897,7 @@ export function SpinnerWheel({
 
   return (
     <div className="space-y-3" data-tool-theme={resolvedTheme} style={rootStyle}>
+      {livePreview}
       {sharedBanner}
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:items-start lg:gap-6">

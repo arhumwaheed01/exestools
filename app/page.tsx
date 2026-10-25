@@ -143,14 +143,14 @@ export default function HomePage() {
   });
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 sm:py-4">
+    <div className="mx-auto max-w-6xl px-4 py-2 sm:px-6 sm:py-3">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homeLd) }}
       />
 
-      <header className="mb-2 max-w-3xl">
-        <h1 className="text-lg font-extrabold tracking-tight text-foreground sm:text-xl lg:text-2xl">
+      <header className="mb-1.5 max-w-3xl">
+        <h1 className="text-lg font-extrabold tracking-tight text-foreground sm:text-xl">
           Free spinner wheel online
         </h1>
         <PageMeta updated="2026-10-20" />

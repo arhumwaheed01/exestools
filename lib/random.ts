@@ -29,6 +29,13 @@ export function randomInt(n: number): number {
   return x % n;
 }
 
+/** Uniform float in [0, 1). Uses crypto — not Math.random. */
+export function randomFloat(): number {
+  const buf = new Uint32Array(1);
+  getCrypto().getRandomValues(buf);
+  return buf[0]! / 0x1_0000_0000;
+}
+
 /** Fisher–Yates shuffle on a copy. */
 export function shuffle<T>(items: readonly T[]): T[] {
   const a = [...items];
