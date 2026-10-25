@@ -309,7 +309,7 @@ export function WheelCanvas({
         octx.fillStyle = grad;
         octx.fill();
         // Sample the lightened mid of the gradient where the label sits.
-        octx.fillStyle = labelInkForBg(lighten(base, 30));
+        octx.fillStyle = labelInkForBg(base);
         const fontSize = Math.max(14, Math.min(22, radius * 0.12));
         octx.font = `700 ${fontSize}px system-ui, sans-serif`;
         octx.textAlign = "center";
