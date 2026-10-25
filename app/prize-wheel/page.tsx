@@ -204,10 +204,9 @@ export default function PrizeWheelPage() {
         </p>
         <p>
           Before you paste, clean up the list. Blank lines are ignored, and duplicate lines are
-          skipped (capital letters don&apos;t count as different), so if two people share a name, add
-          an initial or their handle. That also means you can&apos;t give someone a second chance by
-          pasting their name twice. If people have several entries, or you have more than 60
-          entrants, use the{" "}
+          skipped (capital letters don&apos;t count as different). That also means you can&apos;t
+          give someone a second chance by pasting their name twice. If people have several entries,
+          or you have more than 60 entrants, use the{" "}
           <Link href="/raffle-generator" className="font-semibold text-accent hover:underline">
             raffle generator with multiple entries
           </Link>{" "}

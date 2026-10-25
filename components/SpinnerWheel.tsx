@@ -119,7 +119,8 @@ function choicesEditorLabels(toolId: ToolId): { heading: string; helpText: strin
     case "yes-no-wheel":
       return {
         heading: "Your choices",
-        helpText: `One answer or option per line, ${CHOICES_HELP_BASE}`,
+        helpText:
+          "One answer or option per line, up to 60. Empty lines are ignored. Duplicate lines are skipped.",
       };
     default:
       return {
@@ -312,6 +313,40 @@ export function SpinnerWheel({
   );
   const canSpin = choices.length >= 2 && !spinning;
 
+  // Keep latest values for synchronous localStorage writes (immediate reload races).
+  const choicesRef = useRef(choices);
+  const v2SettingsRef = useRef(v2Settings);
+  const entryWeightsRef = useRef(entryWeights);
+  const wheelTitleRef = useRef(wheelTitle);
+  const autoRemoveRef = useRef(autoRemove);
+  const autoRemoveTouchedRef = useRef(false);
+  choicesRef.current = choices;
+  v2SettingsRef.current = v2Settings;
+  entryWeightsRef.current = entryWeights;
+  wheelTitleRef.current = wheelTitle;
+  autoRemoveRef.current = autoRemove;
+
+  const flushSession = (overrides?: { autoRemove?: boolean; title?: string }) => {
+    if (!allowSaveRef.current) return;
+    saveSession(toolId, choicesRef.current, {
+      autoRemove:
+        typeof overrides?.autoRemove === "boolean"
+          ? overrides.autoRemove
+          : autoRemoveRef.current,
+      title: typeof overrides?.title === "string" ? overrides.title : wheelTitleRef.current,
+    });
+  };
+
+  const flushLastWheel = (overrides?: { title?: string }) => {
+    if (!allowSaveRef.current) return;
+    autosaveLastWheel(toolId, {
+      title: typeof overrides?.title === "string" ? overrides.title : wheelTitleRef.current,
+      choices: choicesRef.current,
+      settings: v2SettingsRef.current,
+      weights: entryWeightsRef.current,
+    });
+  };
+
   const choiceWeights = useMemo(
     () => choices.map((c) => entryWeights[c.toLocaleLowerCase()] ?? 1),
     [choices, entryWeights],
@@ -371,17 +406,38 @@ export function SpinnerWheel({
         ? getPresetById(initialPresetQuery)!.choices
         : null;
     const session = loadSession(toolId);
+    const lastWheel = loadLastWheel(toolId);
 
-    setAutoRemove(
-      typeof session?.autoRemove === "boolean"
-        ? session.autoRemove
-        : defaultAutoRemoveWinner(toolId),
-    );
+    // Restore Remove winner before any autosave effect can run. Don't overwrite a
+    // toggle the user already made during this mount (fast click before hydrate).
+    if (!autoRemoveTouchedRef.current) {
+      const nextAuto =
+        typeof session?.autoRemove === "boolean"
+          ? session.autoRemove
+          : defaultAutoRemoveWinner(toolId);
+      autoRemoveRef.current = nextAuto;
+      setAutoRemove(nextAuto);
+    }
+
     setV2Settings(loadWheelSettings(toolId));
     setRecentWheels(loadRecentWheels(toolId));
     setWheelImages(loadWheelImages(toolId));
     setEntryWeights(loadEntryWeights(toolId));
-    const lastWheel = loadLastWheel(toolId);
+
+    // Restore title into the ref first so the post-hydrate autosave cannot write "".
+    const shareTitle =
+      fromHash && typeof fromHash.extra?.title === "string"
+        ? fromHash.extra.title.slice(0, 40)
+        : null;
+    const restoredTitle =
+      shareTitle ??
+      (typeof session?.title === "string" && session.title
+        ? session.title.slice(0, 40)
+        : typeof lastWheel?.title === "string" && lastWheel.title
+          ? String(lastWheel.title).slice(0, 40)
+          : "");
+    wheelTitleRef.current = restoredTitle;
+    setWheelTitle(restoredTitle);
 
     if (fromHash && fromHash.choices.length >= 1) {
       setText(choicesToText(fromHash.choices));
@@ -391,9 +447,6 @@ export function SpinnerWheel({
       }
       if (fromHash.extra?.weights) {
         setEntryWeights(normalizeWeights(fromHash.extra.weights));
-      }
-      if (typeof fromHash.extra?.title === "string") {
-        setWheelTitle(fromHash.extra.title.slice(0, 40));
       }
       setSharedMode(true);
       allowSaveRef.current = false;
@@ -431,11 +484,6 @@ export function SpinnerWheel({
       allowSaveRef.current = true;
     }
 
-    // Title lives on the last-wheel autosave (not in WheelV2Settings). Restore unless a share set it.
-    if (!(fromHash && typeof fromHash.extra?.title === "string") && lastWheel?.title) {
-      setWheelTitle(String(lastWheel.title).slice(0, 40));
-    }
-
     setHydrated(true);
     // Reveal canvas after first paint of reserved shell
     requestAnimationFrame(() => setReady(true));
@@ -448,8 +496,8 @@ export function SpinnerWheel({
 
   useEffect(() => {
     if (!hydrated || !allowSaveRef.current) return;
-    saveSession(toolId, choices, { autoRemove });
-  }, [choices, autoRemove, hydrated, toolId]);
+    flushSession();
+  }, [choices, autoRemove, wheelTitle, hydrated, toolId]);
 
   useEffect(() => {
     if (!hydrated) return;
@@ -462,12 +510,7 @@ export function SpinnerWheel({
 
   useEffect(() => {
     if (!hydrated || !allowSaveRef.current) return;
-    autosaveLastWheel(toolId, {
-      title: wheelTitle,
-      choices,
-      settings: v2Settings,
-      weights: entryWeights,
-    });
+    flushLastWheel();
   }, [choices, wheelTitle, v2Settings, entryWeights, hydrated, toolId]);
 
   useEffect(() => {
@@ -735,7 +778,7 @@ export function SpinnerWheel({
     setText(choicesToText(file.choices));
     setV2Settings(normalizeSettings(file.settings));
     setEntryWeights(normalizeWeights(file.weights));
-    setWheelTitle(file.title.slice(0, 40));
+    persistWheelTitle(file.title.slice(0, 40));
     setRotation(0);
     setWinner(null);
     setWinnerIndex(null);
@@ -883,7 +926,10 @@ export function SpinnerWheel({
     });
     setEntryWeights({});
     persistImages({ background: null, center: null, entries: {} });
+    wheelTitleRef.current = "";
     setWheelTitle("");
+    flushSession({ title: "" });
+    flushLastWheel({ title: "" });
     setRotation(0);
     setWinner(null);
     setWinnerIndex(null);
@@ -900,17 +946,26 @@ export function SpinnerWheel({
     if (!undoBundle) return;
     setText(undoBundle.text);
     setV2Settings(undoBundle.settings);
-    setWheelTitle(undoBundle.title);
+    persistWheelTitle(undoBundle.title);
     setUndoBundle(null);
     setToast("");
     showToast("Undone.");
   };
 
   const persistAutoRemove = (v: boolean) => {
+    autoRemoveTouchedRef.current = true;
+    autoRemoveRef.current = v;
     setAutoRemove(v);
-    if (allowSaveRef.current) {
-      saveSession(toolId, choices, { autoRemove: v });
-    }
+    // Write immediately (including explicit false) so a fast reload cannot miss OFF.
+    flushSession({ autoRemove: v });
+  };
+
+  const persistWheelTitle = (raw: string) => {
+    const t = raw.slice(0, 40);
+    wheelTitleRef.current = t;
+    setWheelTitle(t);
+    flushSession({ title: t });
+    flushLastWheel({ title: t });
   };
 
   const onPickImage = async (
@@ -1115,7 +1170,7 @@ export function SpinnerWheel({
           open={customizeOpen}
           value={v2Settings}
           wheelTitle={wheelTitle}
-          onWheelTitle={setWheelTitle}
+          onWheelTitle={persistWheelTitle}
           onCancel={() => setCustomizeOpen(false)}
           onOk={(next) => {
             let swatches = next.swatches;
@@ -1196,7 +1251,7 @@ export function SpinnerWheel({
                 deleted.title.trim().toLocaleLowerCase() ===
                   wheelTitle.trim().toLocaleLowerCase()
               ) {
-                setWheelTitle("");
+                persistWheelTitle("");
               }
             }}
             defaultSaveTitle={wheelTitle || "My wheel"}
@@ -1406,7 +1461,13 @@ export function SpinnerWheel({
           />
         </div>
 
-        <div className="w-full pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))] lg:pb-0">
+        <div
+          className={`w-full lg:pb-0 ${
+            mobilePanelOpen
+              ? "pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))]"
+              : "pb-1"
+          }`}
+        >
           <WheelSidePanel
             open={mobilePanelOpen}
             onToggle={() => setMobilePanelOpen((v) => !v)}

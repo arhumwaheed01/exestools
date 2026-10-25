@@ -9,6 +9,8 @@ export type SpinnerSession = {
   updatedAt: number;
   /** Persisted "Remove winner after spin" — undefined means use tool default. */
   autoRemove?: boolean;
+  /** Optional wheel title (also mirrored on last-wheel autosave). */
+  title?: string;
 };
 
 export const PREFS_KEY = "exestools.spinner.prefs.v1";
@@ -31,6 +33,7 @@ export function loadSession(toolId: ToolId): SpinnerSession | null {
       choices: parsed.choices.filter((c) => typeof c === "string").slice(0, 60),
       updatedAt: typeof parsed.updatedAt === "number" ? parsed.updatedAt : Date.now(),
       autoRemove: typeof parsed.autoRemove === "boolean" ? parsed.autoRemove : undefined,
+      title: typeof parsed.title === "string" ? parsed.title.slice(0, 40) : undefined,
     };
   } catch {
     return null;
@@ -40,18 +43,26 @@ export function loadSession(toolId: ToolId): SpinnerSession | null {
 export function saveSession(
   toolId: ToolId,
   choices: string[],
-  opts?: { autoRemove?: boolean },
+  opts?: { autoRemove?: boolean; title?: string },
 ): void {
   if (typeof window === "undefined") return;
   try {
     const prev = loadSession(toolId);
+    const title =
+      typeof opts?.title === "string"
+        ? opts.title.slice(0, 40)
+        : typeof prev?.title === "string"
+          ? prev.title
+          : undefined;
     const payload: SpinnerSession = {
       choices: choices.slice(0, 60),
       updatedAt: Date.now(),
+      // Always write a boolean when provided — including explicit false (OFF).
       autoRemove:
         typeof opts?.autoRemove === "boolean"
           ? opts.autoRemove
           : prev?.autoRemove,
+      ...(typeof title === "string" ? { title } : {}),
     };
     localStorage.setItem(choicesKey(toolId), JSON.stringify(payload));
   } catch {
