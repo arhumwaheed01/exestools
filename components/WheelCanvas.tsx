@@ -427,8 +427,8 @@ export function WheelCanvas({
         if (flip) octx.rotate(Math.PI);
         octx.textAlign = "center";
         octx.textBaseline = "middle";
-        // Ink from the lightened zone under the label (not the raw swatch).
-        octx.fillStyle = labelInkForBg(lighten(base, 30));
+        // Ink from the slice base: white on mid-tones, dark only on clearly light fills.
+        octx.fillStyle = labelInkForBg(base);
         octx.shadowColor = "rgba(0,0,0,0.45)";
         octx.shadowBlur = 3;
 
