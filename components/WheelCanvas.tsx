@@ -361,7 +361,7 @@ export function WheelCanvas({
         </p>
       ) : null}
       <div
-        className="pointer-events-none absolute left-1/2 top-[-6px] z-20 -translate-x-1/2"
+        className="pointer-events-none absolute left-1/2 top-0 z-20 -translate-x-1/2"
         aria-hidden
       >
         <svg width="36" height="48" viewBox="0 0 36 48" className="drop-shadow-lg">

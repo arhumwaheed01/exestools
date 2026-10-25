@@ -9,21 +9,22 @@ import {
   type CSSProperties,
 } from "react";
 import Link from "next/link";
-import { Link2, Share2, Volume2, VolumeX } from "lucide-react";
+import { Link2, Share2 } from "lucide-react";
 import { useReducedMotion } from "framer-motion";
 import { StaticWheelPreview } from "@/components/StaticWheelPreview";
 import { ChoicesEditor } from "@/components/ChoicesEditor";
 import { PresetSelector } from "@/components/PresetSelector";
-import { RelatedTools } from "@/components/RelatedTools";
 import { SpinControls, StickySpinButton } from "@/components/SpinControls";
 import { WheelCanvas } from "@/components/WheelCanvas";
 import { WheelSidePanel, type PanelTab } from "@/components/WheelSidePanel";
 import { HistoryRow } from "@/components/tools/HistoryRow";
+import { NextStepsModal } from "@/components/tools/NextStepsModal";
 import { ResultReveal } from "@/components/tools/ResultReveal";
 import { ThemeChips } from "@/components/tools/ThemeChips";
 import { ToolConfetti } from "@/components/tools/Confetti";
 import { WinnerModal } from "@/components/WinnerModal";
 import { YesNoTally } from "@/components/tools/YesNoTally";
+import { WheelOverflowMenu } from "@/components/tools/WheelOverflowMenu";
 import { EmbedSnippet } from "@/components/embed/EmbedSnippet";
 import { encodeShareHash, readShareFromLocation } from "@/lib/share-codec";
 import {
@@ -159,6 +160,7 @@ export function SpinnerWheel({
   const [panelOpen, setPanelOpen] = useState(true);
   const [panelTab, setPanelTab] = useState<PanelTab>("entries");
   const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
+  const [embedPanelOpen, setEmbedPanelOpen] = useState(false);
   /** Winner modal: pool size at spin start (not post-remove length). */
   const [pickedFromCount, setPickedFromCount] = useState(0);
   /** Pixel size for wheel-first layout (from ResizeObserver). */
@@ -205,11 +207,11 @@ export function SpinnerWheel({
       const w = box.clientWidth;
       const h = box.clientHeight;
       const mobile = window.matchMedia("(max-width: 1023px)").matches;
-      // Desktop: size from the flex box only (never use a viewport fallback that
-      // ignores the reserved controls row). Mobile: width capped by ~42vh.
+      // Leave room above the square so the teardrop pointer isn't clipped.
+      const pointerPad = 14;
       const next = mobile
-        ? Math.max(0, Math.floor(Math.min(w, window.innerHeight * 0.42)))
-        : Math.max(0, Math.floor(Math.min(w, h)));
+        ? Math.max(0, Math.floor(Math.min(w, window.innerHeight * 0.42 - pointerPad)))
+        : Math.max(0, Math.floor(Math.min(w, h - pointerPad)));
       setWheelPx((prev) => (prev === next ? prev : next));
     };
 
@@ -699,23 +701,23 @@ export function SpinnerWheel({
               panelOpen ? "lg:rounded-r-none lg:border-r-0" : ""
             }`}
           >
-            <button
-              type="button"
-              onClick={() => {
-                sound.unlock();
-                sound.setEnabled(!sound.enabled);
-              }}
-              className="absolute right-2 top-2 z-30 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-surface-2 text-accent outline-none hover:bg-border focus-visible:ring-2 focus-visible:ring-accent"
-              aria-pressed={sound.enabled}
-              aria-label={sound.enabled ? "Mute spin sound" : "Enable spin sound"}
-              title={sound.enabled ? "Mute spin sound" : "Enable spin sound"}
-            >
-              {sound.enabled ? (
-                <Volume2 className="h-4 w-4" aria-hidden />
-              ) : (
-                <VolumeX className="h-4 w-4" aria-hidden />
-              )}
-            </button>
+            <div className="absolute left-2 top-2 z-30">
+              <WheelOverflowMenu
+                disabled={spinning}
+                soundEnabled={sound.enabled}
+                onToggleSound={() => {
+                  sound.unlock();
+                  sound.setEnabled(!sound.enabled);
+                }}
+                onEmbed={() => setEmbedPanelOpen(true)}
+              />
+            </div>
+            <EmbedSnippet
+              toolId={toolId}
+              choices={choices}
+              disabled={spinning}
+              panel={{ open: embedPanelOpen, onClose: () => setEmbedPanelOpen(false) }}
+            />
 
             {wheelTitle ? (
               <p className="mb-0.5 shrink-0 text-center text-sm font-bold text-muted">{wheelTitle}</p>
@@ -724,7 +726,7 @@ export function SpinnerWheel({
             {/* Only this box feeds ResizeObserver — controls/next-steps never steal its height */}
             <div
               ref={wheelBoxRef}
-              className="relative flex min-h-0 w-full flex-1 items-center justify-center overflow-hidden"
+              className="relative flex min-h-0 w-full flex-1 items-center justify-center overflow-hidden pt-3"
             >
               {wheelPx > 0 ? (
                 <div className="relative shrink-0" style={{ width: wheelPx, height: wheelPx }}>
@@ -749,7 +751,7 @@ export function SpinnerWheel({
                     className="absolute inset-[12%] z-20 rounded-full focus:outline-none focus-visible:ring-4 focus-visible:ring-accent/50 disabled:cursor-not-allowed"
                   />
                   {!spinning ? (
-                    <p className="pointer-events-none absolute inset-x-0 bottom-[14%] z-10 text-center text-[11px] font-bold uppercase tracking-wide text-white/90 drop-shadow sm:text-xs">
+                    <p className="pointer-events-none absolute inset-x-0 bottom-2 z-10 text-center text-[10px] font-bold uppercase tracking-wide text-white/90 drop-shadow sm:text-[11px]">
                       Click to spin
                     </p>
                   ) : null}
@@ -841,25 +843,6 @@ export function SpinnerWheel({
           />
         </div>
 
-        {/* Outside the sized stage — cannot shrink the wheel */}
-        {showNextSteps ? (
-          <div className="flex flex-wrap items-center gap-2 rounded-xl border border-border bg-surface-2 px-3 py-2">
-            <p className="text-xs font-semibold text-foreground">
-              Spin again, or try a related spinner:
-            </p>
-            <div className="min-w-0 flex-1">
-              <RelatedTools toolId={toolId} compact heading="Next steps" />
-            </div>
-            <button
-              type="button"
-              onClick={() => setShowNextSteps(false)}
-              className="shrink-0 text-xs font-semibold text-muted underline outline-none focus-visible:ring-2 focus-visible:ring-accent"
-            >
-              Dismiss
-            </button>
-          </div>
-        ) : null}
-
         {/* Mobile sticky SPIN + padding so the bar never covers the wheel */}
         <div className="lg:hidden">
           <StickySpinButton
@@ -878,11 +861,19 @@ export function SpinnerWheel({
             mobileSheet
             {...panelProps}
           />
-          <EmbedSnippet toolId={toolId} choices={choices} disabled={spinning} />
         </div>
 
         {toastEl}
         {winnerUi}
+        <NextStepsModal
+          open={showNextSteps && !revealOpen}
+          toolId={toolId}
+          onClose={() => setShowNextSteps(false)}
+          onSpinAgain={() => {
+            setShowNextSteps(false);
+            spin();
+          }}
+        />
       </div>
     );
   }
@@ -903,23 +894,23 @@ export function SpinnerWheel({
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:items-start lg:gap-6">
         <div className="flex min-w-0 flex-col gap-0">
           <div className="relative rounded-3xl border border-border bg-surface p-3 sm:p-5" ref={stageRef}>
-            <button
-              type="button"
-              onClick={() => {
-                sound.unlock();
-                sound.setEnabled(!sound.enabled);
-              }}
-              className="absolute right-3 top-3 z-30 inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-surface-2 text-accent outline-none hover:bg-border focus-visible:ring-2 focus-visible:ring-accent"
-              aria-pressed={sound.enabled}
-              aria-label={sound.enabled ? "Mute spin sound" : "Enable spin sound"}
-              title={sound.enabled ? "Mute spin sound" : "Enable spin sound"}
-            >
-              {sound.enabled ? (
-                <Volume2 className="h-4 w-4" aria-hidden />
-              ) : (
-                <VolumeX className="h-4 w-4" aria-hidden />
-              )}
-            </button>
+            <div className="absolute left-3 top-3 z-30">
+              <WheelOverflowMenu
+                disabled={spinning}
+                soundEnabled={sound.enabled}
+                onToggleSound={() => {
+                  sound.unlock();
+                  sound.setEnabled(!sound.enabled);
+                }}
+                onEmbed={() => setEmbedPanelOpen(true)}
+              />
+            </div>
+            <EmbedSnippet
+              toolId={toolId}
+              choices={choices}
+              disabled={spinning}
+              panel={{ open: embedPanelOpen, onClose: () => setEmbedPanelOpen(false) }}
+            />
             {wheelTitle ? (
               <p className="mb-2 text-center text-sm font-bold text-muted">{wheelTitle}</p>
             ) : null}
@@ -1024,17 +1015,6 @@ export function SpinnerWheel({
                 Fresh wheel
               </button>
             </div>
-            <EmbedSnippet toolId={toolId} choices={choices} disabled={spinning} />
-            {showNextSteps ? (
-              <div className="mt-4 rounded-xl border border-border bg-surface-2 px-3 py-3">
-                <p className="text-sm font-semibold text-foreground">
-                  Spin again, or try a related spinner below.
-                </p>
-                <div className="mt-2">
-                  <RelatedTools toolId={toolId} compact heading="Next steps" />
-                </div>
-              </div>
-            ) : null}
           </div>
         </div>
 
@@ -1092,6 +1072,15 @@ export function SpinnerWheel({
 
       {toastEl}
       {winnerUi}
+      <NextStepsModal
+        open={showNextSteps && !revealOpen}
+        toolId={toolId}
+        onClose={() => setShowNextSteps(false)}
+        onSpinAgain={() => {
+          setShowNextSteps(false);
+          spin();
+        }}
+      />
     </div>
   );
 }
