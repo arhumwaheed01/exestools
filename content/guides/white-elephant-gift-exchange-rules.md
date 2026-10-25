@@ -1,11 +1,11 @@
 ---
 slug: /guides/white-elephant-gift-exchange-rules
-meta_title: "White Elephant Gift Exchange Rules: Steals, Turn Order and Variations | ExesTools"
+meta_title: "White Elephant Gift Exchange Rules: Steals, Turn Order and Variations"
 meta_description: "Clear white elephant rules you can read out at the party: how turns and steals work, steal limits, what the first player gets, fair turn order, and variations for big or small groups."
 author: Arhum Waheed
 author_url: /about#arhum
-published: 2026-10-26
-updated: 2026-10-26
+published: 2026-10-25
+updated: 2026-10-25
 related_tools: [/random-name-picker, /secret-santa-generator]
 images:
   - file: /guides/white-elephant-gift-exchange-rules/1.jpg
@@ -22,7 +22,7 @@ images:
 
 # White elephant gift exchange rules (and the variations that actually work)
 
-By Arhum Waheed · Published 2026-10-26 · Updated 2026-10-26
+By Arhum Waheed · Published 2026-10-25 · Updated 2026-10-25
 
 White elephant is the gift exchange where you can lose the thing you wanted to your aunt. That's the point. It's also why it goes sideways: half the room thinks steals are unlimited, the other half thinks you can only steal once, and somebody's uncle insists his family has always let the last person swap with anyone.
 

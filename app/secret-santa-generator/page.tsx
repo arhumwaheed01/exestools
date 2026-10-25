@@ -32,6 +32,7 @@ export const metadata: Metadata = {
 
 const FAQ_LINK_HREFS: Record<string, string> = {
   "random name picker": "/random-name-picker",
+  "white elephant gift exchange rules": "/guides/white-elephant-gift-exchange-rules",
   "Privacy Policy": "/privacy-policy",
   "How ExesTools draws names": "/about#how-it-works",
 };
@@ -98,9 +99,9 @@ const FAQ = [
   },
   {
     q: "Can I use it for White Elephant?",
-    a: "Not really. In White Elephant (also called a Yankee swap), nobody is assigned a person; players take turns picking or stealing gifts. For a random turn order, use the [random name picker] with remove-winner on.",
+    a: "Not really. In White Elephant (also called a Yankee swap), nobody is assigned a person; players take turns picking or stealing gifts. For steals, freeze limits and turn order, see [white elephant gift exchange rules]. For a random turn order, use the [random name picker] with remove-winner on.",
     aPlain:
-      "Not really. In White Elephant (also called a Yankee swap), nobody is assigned a person; players take turns picking or stealing gifts. For a random turn order, use the random name picker with remove-winner on.",
+      "Not really. In White Elephant (also called a Yankee swap), nobody is assigned a person; players take turns picking or stealing gifts. For steals, freeze limits and turn order, see white elephant gift exchange rules. For a random turn order, use the random name picker with remove-winner on.",
   },
   {
     q: "Can I stop people drawing the same person as last year?",
@@ -211,7 +212,7 @@ export default function SecretSantaGeneratorPage() {
         <h1 className="mt-4 max-w-3xl text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
           Secret Santa generator with exclusions
         </h1>
-        <PageMeta updated="2026-10-21" />
+        <PageMeta updated="2026-10-25" />
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           Draw names online for Secret Santa—remotely or in the same room. Add everyone&apos;s name,
           mark any couples who shouldn&apos;t draw each other, and press Draw names. Each person gets
@@ -230,6 +231,13 @@ export default function SecretSantaGeneratorPage() {
             className="font-semibold text-accent hover:underline"
           >
             week-by-week office plan
+          </Link>
+          . Prefer a steal-style pile game? Read{" "}
+          <Link
+            href="/guides/white-elephant-gift-exchange-rules"
+            className="font-semibold text-accent hover:underline"
+          >
+            white elephant gift exchange rules
           </Link>
           .
         </p>
@@ -399,7 +407,15 @@ export default function SecretSantaGeneratorPage() {
               >
                 bingo card generator
               </Link>{" "}
-              has a ready-made Christmas list you can edit and print.
+              has a ready-made Christmas list you can edit and print. For a steal-style exchange
+              instead of named gifts, use the{" "}
+              <Link
+                href="/guides/white-elephant-gift-exchange-rules"
+                className="font-semibold text-accent hover:underline"
+              >
+                white elephant rules
+              </Link>
+              .
             </li>
           </ul>
         </section>

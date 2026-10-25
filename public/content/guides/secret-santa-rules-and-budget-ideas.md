@@ -5,7 +5,7 @@ meta_description: "Secret Santa rules worth writing down, why hat draws fail, ha
 author: Arhum Waheed
 author_url: /about#arhum
 published: "2026-10-19"
-updated: "2026-10-21"
+updated: "2026-10-25"
 related_tools: [/secret-santa-generator, /random-name-picker, /bingo-card-generator]
 images:
   - file: /guides/secret-santa-rules-and-budget-ideas/1.jpg
@@ -17,7 +17,7 @@ images:
 
 # Secret Santa rules and gift exchange ideas
 
-By Arhum Waheed · Published 2026-10-19 · Updated 2026-10-21
+By Arhum Waheed · Published 2026-10-19 · Updated 2026-10-25
 
 A Secret Santa goes wrong in predictable ways. Someone draws their own partner. Someone spends four times the budget. Someone in another city ships late. The organizer redraws, and half the group still has the old result. None of that is bad luck. It comes from rules nobody wrote down.
 
@@ -116,7 +116,7 @@ ExesTools doesn't collect wish lists. Use the event note to ask people to send t
 
 **Office:** paste names from a spreadsheet and send links as direct messages. Make taking part clearly optional, and nobody should have to explain why they opt out. **Classrooms:** no student accounts are needed. For younger students, switch on Show all matches and print slips, using first names or initials. **Remote teams:** set the ship-by date at least two weeks before a video-call reveal if anyone is posting internationally.
 
-For the party itself, the [bingo card generator](/bingo-card-generator) has an editable Christmas list. For a White Elephant, nobody is assigned anyone. Use the [random name picker](/random-name-picker) with remove-winner on to set the turn order.
+For the party itself, the [bingo card generator](/bingo-card-generator) has an editable Christmas list. For a White Elephant, nobody is assigned anyone: see [white elephant gift exchange rules](/guides/white-elephant-gift-exchange-rules), and use the [random name picker](/random-name-picker) with remove-winner on to set the turn order.
 
 ## Frequently asked questions
 

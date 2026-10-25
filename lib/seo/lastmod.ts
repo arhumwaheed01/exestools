@@ -9,23 +9,23 @@
 export const LASTMOD: Record<string, string> = {
   // Homepage JSON-LD merged into one @graph (2026-10-20)
   "/": "2026-10-21",
-  "/random-name-picker": "2026-10-21",
+  "/random-name-picker": "2026-10-25",
   "/classroom-spinner": "2026-10-23",
   "/prize-wheel": "2026-10-21",
   "/yes-no-wheel": "2026-10-19",
   "/random-team-generator": "2026-10-21",
-  "/secret-santa-generator": "2026-10-21",
+  "/secret-santa-generator": "2026-10-25",
   "/random-number-wheel": "2026-10-19",
   "/raffle-generator": "2026-10-21",
   "/bingo-card-generator": "2026-10-19",
   // Trust / legal
-  "/about": "2026-10-23",
+  "/about": "2026-10-25",
   "/contact": "2026-10-19",
   "/privacy-policy": "2026-10-22",
   "/terms": "2026-10-19",
   "/dmca": "2026-10-12",
   // Guides hub
-  "/guides": "2026-10-23",
+  "/guides": "2026-10-25",
 };
 
 /** IndexNow key (also served at /{key}.txt). */

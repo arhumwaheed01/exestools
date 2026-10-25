@@ -64,7 +64,7 @@ export default function RandomNamePickerPage() {
       faqs={FAQS}
       schemaName="Random Name Picker Wheel"
       schemaDescription={META}
-      pageUpdated="2026-10-21"
+      pageUpdated="2026-10-25"
     >
       <GuideSection title="How to pick a name">
         <ol className="list-decimal space-y-2 pl-5">
@@ -124,6 +124,18 @@ export default function RandomNamePickerPage() {
             <span className="font-semibold text-foreground">Monday stand-up.</span> Spin for who
             goes first, keep Remove winner on, and spin until the wheel is empty. That&apos;s your
             order.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">White elephant turn order.</span> Same
+            trick for a gift exchange: spin until the wheel is empty and play in that order. Steal
+            limits and freeze rules are in{" "}
+            <Link
+              href="/guides/white-elephant-gift-exchange-rules"
+              className="font-semibold text-accent hover:underline"
+            >
+              white elephant gift exchange rules
+            </Link>
+            .
           </li>
           <li>
             <span className="font-semibold text-foreground">Three presenters from fourteen.</span>{" "}

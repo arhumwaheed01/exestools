@@ -15,4 +15,4 @@ Each guide is written by Arhum Waheed, who builds the tools, and checked against
 
 **For giveaways and draws:** [How to run a fair online giveaway](/guides/how-to-run-a-fair-online-giveaway) · [How random is a spinner wheel?](/guides/how-random-is-a-spinner-wheel)
 
-**For the holidays:** [Secret Santa rules and gift exchange ideas](/guides/secret-santa-rules-and-budget-ideas) · [Office Secret Santa week-by-week plan](/guides/office-secret-santa-planning-timeline)
+**For the holidays:** [Secret Santa rules and gift exchange ideas](/guides/secret-santa-rules-and-budget-ideas) · [Office Secret Santa week-by-week plan](/guides/office-secret-santa-planning-timeline) · [White elephant gift exchange rules](/guides/white-elephant-gift-exchange-rules)

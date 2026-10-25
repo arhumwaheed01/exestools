@@ -46,6 +46,8 @@ const CARD_SUMMARY: Record<string, string> = {
     "For the office organizer who got volunteered. A five-week plan for opt-ins, budgets, exclusions, private links, remote shipping and the party itself.",
   "classroom-games-with-a-spinner-wheel":
     "For teachers who want low-prep review games, warm-ups and brain breaks. Ten setups with timing, wheel lists and tips from kindergarten through about eighth grade.",
+  "white-elephant-gift-exchange-rules":
+    "For the host who needs rules everyone can hear once. Covers steals and freeze limits, what the first player gets, fair turn order, and variations for kids or big groups.",
 };
 
 export const metadata: Metadata = {
@@ -78,7 +80,7 @@ export default function GuidesHubPage() {
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
       <header className="max-w-3xl">
         <h1 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">Guides</h1>
-        <PageMeta updated="2026-10-23" />
+        <PageMeta updated="2026-10-25" />
         <div className="mt-6">
           <GuideMarkdown content={introMarkdown} />
         </div>
