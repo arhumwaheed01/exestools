@@ -124,7 +124,7 @@ export function WheelSidePanel({
         <button
           type="button"
           onClick={onToggle}
-          className="flex w-full items-center justify-between rounded-2xl border border-border bg-surface px-4 py-3 text-sm font-bold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="flex w-full scroll-mb-24 items-center justify-between rounded-2xl border border-border bg-surface px-4 py-3 text-sm font-bold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent"
           aria-expanded={open}
           aria-controls="wheel-side-panel-mobile"
         >
@@ -606,7 +606,12 @@ function AddImageMenu({
   hasCenter?: boolean;
 }) {
   const [open, setOpen] = useState(false);
-  const [pos, setPos] = useState<{ top: number; left: number; width: number } | null>(null);
+  const [pos, setPos] = useState<{
+    top: number;
+    left: number;
+    width: number;
+    maxHeight: number;
+  } | null>(null);
   const btnRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLInputElement>(null);
@@ -621,7 +626,12 @@ function AddImageMenu({
     }
     const place = () => {
       const r = btnRef.current!.getBoundingClientRect();
-      setPos(clampMenuBox(r.left, r.bottom + 4, 220));
+      setPos(
+        clampMenuBox(
+          { left: r.left, right: r.right, top: r.top, bottom: r.bottom },
+          220,
+        ),
+      );
     };
     place();
     window.addEventListener("resize", place);
@@ -659,8 +669,13 @@ function AddImageMenu({
       ? createPortal(
           <div
             ref={menuRef}
-            className="fixed z-[200] max-w-[calc(100vw-16px)] rounded-xl border border-border bg-surface p-1.5 shadow-2xl"
-            style={{ top: pos.top, left: pos.left, width: pos.width }}
+            className="fixed z-[200] max-h-[calc(100dvh-120px)] max-w-[calc(100vw-16px)] overflow-y-auto overscroll-contain rounded-xl border border-border bg-surface p-1.5 shadow-2xl"
+            style={{
+              top: pos.top,
+              left: pos.left,
+              width: pos.width,
+              maxHeight: pos.maxHeight,
+            }}
             role="menu"
           >
             {onBackground ? (

@@ -161,7 +161,7 @@ export function UseCaseToolPage({
         </ol>
       </nav>
 
-      <header className={`max-w-3xl ${wheelFirst ? "mb-1" : "mb-3"}`}>
+      <header className={`max-w-3xl ${wheelFirst ? "mb-0.5" : "mb-3"}`}>
         <h1
           className={
             wheelFirst
@@ -171,11 +171,15 @@ export function UseCaseToolPage({
         >
           {title}
         </h1>
-        {pageUpdated ? <PageMeta updated={pageUpdated} /> : null}
+        {pageUpdated ? (
+          <div className={wheelFirst ? "hidden xl:block" : undefined}>
+            <PageMeta updated={pageUpdated} />
+          </div>
+        ) : null}
         <p
           className={
             wheelFirst
-              ? "mt-0.5 text-sm leading-snug text-muted"
+              ? "mt-0.5 line-clamp-2 text-sm leading-snug text-muted xl:line-clamp-none"
               : "mt-1 line-clamp-2 text-sm leading-snug text-muted sm:line-clamp-none sm:leading-relaxed"
           }
         >

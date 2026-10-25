@@ -283,7 +283,8 @@ export function WheelCanvas({
       const css = fillContainer
         ? Math.max(1, wrap.clientWidth || 420)
         : Math.min(420, Math.max(1, wrap.clientWidth || 420));
-      const rimPad = 18;
+      // Extra pad so rim + pointer leave room for slice labels near the top.
+      const rimPad = 22;
       const radius = css / 2 - rimPad;
       sizeRef.current = { css, dpr, radius };
 
@@ -392,9 +393,10 @@ export function WheelCanvas({
 
         const world = normalizeAngle(mid);
         const flip = world > Math.PI / 2 && world < (Math.PI * 3) / 2;
-        const labelR = radius * (n <= 6 ? 0.72 : 0.74);
-        const maxW = Math.max(28, 2 * labelR * Math.sin(Math.min(slice, equal) / 2) * 0.88);
-        const maxLineH = Math.max(14, radius * Math.sin(Math.min(slice, equal) / 2) * 0.7);
+        // Keep labels inset from the rim so text isn't clipped by the pointer / chrome.
+        const labelR = radius * (n <= 6 ? 0.64 : 0.66);
+        const maxW = Math.max(28, 2 * labelR * Math.sin(Math.min(slice, equal) / 2) * 0.82);
+        const maxLineH = Math.max(14, radius * Math.sin(Math.min(slice, equal) / 2) * 0.65);
 
         octx.save();
         octx.rotate(mid);

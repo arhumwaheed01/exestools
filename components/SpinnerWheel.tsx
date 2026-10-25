@@ -258,13 +258,13 @@ export function SpinnerWheel({
       const w = box.clientWidth;
       const h = box.clientHeight;
       const mobile = window.matchMedia("(max-width: 1023px)").matches;
-      // Leave room above the square so the teardrop pointer isn't clipped.
-      const pointerPad = 14;
+      // Leave room above the square so the teardrop pointer + top labels aren't clipped.
+      const pointerPad = 28;
       // Cap height on short viewports so Spin + side-panel "Add wheel" stay on-screen.
       const vh = window.innerHeight;
-      const shortCap = vh <= 760 ? Math.floor(vh * 0.52) : Math.floor(vh * 0.62);
+      const shortCap = vh <= 760 ? Math.floor(vh * 0.46) : Math.floor(vh * 0.58);
       const next = mobile
-        ? Math.max(0, Math.floor(Math.min(w - 8, vh * 0.55 - pointerPad)))
+        ? Math.max(0, Math.floor(Math.min(w - 8, vh * 0.48 - pointerPad)))
         : Math.max(0, Math.floor(Math.min(w, h - pointerPad, shortCap)));
       setWheelPx((prev) => (prev === next ? prev : next));
     };
@@ -1172,14 +1172,14 @@ export function SpinnerWheel({
         </div>
         {/* Fixed stage height — leave room for site header + H1 + top bar at 1280×720. */}
         <div
-          className="relative order-1 flex w-full min-w-0 max-w-full flex-col gap-2 overflow-hidden rounded-3xl lg:order-2 lg:h-[calc(100dvh-15rem)] lg:max-h-[calc(100dvh-15rem)] lg:min-h-[18rem] lg:flex-row lg:items-stretch lg:gap-0"
+          className="relative order-1 flex w-full min-w-0 max-w-full flex-col gap-2 overflow-hidden rounded-3xl lg:order-2 lg:h-[calc(100dvh-16.5rem)] lg:max-h-[calc(100dvh-16.5rem)] lg:min-h-[18rem] lg:flex-row lg:items-stretch lg:gap-0"
           ref={stageRef}
         >
           {isFullscreen ? (
             <button
               type="button"
               onClick={() => void onToggleFullscreen()}
-              className="absolute right-3 top-3 z-[80] inline-flex min-h-11 items-center gap-2 rounded-xl border border-border bg-surface px-4 text-sm font-bold text-foreground shadow-lg outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
+              className="absolute left-1/2 top-3 z-[80] inline-flex min-h-11 -translate-x-1/2 items-center gap-2 rounded-xl border border-border bg-surface px-4 text-sm font-bold text-foreground shadow-lg outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
             >
               Exit fullscreen
             </button>
@@ -1229,7 +1229,7 @@ export function SpinnerWheel({
             {/* Only this box feeds ResizeObserver — controls/next-steps never steal its height */}
             <div
               ref={wheelBoxRef}
-              className="relative flex min-h-0 w-full flex-1 items-center justify-center overflow-hidden pt-3"
+              className="relative flex min-h-0 w-full flex-1 items-center justify-center overflow-hidden pt-6"
             >
               {wheelPx > 0 ? (
                 <div className="relative shrink-0" style={{ width: wheelPx, height: wheelPx }}>
@@ -1324,7 +1324,7 @@ export function SpinnerWheel({
         </div>
         </div>
 
-        {/* Mobile sticky SPIN + padding so the bar never covers the wheel */}
+        {/* Mobile sticky SPIN — panel below keeps clearance so Entries isn't under the bar */}
         <div className="lg:hidden">
           <StickySpinButton
             canSpin={canSpin}
@@ -1335,7 +1335,7 @@ export function SpinnerWheel({
           />
         </div>
 
-        <div className="w-full pb-[5.25rem] lg:pb-0">
+        <div className="w-full pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))] lg:pb-0">
           <WheelSidePanel
             open={mobilePanelOpen}
             onToggle={() => setMobilePanelOpen((v) => !v)}

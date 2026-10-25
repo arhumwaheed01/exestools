@@ -31,7 +31,7 @@ type Props = {
   compact?: boolean;
 };
 
-type MenuPos = { top: number; left: number; width: number };
+type MenuPos = { top: number; left: number; width: number; maxHeight: number };
 
 export function WheelTopBar({
   disabled,
@@ -74,9 +74,13 @@ export function WheelTopBar({
     const place = () => {
       const r = btn.getBoundingClientRect();
       const desired = openMenu === "more" ? 224 : 256;
-      const preferredLeft =
-        openMenu === "more" ? r.right - desired : r.left;
-      setMenuPos(clampMenuBox(preferredLeft, r.bottom + 4, desired));
+      setMenuPos(
+        clampMenuBox(
+          { left: r.left, right: r.right, top: r.top, bottom: r.bottom },
+          desired,
+          { preferRightAlign: openMenu === "more" },
+        ),
+      );
     };
     place();
     window.addEventListener("resize", place);
@@ -132,11 +136,12 @@ export function WheelTopBar({
             ref={menuRef}
             id={openMenu === "open" ? openId : moreId}
             role="menu"
-            className="fixed z-[200] max-w-[calc(100vw-16px)] rounded-xl border border-border bg-surface p-1.5 shadow-2xl"
+            className="fixed z-[200] max-h-[calc(100dvh-120px)] max-w-[calc(100vw-16px)] overflow-y-auto overscroll-contain rounded-xl border border-border bg-surface p-1.5 shadow-2xl"
             style={{
               top: menuPos.top,
               left: menuPos.left,
               width: menuPos.width,
+              maxHeight: menuPos.maxHeight,
             }}
           >
             {openMenu === "open" ? (
