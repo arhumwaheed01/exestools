@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { labelInkForBg } from "@/lib/tools/contrast";
 import { normalizeAngle, WHEEL_COLORS, sliceAngle, weightedSliceAngles } from "@/lib/wheel";
 
 type Props = {
@@ -307,14 +308,29 @@ export function WheelCanvas({
         grad.addColorStop(1, darken(base, 40));
         octx.fillStyle = grad;
         octx.fill();
-        octx.fillStyle = labels?.[0] ?? "#ffffff";
-        octx.font = `700 ${Math.max(14, Math.min(22, radius * 0.12))}px system-ui, sans-serif`;
+        // Sample the lightened mid of the gradient where the label sits.
+        octx.fillStyle = labelInkForBg(lighten(base, 30));
+        const fontSize = Math.max(14, Math.min(22, radius * 0.12));
+        octx.font = `700 ${fontSize}px system-ui, sans-serif`;
         octx.textAlign = "center";
         octx.textBaseline = "middle";
-        octx.shadowColor = "rgba(0,0,0,0.4)";
+        octx.shadowColor = "rgba(0,0,0,0.45)";
         octx.shadowBlur = 3;
-        const label = choices[0]!.trim().slice(0, 28);
-        octx.fillText(label, cx, cy - radius * 0.35);
+        const raw = choices[0]!.trim();
+        const maxW = radius * 1.35;
+        let display = raw.length > 24 ? raw.slice(0, 24) : raw;
+        if (octx.measureText(display).width > maxW) {
+          while (
+            display.length > 1 &&
+            octx.measureText(`${display.slice(0, -1)}…`).width > maxW
+          ) {
+            display = display.slice(0, -1);
+          }
+        }
+        if (display.length < raw.length) {
+          display = `${display.replace(/…$/u, "")}…`;
+        }
+        octx.fillText(display, cx, cy - radius * 0.35);
         octx.shadowBlur = 0;
         blit();
         return;
@@ -411,8 +427,9 @@ export function WheelCanvas({
         if (flip) octx.rotate(Math.PI);
         octx.textAlign = "center";
         octx.textBaseline = "middle";
-        octx.fillStyle = labels?.[i % labels.length] ?? "#ffffff";
-        octx.shadowColor = "rgba(0,0,0,0.4)";
+        // Ink from the lightened zone under the label (not the raw swatch).
+        octx.fillStyle = labelInkForBg(lighten(base, 30));
+        octx.shadowColor = "rgba(0,0,0,0.45)";
         octx.shadowBlur = 3;
 
         const raw = choices[i]!.trim();

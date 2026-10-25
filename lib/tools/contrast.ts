@@ -18,11 +18,14 @@ export function contrastRatio(fgHex: string, bgHex: string): number {
   return (lighter + 0.05) / (darker + 0.05);
 }
 
-/** Pick white or near-black label ink for ≥4.5:1 on the segment fill. */
+/**
+ * Pick white or near-black label ink for a segment fill.
+ * Biased toward white — glossy/lightened wheel gradients make dark ink hard to read on mid-tones.
+ */
 export function labelInkForBg(bgHex: string): "#ffffff" | "#0f172a" {
   const white = contrastRatio("#ffffff", bgHex);
   const dark = contrastRatio("#0f172a", bgHex);
-  if (white >= 4.5) return "#ffffff";
-  if (dark >= 4.5) return "#0f172a";
+  if (white >= 3.2) return "#ffffff";
+  if (dark >= 4.5 && dark > white + 1) return "#0f172a";
   return white >= dark ? "#ffffff" : "#0f172a";
 }
