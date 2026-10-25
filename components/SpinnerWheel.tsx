@@ -3,6 +3,7 @@
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -179,13 +180,7 @@ export function SpinnerWheel({
   const [hydrated, setHydrated] = useState(false);
   const [toast, setToast] = useState("");
   const [sharedMode, setSharedMode] = useState(false);
-  const [autoRemove, setAutoRemove] = useState(() => {
-    if (typeof window === "undefined") return defaultAutoRemoveWinner(toolId);
-    const session = loadSession(toolId);
-    return typeof session?.autoRemove === "boolean"
-      ? session.autoRemove
-      : defaultAutoRemoveWinner(toolId);
-  });
+  const [autoRemove, setAutoRemove] = useState(() => defaultAutoRemoveWinner(toolId));
   const [ready, setReady] = useState(false);
   const [showNextSteps, setShowNextSteps] = useState(false);
   const [themeChoice, setThemeChoice] = useState<ToolThemeId>("auto");
@@ -339,6 +334,18 @@ export function SpinnerWheel({
   entryWeightsRef.current = entryWeights;
   wheelTitleRef.current = wheelTitle;
   autoRemoveRef.current = autoRemove;
+
+  // Restore Remove winner before first paint so the checkbox never flashes the tool default.
+  useLayoutEffect(() => {
+    if (autoRemoveTouchedRef.current) return;
+    const session = loadSession(toolId);
+    const next =
+      typeof session?.autoRemove === "boolean"
+        ? session.autoRemove
+        : defaultAutoRemoveWinner(toolId);
+    autoRemoveRef.current = next;
+    setAutoRemove(next);
+  }, [toolId]);
 
   // Client navigations reuse this component; block writes until the new toolId hydrates.
   if (hydratedToolIdRef.current !== null && hydratedToolIdRef.current !== toolId) {
@@ -666,9 +673,9 @@ export function SpinnerWheel({
       const elapsed = now - t0;
       if (elapsed < duration) {
         const t = Math.min(1, elapsed / duration);
-        const e = easeOutCubic(t);
+      const e = easeOutCubic(t);
         const next = start + (peak - start) * e;
-        setRotation(next);
+      setRotation(next);
         const seg = winnerIndexAt(next, choices.length, choiceWeights);
         if (seg !== lastSegRef.current) {
           lastSegRef.current = seg;
@@ -790,8 +797,8 @@ export function SpinnerWheel({
       const url = `${window.location.origin}${cleanPathFor(toolId)}${hash}`;
       setShareUrlBox(url);
       try {
-        await navigator.clipboard.writeText(url);
-        showToast("Share link copied.");
+      await navigator.clipboard.writeText(url);
+      showToast("Share link copied.");
       } catch {
         showToast("Share link ready — copy from the box.");
       }
@@ -1064,35 +1071,35 @@ export function SpinnerWheel({
   const sharedBanner = sharedMode ? (
     <div
       className="relative z-30 flex max-h-12 flex-wrap items-center gap-1.5 rounded-xl border border-accent/40 bg-surface-2/95 px-2.5 py-1.5 text-xs text-foreground backdrop-blur sm:text-sm"
-      role="status"
-    >
-      <p className="min-w-0 flex-1 font-semibold leading-snug">
+          role="status"
+        >
+          <p className="min-w-0 flex-1 font-semibold leading-snug">
         Shared wheel — keep it on this device, or dismiss.
-      </p>
+          </p>
       <div className="flex flex-wrap gap-1">
-        <button
-          type="button"
-          onClick={keepThisWheel}
+            <button
+              type="button"
+              onClick={keepThisWheel}
           className="inline-flex min-h-9 items-center justify-center rounded-lg bg-accent-strong px-2.5 text-xs font-bold text-slate-950 hover:bg-accent"
-        >
+            >
           Keep
-        </button>
-        <button
-          type="button"
-          onClick={backToMyWheel}
+            </button>
+            <button
+              type="button"
+              onClick={backToMyWheel}
           className="inline-flex min-h-9 items-center justify-center rounded-lg border border-border bg-surface px-2.5 text-xs font-bold text-foreground hover:bg-border"
-        >
+            >
           My wheel
-        </button>
-        <button
-          type="button"
-          onClick={() => setSharedMode(false)}
+            </button>
+            <button
+              type="button"
+              onClick={() => setSharedMode(false)}
           className="inline-flex min-h-9 items-center justify-center rounded-lg px-2.5 text-xs font-bold text-muted hover:text-foreground"
-        >
-          Dismiss
-        </button>
-      </div>
-    </div>
+            >
+              Dismiss
+            </button>
+          </div>
+        </div>
   ) : null;
 
   const toastEl = toast ? (
@@ -1335,7 +1342,7 @@ export function SpinnerWheel({
             >
               Exit fullscreen
             </button>
-          ) : null}
+      ) : null}
           <div
             className={`relative flex min-h-0 min-w-0 w-full flex-1 flex-col overflow-hidden rounded-3xl border border-border p-2 sm:p-2.5 ${
               panelOpen ? "lg:rounded-r-none lg:border-r-0" : ""
@@ -1445,31 +1452,6 @@ export function SpinnerWheel({
             >
               {status}
             </p>
-
-            {toolId === "yes-no-wheel" ? (
-              <ResultReveal
-                open={revealOpen}
-                value={winner}
-                label="Result"
-                variant="yesno"
-                showRemove={false}
-                onSpinAgain={() => {
-                  setRevealOpen(false);
-                  setShowNextSteps(false);
-                  spin();
-                }}
-                onRemove={onRemoveWinner}
-                onShare={() => void onShare()}
-                onClose={() => {
-                  setRevealOpen(false);
-                  setShowNextSteps(true);
-                }}
-                spinBtnRef={stickySpinRef}
-              />
-            ) : null}
-            {showTally ? (
-              <YesNoTally choices={choices} tally={tally} onReset={() => setTally({})} />
-            ) : null}
             </div>
           </div>
 
@@ -1480,6 +1462,34 @@ export function SpinnerWheel({
           />
         </div>
         </div>
+
+        {/* Outside the fixed stage so tally/result don't shrink the wheel (yes/no). */}
+        {toolId === "yes-no-wheel" ? (
+          <div className="w-full max-w-3xl">
+            <ResultReveal
+              open={revealOpen}
+              value={winner}
+              label="Result"
+              variant="yesno"
+              showRemove={false}
+              onSpinAgain={() => {
+                setRevealOpen(false);
+                setShowNextSteps(false);
+                spin();
+              }}
+              onRemove={onRemoveWinner}
+              onShare={() => void onShare()}
+              onClose={() => {
+                setRevealOpen(false);
+                setShowNextSteps(true);
+              }}
+              spinBtnRef={stickySpinRef}
+            />
+            {showTally ? (
+              <YesNoTally choices={choices} tally={tally} onReset={() => setTally({})} />
+            ) : null}
+          </div>
+        ) : null}
 
         {/* Mobile sticky SPIN — panel below keeps clearance so Entries isn't under the bar */}
         <div className="lg:hidden">
@@ -1563,18 +1573,18 @@ export function SpinnerWheel({
             {wheelTitle ? (
               <p className="mb-2 text-center text-sm font-bold text-muted">{wheelTitle}</p>
             ) : null}
-            <div className="relative mx-auto" style={wheelShellStyle}>
-              <div
-                className={`absolute inset-0 transition-opacity ${ready ? "pointer-events-none opacity-0" : "opacity-100"}`}
-              >
-                <StaticWheelPreview
-                  choices={choices.length ? choices : defaults}
-                  className="!max-w-none h-full"
-                />
-              </div>
-              <div
-                className={`absolute inset-0 transition-opacity ${ready ? "opacity-100" : "opacity-0"}`}
-              >
+          <div className="relative mx-auto" style={wheelShellStyle}>
+            <div
+              className={`absolute inset-0 transition-opacity ${ready ? "pointer-events-none opacity-0" : "opacity-100"}`}
+            >
+              <StaticWheelPreview
+                choices={choices.length ? choices : defaults}
+                className="!max-w-none h-full"
+              />
+            </div>
+            <div
+              className={`absolute inset-0 transition-opacity ${ready ? "opacity-100" : "opacity-0"}`}
+            >
                 <WheelCanvas
                   choices={choices}
                   rotation={rotation}
@@ -1584,8 +1594,8 @@ export function SpinnerWheel({
                   title={wheelTitle || undefined}
                   className="!max-w-none h-full"
                 />
-              </div>
             </div>
+          </div>
             {toolId === "yes-no-wheel" ? (
               <ResultReveal
                 open={revealOpen}
@@ -1612,16 +1622,16 @@ export function SpinnerWheel({
               onClear={() => setHistory([])}
               label={toolId === "classroom-spinner" ? "Picked so far" : undefined}
             />
-            <SpinControls
-              canSpin={canSpin}
-              spinning={spinning}
+          <SpinControls
+            canSpin={canSpin}
+            spinning={spinning}
               soundEnabled={sound.enabled}
-              status={status}
+            status={status}
               spinLength={spinLength}
-              onSpin={spin}
-              onReset={() => {
-                if (!spinning) setRotation(0);
-              }}
+            onSpin={spin}
+            onReset={() => {
+              if (!spinning) setRotation(0);
+            }}
               onToggleSound={() => {
                 sound.unlock();
                 sound.setEnabled(!sound.enabled);
@@ -1634,37 +1644,37 @@ export function SpinnerWheel({
               <YesNoTally choices={choices} tally={tally} onReset={() => setTally({})} />
             ) : null}
             {toolId !== "yes-no-wheel" ? (
-              <label className="mt-3 flex min-h-11 cursor-pointer items-center justify-center gap-2 text-sm text-foreground">
-                <input
-                  type="checkbox"
-                  checked={autoRemove}
+          <label className="mt-3 flex min-h-11 cursor-pointer items-center justify-center gap-2 text-sm text-foreground">
+            <input
+              type="checkbox"
+              checked={autoRemove}
                   onChange={(e) => persistAutoRemove(e.target.checked)}
-                  className="h-4 w-4 accent-cyan-500"
-                />
-                Remove winner after spin (no repeats)
-              </label>
+              className="h-4 w-4 accent-cyan-500"
+            />
+            Remove winner after spin (no repeats)
+          </label>
             ) : null}
-            <div className="mt-4 flex flex-wrap justify-center gap-2">
-              <button
-                type="button"
-                onClick={() => void onShare()}
-                disabled={choices.length < 1 || spinning}
+          <div className="mt-4 flex flex-wrap justify-center gap-2">
+            <button
+              type="button"
+              onClick={() => void onShare()}
+              disabled={choices.length < 1 || spinning}
                 className="inline-flex min-h-11 min-w-11 items-center gap-1.5 rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm font-semibold text-foreground hover:bg-border disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              >
-                <Share2 className="h-3.5 w-3.5" aria-hidden />
+            >
+              <Share2 className="h-3.5 w-3.5" aria-hidden />
                 Share
-              </button>
-              <button
-                type="button"
+            </button>
+            <button
+              type="button"
                 onClick={onFreshWheel}
-                disabled={spinning}
+              disabled={spinning}
                 className="inline-flex min-h-11 min-w-11 items-center gap-1.5 rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm font-semibold text-foreground hover:bg-border disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              >
-                <Link2 className="h-3.5 w-3.5" aria-hidden />
-                Fresh wheel
-              </button>
-            </div>
+            >
+              <Link2 className="h-3.5 w-3.5" aria-hidden />
+              Start fresh
+            </button>
           </div>
+              </div>
         </div>
 
         <div className="flex flex-col gap-4">

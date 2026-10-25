@@ -462,7 +462,7 @@ export function WheelTopBar({
                   className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
                   onClick={() => runAndClose(onAddWheel)}
                 >
-                  Add wheel
+                  Start fresh
                 </button>
                 <button
                   type="button"
@@ -686,7 +686,7 @@ export function WheelTopBar({
             onAddWheel();
           }}
         >
-          Add wheel
+          Start fresh
         </BarBtn>
         <BarBtn
           ref={examplesBtnRef}

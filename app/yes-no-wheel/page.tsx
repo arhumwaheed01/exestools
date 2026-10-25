@@ -175,7 +175,7 @@ export default function YesNoWheelPage() {
           of answers, try{" "}
           <span className="font-semibold text-foreground">Quick decide</span> (do it, wait, ask
           someone, or skip). Edit any slice under Your choices, and press{" "}
-          <span className="font-semibold text-foreground">Fresh wheel</span> to return to plain Yes
+          <span className="font-semibold text-foreground">Start fresh</span> to return to plain Yes
           and No.
         </p>
       </GuideSection>

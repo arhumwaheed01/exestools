@@ -46,7 +46,7 @@ const FAQS = [
   },
   {
     q: "How do I bring back removed names?",
-    a: "Re-paste your list to restore names. Fresh wheel loads the starter sample again.",
+    a: "Re-paste your list to restore names. Start fresh loads the starter sample again.",
   },
   {
     q: "Is it free? Is my list saved?",

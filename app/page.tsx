@@ -128,7 +128,7 @@ const HOME_FAQS = [
   },
   {
     q: "How do I bring back an option I removed?",
-    a: "Type it back in as a new line. Fresh wheel brings back the starter list, and pasting your original list restores everything at once.",
+    a: "Type it back in as a new line. Start fresh brings back the starter list, and pasting your original list restores everything at once.",
   },
 ] as const;
 
@@ -183,8 +183,8 @@ export default function HomePage() {
             </li>
             <li>
               Use the toolbar tools (Shuffle, Copy, Defaults, Clear) to manage your list. Share
-              copies a link to this wheel. New starts a fresh list; Add wheel resets the list to the
-              page default; Open and Save keep named wheels on this device.
+              copies a link to this wheel. New clears the wheel and settings; Start fresh resets the
+              list to the page default; Open and Save keep named wheels on this device.
             </li>
           </ol>
         </section>
