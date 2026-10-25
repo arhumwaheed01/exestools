@@ -241,6 +241,11 @@ export function CustomizeDialog({
                     onClick={() => set("themeId", "auto")}
                     label="Auto"
                   />
+                  <ThemeBtn
+                    active={draft.themeId === "custom"}
+                    onClick={() => set("themeId", "custom")}
+                    label="Custom"
+                  />
                   {TOOL_THEMES.slice(0, 10).map((t) => (
                     <ThemeBtn
                       key={t.id}
@@ -261,7 +266,7 @@ export function CustomizeDialog({
                         onChange={(e) => {
                           const next = [...draft.swatches];
                           next[i] = e.target.value;
-                          set("swatches", next);
+                          setDraft((d) => ({ ...d, swatches: next, themeId: "custom" }));
                         }}
                         className="h-9 w-9 cursor-pointer rounded border border-border bg-transparent"
                       />
@@ -269,6 +274,9 @@ export function CustomizeDialog({
                     </label>
                   ))}
                 </div>
+                {draft.themeId === "custom" ? (
+                  <p className="mt-1 text-[11px] font-semibold text-accent">Theme: Custom</p>
+                ) : null}
               </Field>
               <Field label="Center image size">
                 <div className="flex gap-2">

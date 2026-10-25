@@ -26,12 +26,16 @@ export function WheelGalleryClient() {
 
       <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {wheels.map((w) => {
-          let openHref = "/";
+          let hash = "";
           try {
-            openHref = `/${encodeShareHash(w.choices, "home")}`;
+            hash = encodeShareHash(w.choices, "home");
           } catch {
-            openHref = "/";
+            hash = "";
           }
+          // pathname + hash object avoids relative "/wheel-gallery:0"-style 404s
+          const openHref = hash
+            ? ({ pathname: "/", hash: hash.replace(/^#/, "") } as const)
+            : "/";
 
           return (
             <li key={w.id}>

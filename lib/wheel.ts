@@ -26,15 +26,51 @@ export function sliceAngle(count: number): number {
   return (Math.PI * 2) / Math.max(count, 1);
 }
 
+/** Per-slice angles (radians) from weights; equal weights → equal slices. */
+export function weightedSliceAngles(weights: readonly number[]): number[] {
+  const n = weights.length;
+  if (n === 0) return [];
+  const safe = weights.map((w) => Math.max(0.01, Number(w) || 0.01));
+  const total = safe.reduce((a, b) => a + b, 0);
+  return safe.map((w) => (w / total) * Math.PI * 2);
+}
+
+export function pickWeightedIndex(weights: readonly number[]): number {
+  const n = weights.length;
+  if (n <= 0) return -1;
+  const safe = weights.map((w) => Math.max(0.01, Number(w) || 0.01));
+  const total = safe.reduce((a, b) => a + b, 0);
+  let r = randomFloat() * total;
+  for (let i = 0; i < n; i++) {
+    r -= safe[i]!;
+    if (r <= 0) return i;
+  }
+  return n - 1;
+}
+
 /**
  * Segments are drawn from -PI/2 with ctx.rotate(rotation) clockwise.
  * Returns the index under the fixed top pointer.
  */
-export function winnerIndexAt(rotation: number, count: number): number {
+export function winnerIndexAt(
+  rotation: number,
+  count: number,
+  weights?: readonly number[],
+): number {
   if (count <= 0) return -1;
-  const slice = sliceAngle(count);
+  if (!weights || weights.length !== count) {
+    const slice = sliceAngle(count);
+    const normalized = normalizeAngle(-rotation);
+    return Math.floor(normalized / slice) % count;
+  }
+  const angles = weightedSliceAngles(weights);
   const normalized = normalizeAngle(-rotation);
-  return Math.floor(normalized / slice) % count;
+  let acc = 0;
+  for (let i = 0; i < count; i++) {
+    acc += angles[i]!;
+    if (normalized < acc - 1e-9) return i;
+  }
+  return count - 1;
 }
 
 /**
@@ -48,14 +84,25 @@ export function targetRotationForIndex(
   currentRotation: number,
   extraSpins = 5,
   sliceT?: number,
+  weights?: readonly number[],
 ): number {
-  const slice = sliceAngle(count);
   const edge = 0.12;
   const t =
     typeof sliceT === "number"
       ? Math.min(1 - edge, Math.max(edge, sliceT))
       : edge + randomFloat() * (1 - 2 * edge);
-  const within = index * slice + slice * t;
+
+  let within: number;
+  if (weights && weights.length === count) {
+    const angles = weightedSliceAngles(weights);
+    let start = 0;
+    for (let i = 0; i < index; i++) start += angles[i]!;
+    within = start + angles[index]! * t;
+  } else {
+    const slice = sliceAngle(count);
+    within = index * slice + slice * t;
+  }
+
   const landing = normalizeAngle(-within);
   const current = normalizeAngle(currentRotation);
   let delta = normalizeAngle(landing - current);

@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { normalizeAngle, WHEEL_COLORS, sliceAngle } from "@/lib/wheel";
+import { useEffect, useRef, useState } from "react";
+import { normalizeAngle, WHEEL_COLORS, sliceAngle, weightedSliceAngles } from "@/lib/wheel";
 
 type Props = {
   choices: string[];
@@ -17,6 +17,10 @@ type Props = {
   fillContainer?: boolean;
   /** Curved idle CTA: "Click To Spin" (top) + "Ctrl+Enter" (bottom). */
   spinPrompt?: boolean;
+  /** Optional per-slice weights (same length as choices). */
+  weights?: readonly number[];
+  /** Optional per-slice image data URLs (same length as choices). */
+  sliceImages?: readonly (string | null | undefined)[];
 };
 
 function lighten(hex: string, amount: number): string {
@@ -225,6 +229,8 @@ export function WheelCanvas({
   hubLabel = "ET",
   fillContainer = false,
   spinPrompt = false,
+  weights,
+  sliceImages,
 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -236,6 +242,8 @@ export function WheelCanvas({
   hubLabelRef.current = hubLabel;
   const spinPromptRef = useRef(spinPrompt);
   spinPromptRef.current = spinPrompt;
+  const imageCacheRef = useRef<Map<string, HTMLImageElement>>(new Map());
+  const [, setImgTick] = useState(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -311,13 +319,18 @@ export function WheelCanvas({
         return;
       }
 
-      const slice = sliceAngle(n);
+      const useWeights = Boolean(weights && weights.length === n);
+      const angles = useWeights ? weightedSliceAngles(weights!) : null;
+      const equal = sliceAngle(n);
       octx.save();
       octx.translate(cx, cy);
 
+      let angleCursor = -Math.PI / 2;
       for (let i = 0; i < n; i++) {
-        const start = i * slice - Math.PI / 2;
+        const slice = angles ? angles[i]! : equal;
+        const start = angleCursor;
         const end = start + slice;
+        angleCursor = end;
         const base = palette[i % palette.length]!;
         const mid = start + slice / 2;
 
@@ -353,11 +366,35 @@ export function WheelCanvas({
           octx.stroke();
         }
 
+        const imgUrl = sliceImages?.[i];
+        if (imgUrl) {
+          let img = imageCacheRef.current.get(imgUrl);
+          if (!img) {
+            img = new Image();
+            img.decoding = "async";
+            img.onload = () => setImgTick((t) => t + 1);
+            img.src = imgUrl;
+            imageCacheRef.current.set(imgUrl, img);
+          }
+          if (img.complete && img.naturalWidth > 0) {
+            const imgSize = Math.min(radius * 0.28, Math.max(18, radius * Math.sin(slice / 2) * 0.9));
+            const imgR = radius * (n <= 6 ? 0.48 : 0.55);
+            octx.save();
+            octx.rotate(mid);
+            octx.beginPath();
+            octx.arc(imgR, 0, imgSize / 2, 0, Math.PI * 2);
+            octx.closePath();
+            octx.clip();
+            octx.drawImage(img, imgR - imgSize / 2, -imgSize / 2, imgSize, imgSize);
+            octx.restore();
+          }
+        }
+
         const world = normalizeAngle(mid);
         const flip = world > Math.PI / 2 && world < (Math.PI * 3) / 2;
-        const labelR = radius * (n <= 6 ? 0.58 : 0.66);
-        const maxW = Math.max(32, 2 * labelR * Math.sin(slice / 2) * 0.88);
-        const maxLineH = Math.max(14, radius * Math.sin(slice / 2) * 0.7);
+        const labelR = radius * (n <= 6 ? 0.72 : 0.74);
+        const maxW = Math.max(28, 2 * labelR * Math.sin(Math.min(slice, equal) / 2) * 0.88);
+        const maxLineH = Math.max(14, radius * Math.sin(Math.min(slice, equal) / 2) * 0.7);
 
         octx.save();
         octx.rotate(mid);
@@ -380,7 +417,6 @@ export function WheelCanvas({
         if (octx.measureText(raw).width <= maxW) {
           octx.fillText(raw, x, 0);
         } else {
-          // Two-line wrap (prefer word break; else split long tokens).
           const lines = wrapSliceLabel(octx, raw, maxW);
           const lineH = Math.min(fontSize + 2, maxLineH / 2);
           if (lines.length === 1) {
@@ -400,7 +436,7 @@ export function WheelCanvas({
     const ro = new ResizeObserver(() => paintOffscreen());
     ro.observe(wrap);
     return () => ro.disconnect();
-  }, [choices, colors, labelColors, highlightIndex, hubLabel, fillContainer, spinPrompt]);
+  }, [choices, colors, labelColors, highlightIndex, hubLabel, fillContainer, spinPrompt, weights, sliceImages]);
 
   // Re-blit when rotation changes during a spin (disk already painted).
   useEffect(() => {
@@ -438,12 +474,12 @@ export function WheelCanvas({
       style={{ aspectRatio: "1 / 1" }}
     >
       {title ? (
-        <p className="pointer-events-none absolute left-0 right-0 top-2 z-20 text-center text-sm font-bold text-foreground">
+        <p className="pointer-events-none absolute left-0 right-0 top-2 z-10 text-center text-sm font-bold text-foreground">
           {title}
         </p>
       ) : null}
       <div
-        className="pointer-events-none absolute left-1/2 top-0 z-20 -translate-x-1/2"
+        className="pointer-events-none absolute left-1/2 top-0 z-10 -translate-x-1/2"
         aria-hidden
       >
         <svg width="36" height="48" viewBox="0 0 36 48" className="drop-shadow-lg">

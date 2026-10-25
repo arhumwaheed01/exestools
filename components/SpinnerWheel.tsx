@@ -78,6 +78,7 @@ import {
   choicesToText,
   easeOutCubic,
   parseChoicesWithStats,
+  pickWeightedIndex,
   targetRotationForIndex,
   winnerIndexAt,
 } from "@/lib/wheel";
@@ -198,6 +199,9 @@ export function SpinnerWheel({
     entries: {},
   });
   const [advancedOpen, setAdvancedOpen] = useState(false);
+  /** Per-entry weights keyed by lowercased name — never rewrite the text list. */
+  const [entryWeights, setEntryWeights] = useState<Record<string, number>>({});
+  const [hasSpunOnce, setHasSpunOnce] = useState(false);
   /** Yes/No page only: spin result tallies (session state, not persisted). */
   const [tally, setTally] = useState<Record<string, { label: string; count: number }>>({});
   const [panelOpen, setPanelOpen] = useState(true);
@@ -255,9 +259,9 @@ export function SpinnerWheel({
       const pointerPad = 14;
       // Cap height on short viewports so Spin + side-panel "Add wheel" stay on-screen.
       const vh = window.innerHeight;
-      const shortCap = vh <= 760 ? Math.floor(vh * 0.5) : Math.floor(vh * 0.62);
+      const shortCap = vh <= 760 ? Math.floor(vh * 0.46) : Math.floor(vh * 0.58);
       const next = mobile
-        ? Math.max(0, Math.floor(Math.min(w, vh * 0.4 - pointerPad)))
+        ? Math.max(0, Math.floor(Math.min(w - 8, vh * 0.52 - pointerPad)))
         : Math.max(0, Math.floor(Math.min(w, h - pointerPad, shortCap)));
       setWheelPx((prev) => (prev === next ? prev : next));
     };
@@ -300,6 +304,16 @@ export function SpinnerWheel({
     [text, v2Settings.displayDuplicates, v2Settings.maxNamesVisible],
   );
   const canSpin = choices.length >= 2 && !spinning;
+
+  const choiceWeights = useMemo(
+    () => choices.map((c) => entryWeights[c.toLocaleLowerCase()] ?? 1),
+    [choices, entryWeights],
+  );
+
+  const sliceImages = useMemo(
+    () => choices.map((c) => wheelImages.entries[c.toLocaleLowerCase()] ?? null),
+    [choices, wheelImages.entries],
+  );
 
   const status = useMemo(() => {
     if (spinning) return "Spinning… good luck!";
@@ -441,13 +455,15 @@ export function SpinnerWheel({
   const finishSpin = useCallback(
     (finalRotation: number) => {
       setRotation(finalRotation);
-      const idx = winnerIndexAt(finalRotation, choices.length);
+      const weights = choices.map((c) => entryWeights[c.toLocaleLowerCase()] ?? 1);
+      const idx = winnerIndexAt(finalRotation, choices.length, weights);
       const name = choices[idx] ?? null;
       setWinner(name);
       setWinnerIndex(idx);
       setPickedFromCount(spinPoolCountRef.current || choices.length);
       setRevealOpen(Boolean(name));
       setSpinning(false);
+      setHasSpunOnce(true);
       if (toolId === "prize-wheel") {
         sound.fanfare();
       } else {
@@ -491,7 +507,7 @@ export function SpinnerWheel({
         }, v2Settings.autoRemoveAfterSec * 1000);
       }
     },
-    [choices, autoRemove, toolId, showTally, sound, v2Settings],
+    [choices, entryWeights, autoRemove, toolId, showTally, sound, v2Settings],
   );
 
   const spin = useCallback(() => {
@@ -505,10 +521,17 @@ export function SpinnerWheel({
     setSpinning(true);
     lastSegRef.current = -1;
 
-    const winnerIdx = randomInt(choices.length);
+    const winnerIdx = pickWeightedIndex(choiceWeights);
     const start = rotationRef.current;
     const extra = reduceMotion ? 1 : 5 + randomInt(3);
-    const end = targetRotationForIndex(winnerIdx, choices.length, start, extra);
+    const end = targetRotationForIndex(
+      winnerIdx,
+      choices.length,
+      start,
+      extra,
+      undefined,
+      choiceWeights,
+    );
     // Slight overshoot then settle (skipped under reduced motion)
     const overshoot = reduceMotion ? 0 : (4 + randomInt(3)) * (Math.PI / 180);
     const peak = end + overshoot;
@@ -527,7 +550,7 @@ export function SpinnerWheel({
         const e = easeOutCubic(t);
         const next = start + (peak - start) * e;
         setRotation(next);
-        const seg = winnerIndexAt(next, choices.length);
+        const seg = winnerIndexAt(next, choices.length, choiceWeights);
         if (seg !== lastSegRef.current) {
           lastSegRef.current = seg;
           sound.tick();
@@ -543,7 +566,17 @@ export function SpinnerWheel({
       }
     };
     rafRef.current = requestAnimationFrame(tick);
-  }, [choices, finishSpin, reduceMotion, sound, spinLength, toolId, wheelFirst, v2Settings]);
+  }, [
+    choices,
+    choiceWeights,
+    finishSpin,
+    reduceMotion,
+    sound,
+    spinLength,
+    toolId,
+    wheelFirst,
+    v2Settings,
+  ]);
 
   spinRef.current = spin;
 
@@ -864,33 +897,45 @@ export function SpinnerWheel({
     URL.revokeObjectURL(a.href);
   };
 
+  useEffect(() => {
+    if (!sharedMode) return;
+    const t = window.setTimeout(() => setSharedMode(false), 10000);
+    return () => window.clearTimeout(t);
+  }, [sharedMode]);
+
+  useEffect(() => {
+    if (!shareUrlBox) return;
+    const t = window.setTimeout(() => setShareUrlBox(null), 12000);
+    return () => window.clearTimeout(t);
+  }, [shareUrlBox]);
+
   const sharedBanner = sharedMode ? (
     <div
-      className="flex max-h-16 flex-wrap items-center gap-2 rounded-xl border border-accent/40 bg-surface-2 px-3 py-2 text-xs text-foreground sm:text-sm"
+      className="relative z-30 flex max-h-12 flex-wrap items-center gap-1.5 rounded-xl border border-accent/40 bg-surface-2/95 px-2.5 py-1.5 text-xs text-foreground backdrop-blur sm:text-sm"
       role="status"
     >
       <p className="min-w-0 flex-1 font-semibold leading-snug">
-        You’re viewing a shared wheel. Names stay here unless you keep it.
+        Shared wheel — keep it on this device, or dismiss.
       </p>
-      <div className="flex flex-wrap gap-1.5">
+      <div className="flex flex-wrap gap-1">
         <button
           type="button"
           onClick={keepThisWheel}
-          className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg bg-accent-strong px-3 text-xs font-bold text-slate-950 hover:bg-accent"
+          className="inline-flex min-h-9 items-center justify-center rounded-lg bg-accent-strong px-2.5 text-xs font-bold text-slate-950 hover:bg-accent"
         >
-          Keep this wheel
+          Keep
         </button>
         <button
           type="button"
           onClick={backToMyWheel}
-          className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-border bg-surface px-3 text-xs font-bold text-foreground hover:bg-border"
+          className="inline-flex min-h-9 items-center justify-center rounded-lg border border-border bg-surface px-2.5 text-xs font-bold text-foreground hover:bg-border"
         >
-          Back to my wheel
+          My wheel
         </button>
         <button
           type="button"
           onClick={() => setSharedMode(false)}
-          className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg px-3 text-xs font-bold text-muted hover:text-foreground"
+          className="inline-flex min-h-9 items-center justify-center rounded-lg px-2.5 text-xs font-bold text-muted hover:text-foreground"
         >
           Dismiss
         </button>
@@ -921,7 +966,7 @@ export function SpinnerWheel({
   ) : null;
 
   const winnerUi =
-    toolId !== "prize-wheel" && toolId !== "yes-no-wheel" ? (
+    toolId !== "yes-no-wheel" ? (
       <WinnerModal
         open={revealOpen}
         winner={winner}
@@ -1017,30 +1062,15 @@ export function SpinnerWheel({
       >
         {livePreview}
         {sharedBanner}
-        <WheelTopBar
-          disabled={spinning}
-          onCustomize={() => setCustomizeOpen(true)}
-          onNew={onNewWheel}
-          onSave={onSaveWheelFile}
-          onOpenFile={(f) => void onOpenWheelFile(f)}
-          recent={recentWheels}
-          onOpenRecent={applySavedWheel}
-          onShare={() => void onShare()}
-          shareUrl={shareUrlBox}
-          onClearShare={() => setShareUrlBox(null)}
-          onFullscreen={() => void onToggleFullscreen()}
-          isFullscreen={isFullscreen}
-          onImportCsv={onImportCsv}
-          onPreferences={() => setCustomizeOpen(true)}
-          faqHref="#faq"
-        />
         <CustomizeDialog
           open={customizeOpen}
           value={v2Settings}
           onCancel={() => setCustomizeOpen(false)}
           onOk={(next) => {
             let swatches = next.swatches;
-            if (isToolThemeId(next.themeId) && next.themeId !== "auto") {
+            if (next.themeId === "custom") {
+              swatches = next.swatches;
+            } else if (isToolThemeId(next.themeId) && next.themeId !== "auto") {
               const segs = segColors(next.themeId).segs;
               swatches = Array.from({ length: 6 }, (_, i) => segs[i] ?? next.swatches[i]!);
             } else if (next.themeId === "auto") {
@@ -1068,32 +1098,79 @@ export function SpinnerWheel({
           open={advancedOpen}
           entries={choices}
           swatches={v2Settings.swatches}
+          weights={entryWeights}
+          images={wheelImages.entries}
           onCancel={() => setAdvancedOpen(false)}
-          onOk={(nextEntries) => {
-            setText(choicesToText(nextEntries));
-            setV2Settings((s) => ({ ...s, displayDuplicates: true }));
+          onOk={(result) => {
+            const names = result.rows.map((r) => r.name);
+            const nextWeights: Record<string, number> = {};
+            const nextImages: Record<string, string> = { ...wheelImages.entries };
+            const nextSwatches = [...v2Settings.swatches];
+            result.rows.forEach((r, i) => {
+              const key = r.name.toLocaleLowerCase();
+              nextWeights[key] = r.weight;
+              if (r.image) nextImages[key] = r.image;
+              else delete nextImages[key];
+              if (i < 6) nextSwatches[i] = r.color;
+            });
+            setText(choicesToText(names));
+            setEntryWeights(nextWeights);
+            persistImages({ ...wheelImages, entries: nextImages });
+            setV2Settings((s) => ({ ...s, swatches: nextSwatches, themeId: "custom" }));
             setAdvancedOpen(false);
             showToast("Advanced entries applied.");
           }}
         />
+        {isFullscreen ? (
+          <button
+            type="button"
+            onClick={() => void onToggleFullscreen()}
+            className="fixed right-3 top-3 z-[90] inline-flex min-h-11 items-center gap-2 rounded-xl border border-border bg-surface px-4 text-sm font-bold text-foreground shadow-lg outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
+          >
+            Exit fullscreen
+          </button>
+        ) : null}
+        {/* Mobile: wheel on top (order-1); toolbar under it. Desktop: toolbar above via flex-col wrapper. */}
+        <div className="flex w-full flex-col gap-2">
+        <div className="order-2 w-full lg:order-1">
+          <WheelTopBar
+            disabled={spinning}
+            compact
+            onCustomize={() => setCustomizeOpen(true)}
+            onNew={onNewWheel}
+            onSave={onSaveWheelFile}
+            onOpenFile={(f) => void onOpenWheelFile(f)}
+            recent={recentWheels}
+            onOpenRecent={applySavedWheel}
+            onShare={() => void onShare()}
+            shareUrl={shareUrlBox}
+            onClearShare={() => setShareUrlBox(null)}
+            onFullscreen={() => void onToggleFullscreen()}
+            isFullscreen={isFullscreen}
+            onImportCsv={onImportCsv}
+            onPreferences={() => setCustomizeOpen(true)}
+            faqHref="#faq"
+          />
+        </div>
         {/* Fixed stage height — leave room for site header + H1 + top bar at 1280×720. */}
         <div
-          className="flex flex-col gap-2 lg:h-[calc(100dvh-15.5rem)] lg:max-h-[calc(100dvh-15.5rem)] lg:min-h-[18rem] lg:flex-row lg:items-stretch lg:gap-0 lg:overflow-hidden"
+          className="order-1 flex w-full flex-col gap-2 lg:order-2 lg:h-[calc(100dvh-16.25rem)] lg:max-h-[calc(100dvh-16.25rem)] lg:min-h-[17.5rem] lg:flex-row lg:items-stretch lg:gap-0 lg:overflow-hidden"
           ref={stageRef}
+          style={
+            wheelImages.background
+              ? {
+                  backgroundImage: `linear-gradient(rgba(11,15,23,0.78), rgba(11,15,23,0.78)), url(${wheelImages.background})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  borderRadius: "1.5rem",
+                }
+              : undefined
+          }
         >
           <div
-            className={`relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-3xl border border-border bg-surface p-2 sm:p-2.5 ${
+            className={`relative flex min-h-0 min-w-0 w-full flex-1 flex-col overflow-hidden rounded-3xl border border-border bg-surface/90 p-2 sm:p-2.5 ${
               panelOpen ? "lg:rounded-r-none lg:border-r-0" : ""
             }`}
-            style={
-              wheelImages.background
-                ? {
-                    backgroundImage: `linear-gradient(rgba(11,15,23,0.72), rgba(11,15,23,0.72)), url(${wheelImages.background})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }
-                : undefined
-            }
           >
             <div className="absolute left-2 top-2 z-30">
               <WheelOverflowMenu
@@ -1136,7 +1213,11 @@ export function SpinnerWheel({
                     highlightIndex={revealOpen ? winnerIndex : null}
                     title={v2Settings.showTitle && wheelTitle ? wheelTitle : undefined}
                     hubLabel={spinning ? "…" : ""}
-                    spinPrompt={!spinning && !revealOpen && choices.length >= 2}
+                    spinPrompt={
+                      !hasSpunOnce && !spinning && !revealOpen && choices.length >= 2
+                    }
+                    weights={choiceWeights}
+                    sliceImages={sliceImages}
                     fillContainer
                     className="!max-w-none h-full"
                   />
@@ -1176,13 +1257,13 @@ export function SpinnerWheel({
               {status}
             </p>
 
-            {toolId === "prize-wheel" || toolId === "yes-no-wheel" ? (
+            {toolId === "yes-no-wheel" ? (
               <ResultReveal
                 open={revealOpen}
                 value={winner}
-                label={toolId === "prize-wheel" ? "Prize" : "Result"}
-                variant={toolId === "prize-wheel" ? "prize" : "yesno"}
-                showRemove={!autoRemove && toolId !== "yes-no-wheel"}
+                label="Result"
+                variant="yesno"
+                showRemove={false}
                 onSpinAgain={() => {
                   setRevealOpen(false);
                   setShowNextSteps(false);
@@ -1208,6 +1289,7 @@ export function SpinnerWheel({
             {...panelProps}
           />
         </div>
+        </div>
 
         {/* Mobile sticky SPIN + padding so the bar never covers the wheel */}
         <div className="lg:hidden">
@@ -1220,7 +1302,7 @@ export function SpinnerWheel({
           />
         </div>
 
-        <div className="pb-[4.5rem] lg:pb-0">
+        <div className="w-full pb-[5.25rem] lg:pb-0">
           <WheelSidePanel
             open={mobilePanelOpen}
             onToggle={() => setMobilePanelOpen((v) => !v)}
@@ -1308,13 +1390,13 @@ export function SpinnerWheel({
                 />
               </div>
             </div>
-            {toolId === "prize-wheel" || toolId === "yes-no-wheel" ? (
+            {toolId === "yes-no-wheel" ? (
               <ResultReveal
                 open={revealOpen}
                 value={winner}
-                label={toolId === "prize-wheel" ? "Prize" : "Result"}
-                variant={toolId === "prize-wheel" ? "prize" : "yesno"}
-                showRemove={!autoRemove && toolId !== "yes-no-wheel"}
+                label="Result"
+                variant="yesno"
+                showRemove={false}
                 onSpinAgain={() => {
                   setRevealOpen(false);
                   setShowNextSteps(false);

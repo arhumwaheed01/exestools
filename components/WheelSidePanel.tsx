@@ -581,14 +581,14 @@ function AddImageMenu({
     <div className="relative">
       <ToolBtn disabled={disabled} onClick={() => setOpen((v) => !v)} label="Add image ▾" />
       {open ? (
-        <div className="absolute left-0 top-full z-30 mt-1 w-52 rounded-xl border border-border bg-surface p-1.5 shadow-xl">
+        <div className="absolute right-0 top-full z-50 mt-1 w-52 rounded-xl border border-border bg-surface p-1.5 shadow-xl sm:left-0 sm:right-auto">
           {onBackground ? (
             <button
               type="button"
               className="flex min-h-9 w-full items-center rounded-lg px-2 text-left text-xs font-semibold hover:bg-surface-2"
               onClick={() => {
                 setOpen(false);
-                bgRef.current?.click();
+                window.setTimeout(() => bgRef.current?.click(), 0);
               }}
             >
               Add background image
@@ -600,7 +600,7 @@ function AddImageMenu({
               className="flex min-h-9 w-full items-center rounded-lg px-2 text-left text-xs font-semibold hover:bg-surface-2"
               onClick={() => {
                 setOpen(false);
-                centerRef.current?.click();
+                window.setTimeout(() => centerRef.current?.click(), 0);
               }}
             >
               Add center image
@@ -612,7 +612,7 @@ function AddImageMenu({
               className="flex min-h-9 w-full items-center rounded-lg px-2 text-left text-xs font-semibold hover:bg-surface-2"
               onClick={() => {
                 setOpen(false);
-                entryRef.current?.click();
+                window.setTimeout(() => entryRef.current?.click(), 0);
               }}
             >
               Add image as entry

@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import {
   ChevronDown,
   Maximize2,
   Minimize2,
-  MoreHorizontal,
   Settings2,
 } from "lucide-react";
 import type { SavedWheelFile } from "@/lib/wheel-v2/settings";
@@ -27,6 +27,8 @@ type Props = {
   onImportCsv: (text: string) => void;
   onPreferences: () => void;
   faqHref?: string;
+  /** Compact single-row overflow on small screens. */
+  compact?: boolean;
 };
 
 export function WheelTopBar({
@@ -45,14 +47,18 @@ export function WheelTopBar({
   onImportCsv,
   onPreferences,
   faqHref = "#faq",
+  compact = false,
 }: Props) {
   const [openMenu, setOpenMenu] = useState<"open" | "more" | null>(null);
   const [csvOpen, setCsvOpen] = useState(false);
   const [csvText, setCsvText] = useState("");
+  const [mounted, setMounted] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
   const openId = useId();
   const moreId = useId();
+
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     if (!openMenu) return;
@@ -63,16 +69,39 @@ export function WheelTopBar({
     return () => document.removeEventListener("mousedown", onDoc);
   }, [openMenu]);
 
+  const triggerOpenFile = () => {
+    setOpenMenu(null);
+    // Keep input mounted outside the menu; defer so the picker opens after close.
+    window.setTimeout(() => fileRef.current?.click(), 0);
+  };
+
   return (
-    <div ref={barRef} className="relative z-20">
-      <div className="flex flex-wrap items-center gap-1 rounded-2xl border border-border bg-surface px-1.5 py-1 sm:gap-1.5 sm:px-2">
+    <div ref={barRef} className="relative w-full">
+      {/* Always mounted — must survive Open menu close */}
+      <input
+        ref={fileRef}
+        type="file"
+        accept="application/json,.json"
+        className="hidden"
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          if (f) onOpenFile(f);
+          e.target.value = "";
+        }}
+      />
+
+      <div
+        className={`flex w-full items-center gap-1 rounded-2xl border border-border bg-surface px-1.5 py-1 sm:gap-1.5 sm:px-2 ${
+          compact ? "flex-nowrap overflow-x-auto" : "flex-wrap"
+        }`}
+      >
         <BarBtn disabled={disabled} onClick={onCustomize} icon={<Settings2 className="h-3.5 w-3.5" />}>
           Customize
         </BarBtn>
         <BarBtn disabled={disabled} onClick={onNew}>
           New
         </BarBtn>
-        <div className="relative">
+        <div className="relative shrink-0">
           <BarBtn
             disabled={disabled}
             onClick={() => setOpenMenu((m) => (m === "open" ? null : "open"))}
@@ -85,29 +114,15 @@ export function WheelTopBar({
           {openMenu === "open" ? (
             <div
               id={openId}
-              className="absolute left-0 top-full z-30 mt-1 w-64 rounded-xl border border-border bg-surface p-2 shadow-xl"
+              className="absolute left-0 top-full z-40 mt-1 w-64 rounded-xl border border-border bg-surface p-2 shadow-xl"
             >
               <button
                 type="button"
                 className="flex min-h-10 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2"
-                onClick={() => {
-                  fileRef.current?.click();
-                  setOpenMenu(null);
-                }}
+                onClick={triggerOpenFile}
               >
                 Open JSON file…
               </button>
-              <input
-                ref={fileRef}
-                type="file"
-                accept="application/json,.json"
-                className="hidden"
-                onChange={(e) => {
-                  const f = e.target.files?.[0];
-                  if (f) onOpenFile(f);
-                  e.target.value = "";
-                }}
-              />
               {recent.length > 0 ? (
                 <>
                   <p className="mt-2 px-2 text-[10px] font-bold uppercase tracking-wide text-muted">
@@ -150,7 +165,7 @@ export function WheelTopBar({
         </BarBtn>
         <Link
           href="/wheel-gallery"
-          className="inline-flex min-h-9 items-center rounded-lg px-2.5 text-xs font-bold text-foreground outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
+          className="inline-flex min-h-9 shrink-0 items-center rounded-lg px-2.5 text-xs font-bold text-foreground outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
         >
           Gallery
         </Link>
@@ -158,7 +173,7 @@ export function WheelTopBar({
           type="button"
           disabled={disabled}
           onClick={onFullscreen}
-          className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-foreground outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
+          className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-foreground outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
           aria-label={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
           title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
         >
@@ -168,7 +183,7 @@ export function WheelTopBar({
             <Maximize2 className="h-4 w-4" aria-hidden />
           )}
         </button>
-        <div className="relative ml-auto">
+        <div className="relative ml-auto shrink-0">
           <BarBtn
             disabled={disabled}
             onClick={() => setOpenMenu((m) => (m === "more" ? null : "more"))}
@@ -181,7 +196,7 @@ export function WheelTopBar({
           {openMenu === "more" ? (
             <div
               id={moreId}
-              className="absolute right-0 top-full z-30 mt-1 w-56 rounded-xl border border-border bg-surface p-1.5 shadow-xl"
+              className="absolute right-0 top-full z-40 mt-1 w-56 rounded-xl border border-border bg-surface p-1.5 shadow-xl"
             >
               <a
                 href="mailto:hello@exestools.com?subject=Spinner%20wheel%20feedback"
@@ -217,21 +232,17 @@ export function WheelTopBar({
               >
                 Preferences
               </button>
-              <p className="flex items-center gap-1 px-2 py-2 text-xs text-muted">
-                <MoreHorizontal className="h-3.5 w-3.5" aria-hidden />
-                More options
-              </p>
             </div>
           ) : null}
         </div>
       </div>
 
       {shareUrl ? (
-        <div className="mt-2 flex flex-col gap-2 rounded-xl border border-border bg-surface-2 p-3 sm:flex-row sm:items-center">
+        <div className="mt-2 flex w-full flex-col gap-2 rounded-xl border border-border bg-surface-2 p-3 sm:flex-row sm:items-center">
           <input
             readOnly
             value={shareUrl}
-            className="min-h-10 flex-1 truncate rounded-lg border border-border bg-surface px-3 text-xs text-foreground"
+            className="min-h-10 min-w-0 flex-1 truncate rounded-lg border border-border bg-surface px-3 text-xs text-foreground"
             onFocus={(e) => e.currentTarget.select()}
           />
           <button
@@ -251,46 +262,49 @@ export function WheelTopBar({
         </div>
       ) : null}
 
-      {csvOpen ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-          <div className="w-full max-w-md rounded-2xl border border-border bg-surface p-4 shadow-2xl">
-            <h3 className="text-sm font-extrabold">Import from pasted CSV</h3>
-            <p className="mt-1 text-xs text-muted">
-              One name per line, or comma-separated values.
-            </p>
-            <textarea
-              value={csvText}
-              onChange={(e) => setCsvText(e.target.value)}
-              rows={6}
-              className="mt-3 w-full rounded-xl border border-border bg-surface-2 p-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              placeholder="Alex, Jordan, Sam"
-            />
-            <div className="mt-3 flex justify-end gap-2">
-              <button
-                type="button"
-                className="min-h-10 rounded-lg border border-border px-3 text-sm font-bold"
-                onClick={() => {
-                  setCsvOpen(false);
-                  setCsvText("");
-                }}
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                className="min-h-10 rounded-lg bg-accent-strong px-3 text-sm font-bold text-slate-950"
-                onClick={() => {
-                  onImportCsv(csvText);
-                  setCsvOpen(false);
-                  setCsvText("");
-                }}
-              >
-                Import
-              </button>
-            </div>
-          </div>
-        </div>
-      ) : null}
+      {mounted && csvOpen
+        ? createPortal(
+            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4">
+              <div className="w-full max-w-md rounded-2xl border border-border bg-surface p-4 shadow-2xl">
+                <h3 className="text-sm font-extrabold">Import from pasted CSV</h3>
+                <p className="mt-1 text-xs text-muted">
+                  One name per line, or comma-separated values.
+                </p>
+                <textarea
+                  value={csvText}
+                  onChange={(e) => setCsvText(e.target.value)}
+                  rows={6}
+                  className="mt-3 w-full rounded-xl border border-border bg-surface-2 p-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  placeholder="Alex, Jordan, Sam"
+                />
+                <div className="mt-3 flex justify-end gap-2">
+                  <button
+                    type="button"
+                    className="min-h-10 rounded-lg border border-border px-3 text-sm font-bold"
+                    onClick={() => {
+                      setCsvOpen(false);
+                      setCsvText("");
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    className="min-h-10 rounded-lg bg-accent-strong px-3 text-sm font-bold text-slate-950"
+                    onClick={() => {
+                      onImportCsv(csvText);
+                      setCsvOpen(false);
+                      setCsvText("");
+                    }}
+                  >
+                    Import
+                  </button>
+                </div>
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
     </div>
   );
 }
@@ -312,7 +326,7 @@ function BarBtn({
       type="button"
       disabled={disabled}
       onClick={onClick}
-      className="inline-flex min-h-9 items-center gap-1 rounded-lg px-2.5 text-xs font-bold text-foreground outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
+      className="inline-flex min-h-9 shrink-0 items-center gap-1 rounded-lg px-2.5 text-xs font-bold text-foreground outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
       {...rest}
     >
       {icon}
