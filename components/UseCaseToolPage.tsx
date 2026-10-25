@@ -122,7 +122,10 @@ export function UseCaseToolPage({
     ],
   };
 
-  const wheelFirst = toolId === "random-name-picker";
+  const wheelFirst =
+    toolId === "random-name-picker" ||
+    toolId === "prize-wheel" ||
+    toolId === "classroom-spinner";
 
   return (
     <div
@@ -174,7 +177,7 @@ export function UseCaseToolPage({
         <p
           className={
             wheelFirst
-              ? "mt-0.5 line-clamp-2 text-sm leading-snug text-muted"
+              ? "mt-0.5 text-sm leading-snug text-muted"
               : "mt-1 line-clamp-2 text-sm leading-snug text-muted sm:line-clamp-none sm:leading-relaxed"
           }
         >

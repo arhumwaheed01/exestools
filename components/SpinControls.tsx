@@ -54,6 +54,8 @@ export function StickySpinButton({
   buttonRef,
   placement: _placement = "both",
   anchorRef,
+  /** When true, SPIN stays fixed at the bottom on mobile (wheel-first layout). */
+  alwaysDockMobile = false,
 }: {
   canSpin: boolean;
   spinning: boolean;
@@ -62,11 +64,21 @@ export function StickySpinButton({
   placement?: StickyPlacement;
   /** Wheel/stage element — when this leaves the viewport on mobile, SPIN docks to the bottom. */
   anchorRef?: RefObject<HTMLElement | null>;
+  alwaysDockMobile?: boolean;
 }) {
   void _placement;
-  const [docked, setDocked] = useState(false);
+  const [docked, setDocked] = useState(alwaysDockMobile);
 
   useEffect(() => {
+    if (alwaysDockMobile) {
+      const sync = () => {
+        setDocked(window.matchMedia("(max-width: 1023px)").matches);
+      };
+      sync();
+      window.addEventListener("resize", sync);
+      return () => window.removeEventListener("resize", sync);
+    }
+
     const anchor = anchorRef?.current;
     if (!anchor) return;
 
@@ -96,7 +108,7 @@ export function StickySpinButton({
       window.removeEventListener("scroll", update);
       window.removeEventListener("resize", update);
     };
-  }, [anchorRef]);
+  }, [anchorRef, alwaysDockMobile]);
 
   const btnClass =
     "inline-flex min-h-12 w-full max-w-xs items-center justify-center rounded-2xl bg-accent-strong px-8 text-lg font-extrabold tracking-wide text-slate-950 transition hover:bg-accent focus:outline-none focus-visible:ring-4 focus-visible:ring-accent/40 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-55";
@@ -124,7 +136,11 @@ export function StickySpinButton({
       </div>
 
       {docked ? (
-        <div className="fixed inset-x-0 bottom-0 z-40 flex justify-center border-t border-border bg-background/95 px-3 pt-2 backdrop-blur pb-[max(0.5rem,env(safe-area-inset-bottom))] sm:hidden print:hidden">
+        <div
+          className={`fixed inset-x-0 bottom-0 z-40 flex justify-center border-t border-border bg-background/95 px-3 pt-2 backdrop-blur pb-[max(0.5rem,env(safe-area-inset-bottom))] print:hidden ${
+            alwaysDockMobile ? "lg:hidden" : "sm:hidden"
+          }`}
+        >
           <button
             ref={(el) => assignRef(buttonRef, el)}
             type="button"

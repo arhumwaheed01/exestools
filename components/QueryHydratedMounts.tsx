@@ -13,7 +13,12 @@ function MountSlot({ className }: { className: string }) {
   return <div className={className} aria-hidden />;
 }
 
-const WHEEL_FIRST_TOOLS: ReadonlySet<ToolId> = new Set(["home", "random-name-picker"]);
+const WHEEL_FIRST_TOOLS: ReadonlySet<ToolId> = new Set([
+  "home",
+  "random-name-picker",
+  "prize-wheel",
+  "classroom-spinner",
+]);
 
 function SpinnerFromQuery({ toolId }: { toolId: ToolId }) {
   const sp = useSearchParams();

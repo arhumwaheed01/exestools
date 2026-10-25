@@ -159,6 +159,10 @@ export function SpinnerWheel({
   const [panelOpen, setPanelOpen] = useState(true);
   const [panelTab, setPanelTab] = useState<PanelTab>("entries");
   const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
+  /** Winner modal: pool size at spin start (not post-remove length). */
+  const [pickedFromCount, setPickedFromCount] = useState(0);
+  /** Pixel size for wheel-first layout (from ResizeObserver). */
+  const [wheelPx, setWheelPx] = useState(0);
 
   const sound = useSound();
   const spinningRef = useRef(false);
@@ -171,8 +175,9 @@ export function SpinnerWheel({
   const lastSegRef = useRef(-1);
   const allowSaveRef = useRef(true);
   const stageRef = useRef<HTMLDivElement>(null);
+  const wheelBoxRef = useRef<HTMLDivElement>(null);
   const stickySpinRef = useRef<HTMLButtonElement>(null);
-  const entryCountAtReveal = useRef(0);
+  const spinPoolCountRef = useRef(0);
 
   useEffect(() => {
     if (!wheelFirst) return;
@@ -189,6 +194,38 @@ export function SpinnerWheel({
     mq.addEventListener("change", sync);
     return () => mq.removeEventListener("change", sync);
   }, [wheelFirst]);
+
+  // Size the wheel from its flex box on every resize / panel collapse.
+  useEffect(() => {
+    if (!wheelFirst) return;
+    const box = wheelBoxRef.current;
+    if (!box) return;
+
+    const measure = () => {
+      const w = box.clientWidth;
+      const h = box.clientHeight;
+      // Desktop: box has a real flex height. Mobile: height may be min-content only —
+      // fall back to a viewport-capped width so the wheel still sizes.
+      let next = Math.floor(Math.min(w, h));
+      if (h < 120) {
+        next = Math.floor(Math.min(w, window.innerHeight * 0.46));
+      }
+      next = Math.max(0, next);
+      setWheelPx((prev) => (prev === next ? prev : next));
+    };
+
+    measure();
+    const ro = new ResizeObserver(() => {
+      // rAF so we measure after flex reflow from panel width changes
+      requestAnimationFrame(measure);
+    });
+    ro.observe(box);
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [wheelFirst, panelOpen]);
 
   const resolvedTheme = resolveToolTheme(themeChoice, toolId);
   const themeColors = useMemo(
@@ -297,7 +334,7 @@ export function SpinnerWheel({
       const name = choices[idx] ?? null;
       setWinner(name);
       setWinnerIndex(idx);
-      entryCountAtReveal.current = choices.length;
+      setPickedFromCount(spinPoolCountRef.current || choices.length);
       setRevealOpen(Boolean(name));
       setSpinning(false);
       if (toolId === "prize-wheel") {
@@ -337,6 +374,7 @@ export function SpinnerWheel({
     if (spinningRef.current || choices.length < 2) return;
     sound.unlock();
     if (toolId === "prize-wheel" && !reduceMotion) sound.drumroll(1200);
+    spinPoolCountRef.current = choices.length;
     setRevealOpen(false);
     setWinner(null);
     setWinnerIndex(null);
@@ -583,7 +621,7 @@ export function SpinnerWheel({
       <WinnerModal
         open={revealOpen}
         winner={winner}
-        entryCount={entryCountAtReveal.current || choices.length}
+        entryCount={pickedFromCount}
         showRemoveContinue={!autoRemove}
         onClose={() => {
           setRevealOpen(false);
@@ -641,20 +679,19 @@ export function SpinnerWheel({
   };
 
   if (wheelFirst) {
-    const wheelShellStyle = {
-      aspectRatio: "1 / 1",
-      width: "min(100%, calc(100svh - 12rem))",
-      maxHeight: "calc(100svh - 12rem)",
-    } as const;
-
     return (
       <div className="space-y-2" data-tool-theme={resolvedTheme} style={rootStyle}>
         {sharedBanner}
+        {/* Desktop stage fits under header+intro; mobile stacks naturally. */}
         <div
-          className="flex flex-col gap-2 lg:h-[calc(100svh-10.5rem)] lg:min-h-[26rem] lg:flex-row lg:items-stretch lg:gap-0"
+          className="flex flex-col gap-2 lg:h-[calc(100dvh-11rem)] lg:max-h-[calc(100dvh-11rem)] lg:min-h-[22rem] lg:flex-row lg:items-stretch lg:gap-0 lg:overflow-hidden"
           ref={stageRef}
         >
-          <div className="relative flex min-h-0 min-w-0 flex-1 flex-col items-center justify-center rounded-3xl border border-border bg-surface p-2 sm:p-3 lg:rounded-r-none lg:border-r-0">
+          <div
+            className={`relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-3xl border border-border bg-surface p-2 sm:p-3 ${
+              panelOpen ? "lg:rounded-r-none lg:border-r-0" : ""
+            }`}
+          >
             <button
               type="button"
               onClick={() => {
@@ -672,49 +709,56 @@ export function SpinnerWheel({
                 <VolumeX className="h-4 w-4" aria-hidden />
               )}
             </button>
+
             {wheelTitle ? (
-              <p className="mb-1 text-center text-sm font-bold text-muted">{wheelTitle}</p>
+              <p className="mb-1 shrink-0 text-center text-sm font-bold text-muted">{wheelTitle}</p>
             ) : null}
-            <div className="relative mx-auto max-h-full" style={wheelShellStyle}>
-              <div
-                className={`absolute inset-0 transition-opacity ${ready ? "pointer-events-none opacity-0" : "opacity-100"}`}
-              >
-                <StaticWheelPreview
-                  choices={choices.length ? choices : defaults}
-                  className="!max-w-none h-full"
+
+            {/* Flex box that owns available height; wheel is min(width,height) via ResizeObserver */}
+            <div
+              ref={wheelBoxRef}
+              className="relative flex min-h-[14rem] w-full flex-1 items-center justify-center overflow-hidden"
+            >
+              {wheelPx > 0 ? (
+                <div
+                  className="relative shrink-0"
+                  style={{ width: wheelPx, height: wheelPx }}
+                >
+                  <WheelCanvas
+                    choices={choices}
+                    rotation={rotation}
+                    colors={themeColors}
+                    labelColors={themeLabels}
+                    highlightIndex={revealOpen ? winnerIndex : null}
+                    title={wheelTitle || undefined}
+                    hubLabel={spinning ? "…" : "SPIN"}
+                    fillContainer
+                    className="!max-w-none h-full"
+                  />
+                  <button
+                    type="button"
+                    data-et-spin=""
+                    onClick={spin}
+                    disabled={!canSpin}
+                    aria-label="Click to spin"
+                    aria-busy={spinning}
+                    className="absolute inset-[12%] z-20 rounded-full focus:outline-none focus-visible:ring-4 focus-visible:ring-accent/50 disabled:cursor-not-allowed"
+                  />
+                  {!spinning ? (
+                    <p className="pointer-events-none absolute inset-x-0 bottom-[14%] z-10 text-center text-[11px] font-bold uppercase tracking-wide text-white/90 drop-shadow sm:text-xs">
+                      Click to spin
+                    </p>
+                  ) : null}
+                </div>
+              ) : (
+                <div
+                  className="aspect-square w-full max-w-[min(100%,20rem)] bg-surface-2/40"
+                  aria-hidden
                 />
-              </div>
-              <div
-                className={`absolute inset-0 transition-opacity ${ready ? "opacity-100" : "opacity-0"}`}
-              >
-                <WheelCanvas
-                  choices={choices}
-                  rotation={rotation}
-                  colors={themeColors}
-                  labelColors={themeLabels}
-                  highlightIndex={revealOpen ? winnerIndex : null}
-                  title={wheelTitle || undefined}
-                  hubLabel={spinning ? "…" : "SPIN"}
-                  fillContainer
-                  className="!max-w-none h-full"
-                />
-              </div>
-              <button
-                type="button"
-                data-et-spin=""
-                onClick={spin}
-                disabled={!canSpin}
-                aria-label="Click to spin"
-                aria-busy={spinning}
-                className="absolute inset-[12%] z-20 rounded-full focus:outline-none focus-visible:ring-4 focus-visible:ring-accent/50 disabled:cursor-not-allowed"
-              />
-              {!spinning ? (
-                <p className="pointer-events-none absolute inset-x-0 bottom-[14%] z-10 text-center text-[11px] font-bold uppercase tracking-wide text-white/90 drop-shadow sm:text-xs">
-                  Click to spin
-                </p>
-              ) : null}
+              )}
             </div>
-            <div className="mt-1 flex flex-wrap items-center justify-center gap-2">
+
+            <div className="mt-1 flex shrink-0 flex-wrap items-center justify-center gap-2 pb-1">
               <div
                 role="radiogroup"
                 aria-label="Spin length"
@@ -755,23 +799,26 @@ export function SpinnerWheel({
                 <Share2 className="h-3.5 w-3.5" aria-hidden />
                 Share
               </button>
-              <p className="hidden text-xs text-muted pointer-fine:inline lg:ml-1" aria-live="polite">
+              <p className="hidden text-xs text-muted pointer-fine:inline" aria-live="polite">
                 {status}
                 <span className="mx-1.5 text-border">·</span>
                 Ctrl+Enter
               </p>
             </div>
-            <div className="mt-2 w-full lg:hidden">
+
+            {/* Mobile sticky SPIN — always docked so it stays visible */}
+            <div className="mt-1 w-full lg:hidden">
               <StickySpinButton
                 canSpin={canSpin}
                 spinning={spinning}
                 onSpin={spin}
                 buttonRef={stickySpinRef}
-                anchorRef={stageRef}
+                alwaysDockMobile
               />
             </div>
+
             {showNextSteps ? (
-              <div className="mt-2 w-full max-w-lg rounded-xl border border-border bg-surface-2 px-3 py-2">
+              <div className="mt-1 w-full max-w-lg shrink-0 rounded-xl border border-border bg-surface-2 px-3 py-2">
                 <p className="text-xs font-semibold text-foreground">
                   Spin again, or try a related spinner below.
                 </p>
@@ -779,6 +826,31 @@ export function SpinnerWheel({
                   <RelatedTools toolId={toolId} compact heading="Next steps" />
                 </div>
               </div>
+            ) : null}
+
+            {toolId === "prize-wheel" || toolId === "yes-no-wheel" ? (
+              <ResultReveal
+                open={revealOpen}
+                value={winner}
+                label={toolId === "prize-wheel" ? "Prize" : "Result"}
+                variant={toolId === "prize-wheel" ? "prize" : "yesno"}
+                showRemove={!autoRemove && toolId !== "yes-no-wheel"}
+                onSpinAgain={() => {
+                  setRevealOpen(false);
+                  setShowNextSteps(false);
+                  spin();
+                }}
+                onRemove={onRemoveWinner}
+                onShare={() => void onShare()}
+                onClose={() => {
+                  setRevealOpen(false);
+                  setShowNextSteps(true);
+                }}
+                spinBtnRef={stickySpinRef}
+              />
+            ) : null}
+            {showTally ? (
+              <YesNoTally choices={choices} tally={tally} onReset={() => setTally({})} />
             ) : null}
           </div>
 
@@ -789,14 +861,15 @@ export function SpinnerWheel({
           />
         </div>
 
-        <WheelSidePanel
-          open={mobilePanelOpen}
-          onToggle={() => setMobilePanelOpen((v) => !v)}
-          mobileSheet
-          {...panelProps}
-        />
-
-        <EmbedSnippet toolId={toolId} choices={choices} disabled={spinning} />
+        <div className="pb-16 lg:pb-0">
+          <WheelSidePanel
+            open={mobilePanelOpen}
+            onToggle={() => setMobilePanelOpen((v) => !v)}
+            mobileSheet
+            {...panelProps}
+          />
+          <EmbedSnippet toolId={toolId} choices={choices} disabled={spinning} />
+        </div>
 
         {toastEl}
         {winnerUi}

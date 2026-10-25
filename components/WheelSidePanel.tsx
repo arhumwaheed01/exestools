@@ -96,24 +96,6 @@ export function WheelSidePanel({
 }: Props) {
   const labelId = "wf-choices-label";
 
-  const toggleBtn = (
-    <button
-      type="button"
-      onClick={onToggle}
-      className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-surface text-foreground shadow-sm outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
-      aria-expanded={open}
-      aria-controls="wheel-side-panel"
-      title={open ? "Collapse panel" : "Expand panel"}
-    >
-      {open ? (
-        <ChevronRight className="h-4 w-4" aria-hidden />
-      ) : (
-        <ChevronLeft className="h-4 w-4" aria-hidden />
-      )}
-      <span className="sr-only">{open ? "Collapse entries panel" : "Expand entries panel"}</span>
-    </button>
-  );
-
   if (mobileSheet) {
     return (
       <div className="lg:hidden">
@@ -137,7 +119,7 @@ export function WheelSidePanel({
         {open ? (
           <div
             id="wheel-side-panel-mobile"
-            className="mt-2 flex max-h-[min(55svh,28rem)] flex-col overflow-hidden rounded-2xl border border-border bg-surface"
+            className="mt-2 flex max-h-[min(50svh,26rem)] flex-col overflow-hidden rounded-2xl border border-border bg-surface"
           >
             <PanelBody
               tab={tab}
@@ -179,59 +161,75 @@ export function WheelSidePanel({
     );
   }
 
-  return (
-    <div className="relative hidden h-full shrink-0 lg:flex lg:items-stretch">
-      <div className="absolute -left-5 top-1/2 z-20 -translate-y-1/2">{toggleBtn}</div>
-      <aside
-        id="wheel-side-panel"
-        className={`flex h-full flex-col overflow-hidden border border-border bg-surface transition-[width,opacity,margin] duration-200 ease-out ${
-          open
-            ? "w-[320px] opacity-100"
-            : "pointer-events-none w-0 border-transparent opacity-0"
-        }`}
-        aria-hidden={!open}
+  // Desktop: when closed, only a single expand chevron (no empty panel shell).
+  if (!open) {
+    return (
+      <button
+        type="button"
+        onClick={onToggle}
+        className="relative z-20 hidden h-10 w-10 shrink-0 self-center rounded-full border border-border bg-surface text-foreground shadow-sm outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent lg:inline-flex lg:items-center lg:justify-center"
+        aria-expanded={false}
+        aria-controls="wheel-side-panel"
+        title="Expand panel"
       >
-        {open ? (
-          <PanelBody
-            tab={tab}
-            onTab={onTab}
-            text={text}
-            entryCount={entryCount}
-            resultCount={resultCount}
-            results={results}
-            onClearResults={onClearResults}
-            disabled={disabled}
-            duplicatesSkipped={duplicatesSkipped}
-            overLimit={overLimit}
-            heading={heading}
-            helpText={helpText}
-            raffleHint={raffleHint}
-            savedNote={savedNote}
-            onChange={onChange}
-            onShuffle={onShuffle}
-            onSort={onSort}
-            onClear={onClear}
-            onRestoreDefaults={onRestoreDefaults}
-            onCopy={onCopy}
-            onFreshWheel={onFreshWheel}
-            autoRemove={autoRemove}
-            onAutoRemove={onAutoRemove}
-            showAutoRemove={showAutoRemove}
-            wheelTitle={wheelTitle}
-            onWheelTitle={onWheelTitle}
-            themeChoice={themeChoice}
-            onThemeChange={onThemeChange}
-            presets={presets}
-            onPreset={onPreset}
-            homeLinks={homeLinks}
-            labelId={labelId}
-          />
-        ) : null}
-      </aside>
-      {!open ? (
-        <div className="flex w-10 flex-col items-center justify-center">{toggleBtn}</div>
-      ) : null}
-    </div>
+        <ChevronLeft className="h-4 w-4" aria-hidden />
+        <span className="sr-only">Expand entries panel</span>
+      </button>
+    );
+  }
+
+  return (
+    <aside
+      id="wheel-side-panel"
+      className="relative hidden h-full min-h-0 w-[320px] shrink-0 flex-col overflow-hidden rounded-r-3xl border border-border border-l-0 bg-surface lg:flex"
+      aria-hidden={false}
+    >
+      <button
+        type="button"
+        onClick={onToggle}
+        className="absolute -left-5 top-1/2 z-20 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-surface text-foreground shadow-sm outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent"
+        aria-expanded={true}
+        aria-controls="wheel-side-panel"
+        title="Collapse panel"
+      >
+        <ChevronRight className="h-4 w-4" aria-hidden />
+        <span className="sr-only">Collapse entries panel</span>
+      </button>
+      <PanelBody
+        tab={tab}
+        onTab={onTab}
+        text={text}
+        entryCount={entryCount}
+        resultCount={resultCount}
+        results={results}
+        onClearResults={onClearResults}
+        disabled={disabled}
+        duplicatesSkipped={duplicatesSkipped}
+        overLimit={overLimit}
+        heading={heading}
+        helpText={helpText}
+        raffleHint={raffleHint}
+        savedNote={savedNote}
+        onChange={onChange}
+        onShuffle={onShuffle}
+        onSort={onSort}
+        onClear={onClear}
+        onRestoreDefaults={onRestoreDefaults}
+        onCopy={onCopy}
+        onFreshWheel={onFreshWheel}
+        autoRemove={autoRemove}
+        onAutoRemove={onAutoRemove}
+        showAutoRemove={showAutoRemove}
+        wheelTitle={wheelTitle}
+        onWheelTitle={onWheelTitle}
+        themeChoice={themeChoice}
+        onThemeChange={onThemeChange}
+        presets={presets}
+        onPreset={onPreset}
+        homeLinks={homeLinks}
+        labelId={labelId}
+      />
+    </aside>
   );
 }
 
@@ -281,13 +279,13 @@ function PanelBody({
       </div>
 
       {tab === "entries" ? (
-        <div className="flex min-h-0 flex-1 flex-col gap-2 p-3">
+        <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-hidden p-3">
           <p id={labelId} className="sr-only">
             {heading}
           </p>
-          <p className="text-[11px] leading-snug text-muted">{helpText}</p>
+          <p className="shrink-0 text-[11px] leading-snug text-muted">{helpText}</p>
 
-          <div className="grid grid-cols-5 gap-1">
+          <div className="flex shrink-0 flex-wrap gap-1.5">
             <ToolBtn disabled={disabled} onClick={onShuffle} icon={<Shuffle className="h-3.5 w-3.5" />} label="Shuffle" />
             <ToolBtn
               disabled={disabled}
@@ -327,22 +325,22 @@ function PanelBody({
             onChange={(e) => onChange(e.target.value)}
             spellCheck={false}
             placeholder={"Alex\nJordan\nSam\n…"}
-            className="min-h-0 w-full flex-1 resize-none rounded-xl border border-border bg-surface-2 px-3 py-2 font-mono text-sm leading-relaxed text-foreground outline-none focus:border-accent focus:ring-2 focus:ring-accent/30 disabled:opacity-60"
+            className="min-h-[6rem] w-full flex-1 resize-none rounded-xl border border-border bg-surface-2 px-3 py-2 font-mono text-sm leading-relaxed text-foreground outline-none focus:border-accent focus:ring-2 focus:ring-accent/30 disabled:opacity-60"
           />
 
           {(duplicatesSkipped ?? 0) > 0 ? (
-            <p className="text-xs font-medium text-amber-300" role="status">
+            <p className="shrink-0 text-xs font-medium text-amber-300" role="status">
               {duplicatesSkipped} duplicate line{duplicatesSkipped === 1 ? "" : "s"} skipped.
             </p>
           ) : null}
           {(overLimit ?? 0) > 0 ? (
-            <p className="text-xs font-medium text-amber-300" role="status">
+            <p className="shrink-0 text-xs font-medium text-amber-300" role="status">
               Only the first 60 are on the wheel. {overLimit} line
               {overLimit === 1 ? " was" : "s were"} left out.
             </p>
           ) : null}
           {raffleHint && entryCount >= WHEEL_CAP ? (
-            <p className="text-xs font-medium text-foreground" role="status">
+            <p className="shrink-0 text-xs font-medium text-foreground" role="status">
               Wheel holds {WHEEL_CAP}. Bigger list?{" "}
               <Link href="/raffle-generator" className="font-semibold text-accent hover:underline">
                 Try the raffle generator →
@@ -350,7 +348,7 @@ function PanelBody({
             </p>
           ) : null}
 
-          <details className="group rounded-xl border border-border bg-surface-2 open:pb-2">
+          <details className="group shrink-0 rounded-xl border border-border bg-surface-2 open:max-h-[40%] open:overflow-y-auto open:pb-2">
             <summary className="cursor-pointer list-none px-3 py-2 text-xs font-bold uppercase tracking-wide text-muted outline-none marker:content-none focus-visible:ring-2 focus-visible:ring-accent [&::-webkit-details-marker]:hidden">
               <span className="flex items-center justify-between gap-2">
                 Advanced
@@ -493,14 +491,14 @@ function ToolBtn({
       type="button"
       disabled={disabled}
       onClick={onClick}
-      className={`inline-flex min-h-9 w-full items-center justify-center gap-1 rounded-lg px-1.5 py-1.5 text-[11px] font-semibold outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50 ${
+      className={`inline-flex min-h-9 shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-xs font-semibold outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50 ${
         danger
           ? "bg-rose-950/60 text-rose-300 hover:bg-rose-900/70"
           : "bg-surface-2 text-foreground hover:bg-border"
       }`}
     >
       {icon}
-      <span className="truncate">{label}</span>
+      {label}
     </button>
   );
 }
