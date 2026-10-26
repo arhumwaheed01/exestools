@@ -17,7 +17,7 @@ images:
 
 # Friendsgiving and Thanksgiving team games (without the awkward picks)
 
-By Arhum Waheed · Published 2026-11-05 · Updated 2026-11-05
+By Arhum Waheed · Published 2026-10-26 · Updated 2026-10-26
 
 Friendsgiving and Thanksgiving both have the same soft problem: a mixed room of people who know some faces and not others, a stretch of time before or after the meal, and someone who says "should we play a game?" Captain picks and "you two go over there" leave the same people standing alone. A fair random split fixes that in about thirty seconds, then the game itself can be as competitive or as silly as the room wants.
 
