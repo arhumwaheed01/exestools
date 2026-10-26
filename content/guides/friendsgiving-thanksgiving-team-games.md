@@ -4,8 +4,8 @@ meta_title: "Friendsgiving & Thanksgiving Team Games (No Awkward Picks) | ExesTo
 meta_description: "Team games for Friendsgiving and Thanksgiving: fair splits for trivia, cooking stations and charades, plus bingo, turn order and gift-exchange options for mixed groups."
 author: Arhum Waheed
 author_url: /about#arhum
-published: "2026-11-05"
-updated: "2026-11-05"
+published: "2026-10-26"
+updated: "2026-10-26"
 related_tools: [/random-team-generator, /random-name-picker, /bingo-card-generator, /secret-santa-generator, /]
 images:
   - file: /guides/friendsgiving-thanksgiving-team-games/1.jpg
