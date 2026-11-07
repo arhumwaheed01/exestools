@@ -22,7 +22,7 @@ images:
 
 # How to set up a chore wheel kids won't argue with
 
-By Arhum Waheed · Published 2026-11-09 · Updated 2026-11-09
+By Arhum Waheed · Published 2026-11-07 · Updated 2026-11-07
 
 If you have more than one child, you already know the problem with chores isn't the chores. It's the fairness. "Why does she always get the easy one?" "I did the bins *last* week!" A chore chart you fill in yourself turns you into the judge, and every assignment is a ruling someone can appeal.
 
