@@ -111,7 +111,6 @@ export default function ClassroomSpinnerPage() {
           </li>
         </ol>
       </GuideSection>
-      <ClassroomIdeas />
       <GuideSection title="Ways teachers use it">
         <ul className="list-disc space-y-2 pl-5">
           <li>
