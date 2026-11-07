@@ -4,8 +4,8 @@ meta_title: "Friendsgiving & Thanksgiving Team Games (No Awkward Picks) | ExesTo
 meta_description: "Team games for Friendsgiving and Thanksgiving: fair splits for trivia, cooking stations and charades, plus bingo, turn order and gift-exchange options for mixed groups."
 author: Arhum Waheed
 author_url: /about#arhum
-published: "2026-10-26"
-updated: "2026-10-26"
+published: "2026-11-05"
+updated: "2026-11-05"
 related_tools: [/random-team-generator, /random-name-picker, /bingo-card-generator, /secret-santa-generator, /]
 images:
   - file: /guides/friendsgiving-thanksgiving-team-games/1.jpg
@@ -17,7 +17,7 @@ images:
 
 # Friendsgiving and Thanksgiving team games (without the awkward picks)
 
-By Arhum Waheed · Published 2026-10-26 · Updated 2026-10-26
+By Arhum Waheed · Published 2026-11-05 · Updated 2026-11-05
 
 Friendsgiving and Thanksgiving both have the same soft problem: a mixed room of people who know some faces and not others, a stretch of time before or after the meal, and someone who says "should we play a game?" Captain picks and "you two go over there" leave the same people standing alone. A fair random split fixes that in about thirty seconds, then the game itself can be as competitive or as silly as the room wants.
 
