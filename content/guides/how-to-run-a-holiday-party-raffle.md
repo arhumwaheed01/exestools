@@ -4,8 +4,8 @@ meta_title: "How to Run a Holiday Party Raffle at Work (Prizes, Tickets, Draw) |
 meta_description: "A practical guide to the office or holiday party raffle: prize budgets and order, fair ticket rules, remote staff, how to draw winners and alternates in front of the room, and what to check first."
 author: Arhum Waheed
 author_url: /about#arhum
-published: "2026-11-10"
-updated: "2026-11-10"
+published: "2026-11-07"
+updated: "2026-11-07"
 related_tools: [/raffle-generator, /prize-wheel, /random-name-picker, /bingo-card-generator, /secret-santa-generator]
 ---
 
