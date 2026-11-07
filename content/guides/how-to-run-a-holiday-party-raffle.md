@@ -11,7 +11,7 @@ related_tools: [/raffle-generator, /prize-wheel, /random-name-picker, /bingo-car
 
 # How to run a holiday party raffle (at work, school or a club)
 
-By Arhum Waheed · Published 2026-11-10 · Updated 2026-11-10
+By Arhum Waheed · Published 2026-11-07 · Updated 2026-11-07
 
 Someone always gets handed the raffle. Usually it's a week before the party, with a budget, a list of names and no instructions. This guide is for that person. It covers how to pick prizes people actually want, how to decide who gets how many tickets, how to include remote staff, and how to run a draw that is quick, visible and impossible to argue with.
 
