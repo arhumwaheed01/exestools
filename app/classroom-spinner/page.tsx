@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ClassroomIdeas } from "@/components/ClassroomIdeas";
 import { GuideMarkdown } from "@/components/guides/GuideMarkdown";
 import { GuideSection, UseCaseToolPage } from "@/components/UseCaseToolPage";
 import { loadToolPageMarkdown } from "@/lib/toolPageMarkdown";

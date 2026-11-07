@@ -41,7 +41,7 @@ Deploy as a standard Next.js app (Vercel, Netlify, Node host, etc.):
 
 None required for the core Spinner Wheel. Optional later:
 
-- AdSense publisher ID when replacing `AdPlaceholder` components
+- `NEXT_PUBLIC_ADSENSE_CLIENT` for AdSense (`AdSenseLoader`)
 - Contact/email backend if you add a contact form later
 
 ## Pages
