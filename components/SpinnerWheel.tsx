@@ -1240,7 +1240,7 @@ export function SpinnerWheel({
       >
         {livePreview}
         {sharedBanner}
-        {toolId === "home" ? <HomeGalleryStrip /> : null}
+        {/* Short purpose chrome stays above the fold; taller panels move below the wheel. */}
         {toolId === "random-name-picker" ? (
           <div className="w-full rounded-2xl border border-border bg-surface p-3 sm:p-4">
             <h2 className="text-sm font-extrabold tracking-tight text-foreground">
@@ -1251,19 +1251,6 @@ export function SpinnerWheel({
               the list for your team, then spin for who goes next.
             </p>
           </div>
-        ) : null}
-        {toolId === "classroom-spinner" ? (
-          <ClassroomRosterPanel
-            names={rosterNames}
-            absent={new Set(heldAbsent.map((n) => n.toLocaleLowerCase()))}
-            pickedCount={history.length}
-            total={classSize || rosterNames.length}
-            onToggleAbsent={onToggleAbsent}
-            disabled={spinning}
-          />
-        ) : null}
-        {toolId === "prize-wheel" ? (
-          <PrizeOddsPanel prizes={choices} weights={entryWeights} />
         ) : null}
         {toolId === "yes-no-wheel" ? (
           <YesNoModeBar
@@ -1596,6 +1583,22 @@ export function SpinnerWheel({
             {...panelProps}
           />
         </div>
+
+        {/* Tall purpose panels below wheel + SPIN on every breakpoint (laptop + phone). */}
+        {toolId === "home" ? <HomeGalleryStrip /> : null}
+        {toolId === "prize-wheel" ? (
+          <PrizeOddsPanel prizes={choices} weights={entryWeights} />
+        ) : null}
+        {toolId === "classroom-spinner" ? (
+          <ClassroomRosterPanel
+            names={rosterNames}
+            absent={new Set(heldAbsent.map((n) => n.toLocaleLowerCase()))}
+            pickedCount={history.length}
+            total={classSize || rosterNames.length}
+            onToggleAbsent={onToggleAbsent}
+            disabled={spinning}
+          />
+        ) : null}
 
         <NextStepsInline
           open={showNextSteps && !revealOpen}
