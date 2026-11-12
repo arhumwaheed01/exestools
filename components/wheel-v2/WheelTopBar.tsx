@@ -21,6 +21,10 @@ import {
   parseCsvEntries,
   useFullscreenPortalRoot,
 } from "@/lib/wheel-v2/portal";
+import {
+  toolbarHasEntriesRow,
+  type WheelToolbarFeatures,
+} from "@/lib/wheel-v2/toolbar";
 
 export type SaveWheelOpts = { title: string; download: boolean };
 
@@ -56,7 +60,6 @@ type Props = {
   onOpenAdvanced: () => void;
   autoRemove: boolean;
   onAutoRemove: (v: boolean) => void;
-  showAutoRemove: boolean;
   onAddBackgroundImage?: (file: File) => void;
   onAddCenterImage?: (file: File) => void;
   onAddEntryImage?: (file: File) => void;
@@ -64,12 +67,8 @@ type Props = {
   onRemoveCenterImage?: () => void;
   hasBackgroundImage?: boolean;
   hasCenterImage?: boolean;
-  /** Hide image / defaults / advanced (specialized tool pages). */
-  showAddImage?: boolean;
-  showDefaults?: boolean;
-  showAdvanced?: boolean;
-  /** Yes/No: heavily reduced chrome. */
-  minimalToolbar?: boolean;
+  /** Per-tool button visibility (required for distinct page chrome). */
+  features: WheelToolbarFeatures;
 };
 
 type MenuKind = "open" | "more" | "examples" | "add-image" | null;
@@ -114,7 +113,6 @@ export function WheelTopBar({
   onOpenAdvanced,
   autoRemove,
   onAutoRemove,
-  showAutoRemove,
   onAddBackgroundImage,
   onAddCenterImage,
   onAddEntryImage,
@@ -122,12 +120,10 @@ export function WheelTopBar({
   onRemoveCenterImage,
   hasBackgroundImage,
   hasCenterImage,
-  showAddImage = true,
-  showDefaults = true,
-  showAdvanced = true,
-  minimalToolbar = false,
+  features,
 }: Props) {
   void _compact;
+  const showEntriesRow = toolbarHasEntriesRow(features);
   const [openMenu, setOpenMenu] = useState<MenuKind>(null);
   const [csvOpen, setCsvOpen] = useState(false);
   const [csvText, setCsvText] = useState("");
@@ -458,36 +454,44 @@ export function WheelTopBar({
               addImageMenuBody
             ) : (
               <>
-                <Link
-                  href="/wheel-gallery"
-                  role="menuitem"
-                  className="flex min-h-11 items-center rounded-lg px-2 text-sm font-semibold hover:bg-surface-2 sm:hidden"
-                  onClick={() => setOpenMenu(null)}
-                >
-                  Gallery
-                </Link>
-                <button
-                  type="button"
-                  role="menuitem"
-                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
-                  onClick={() => runAndClose(onAddWheel)}
-                >
-                  Start fresh
-                </button>
-                <button
-                  type="button"
-                  role="menuitem"
-                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
-                  onClick={() => setOpenMenu("examples")}
-                >
-                  Examples
-                  <ChevronDown className="ml-auto h-3.5 w-3.5 opacity-70" aria-hidden />
-                </button>
+                {features.gallery ? (
+                  <Link
+                    href="/wheel-gallery"
+                    role="menuitem"
+                    className="flex min-h-11 items-center rounded-lg px-2 text-sm font-semibold hover:bg-surface-2 sm:hidden"
+                    onClick={() => setOpenMenu(null)}
+                  >
+                    Gallery
+                  </Link>
+                ) : null}
+                {features.startFresh ? (
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
+                    onClick={() => runAndClose(onAddWheel)}
+                  >
+                    Start fresh
+                  </button>
+                ) : null}
+                {features.examples ? (
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
+                    onClick={() => setOpenMenu("examples")}
+                  >
+                    Examples
+                    <ChevronDown className="ml-auto h-3.5 w-3.5 opacity-70" aria-hidden />
+                  </button>
+                ) : null}
 
-                <p className="mt-2 px-2 text-[10px] font-bold uppercase tracking-wide text-muted sm:hidden">
-                  Entries tools
-                </p>
-                {showAutoRemove ? (
+                {showEntriesRow ? (
+                  <p className="mt-2 px-2 text-[10px] font-bold uppercase tracking-wide text-muted sm:hidden">
+                    Entries tools
+                  </p>
+                ) : null}
+                {features.autoRemove ? (
                   <label className="flex min-h-11 cursor-pointer items-center gap-2 rounded-lg px-2 text-sm font-semibold hover:bg-surface-2 sm:hidden">
                     <input
                       type="checkbox"
@@ -498,23 +502,27 @@ export function WheelTopBar({
                     Remove winner after spin
                   </label>
                 ) : null}
-                <button
-                  type="button"
-                  role="menuitem"
-                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
-                  onClick={() => runAndClose(onShuffle)}
-                >
-                  Shuffle
-                </button>
-                <button
-                  type="button"
-                  role="menuitem"
-                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
-                  onClick={() => runAndClose(onSort)}
-                >
-                  Sort
-                </button>
-                {showAddImage ? (
+                {features.shuffle ? (
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
+                    onClick={() => runAndClose(onShuffle)}
+                  >
+                    Shuffle
+                  </button>
+                ) : null}
+                {features.sort ? (
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
+                    onClick={() => runAndClose(onSort)}
+                  >
+                    Sort
+                  </button>
+                ) : null}
+                {features.addImage ? (
                   <button
                     type="button"
                     role="menuitem"
@@ -525,15 +533,17 @@ export function WheelTopBar({
                     <ChevronDown className="ml-auto h-3.5 w-3.5 opacity-70" aria-hidden />
                   </button>
                 ) : null}
-                <button
-                  type="button"
-                  role="menuitem"
-                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
-                  onClick={() => runAndClose(() => void onCopy())}
-                >
-                  Copy
-                </button>
-                {showDefaults ? (
+                {features.copy ? (
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
+                    onClick={() => runAndClose(() => void onCopy())}
+                  >
+                    Copy
+                  </button>
+                ) : null}
+                {features.defaults ? (
                   <button
                     type="button"
                     role="menuitem"
@@ -543,15 +553,17 @@ export function WheelTopBar({
                     Defaults
                   </button>
                 ) : null}
-                <button
-                  type="button"
-                  role="menuitem"
-                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold text-rose-300 hover:bg-surface-2 sm:hidden"
-                  onClick={() => runAndClose(onClear)}
-                >
-                  Clear
-                </button>
-                {showAdvanced ? (
+                {features.clear ? (
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold text-rose-300 hover:bg-surface-2 sm:hidden"
+                    onClick={() => runAndClose(onClear)}
+                  >
+                    Clear
+                  </button>
+                ) : null}
+                {features.advanced ? (
                   <button
                     type="button"
                     role="menuitem"
@@ -578,29 +590,33 @@ export function WheelTopBar({
                 >
                   FAQ
                 </a>
-                <button
-                  type="button"
-                  role="menuitem"
-                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2"
-                  onClick={() => {
-                    setOpenMenu(null);
-                    setCsvError("");
-                    setCsvOpen(true);
-                  }}
-                >
-                  Import from pasted CSV
-                </button>
-                <button
-                  type="button"
-                  role="menuitem"
-                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
-                  onClick={() => {
-                    setOpenMenu(null);
-                    onPreferences();
-                  }}
-                >
-                  Customize
-                </button>
+                {features.open ? (
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2"
+                    onClick={() => {
+                      setOpenMenu(null);
+                      setCsvError("");
+                      setCsvOpen(true);
+                    }}
+                  >
+                    Import from pasted CSV
+                  </button>
+                ) : null}
+                {features.customize ? (
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
+                    onClick={() => {
+                      setOpenMenu(null);
+                      onPreferences();
+                    }}
+                  >
+                    Customize
+                  </button>
+                ) : null}
               </>
             )}
           </div>,
@@ -655,68 +671,84 @@ export function WheelTopBar({
         }}
       />
 
-      {/* Row 1 — primary actions; no wrap on ≥sm */}
+      {/* Row 1 — primary actions; visibility is per-tool */}
       <div className="flex w-full min-w-0 max-w-full flex-wrap items-center gap-1 rounded-2xl border border-border bg-surface px-1 py-1 sm:flex-nowrap sm:gap-1 sm:overflow-x-auto sm:px-2">
-        <BarBtn disabled={disabled} onClick={onCustomize} icon={<Settings2 className="h-3.5 w-3.5" />}>
-          Customize
-        </BarBtn>
-        <BarBtn disabled={disabled} onClick={onNew}>
-          New
-        </BarBtn>
-        <BarBtn
-          ref={openBtnRef}
-          disabled={disabled}
-          onClick={() => setOpenMenu((m) => (m === "open" ? null : "open"))}
-          aria-expanded={openMenu === "open"}
-          aria-controls={openId}
-          aria-haspopup="menu"
-        >
-          Open
-          <ChevronDown className="h-3.5 w-3.5 opacity-70" aria-hidden />
-        </BarBtn>
-        <BarBtn
-          disabled={disabled}
-          onClick={() => {
-            setSaveTitle(defaultSaveTitle || "My wheel");
-            setSaveDownload(false);
-            setSaveError("");
-            setSaveOpen(true);
-          }}
-        >
-          Save
-        </BarBtn>
-        <BarBtn disabled={disabled} onClick={onShare}>
-          Share
-        </BarBtn>
-        <Link
-          href="/wheel-gallery"
-          className="hidden min-h-11 shrink-0 items-center rounded-lg px-2.5 text-xs font-bold text-foreground outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent sm:inline-flex"
-        >
-          Gallery
-        </Link>
-        <BarBtn
-          disabled={disabled}
-          className="max-sm:hidden"
-          onClick={() => {
-            setOpenMenu(null);
-            onAddWheel();
-          }}
-        >
-          Start fresh
-        </BarBtn>
-        <BarBtn
-          ref={examplesBtnRef}
-          disabled={disabled}
-          className="max-sm:hidden"
-          onClick={() => setOpenMenu((m) => (m === "examples" ? null : "examples"))}
-          aria-expanded={openMenu === "examples"}
-          aria-controls={examplesId}
-          aria-haspopup="menu"
-        >
-          Examples
-          <ChevronDown className="h-3.5 w-3.5 opacity-70" aria-hidden />
-        </BarBtn>
-        {!isFullscreen ? (
+        {features.customize ? (
+          <BarBtn disabled={disabled} onClick={onCustomize} icon={<Settings2 className="h-3.5 w-3.5" />}>
+            Customize
+          </BarBtn>
+        ) : null}
+        {features.new ? (
+          <BarBtn disabled={disabled} onClick={onNew}>
+            New
+          </BarBtn>
+        ) : null}
+        {features.open ? (
+          <BarBtn
+            ref={openBtnRef}
+            disabled={disabled}
+            onClick={() => setOpenMenu((m) => (m === "open" ? null : "open"))}
+            aria-expanded={openMenu === "open"}
+            aria-controls={openId}
+            aria-haspopup="menu"
+          >
+            Open
+            <ChevronDown className="h-3.5 w-3.5 opacity-70" aria-hidden />
+          </BarBtn>
+        ) : null}
+        {features.save ? (
+          <BarBtn
+            disabled={disabled}
+            onClick={() => {
+              setSaveTitle(defaultSaveTitle || "My wheel");
+              setSaveDownload(false);
+              setSaveError("");
+              setSaveOpen(true);
+            }}
+          >
+            Save
+          </BarBtn>
+        ) : null}
+        {features.share ? (
+          <BarBtn disabled={disabled} onClick={onShare}>
+            Share
+          </BarBtn>
+        ) : null}
+        {features.gallery ? (
+          <Link
+            href="/wheel-gallery"
+            className="hidden min-h-11 shrink-0 items-center rounded-lg px-2.5 text-xs font-bold text-foreground outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-accent sm:inline-flex"
+          >
+            Gallery
+          </Link>
+        ) : null}
+        {features.startFresh ? (
+          <BarBtn
+            disabled={disabled}
+            className="max-sm:hidden"
+            onClick={() => {
+              setOpenMenu(null);
+              onAddWheel();
+            }}
+          >
+            Start fresh
+          </BarBtn>
+        ) : null}
+        {features.examples ? (
+          <BarBtn
+            ref={examplesBtnRef}
+            disabled={disabled}
+            className="max-sm:hidden"
+            onClick={() => setOpenMenu((m) => (m === "examples" ? null : "examples"))}
+            aria-expanded={openMenu === "examples"}
+            aria-controls={examplesId}
+            aria-haspopup="menu"
+          >
+            Examples
+            <ChevronDown className="h-3.5 w-3.5 opacity-70" aria-hidden />
+          </BarBtn>
+        ) : null}
+        {features.fullscreen && !isFullscreen ? (
           <button
             type="button"
             disabled={disabled}
@@ -728,27 +760,29 @@ export function WheelTopBar({
             <Maximize2 className="h-4 w-4" aria-hidden />
           </button>
         ) : null}
-        <BarBtn
-          ref={moreBtnRef}
-          disabled={disabled}
-          className="sm:ml-auto"
-          onClick={() => setOpenMenu((m) => (m === "more" ? null : "more"))}
-          aria-expanded={openMenu === "more"}
-          aria-controls={moreId}
-          aria-haspopup="menu"
-        >
-          More
-          <ChevronDown className="h-3.5 w-3.5 opacity-70" aria-hidden />
-        </BarBtn>
+        {features.more ? (
+          <BarBtn
+            ref={moreBtnRef}
+            disabled={disabled}
+            className="sm:ml-auto"
+            onClick={() => setOpenMenu((m) => (m === "more" ? null : "more"))}
+            aria-expanded={openMenu === "more"}
+            aria-controls={moreId}
+            aria-haspopup="menu"
+          >
+            More
+            <ChevronDown className="h-3.5 w-3.5 opacity-70" aria-hidden />
+          </BarBtn>
+        ) : null}
       </div>
 
-      {/* Row 2 — entries tools (desktop only); omitted on minimal yes/no chrome */}
-      {minimalToolbar ? null : (
+      {/* Row 2 — entries tools (desktop only); only the buttons this tool needs */}
+      {showEntriesRow ? (
       <div
         className="hidden w-full min-w-0 max-w-full items-center gap-1 overflow-x-auto rounded-2xl border border-border bg-surface px-1 py-1 sm:flex sm:flex-nowrap sm:gap-1.5 sm:px-2"
         aria-label="Entries tools"
       >
-        {showAutoRemove ? (
+        {features.autoRemove ? (
           <label className="inline-flex min-h-11 shrink-0 cursor-pointer items-center gap-2 rounded-lg px-2 text-xs font-bold text-foreground hover:bg-surface-2">
             <input
               type="checkbox"
@@ -760,21 +794,25 @@ export function WheelTopBar({
             Remove winner after spin
           </label>
         ) : null}
-        <BarBtn
-          disabled={disabled}
-          onClick={onShuffle}
-          icon={<Shuffle className="h-3.5 w-3.5" />}
-        >
-          Shuffle
-        </BarBtn>
-        <BarBtn
-          disabled={disabled}
-          onClick={onSort}
-          icon={<ArrowUpDown className="h-3.5 w-3.5" />}
-        >
-          Sort
-        </BarBtn>
-        {showAddImage ? (
+        {features.shuffle ? (
+          <BarBtn
+            disabled={disabled}
+            onClick={onShuffle}
+            icon={<Shuffle className="h-3.5 w-3.5" />}
+          >
+            Shuffle
+          </BarBtn>
+        ) : null}
+        {features.sort ? (
+          <BarBtn
+            disabled={disabled}
+            onClick={onSort}
+            icon={<ArrowUpDown className="h-3.5 w-3.5" />}
+          >
+            Sort
+          </BarBtn>
+        ) : null}
+        {features.addImage ? (
           <BarBtn
             ref={addImageBtnRef}
             disabled={disabled}
@@ -787,14 +825,16 @@ export function WheelTopBar({
             <ChevronDown className="h-3.5 w-3.5 opacity-70" aria-hidden />
           </BarBtn>
         ) : null}
-        <BarBtn
-          disabled={disabled}
-          onClick={() => void onCopy()}
-          icon={<ClipboardCopy className="h-3.5 w-3.5" />}
-        >
-          Copy
-        </BarBtn>
-        {showDefaults ? (
+        {features.copy ? (
+          <BarBtn
+            disabled={disabled}
+            onClick={() => void onCopy()}
+            icon={<ClipboardCopy className="h-3.5 w-3.5" />}
+          >
+            Copy
+          </BarBtn>
+        ) : null}
+        {features.defaults ? (
           <BarBtn
             disabled={disabled}
             onClick={onRestoreDefaults}
@@ -803,21 +843,23 @@ export function WheelTopBar({
             Defaults
           </BarBtn>
         ) : null}
-        <BarBtn
-          disabled={disabled}
-          onClick={onClear}
-          icon={<Eraser className="h-3.5 w-3.5" />}
-          className="text-rose-300 hover:bg-rose-950/40"
-        >
-          Clear
-        </BarBtn>
-        {showAdvanced ? (
+        {features.clear ? (
+          <BarBtn
+            disabled={disabled}
+            onClick={onClear}
+            icon={<Eraser className="h-3.5 w-3.5" />}
+            className="text-rose-300 hover:bg-rose-950/40"
+          >
+            Clear
+          </BarBtn>
+        ) : null}
+        {features.advanced ? (
           <BarBtn disabled={disabled} onClick={onOpenAdvanced}>
             Advanced…
           </BarBtn>
         ) : null}
       </div>
-      )}
+      ) : null}
 
       {menuPortal}
 
