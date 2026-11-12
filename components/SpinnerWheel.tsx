@@ -35,6 +35,10 @@ import { AdvancedEntriesDialog } from "@/components/wheel-v2/AdvancedEntriesDial
 import { CustomizeDialog } from "@/components/wheel-v2/CustomizeDialog";
 import { WheelTopBar } from "@/components/wheel-v2/WheelTopBar";
 import {
+  toolbarFeaturesForTool,
+  toolbarHasAny,
+} from "@/lib/wheel-v2/toolbar";
+import {
   fileToResizedDataUrl,
   loadWheelImages,
   saveWheelImages,
@@ -234,12 +238,7 @@ export function SpinnerWheel({
   const spinningRef = useRef(false);
   const spinRef = useRef<() => void>(() => {});
   const showTally = toolId === "yes-no-wheel";
-  const focusedToolbar =
-    toolId === "classroom-spinner" ||
-    toolId === "prize-wheel" ||
-    toolId === "random-name-picker" ||
-    toolId === "yes-no-wheel";
-  const minimalToolbar = toolId === "yes-no-wheel";
+  const toolbarFeatures = useMemo(() => toolbarFeaturesForTool(toolId), [toolId]);
   const editorLabels = useMemo(() => choicesEditorLabels(toolId), [toolId]);
   const savedNote = useMemo(() => listSavedNote(toolId), [toolId]);
   const rotationRef = useRef(0);
@@ -1349,13 +1348,11 @@ export function SpinnerWheel({
         {/* Mobile: wheel on top (order-1); toolbar under it. Desktop: toolbar above via flex-col wrapper. */}
         <div className="flex w-full min-w-0 max-w-full flex-col gap-2">
         <div className="order-2 w-full min-w-0 max-w-full lg:order-1">
+          {toolbarHasAny(toolbarFeatures) ? (
           <WheelTopBar
             disabled={spinning}
             compact
-            showAddImage={!focusedToolbar}
-            showDefaults={!focusedToolbar}
-            showAdvanced={!focusedToolbar}
-            minimalToolbar={minimalToolbar}
+            features={toolbarFeatures}
             onCustomize={() => setCustomizeOpen(true)}
             onNew={onNewWheel}
             onSave={onSaveWheelFile}
@@ -1395,7 +1392,6 @@ export function SpinnerWheel({
             onOpenAdvanced={() => setAdvancedOpen(true)}
             autoRemove={autoRemove}
             onAutoRemove={persistAutoRemove}
-            showAutoRemove={toolId !== "yes-no-wheel"}
             onAddBackgroundImage={(f) => void onPickImage(f, "background")}
             onAddCenterImage={(f) => void onPickImage(f, "center")}
             onAddEntryImage={(f) => void onPickImage(f, "entry")}
@@ -1410,6 +1406,7 @@ export function SpinnerWheel({
             hasBackgroundImage={Boolean(wheelImages.background)}
             hasCenterImage={Boolean(wheelImages.center)}
           />
+          ) : null}
         </div>
         {/* Fixed stage height — site header + H1/byline/intro + two toolbar rows at 1280×720. */}
         <div
