@@ -1,17 +1,17 @@
 ---
 slug: /guides/white-elephant-rules-and-variations
-meta_title: "White Elephant Rules: Steal Limits, Dice Version & Big Groups | ExesTools"
-meta_description: "Clear White Elephant rules you can read out loud: how to draw the turn order, steal limits, the dice version, rules for 25+ people, and fixes for the arguments that always come up."
+meta_title: "White Elephant Rules: Steals, Dice, Big Groups | ExesTools"
+meta_description: "Clear White Elephant rules you can read out loud: turn order, steal limits, the dice version, rules for 25+ people, and how to avoid the usual arguments."
 author: Arhum Waheed
 author_url: /about#arhum
 published: "2026-11-03"
-updated: "2026-11-03"
+updated: "2026-11-12"
 related_tools: [/random-name-picker, /random-number-wheel, /secret-santa-generator, /bingo-card-generator]
 ---
 
 # White Elephant rules: the standard game, steal limits, dice and big groups
 
-By Arhum Waheed · Published 2026-11-03 · Updated 2026-11-03
+By Arhum Waheed · Published 2026-11-03 · Updated 2026-11-12
 
 White Elephant (also called Yankee Swap or Dirty Santa) is the gift exchange where nobody knows what they will go home with. That is the fun of it, and also the source of every argument. Most White Elephant games that go wrong don't go wrong because of the gifts. They go wrong because three people learned three different versions of the rules, and nobody said which one counts before the first gift came off the pile.
 
@@ -47,7 +47,7 @@ If guests are arriving at different times, draw the order before the party and s
 
 ## House rules to decide before you start
 
-Settle these out loud. Each one is something I've seen start a real argument.
+Settle these out loud. Each one is a common source of real arguments.
 
 ### How many steals before a gift freezes?
 
@@ -68,6 +68,10 @@ Usually yes, it just goes the same as any other gift. Some groups forbid it, but
 ### What about the gag gifts?
 
 Decide whether joke gifts are welcome. In a family game with kids, a rule like "something you'd actually use" saves disappointment. At a work party, joke gifts are part of the culture at some companies and a problem at others. If in doubt, say "no gag gifts" in the invite.
+
+### No stealing until three gifts are open (good for kids)
+
+The usual rule is that only player 1 cannot steal, because there is nothing to steal yet. After that, anyone can steal an opened, unfrozen gift. For kids' parties, add a house rule: no stealing until three gifts are open. The first opened toy is otherwise a magnet, and the game feels unfair to the children who went early.
 
 ## The dice version (no steal counting)
 
@@ -132,6 +136,26 @@ Pick Secret Santa when people know each other well and want thoughtful gifts. Pi
 ## A game for the people waiting their turn
 
 In a big game, players can sit for 20 minutes between turns. A round of holiday bingo, played on the side, keeps them involved. The [bingo card generator](/bingo-card-generator) has a Christmas word list you can edit, and you can add squares like "someone steals a gift" or "a gift gets frozen" that fill up during the exchange. Our [bingo game ideas guide](/guides/bingo-games-for-classrooms-and-parties) has more.
+
+## A worked round with six players
+
+Six friends, $20 budget, three-steal limit, first player gets a final swap. The wheel gives this order: Jo, Marcus, Priya, Dan, Lee, Sam.
+
+Jo opens a gift: a heated blanket.
+
+Marcus steals the blanket (steal 1). Jo, now empty-handed, opens a new gift: a board game.
+
+Priya opens a gift: a coffee sampler.
+
+Dan steals the blanket from Marcus (steal 2). Marcus can't steal it straight back, so he steals the coffee from Priya. Priya opens a new gift: a candle.
+
+Lee steals the blanket from Dan (steal 3). It's frozen now. Dan opens a new gift: a plant.
+
+Sam opens the last gift: a hot sauce set.
+
+All gifts are open. Jo gets the final swap and trades the board game for Sam's hot sauce. Done. Six players, six turns, about 15 minutes, and the blanket finishes with Lee.
+
+Notice that Jo, who went first and lost the blanket immediately, still got to choose last. That's the final swap doing its job.
 
 ## Frequently asked questions
 

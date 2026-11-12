@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
-import { toolOpenGraph } from "@/lib/seo/jsonld";
+import { contactPageLd, toolOpenGraph } from "@/lib/seo/jsonld";
 
-const CONTACT_TITLE = "Contact ExesTools | Bug Reports, Ideas, Privacy and Corrections";
+const CONTACT_TITLE = "Contact ExesTools | Bugs, Ideas, Privacy and Corrections";
 const CONTACT_META =
-  "How to reach the person who builds ExesTools: what to include in a bug report, privacy and data requests, corrections to guides, ad concerns and copyright notices.";
+  "How to reach the person who builds ExesTools: bug reports, privacy and data requests, guide corrections, ad concerns and copyright notices.";
 
 export const metadata: Metadata = {
   title: { absolute: CONTACT_TITLE },
@@ -28,8 +28,13 @@ export const metadata: Metadata = {
 const MAIL = "mailto:hello@exestools.com";
 
 export default function ContactPage() {
+  const ld = contactPageLd({ name: CONTACT_TITLE, description: CONTACT_META });
   return (
     <div className="mx-auto max-w-xl px-4 py-10 sm:px-6 sm:py-14">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
+      />
       <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">Contact ExesTools</h1>
       <p className="mt-2 text-sm text-muted">Last updated: October 19, 2026</p>
       <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">

@@ -1,7 +1,7 @@
 ---
 slug: /guides/prize-wheel-ideas-for-events-and-booths
-meta_title: "Running a Prize Wheel at a Booth or School Fair: Setup and Prize Budget | ExesTools"
-meta_description: "How to run an on-screen prize wheel at a trade show booth, school fair or shop counter: choosing the prize mix, working out cost per spin, booth flow, and a rules sign you can copy."
+meta_title: "Prize Wheel at a Booth or School Fair | ExesTools"
+meta_description: "How to run a prize wheel at a trade show booth, school fair or shop counter: prize mix, cost per spin, booth flow, and a rules sign you can copy."
 author: Arhum Waheed
 author_url: /about#arhum
 published: 2026-11-02
@@ -24,7 +24,7 @@ images:
 
 By Arhum Waheed · Published 2026-11-02 · Updated 2026-11-02
 
-At a school fair last spring I watched a tablet prize wheel stop three people mid-walk: they heard the spin, saw the slices, and queued before anyone had said hello. A wheel is loud and visual, and everyone thinks they'll land the big prize. That's great for foot traffic. It's less great if you didn't plan the prize mix and you've given away all the good stuff by 11 a.m.
+A tablet prize wheel can stop people mid-walk: they hear the spin, see the slices, and often queue before anyone has said hello. A wheel is loud and visual, and everyone thinks they'll land the big prize. That's great for foot traffic. It's less great if you didn't plan the prize mix and you've given away all the good stuff by 11 a.m.
 
 This guide covers running an on-screen [prize wheel](/prize-wheel) at a trade show booth, a school fair, a library open day or a shop counter. Most of it is about prizes and money, because that's the part people get wrong.
 

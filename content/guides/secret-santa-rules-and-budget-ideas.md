@@ -30,7 +30,7 @@ This guide covers the rules worth agreeing on, the math of why hat draws misfire
 
 Send these before the draw, and put a short version in the event note so it appears on everyone's reveal. Running it at work? The [week-by-week office plan](/guides/office-secret-santa-planning-timeline) covers opt-ins, remote coworkers and dropouts.
 
-1. **A budget range, not just a maximum.** "$20–$30" or "PKR 3,000–4,000" sets a floor as well as a ceiling. The budget field is free text, so any currency works.
+1. **A budget range, not just a maximum.** "$20–$30" sets a floor as well as a ceiling. The budget field is free text, so any currency works.
 2. **The date and place.** Remote groups also need a ship-by date: "Gifts must arrive by 18 December."
 3. **What's off limits.** For example, no joke gifts that embarrass the receiver, no alcohol at a workplace or school exchange, and no gift cards unless the theme allows them.
 4. **Wrapping and labeling.** "Wrap it and write your recipient's name on it" saves a lot of sorting on the day.
@@ -116,7 +116,7 @@ ExesTools doesn't collect wish lists. Use the event note to ask people to send t
 
 **Office:** paste names from a spreadsheet and send links as direct messages. Make taking part clearly optional, and nobody should have to explain why they opt out. **Classrooms:** no student accounts are needed. For younger students, switch on Show all matches and print slips, using first names or initials. **Remote teams:** set the ship-by date at least two weeks before a video-call reveal if anyone is posting internationally.
 
-For the party itself, the [bingo card generator](/bingo-card-generator) has an editable Christmas list. For a White Elephant, nobody is assigned anyone: see [white elephant gift exchange rules](/guides/white-elephant-gift-exchange-rules), and use the [random name picker](/random-name-picker) with remove-winner on to set the turn order.
+For the party itself, the [bingo card generator](/bingo-card-generator) has an editable Christmas list. For a White Elephant, nobody is assigned anyone: see [White Elephant rules](/guides/white-elephant-rules-and-variations), and use the [random name picker](/random-name-picker) with remove-winner on to set the turn order.
 
 ## Frequently asked questions
 

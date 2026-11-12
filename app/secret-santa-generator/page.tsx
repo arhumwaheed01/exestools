@@ -32,7 +32,8 @@ export const metadata: Metadata = {
 
 const FAQ_LINK_HREFS: Record<string, string> = {
   "random name picker": "/random-name-picker",
-  "white elephant gift exchange rules": "/guides/white-elephant-gift-exchange-rules",
+  "white elephant gift exchange rules": "/guides/white-elephant-rules-and-variations",
+  "White Elephant rules": "/guides/white-elephant-rules-and-variations",
   "Secret Santa rules and gift exchange ideas": "/guides/secret-santa-rules-and-budget-ideas",
   "office Secret Santa planning timeline": "/guides/office-secret-santa-planning-timeline",
   "Privacy Policy": "/privacy-policy",
@@ -237,10 +238,10 @@ export default function SecretSantaGeneratorPage() {
           </Link>
           . Prefer a steal-style pile game? Read{" "}
           <Link
-            href="/guides/white-elephant-gift-exchange-rules"
+            href="/guides/white-elephant-rules-and-variations"
             className="font-semibold text-accent hover:underline"
           >
-            white elephant gift exchange rules
+            White Elephant rules
           </Link>
           .
         </p>
@@ -413,7 +414,7 @@ export default function SecretSantaGeneratorPage() {
               has a ready-made Christmas list you can edit and print. For a steal-style exchange
               instead of named gifts, use the{" "}
               <Link
-                href="/guides/white-elephant-gift-exchange-rules"
+                href="/guides/white-elephant-rules-and-variations"
                 className="font-semibold text-accent hover:underline"
               >
                 white elephant rules

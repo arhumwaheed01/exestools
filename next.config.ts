@@ -23,6 +23,16 @@ const nextConfig: NextConfig = {
         destination: "/",
         statusCode: 301,
       },
+      {
+        source: "/guides/white-elephant-gift-exchange-rules",
+        destination: "/guides/white-elephant-rules-and-variations",
+        permanent: true,
+      },
+      {
+        source: "/guides/white-elephant-gift-exchange-rules/",
+        destination: "/guides/white-elephant-rules-and-variations",
+        permanent: true,
+      },
     ];
   },
   async headers() {

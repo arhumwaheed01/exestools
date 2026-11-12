@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
+import { webPageLd } from "@/lib/seo/jsonld";
 
 const DMCA_META =
   "How to send ExesTools a copyright (DMCA) notice or counter-notice, what to include, and where to email it.";
@@ -27,8 +28,17 @@ export const metadata: Metadata = {
 };
 
 export default function DmcaPage() {
+  const ld = webPageLd({
+    name: "DMCA / Copyright | ExesTools",
+    description: DMCA_META,
+    path: "/dmca",
+  });
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
+      />
       <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
         DMCA / Copyright
       </h1>

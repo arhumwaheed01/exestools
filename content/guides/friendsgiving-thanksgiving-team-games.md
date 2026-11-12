@@ -1,7 +1,7 @@
 ---
 slug: /guides/friendsgiving-thanksgiving-team-games
-meta_title: "Friendsgiving & Thanksgiving Team Games (No Awkward Picks) | ExesTools"
-meta_description: "Team games for Friendsgiving and Thanksgiving: fair splits for trivia, cooking stations and charades, plus bingo, turn order and gift-exchange options for mixed groups."
+meta_title: "Friendsgiving and Thanksgiving Team Games | ExesTools"
+meta_description: "Team games for Friendsgiving and Thanksgiving: fair splits for trivia, cooking and charades, plus bingo, turn order and gift-exchange options."
 author: Arhum Waheed
 author_url: /about#arhum
 published: "2026-11-05"
@@ -95,7 +95,7 @@ Edit a bingo card with rooms and objects ("candles," "orange napkin," "someone i
 **Time:** 20–45 minutes. **Ask:** depends on the format.
 
 - **Named gifts with couple exclusions:** [Secret Santa generator](/secret-santa-generator)—draw once, send private links or print slips.
-- **Steal pile (Yankee swap / white elephant):** follow [white elephant gift exchange rules](/guides/white-elephant-gift-exchange-rules) and use the name picker with remove-winner on for turn order.
+- **Steal pile (Yankee swap / white elephant):** follow [White Elephant rules](/guides/white-elephant-rules-and-variations) and use the name picker with remove-winner on for turn order.
 
 Pick one format. Running both the same night usually means one of them feels rushed.
 

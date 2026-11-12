@@ -1,7 +1,7 @@
 ---
 slug: /guides/how-to-run-a-holiday-party-raffle
-meta_title: "How to Run a Holiday Party Raffle at Work (Prizes, Tickets, Draw) | ExesTools"
-meta_description: "A practical guide to the office or holiday party raffle: prize budgets and order, fair ticket rules, remote staff, how to draw winners and alternates in front of the room, and what to check first."
+meta_title: "How to Run a Holiday Party Raffle at Work | ExesTools"
+meta_description: "How to run an office or holiday party raffle: prize budgets, fair ticket rules, remote staff, and how to draw winners and alternates in front of the room."
 author: Arhum Waheed
 author_url: /about#arhum
 published: "2026-11-07"

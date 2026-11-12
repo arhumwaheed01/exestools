@@ -1,7 +1,7 @@
 ---
 slug: /guides/office-secret-santa-planning-timeline
 meta_title: "Office Secret Santa: A Week-by-Week Plan for the Organizer"
-meta_description: "A five-week plan for running an office Secret Santa: the opt-in message, budget and deadlines, exclusions, sending private links, remote shipping and the party itself."
+meta_description: "A five-week plan for an office Secret Santa: the opt-in message, budget, exclusions, private links, remote shipping and the party itself."
 author: Arhum Waheed
 author_url: /about#arhum
 published: 2026-10-21

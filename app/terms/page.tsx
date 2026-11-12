@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
+import { webPageLd } from "@/lib/seo/jsonld";
 
 const TERMS_META =
   "Terms of Service for ExesTools free online tools: fair use, share links, giveaway and raffle responsibility, no warranty and advertising.";
@@ -27,8 +28,17 @@ export const metadata: Metadata = {
 };
 
 export default function TermsPage() {
+  const ld = webPageLd({
+    name: "Terms of Service | ExesTools",
+    description: TERMS_META,
+    path: "/terms",
+  });
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
+      />
       <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
         Terms of Service
       </h1>

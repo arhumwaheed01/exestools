@@ -16,6 +16,12 @@ export function AppShell({
   const pathname = usePathname() ?? "";
   const isEmbed =
     pathname.startsWith("/classroom-spinner/embed/") || pathname.startsWith("/embed/");
+  const noAds =
+    pathname === "/contact" ||
+    pathname === "/privacy-policy" ||
+    pathname === "/terms" ||
+    pathname === "/dmca" ||
+    pathname === "/wheel-gallery";
   const hasStickySpin =
     pathname === "/" ||
     pathname === "/random-name-picker" ||
@@ -35,7 +41,7 @@ export function AppShell({
           aria-hidden
         />
       )}
-      {isEmbed ? null : adsense}
+      {isEmbed || noAds ? null : adsense}
     </>
   );
 }
