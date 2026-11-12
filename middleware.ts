@@ -4,9 +4,28 @@ import { CLASSROOM_EMBED_CSP } from "@/lib/classroom-embed";
 import { EMBED_FRAME_CSP } from "@/lib/embed";
 
 const GONE = new Set(["/tools/jwt-decoder"]);
+const CANONICAL_HOST = "www.exestools.com";
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const host = (request.headers.get("host") ?? "").split(":")[0].toLowerCase();
+  const proto = (request.headers.get("x-forwarded-proto") ?? "https").split(",")[0].trim();
+
+  // Apex → www (and force https). Prefer a single hop to https://www when possible.
+  if (host === "exestools.com") {
+    const url = request.nextUrl.clone();
+    url.protocol = "https:";
+    url.host = CANONICAL_HOST;
+    return NextResponse.redirect(url, 308);
+  }
+
+  // http://www → https://www (path preserved). Vercel usually does this first; keep as fallback.
+  if (host === CANONICAL_HOST && proto === "http") {
+    const url = request.nextUrl.clone();
+    url.protocol = "https:";
+    url.host = CANONICAL_HOST;
+    return NextResponse.redirect(url, 308);
+  }
 
   if (GONE.has(pathname)) {
     return new NextResponse("Gone", {
@@ -42,5 +61,10 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/classroom-spinner/embed/:path*", "/embed/:path*", "/tools/:path*"],
+  matcher: [
+    /*
+     * Host canonicalization for all pages; skip Next internals and static assets.
+     */
+    "/((?!_next/static|_next/image|favicon.svg|.*\\.(?:ico|png|jpg|jpeg|gif|webp|svg|txt|xml|json)$).*)",
+  ],
 };

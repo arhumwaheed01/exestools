@@ -24,6 +24,12 @@ import { ThemeChips } from "@/components/tools/ThemeChips";
 import { ToolConfetti } from "@/components/tools/Confetti";
 import { WinnerModal } from "@/components/WinnerModal";
 import { YesNoTally } from "@/components/tools/YesNoTally";
+import {
+  ClassroomRosterPanel,
+  HomeGalleryStrip,
+  PrizeOddsPanel,
+  YesNoModeBar,
+} from "@/components/tools/ToolPurposePanels";
 import { WheelOverflowMenu } from "@/components/tools/WheelOverflowMenu";
 import { AdvancedEntriesDialog } from "@/components/wheel-v2/AdvancedEntriesDialog";
 import { CustomizeDialog } from "@/components/wheel-v2/CustomizeDialog";
@@ -212,6 +218,9 @@ export function SpinnerWheel({
   const [hasSpunOnce, setHasSpunOnce] = useState(false);
   /** Yes/No page only: spin result tallies (session state, not persisted). */
   const [tally, setTally] = useState<Record<string, { label: string; count: number }>>({});
+  /** Classroom: names temporarily held off the wheel (absent). */
+  const [heldAbsent, setHeldAbsent] = useState<string[]>([]);
+  const [classSize, setClassSize] = useState(0);
   const [panelOpen, setPanelOpen] = useState(true);
   const [panelTab, setPanelTab] = useState<PanelTab>("entries");
   const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
@@ -225,6 +234,12 @@ export function SpinnerWheel({
   const spinningRef = useRef(false);
   const spinRef = useRef<() => void>(() => {});
   const showTally = toolId === "yes-no-wheel";
+  const focusedToolbar =
+    toolId === "classroom-spinner" ||
+    toolId === "prize-wheel" ||
+    toolId === "random-name-picker" ||
+    toolId === "yes-no-wheel";
+  const minimalToolbar = toolId === "yes-no-wheel";
   const editorLabels = useMemo(() => choicesEditorLabels(toolId), [toolId]);
   const savedNote = useMemo(() => listSavedNote(toolId), [toolId]);
   const rotationRef = useRef(0);
@@ -313,7 +328,23 @@ export function SpinnerWheel({
       }),
     [text, v2Settings.displayDuplicates, v2Settings.maxNamesVisible],
   );
+  const isCoinMode =
+    toolId === "yes-no-wheel" &&
+    choices.length === 2 &&
+    choices.every((c) => /^(heads|tails)$/i.test(c));
+  const rosterNames = useMemo(() => {
+    if (toolId !== "classroom-spinner") return choices;
+    const seen = new Set(choices.map((c) => c.toLocaleLowerCase()));
+    const extras = heldAbsent.filter((n) => !seen.has(n.toLocaleLowerCase()));
+    return [...choices, ...extras];
+  }, [toolId, choices, heldAbsent]);
   const canSpin = choices.length >= 2 && !spinning;
+
+  useEffect(() => {
+    if (!hydrated || toolId !== "classroom-spinner") return;
+    const n = choices.length + heldAbsent.length;
+    if (n > 0 && (classSize === 0 || n > classSize)) setClassSize(n);
+  }, [hydrated, toolId, choices.length, heldAbsent.length, classSize]);
 
   // Keep latest values for synchronous localStorage writes (immediate reload races).
   const choicesRef = useRef(choices);
@@ -499,6 +530,8 @@ export function SpinnerWheel({
     }
 
     hydratedToolIdRef.current = toolId;
+    setHeldAbsent([]);
+    setClassSize(0);
     setHydrated(true);
     // Reveal canvas after first paint of reserved shell
     requestAnimationFrame(() => setReady(true));
@@ -749,6 +782,8 @@ export function SpinnerWheel({
   const onRestoreDefaults = () => {
     if (spinningRef.current) return;
     offerListUndo("Defaults restored — Undo to go back.");
+    setHeldAbsent([]);
+    if (toolId === "classroom-spinner") setClassSize(defaults.length);
     setText(choicesToText(defaults));
     setShowNextSteps(false);
   };
@@ -762,8 +797,27 @@ export function SpinnerWheel({
     }
   };
 
+  const onToggleAbsent = (name: string) => {
+    if (spinningRef.current) return;
+    const key = name.toLocaleLowerCase();
+    const isHeld = heldAbsent.some((n) => n.toLocaleLowerCase() === key);
+    if (isHeld) {
+      setHeldAbsent((prev) => prev.filter((n) => n.toLocaleLowerCase() !== key));
+      setText(choicesToText([...choices, name]));
+    } else {
+      if (choices.length <= 2) {
+        showToast("Keep at least two students on the wheel.");
+        return;
+      }
+      setHeldAbsent((prev) => [...prev, name]);
+      setText(choicesToText(choices.filter((c) => c.toLocaleLowerCase() !== key)));
+    }
+  };
+
   const onPreset = (preset: WheelPreset) => {
     if (spinningRef.current) return;
+    setHeldAbsent([]);
+    if (toolId === "classroom-spinner") setClassSize(preset.choices.length);
     setText(choicesToText(preset.choices));
     setRotation(0);
     track("preset_load", { toolId, preset: preset.id });
@@ -1187,6 +1241,47 @@ export function SpinnerWheel({
       >
         {livePreview}
         {sharedBanner}
+        {toolId === "home" ? <HomeGalleryStrip /> : null}
+        {toolId === "random-name-picker" ? (
+          <div className="w-full rounded-2xl border border-border bg-surface p-3 sm:p-4">
+            <h2 className="text-sm font-extrabold tracking-tight text-foreground">
+              Meeting / stand-up order
+            </h2>
+            <p className="mt-1 text-xs text-muted">
+              Loaded with a stand-up roster and remove-winner on, so each person speaks once. Swap
+              the list for your team, then spin for who goes next.
+            </p>
+          </div>
+        ) : null}
+        {toolId === "classroom-spinner" ? (
+          <ClassroomRosterPanel
+            names={rosterNames}
+            absent={new Set(heldAbsent.map((n) => n.toLocaleLowerCase()))}
+            pickedCount={history.length}
+            total={classSize || rosterNames.length}
+            onToggleAbsent={onToggleAbsent}
+            disabled={spinning}
+          />
+        ) : null}
+        {toolId === "prize-wheel" ? (
+          <PrizeOddsPanel prizes={choices} weights={entryWeights} />
+        ) : null}
+        {toolId === "yes-no-wheel" ? (
+          <YesNoModeBar
+            isCoin={isCoinMode}
+            onYesNo={() => {
+              const p = getPresetById("yes-no");
+              if (p) onPreset(p);
+            }}
+            onCoinMode={() => {
+              const p = getPresetById("heads-tails");
+              if (p) onPreset(p);
+            }}
+          />
+        ) : null}
+        {toolId === "yes-no-wheel" ? (
+          <YesNoTally choices={choices} tally={tally} onReset={() => setTally({})} />
+        ) : null}
         <CustomizeDialog
           open={customizeOpen}
           value={v2Settings}
@@ -1257,6 +1352,10 @@ export function SpinnerWheel({
           <WheelTopBar
             disabled={spinning}
             compact
+            showAddImage={!focusedToolbar}
+            showDefaults={!focusedToolbar}
+            showAdvanced={!focusedToolbar}
+            minimalToolbar={minimalToolbar}
             onCustomize={() => setCustomizeOpen(true)}
             onNew={onNewWheel}
             onSave={onSaveWheelFile}
@@ -1450,7 +1549,7 @@ export function SpinnerWheel({
         </div>
         </div>
 
-        {/* Outside the fixed stage so tally/result don't shrink the wheel (yes/no). */}
+        {/* Outside the fixed stage so result doesn't shrink the wheel (yes/no). Tally is above-fold. */}
         {toolId === "yes-no-wheel" ? (
           <div className="w-full max-w-3xl">
             <ResultReveal
@@ -1472,9 +1571,6 @@ export function SpinnerWheel({
               }}
               spinBtnRef={stickySpinRef}
             />
-            {showTally ? (
-              <YesNoTally choices={choices} tally={tally} onReset={() => setTally({})} />
-            ) : null}
           </div>
         ) : null}
 

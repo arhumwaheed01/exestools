@@ -166,6 +166,70 @@ export function articleLd(opts: {
   };
 }
 
+/** Thin legal / contact pages. */
+export function webPageLd(opts: {
+  name: string;
+  description: string;
+  path: string;
+}) {
+  const url =
+    opts.path === "/" ? "https://www.exestools.com/" : `https://www.exestools.com${opts.path}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: opts.name,
+    description: opts.description,
+    url,
+    isPartOf: { "@id": "https://www.exestools.com/#website" },
+    publisher: { "@id": "https://www.exestools.com/#organization" },
+  };
+}
+
+export function contactPageLd(opts: { name: string; description: string }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    name: opts.name,
+    description: opts.description,
+    url: "https://www.exestools.com/contact",
+    isPartOf: { "@id": "https://www.exestools.com/#website" },
+    publisher: { "@id": "https://www.exestools.com/#organization" },
+  };
+}
+
+/** /guides hub: CollectionPage + ItemList of published guides. */
+export function guidesHubLd(opts: {
+  name: string;
+  description: string;
+  items: { name: string; path: string }[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": "https://www.exestools.com/guides#collection",
+        name: opts.name,
+        description: opts.description,
+        url: "https://www.exestools.com/guides",
+        isPartOf: { "@id": "https://www.exestools.com/#website" },
+        publisher: { "@id": "https://www.exestools.com/#organization" },
+        mainEntity: { "@id": "https://www.exestools.com/guides#itemlist" },
+      },
+      {
+        "@type": "ItemList",
+        "@id": "https://www.exestools.com/guides#itemlist",
+        itemListElement: opts.items.map((item, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          name: item.name,
+          url: `https://www.exestools.com${item.path}`,
+        })),
+      },
+    ],
+  };
+}
+
 export function toolOpenGraph(opts: {
   title: string;
   description: string;

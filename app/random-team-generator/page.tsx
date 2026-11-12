@@ -247,7 +247,7 @@ export default function RandomTeamGeneratorPage() {
         </section>
 
         <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">Tips</h2>
+          <h2 className="text-xl font-bold tracking-tight text-foreground">Tips for fair teams</h2>
           <ul className="mt-3 list-disc space-y-3 pl-5">
             <li>
               Odd number? Pick the number of teams, not the team size, and the extra people get
@@ -276,10 +276,6 @@ export default function RandomTeamGeneratorPage() {
             </Link>
             .
           </p>
-        </section>
-
-        <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">Tips for fair teams</h2>
           <p className="mt-3">
             Show the full name list on a screen before you generate, so everyone can see who is in
             the draw. Generate once where the group can watch, then reshuffle only if you agreed

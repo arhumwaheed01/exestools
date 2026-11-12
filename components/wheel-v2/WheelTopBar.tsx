@@ -64,6 +64,12 @@ type Props = {
   onRemoveCenterImage?: () => void;
   hasBackgroundImage?: boolean;
   hasCenterImage?: boolean;
+  /** Hide image / defaults / advanced (specialized tool pages). */
+  showAddImage?: boolean;
+  showDefaults?: boolean;
+  showAdvanced?: boolean;
+  /** Yes/No: heavily reduced chrome. */
+  minimalToolbar?: boolean;
 };
 
 type MenuKind = "open" | "more" | "examples" | "add-image" | null;
@@ -116,6 +122,10 @@ export function WheelTopBar({
   onRemoveCenterImage,
   hasBackgroundImage,
   hasCenterImage,
+  showAddImage = true,
+  showDefaults = true,
+  showAdvanced = true,
+  minimalToolbar = false,
 }: Props) {
   void _compact;
   const [openMenu, setOpenMenu] = useState<MenuKind>(null);
@@ -504,15 +514,17 @@ export function WheelTopBar({
                 >
                   Sort
                 </button>
-                <button
-                  type="button"
-                  role="menuitem"
-                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
-                  onClick={() => setOpenMenu("add-image")}
-                >
-                  Add image
-                  <ChevronDown className="ml-auto h-3.5 w-3.5 opacity-70" aria-hidden />
-                </button>
+                {showAddImage ? (
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
+                    onClick={() => setOpenMenu("add-image")}
+                  >
+                    Add image
+                    <ChevronDown className="ml-auto h-3.5 w-3.5 opacity-70" aria-hidden />
+                  </button>
+                ) : null}
                 <button
                   type="button"
                   role="menuitem"
@@ -521,14 +533,16 @@ export function WheelTopBar({
                 >
                   Copy
                 </button>
-                <button
-                  type="button"
-                  role="menuitem"
-                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
-                  onClick={() => runAndClose(onRestoreDefaults)}
-                >
-                  Defaults
-                </button>
+                {showDefaults ? (
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
+                    onClick={() => runAndClose(onRestoreDefaults)}
+                  >
+                    Defaults
+                  </button>
+                ) : null}
                 <button
                   type="button"
                   role="menuitem"
@@ -537,14 +551,16 @@ export function WheelTopBar({
                 >
                   Clear
                 </button>
-                <button
-                  type="button"
-                  role="menuitem"
-                  className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
-                  onClick={() => runAndClose(onOpenAdvanced)}
-                >
-                  Advanced…
-                </button>
+                {showAdvanced ? (
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="flex min-h-11 w-full items-center rounded-lg px-2 text-left text-sm font-semibold hover:bg-surface-2 sm:hidden"
+                    onClick={() => runAndClose(onOpenAdvanced)}
+                  >
+                    Advanced…
+                  </button>
+                ) : null}
 
                 <a
                   href="mailto:hello@exestools.com?subject=Spinner%20wheel%20feedback"
@@ -726,7 +742,8 @@ export function WheelTopBar({
         </BarBtn>
       </div>
 
-      {/* Row 2 — entries tools (desktop only) */}
+      {/* Row 2 — entries tools (desktop only); omitted on minimal yes/no chrome */}
+      {minimalToolbar ? null : (
       <div
         className="hidden w-full min-w-0 max-w-full items-center gap-1 overflow-x-auto rounded-2xl border border-border bg-surface px-1 py-1 sm:flex sm:flex-nowrap sm:gap-1.5 sm:px-2"
         aria-label="Entries tools"
@@ -757,17 +774,19 @@ export function WheelTopBar({
         >
           Sort
         </BarBtn>
-        <BarBtn
-          ref={addImageBtnRef}
-          disabled={disabled}
-          onClick={() => setOpenMenu((m) => (m === "add-image" ? null : "add-image"))}
-          aria-expanded={openMenu === "add-image"}
-          aria-controls={addImageId}
-          aria-haspopup="menu"
-        >
-          Add image
-          <ChevronDown className="h-3.5 w-3.5 opacity-70" aria-hidden />
-        </BarBtn>
+        {showAddImage ? (
+          <BarBtn
+            ref={addImageBtnRef}
+            disabled={disabled}
+            onClick={() => setOpenMenu((m) => (m === "add-image" ? null : "add-image"))}
+            aria-expanded={openMenu === "add-image"}
+            aria-controls={addImageId}
+            aria-haspopup="menu"
+          >
+            Add image
+            <ChevronDown className="h-3.5 w-3.5 opacity-70" aria-hidden />
+          </BarBtn>
+        ) : null}
         <BarBtn
           disabled={disabled}
           onClick={() => void onCopy()}
@@ -775,13 +794,15 @@ export function WheelTopBar({
         >
           Copy
         </BarBtn>
-        <BarBtn
-          disabled={disabled}
-          onClick={onRestoreDefaults}
-          icon={<RotateCcw className="h-3.5 w-3.5" />}
-        >
-          Defaults
-        </BarBtn>
+        {showDefaults ? (
+          <BarBtn
+            disabled={disabled}
+            onClick={onRestoreDefaults}
+            icon={<RotateCcw className="h-3.5 w-3.5" />}
+          >
+            Defaults
+          </BarBtn>
+        ) : null}
         <BarBtn
           disabled={disabled}
           onClick={onClear}
@@ -790,10 +811,13 @@ export function WheelTopBar({
         >
           Clear
         </BarBtn>
-        <BarBtn disabled={disabled} onClick={onOpenAdvanced}>
-          Advanced…
-        </BarBtn>
+        {showAdvanced ? (
+          <BarBtn disabled={disabled} onClick={onOpenAdvanced}>
+            Advanced…
+          </BarBtn>
+        ) : null}
       </div>
+      )}
 
       {menuPortal}
 

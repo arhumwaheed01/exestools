@@ -8,7 +8,7 @@ import { GuideMarkdown } from "@/components/guides/GuideMarkdown";
 import { preprocessGuideBody } from "@/lib/guideBody";
 import { getPublishedGuides } from "@/lib/guides";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
-import { toolOpenGraph } from "@/lib/seo/jsonld";
+import { guidesHubLd, toolOpenGraph } from "@/lib/seo/jsonld";
 
 const HUB_INTRO_PATH = path.join(process.cwd(), "public/content/site-pages/guides-hub-intro.md");
 
@@ -46,7 +46,7 @@ const CARD_SUMMARY: Record<string, string> = {
     "For the office organizer who got volunteered. A five-week plan for opt-ins, budgets, exclusions, private links, remote shipping and the party itself.",
   "classroom-games-with-a-spinner-wheel":
     "For teachers who want low-prep review games, warm-ups and brain breaks. Ten setups with timing, wheel lists and tips from kindergarten through about eighth grade.",
-  "white-elephant-gift-exchange-rules":
+  "white-elephant-rules-and-variations":
     "For the host who needs rules everyone can hear once. Covers steals and freeze limits, what the first player gets, fair turn order, and variations for kids or big groups.",
   "friendsgiving-thanksgiving-team-games":
     "For Friendsgiving or Thanksgiving hosts with a mixed guest list. Covers fair team splits, trivia and cooking stations, bingo, duties spins and gift-exchange options.",
@@ -77,12 +77,21 @@ export const metadata: Metadata = {
 export default function GuidesHubPage() {
   const guides = getPublishedGuides();
   const introMarkdown = hub.introMarkdown;
+  const hubLd = guidesHubLd({
+    name: hub.title,
+    description: hub.description,
+    items: guides.map((g) => ({ name: g.title, path: `/guides/${g.slug}` })),
+  });
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(hubLd) }}
+      />
       <header className="max-w-3xl">
         <h1 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">Guides</h1>
-        <PageMeta updated="2026-10-25" />
+        <PageMeta updated="2026-11-12" />
         <div className="mt-6">
           <GuideMarkdown content={introMarkdown} />
         </div>

@@ -130,10 +130,10 @@ export default function RandomNamePickerPage() {
             trick for a gift exchange: spin until the wheel is empty and play in that order. Steal
             limits and freeze rules are in{" "}
             <Link
-              href="/guides/white-elephant-gift-exchange-rules"
+              href="/guides/white-elephant-rules-and-variations"
               className="font-semibold text-accent hover:underline"
             >
-              white elephant gift exchange rules
+              White Elephant rules
             </Link>
             .
           </li>

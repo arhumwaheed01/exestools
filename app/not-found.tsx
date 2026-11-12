@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { NoAds } from "@/components/NoAds";
 
 export const metadata: Metadata = {
   title: {
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <div className="mx-auto flex max-w-lg flex-col items-center px-4 py-20 text-center sm:py-28">
+      <NoAds />
       <p className="text-sm font-semibold uppercase tracking-wider text-accent">404</p>
       <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-foreground">Page not found</h1>
       <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">

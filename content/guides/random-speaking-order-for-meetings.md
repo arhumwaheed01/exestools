@@ -1,7 +1,7 @@
 ---
 slug: /guides/random-speaking-order-for-meetings
-meta_title: "Random Speaking Order for Stand-ups and Meetings: A Facilitator's Guide | ExesTools"
-meta_description: "When a random speaking order helps a meeting and when it doesn't, plus setups for daily stand-ups, retros, round-robin updates and remote calls, with a worked example."
+meta_title: "Random Speaking Order for Stand-ups and Meetings | ExesTools"
+meta_description: "When a random speaking order helps a meeting and when it doesn't, plus setups for stand-ups, retros and remote calls, with a worked example."
 author: Arhum Waheed
 author_url: /about#arhum
 published: 2026-10-30

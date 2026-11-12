@@ -1,7 +1,7 @@
 ---
 slug: /guides/fair-ways-to-break-a-tie
-meta_title: "How to Break a Tie Fairly: Coin Toss, Yes/No Wheel or Something Else | ExesTools"
-meta_description: "A practical guide to breaking ties fairly in games, votes, drafts and family arguments: when chance is the right call, how to run a clean coin toss, three-way ties, and when not to leave it to luck."
+meta_title: "How to Break a Tie Fairly: Coin Toss or Wheel | ExesTools"
+meta_description: "How to break ties fairly in games, votes and drafts: when chance is right, how to run a clean coin toss, three-way ties, and when not to leave it to luck."
 author: Arhum Waheed
 author_url: /about#arhum
 published: 2026-11-06

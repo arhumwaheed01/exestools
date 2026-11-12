@@ -1,7 +1,7 @@
 ---
 slug: /guides/icebreaker-games-with-a-random-picker
-meta_title: "Icebreaker Games With a Random Picker (and 30 Questions to Use) | ExesTools"
-meta_description: "Eight icebreakers for teams, classes and parties that use a random picker, rated by how much they ask of people, with group sizes, timings and a bank of 30 low-pressure questions."
+meta_title: "Icebreaker Games With a Random Picker | ExesTools"
+meta_description: "Eight icebreakers for teams, classes and parties, rated by how much they ask of people, with timings and a bank of 30 low-pressure questions."
 author: Arhum Waheed
 author_url: /about#arhum
 published: 2026-11-04

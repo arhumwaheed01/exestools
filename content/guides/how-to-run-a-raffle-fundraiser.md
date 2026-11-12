@@ -1,7 +1,7 @@
 ---
 slug: /guides/how-to-run-a-raffle-fundraiser
-meta_title: "How to Run a Raffle Fundraiser: Prizes, Ticket Pricing and the Draw | ExesTools"
-meta_description: "Plan a school, club or charity raffle that actually raises money: check the local rules, line up donated prizes, price tickets, track sales and run a draw people trust."
+meta_title: "Raffle Fundraiser: Prizes, Tickets and the Draw | ExesTools"
+meta_description: "Plan a school, club or charity raffle: check local rules, line up donated prizes, price tickets, track sales and run a draw people trust."
 author: Arhum Waheed
 author_url: /about#arhum
 published: 2026-10-28

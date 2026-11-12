@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
-import { toolOpenGraph } from "@/lib/seo/jsonld";
+import { toolOpenGraph, webPageLd } from "@/lib/seo/jsonld";
 
 const META =
   "How ExesTools handles your lists, share links, analytics, advertising cookies and consent choices.";
@@ -25,8 +25,17 @@ export const metadata: Metadata = {
 };
 
 export default function PrivacyPolicyPage() {
+  const ld = webPageLd({
+    name: "Privacy Policy | ExesTools",
+    description: META,
+    path: "/privacy-policy",
+  });
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
+      />
       <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
         Privacy Policy
       </h1>

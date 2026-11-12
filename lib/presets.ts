@@ -29,6 +29,22 @@ const CLASSROOM_STUDENTS = [
   "Mason",
   "Amelia",
   "Elijah",
+  "Olivia",
+  "James",
+  "Charlotte",
+  "Benjamin",
+  "Evelyn",
+  "Henry",
+  "Abigail",
+  "Alexander",
+  "Emily",
+  "Michael",
+  "Elizabeth",
+  "Daniel",
+  "Sofia",
+  "Matthew",
+  "Avery",
+  "Joseph",
 ];
 
 export const WHEEL_PRESETS: WheelPreset[] = [
@@ -264,8 +280,8 @@ export const TOOL_DEFAULTS: Record<ToolId, ToolPresetConfig> = {
     ],
   },
   "random-name-picker": {
-    defaultPresetId: "sample-names",
-    presetIds: ["sample-names", "meeting-order", "party-games"],
+    defaultPresetId: "meeting-order",
+    presetIds: ["meeting-order", "sample-names", "party-games"],
   },
   "classroom-spinner": {
     defaultPresetId: "classroom-students",

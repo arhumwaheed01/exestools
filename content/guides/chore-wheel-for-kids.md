@@ -1,7 +1,7 @@
 ---
 slug: /guides/chore-wheel-for-kids
-meta_title: "How to Set Up a Chore Wheel Kids Won't Argue With | ExesTools"
-meta_description: "A parent's guide to a fair chore wheel: chores by age, bundling jobs so every slice is equal effort, weekly rotation without repeats, swap rules, and a worked week for three kids."
+meta_title: "How to Set Up a Fair Chore Wheel | ExesTools"
+meta_description: "A parent's guide to a fair chore wheel: chores by age, equal-effort slices, weekly rotation, swap rules, and a worked week for three kids."
 author: Arhum Waheed
 author_url: /about#arhum
 published: 2026-11-07

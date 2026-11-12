@@ -4,7 +4,7 @@ import PageMeta from "@/components/PageMeta";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { aboutPageGraphLd, toolOpenGraph } from "@/lib/seo/jsonld";
 
-const ABOUT_TITLE = "About ExesTools | Who Builds It, How Picks Work, How It's Paid For";
+const ABOUT_TITLE = "About ExesTools | Who Builds It and How Picks Work";
 const ABOUT_DESC =
   "ExesTools: free random-pick tools by Arhum Waheed. How picks work, how guides are written, what we will not do, and how the site is funded.";
 
@@ -359,8 +359,8 @@ export default function AboutPage() {
           <ul className="mt-3 list-disc space-y-2 pl-5">
             <li>
               <strong className="text-foreground">2026-10-25:</strong> Published{" "}
-              <Link href="/guides/white-elephant-gift-exchange-rules" className={linkCls}>
-                White elephant gift exchange rules
+              <Link href="/guides/white-elephant-rules-and-variations" className={linkCls}>
+                White Elephant rules
               </Link>
               .
             </li>
