@@ -196,7 +196,8 @@ export default function AboutPage() {
             </code>
             ) with rejection sampling, so each option still in play has exactly the same chance. The
             result is chosen first, and the wheel animation then stops on it, so the slice under the
-            pointer is always the pick. How long or how hard the wheel spins changes nothing.
+            pointer is always the pick. The result is picked before the animation starts, so a big
+            spin is just for show.
             Cosmetic details such as the spin duration and sound use the browser&apos;s ordinary
             random function, and they can&apos;t affect the result.
           </p>

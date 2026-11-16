@@ -111,6 +111,7 @@ export function UseCaseToolPage({
     category: schemaCategory,
     alternateName: schemaAlternateName,
     featureList: schemaFeatureList,
+    dateModified: pageUpdated,
   });
 
   const crumbLd = {

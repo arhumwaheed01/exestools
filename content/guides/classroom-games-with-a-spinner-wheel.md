@@ -5,7 +5,7 @@ meta_description: "Ten low-prep classroom games for a spinner wheel: review, war
 author: Arhum Waheed
 author_url: /about#arhum
 published: 2026-10-23
-updated: 2026-10-23
+updated: "2026-11-17"
 related_tools: [/classroom-spinner, /random-number-wheel]
 images:
   - file: /guides/classroom-games-with-a-spinner-wheel/1.jpg
@@ -158,7 +158,7 @@ Leave remove-winner on. Each student leaves the wheel after they're picked, so e
 
 ### Is it safe to put students' names in the spinner?
 
-The list is saved only in your browser on that device. Names leave the device only if you share a link, because the link carries the list. Follow your school's policy, and use first names or initials if you prefer.
+The list is saved only in your browser on that device. Names leave the device only if you share a link, because the link carries the list. Check what your school allows on screen. First names or initials work fine for every game here.
 
 ### Do these games work for older students?
 

@@ -43,9 +43,9 @@ const FAQ_LINK_HREFS: Record<string, string> = {
 const FAQ = [
   {
     q: "Does it send emails to participants?",
-    a: "No. ExesTools doesn't collect email addresses or send messages. You copy each person's private link and send it yourself, by text, chat, or your own email.",
+    a: "No. You share the pairings yourself. ExesTools never emails anyone or asks for addresses. You copy each person's private link and send it yourself, by text, chat, or your own email.",
     aPlain:
-      "No. ExesTools doesn't collect email addresses or send messages. You copy each person's private link and send it yourself, by text, chat, or your own email.",
+      "No. You share the pairings yourself. ExesTools never emails anyone or asks for addresses. You copy each person's private link and send it yourself, by text, chat, or your own email.",
   },
   {
     q: "How do I stop couples from drawing each other?",
@@ -168,6 +168,7 @@ export default function SecretSantaGeneratorPage() {
       "No email needed",
       "Up to 50 names",
     ],
+    dateModified: "2026-11-17",
   });
 
   const breadcrumbJsonLd = {
@@ -216,7 +217,7 @@ export default function SecretSantaGeneratorPage() {
         <h1 className="mt-4 max-w-3xl text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
           Secret Santa generator with exclusions
         </h1>
-        <PageMeta updated="2026-10-25" />
+        <PageMeta updated="2026-11-17" />
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           Draw names online for Secret Santa—remotely or in the same room. Add everyone&apos;s name,
           mark any couples who shouldn&apos;t draw each other, and press Draw names. Each person gets
