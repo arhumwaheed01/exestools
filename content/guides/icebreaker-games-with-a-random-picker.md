@@ -5,7 +5,7 @@ meta_description: "Eight icebreakers for teams, classes and parties, rated by ho
 author: Arhum Waheed
 author_url: /about#arhum
 published: 2026-11-04
-updated: 2026-11-04
+updated: "2026-11-17"
 related_tools: [/random-name-picker, /]
 images:
   - file: /guides/icebreaker-games-with-a-random-picker/1.jpg
@@ -166,7 +166,7 @@ Yes. Type your questions one per line into the spinner wheel. Switch on remove w
 
 ### How can I share my icebreaker wheel with a co-host?
 
-Press Copy share link and send it to them. The link opens the same wheel with the same questions or names. Anyone with the link can see the list.
+Press Copy share link and send it to them. The link opens the same wheel with the same questions or names. Whoever opens that link sees every name on it, so share it only with the group.
 
 ### Are these icebreakers OK for students?
 

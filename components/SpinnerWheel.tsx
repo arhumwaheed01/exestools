@@ -100,25 +100,25 @@ import {
 import { parseCsvEntries } from "@/lib/wheel-v2/portal";
 import "@/app/styles/tools-themes.css";
 
-const CHOICES_HELP_BASE =
-  "up to 60. Empty lines are ignored. Duplicate lines are skipped (capital letters don't count as different), so add an initial if two people share a name.";
-
 function choicesEditorLabels(toolId: ToolId): { heading: string; helpText: string } {
   switch (toolId) {
     case "home":
       return {
         heading: "Your options",
-        helpText: `One option per line, ${CHOICES_HELP_BASE}`,
+        helpText:
+          "One option per line, up to 60. Empty lines are ignored. Exact repeat entries are dropped.",
       };
     case "random-name-picker":
       return {
         heading: "Your names",
-        helpText: `One name per line, ${CHOICES_HELP_BASE}`,
+        helpText:
+          "One name per line, up to 60. Empty lines are ignored. Duplicate lines are skipped (capital letters don't count as different), so add an initial if two people share a name.",
       };
     case "classroom-spinner":
       return {
         heading: "Your roster",
-        helpText: `One student name per line, ${CHOICES_HELP_BASE}`,
+        helpText:
+          "One student name per line, up to 60. Empty lines are ignored. Two students called Sam? Type 'Sam K' and 'Sam R', because the spinner drops exact repeats whatever the capitals.",
       };
     case "prize-wheel":
       return {
@@ -135,7 +135,8 @@ function choicesEditorLabels(toolId: ToolId): { heading: string; helpText: strin
     default:
       return {
         heading: "Your choices",
-        helpText: `One name or option per line, ${CHOICES_HELP_BASE}`,
+        helpText:
+          "One name or option per line, up to 60. Empty lines are ignored. Duplicate lines are skipped (capital letters don't count as different), so add an initial if two people share a name.",
       };
   }
 }
@@ -145,13 +146,13 @@ function listSavedNote(toolId: ToolId): string {
     case "random-name-picker":
       return "Your names are saved in this browser. Share links carry the list inside the link, so anyone with the link can see it.";
     case "classroom-spinner":
-      return "Your roster is saved in this browser. Share links carry the list inside the link, so anyone with the link can see it.";
+      return "Your roster is saved in this browser. The share link holds your class list, so only send it to people who should see students' names.";
     case "prize-wheel":
-      return "Your prize list is saved in this browser. Share links carry the list inside the link, so anyone with the link can see it.";
+      return "Your prize list is saved in this browser. Your prize list travels inside the share link, so anyone you send it to sees every prize.";
     case "yes-no-wheel":
-      return "Your options are saved in this browser. Share links carry the list inside the link, so anyone with the link can see it.";
+      return "Your options are saved in this browser. If you added your own answers, they ride along in the share link for whoever opens it.";
     case "home":
-      return "Your options are saved in this browser. Share links carry the list inside the link, so anyone with the link can see it.";
+      return "Your options are saved in this browser. Shared wheels keep their entries in the link itself, and nothing is stored on our side.";
     default:
       return "Your list is saved in this browser. Share links carry the list inside the link, so anyone with the link can see it.";
   }

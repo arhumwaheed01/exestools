@@ -191,7 +191,11 @@ export function webPageLd(opts: {
   };
 }
 
-export function contactPageLd(opts: { name: string; description: string }) {
+export function contactPageLd(opts: {
+  name: string;
+  description: string;
+  dateModified?: string;
+}) {
   return {
     "@context": "https://schema.org",
     "@type": "ContactPage",
@@ -200,6 +204,7 @@ export function contactPageLd(opts: { name: string; description: string }) {
     url: "https://www.exestools.com/contact",
     isPartOf: { "@id": "https://www.exestools.com/#website" },
     publisher: { "@id": "https://www.exestools.com/#organization" },
+    ...(opts.dateModified ? { dateModified: opts.dateModified } : {}),
   };
 }
 

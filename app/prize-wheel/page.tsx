@@ -100,7 +100,7 @@ export default function PrizeWheelPage() {
         "Sound on/off",
         "No signup",
       ]}
-      pageUpdated="2026-10-19"
+      pageUpdated="2026-11-17"
     >
       <GuideSection title="How to run a giveaway spin">
         <ol className="list-decimal space-y-2 pl-5">

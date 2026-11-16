@@ -115,7 +115,7 @@ const HOME_FAQS = [
     a: "No. Duplicate lines are skipped, so each option appears once and every slice has the same chance. If you want an option to come up more often, add a different label for it, such as \"Pizza\" and \"Pizza night.\"",
   },
   {
-    q: "Does spinning harder or longer change the result?",
+    q: "Does a bigger spin make a difference?",
     a: "No. The result is picked at random before the animation starts, and the wheel then stops on it. Spin length and speed are only for show.",
   },
   {

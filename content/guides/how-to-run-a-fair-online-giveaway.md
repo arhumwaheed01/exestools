@@ -5,7 +5,7 @@ meta_description: "Checklist for a fair online giveaway: rules to publish, clean
 author: Arhum Waheed
 author_url: /about#arhum
 published: "2026-10-13"
-updated: "2026-10-21"
+updated: "2026-11-17"
 related_tools: [/prize-wheel, /raffle-generator, /random-name-picker]
 ---
 
@@ -83,7 +83,7 @@ Announce in the same place you ran the giveaway. Post the handle, the prize and 
 
 Decide before the draw what happens if a winner doesn't reply. There are two fair options:
 
-1. **Draw alternates at the same time as the winners.** The raffle generator does this in order: if the winner doesn't claim, Alternate 1 is offered the prize, then Alternate 2. If you need another backup later, **Draw another alternate** adds one without changing anyone already drawn.
+1. **Pick your backup winners in the same draw, on camera, so nobody wonders later where they came from.** The raffle generator does this in order: if the winner doesn't claim, Alternate 1 is offered the prize, then Alternate 2. If you need another backup later, **Draw another alternate** adds one without changing anyone already drawn.
 2. **Redraw on camera** from the same list, minus the previous winner. On a wheel, leave **Remove winner after spin** on, and the non-responder is already off the wheel.
 
 The unfair option is picking someone yourself because they seem keen. Even if it is well meant, it is the fastest way to lose trust.

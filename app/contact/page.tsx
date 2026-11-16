@@ -28,7 +28,11 @@ export const metadata: Metadata = {
 const MAIL = "mailto:hello@exestools.com";
 
 export default function ContactPage() {
-  const ld = contactPageLd({ name: CONTACT_TITLE, description: CONTACT_META });
+  const ld = contactPageLd({
+    name: CONTACT_TITLE,
+    description: CONTACT_META,
+    dateModified: "2026-11-17",
+  });
   return (
     <div className="mx-auto max-w-xl px-4 py-10 sm:px-6 sm:py-14">
       <script
@@ -198,8 +202,8 @@ export default function ContactPage() {
           <div>
             <h3 className="font-semibold text-foreground">Press, schools and partnerships</h3>
             <p className="mt-1">
-              Say who you are, how you use ExesTools, and what you need. ExesTools doesn&apos;t
-              accept paid placements or sponsored guides.
+              Say who you are, how you use ExesTools, and what you need. Please don&apos;t pitch
+              sponsored posts or paid links. We don&apos;t run them.
             </p>
           </div>
         </div>

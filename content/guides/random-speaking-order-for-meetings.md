@@ -5,7 +5,7 @@ meta_description: "When a random speaking order helps a meeting and when it does
 author: Arhum Waheed
 author_url: /about#arhum
 published: 2026-10-30
-updated: 2026-10-30
+updated: "2026-11-17"
 related_tools: [/random-name-picker, /random-team-generator]
 images:
   - file: /guides/random-speaking-order-for-meetings/1.jpg
@@ -127,7 +127,7 @@ Yes, in the same browser on the same device. Because picked names leave the whee
 
 ### Can a co-facilitator use the same list?
 
-Press Copy share link and send it to them. The link opens the same wheel with the same names on their device.
+Hit Copy share link and drop it in the meeting chat. The link opens the same wheel with the same names on their device.
 
 ### What if someone joins the meeting late?
 

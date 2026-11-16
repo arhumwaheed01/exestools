@@ -5,7 +5,7 @@ meta_description: "Team games for Friendsgiving and Thanksgiving: fair splits fo
 author: Arhum Waheed
 author_url: /about#arhum
 published: "2026-11-05"
-updated: "2026-11-05"
+updated: "2026-11-17"
 related_tools: [/random-team-generator, /random-name-picker, /bingo-card-generator, /secret-santa-generator, /]
 images:
   - file: /guides/friendsgiving-thanksgiving-team-games/1.jpg
@@ -44,9 +44,9 @@ Agree the rule out loud before the first deal:
 - **Accept the first split**, or
 - **One agreed reshuffle** if a couple lands together when you wanted them apart, or a quiet guest lands with three loud cousins.
 
-Reshuffling until you get the teams you wanted is captain picking with extra steps. For skill-sensitive games (quiz night with two trivia sharks), run the [tiered method](/guides/how-to-make-balanced-random-teams) once: put the strongest players in a small tier the size of your team count so each team gets one, then deal everyone else.
+If you keep hitting shuffle until Uncle Dave lands on your side, it's not random anymore. For skill-sensitive games (quiz night with two trivia sharks), run the [tiered method](/guides/how-to-make-balanced-random-teams) once: put the strongest players in a small tier the size of your team count so each team gets one, then deal everyone else.
 
-The generator can't keep two people apart by rule. For a gift exchange where that matters, use the [Secret Santa generator](/secret-santa-generator) instead.
+There's no "keep these two apart" setting, so sort that out before you shuffle, or just shuffle again once, openly. For a gift exchange where that matters, use the [Secret Santa generator](/secret-santa-generator) instead.
 
 [SCREENSHOT: The random team generator showing a Friendsgiving guest list split into three named teams.]
 
