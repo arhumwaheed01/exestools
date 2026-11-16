@@ -35,6 +35,7 @@ const FAQ_LINK_HREFS: Record<string, string> = {
   "Privacy Policy": "/privacy-policy",
   "classroom spinner": "/classroom-spinner",
   "random name picker": "/random-name-picker",
+  "balanced teams guide": "/guides/how-to-make-balanced-random-teams",
 };
 
 function FaqAnswer({ text }: { text: string }) {
@@ -84,7 +85,7 @@ const FAQS = [
   },
   {
     q: "Can I keep two people from landing on the same team?",
-    a: "Not automatically. Reshuffle until they're apart. If you need that often, place one of them on each team in a quick first pass, then generate the rest at random — the balanced teams guide on this page covers that pattern.",
+    a: "Not automatically. Reshuffle until they're apart. If you need that often, place one of them on each team in a quick first pass, then generate the rest at random. The [balanced teams guide] covers that pattern.",
   },
 ];
 
@@ -94,6 +95,7 @@ export default function RandomTeamGeneratorPage() {
     name: "Random Team Generator",
     description: META,
     featureList: ["Number of teams or team size", "Pairs", "Reshuffle", "Print"],
+    dateModified: "2026-11-17",
   });
 
   const faqLd = {
@@ -150,7 +152,7 @@ export default function RandomTeamGeneratorPage() {
         <h1 className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl lg:text-3xl">
           Random Team Generator: Split Names into Teams, Groups or Pairs
         </h1>
-        <PageMeta updated="2026-10-21" />
+        <PageMeta updated="2026-11-17" />
         <p className="mt-1 text-sm leading-relaxed text-muted sm:text-base">
           Paste your names, choose how many teams (or how many people per team), and hit Generate.
           Don&apos;t like the split? Reshuffle. Then print it, copy it into the group chat, or send a

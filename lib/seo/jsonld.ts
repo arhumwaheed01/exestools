@@ -21,6 +21,7 @@ export function webAppLd({
   category = "UtilitiesApplication",
   alternateName,
   featureList,
+  dateModified,
 }: {
   path: string;
   name: string;
@@ -28,6 +29,7 @@ export function webAppLd({
   category?: string;
   alternateName?: string[];
   featureList?: string[];
+  dateModified?: string;
 }) {
   // Prefer apex without trailing slash (P2-3); path "/" → https://www.exestools.com
   const url = path === "/" ? "https://www.exestools.com" : `https://www.exestools.com${path}`;
@@ -45,6 +47,7 @@ export function webAppLd({
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     description,
     ...(featureList?.length ? { featureList } : {}),
+    ...(dateModified ? { dateModified } : {}),
     publisher: { "@id": "https://www.exestools.com/#organization" },
   };
 }
@@ -78,6 +81,7 @@ export function homePageGraphLd(opts: {
   name: string;
   description: string;
   faqs: { q: string; a: string }[];
+  dateModified?: string;
 }) {
   return {
     "@context": "https://schema.org",
@@ -97,6 +101,7 @@ export function homePageGraphLd(opts: {
           path: "/",
           name: opts.name,
           description: opts.description,
+          dateModified: opts.dateModified,
         }),
       ),
       graphNode(faqPageLd(opts.faqs)),
@@ -119,20 +124,21 @@ export function faqPageLd(faqs: { q: string; a: string }[]) {
   };
 }
 
-export function aboutPageLd() {
+export function aboutPageLd(opts?: { dateModified?: string }) {
   return {
     "@context": "https://schema.org",
     "@type": "AboutPage",
     url: "https://www.exestools.com/about",
     mainEntity: { "@id": "https://www.exestools.com/#organization" },
+    ...(opts?.dateModified ? { dateModified: opts.dateModified } : {}),
   };
 }
 
 /** About page: Organization + AboutPage in one @graph. */
-export function aboutPageGraphLd() {
+export function aboutPageGraphLd(opts?: { dateModified?: string }) {
   return {
     "@context": "https://schema.org",
-    "@graph": [graphNode(organizationLd()), graphNode(aboutPageLd())],
+    "@graph": [graphNode(organizationLd()), graphNode(aboutPageLd(opts))],
   };
 }
 

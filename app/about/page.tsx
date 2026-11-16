@@ -86,12 +86,14 @@ export default function AboutPage() {
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutPageGraphLd()) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(aboutPageGraphLd({ dateModified: "2026-11-17" })),
+        }}
       />
       <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
         About ExesTools
       </h1>
-      <PageMeta updated="2026-10-25" />
+      <PageMeta updated="2026-11-17" />
       <div className="mt-6 space-y-8 text-sm leading-relaxed text-muted sm:text-base">
         <section>
           <p>
@@ -358,9 +360,62 @@ export default function AboutPage() {
           <p className="mt-2">Major changes to the site, newest first.</p>
           <ul className="mt-3 list-disc space-y-2 pl-5">
             <li>
-              <strong className="text-foreground">2026-10-25:</strong> Published{" "}
+              <strong className="text-foreground">2026-11-07:</strong> Published{" "}
+              <Link href="/guides/how-to-run-a-holiday-party-raffle" className={linkCls}>
+                How to run a holiday party raffle (at work, school or a club)
+              </Link>{" "}
+              and{" "}
+              <Link href="/guides/chore-wheel-for-kids" className={linkCls}>
+                How to set up a chore wheel kids won&apos;t argue with
+              </Link>
+              .
+            </li>
+            <li>
+              <strong className="text-foreground">2026-11-06:</strong> Published{" "}
+              <Link href="/guides/fair-ways-to-break-a-tie" className={linkCls}>
+                How to break a tie fairly
+              </Link>
+              .
+            </li>
+            <li>
+              <strong className="text-foreground">2026-11-05:</strong> Published{" "}
+              <Link href="/guides/friendsgiving-thanksgiving-team-games" className={linkCls}>
+                Friendsgiving and Thanksgiving team games (without the awkward picks)
+              </Link>
+              .
+            </li>
+            <li>
+              <strong className="text-foreground">2026-11-04:</strong> Published{" "}
+              <Link href="/guides/icebreaker-games-with-a-random-picker" className={linkCls}>
+                Icebreakers that don&apos;t make people cringe
+              </Link>
+              .
+            </li>
+            <li>
+              <strong className="text-foreground">2026-11-03:</strong> Published{" "}
               <Link href="/guides/white-elephant-rules-and-variations" className={linkCls}>
                 White Elephant rules
+              </Link>
+              .
+            </li>
+            <li>
+              <strong className="text-foreground">2026-11-02:</strong> Published{" "}
+              <Link href="/guides/prize-wheel-ideas-for-events-and-booths" className={linkCls}>
+                Running a prize wheel at a booth or school fair
+              </Link>
+              .
+            </li>
+            <li>
+              <strong className="text-foreground">2026-10-30:</strong> Published{" "}
+              <Link href="/guides/random-speaking-order-for-meetings" className={linkCls}>
+                Random speaking order for stand-ups and meetings
+              </Link>
+              .
+            </li>
+            <li>
+              <strong className="text-foreground">2026-10-28:</strong> Published{" "}
+              <Link href="/guides/how-to-run-a-raffle-fundraiser" className={linkCls}>
+                How to run a raffle fundraiser that actually raises money
               </Link>
               .
             </li>

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import PageMeta from "@/components/PageMeta";
 import { WheelGalleryClient } from "@/components/wheel-v2/WheelGalleryClient";
 import { isGuidePublished } from "@/lib/guides";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
-import { toolOpenGraph } from "@/lib/seo/jsonld";
+import { toolOpenGraph, webPageLd } from "@/lib/seo/jsonld";
 
 const TITLE = "Wheel gallery — ready-made spinner wheels";
 const META =
@@ -56,6 +57,15 @@ export default function WheelGalleryPage() {
   const classroomGuideLive = isGuidePublished("classroom-games-with-a-spinner-wheel");
   const secretSantaGuideLive = isGuidePublished("secret-santa-rules-and-budget-ideas");
 
+  const pageLd = {
+    ...webPageLd({
+      name: TITLE,
+      description: META,
+      path: "/wheel-gallery",
+    }),
+    dateModified: "2026-11-17",
+  };
+
   const faqLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -70,6 +80,10 @@ export default function WheelGalleryPage() {
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
       <script
         type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(pageLd) }}
+      />
+      <script
+        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
       />
 
@@ -77,6 +91,7 @@ export default function WheelGalleryPage() {
         <h1 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
           Wheel gallery
         </h1>
+        <PageMeta updated="2026-11-17" />
         <p className="mt-2 text-sm leading-relaxed text-muted sm:text-base">
           Not sure what to put on a wheel? Every wheel here is a ready-made starting list you can
           open in one click, then edit, shuffle and spin. They&apos;re free, there&apos;s no
