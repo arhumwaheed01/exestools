@@ -140,6 +140,7 @@ export default function HomePage() {
     name: "ExesTools Spinner Wheel",
     description: HOME_META,
     faqs: [...HOME_FAQS],
+    dateModified: "2026-11-17",
   });
 
   return (
@@ -153,7 +154,7 @@ export default function HomePage() {
         <h1 className="text-lg font-extrabold tracking-tight text-foreground sm:text-xl">
           Free spinner wheel online
         </h1>
-        <PageMeta updated="2026-10-20" />
+        <PageMeta updated="2026-11-17" />
         <p className="mt-0.5 text-sm leading-snug text-muted">
           Add one option per line, hit SPIN, and land on a fair result. It works as a multi-option
           decision wheel when you have several choices, and there&apos;s no account to create. For
@@ -348,8 +349,9 @@ export default function HomePage() {
               It changes the order around the rim, not the odds.
             </li>
             <li>
-              <span className="font-semibold text-foreground">Save useful wheels as links.</span>{" "}
-              The page keeps one list in your browser. For others, copy a share link and bookmark it.
+              <span className="font-semibold text-foreground">Save the wheels you reuse.</span>{" "}
+              Press Save to keep a named wheel on this device and Open to load it again, or copy a
+              share link and bookmark it.
             </li>
           </ul>
         </section>
