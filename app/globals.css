@@ -122,13 +122,16 @@ body {
     color: #111;
   }
 
-  /* Time card: print the timesheet tool only */
-  body:has(.timecard-tool-wrap) .timecard-tool {
-    color: #111;
+  /* Time card: print the compact sheet only */
+  body:has(.timecard-tool-wrap) main > div > *:not(.timecard-tool-wrap) {
+    display: none !important;
   }
-  body:has(.timecard-tool-wrap) .sticky {
-    position: static !important;
-    box-shadow: none !important;
+  body:has(.timecard-tool-wrap) .timecard-interactive {
+    display: none !important;
+  }
+  body:has(.timecard-tool-wrap) .timecard-print-sheet {
+    display: block !important;
+    color: #111;
   }
 }
 

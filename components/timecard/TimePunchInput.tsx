@@ -1,5 +1,6 @@
 "use client";
 
+import { SegmentedToggle } from "@/components/timecard/SegmentedToggle";
 import { from12h, from24h, to12h, to24h } from "@/lib/timecard/time";
 import type { ClockFormat, TimePunch } from "@/lib/timecard/types";
 
@@ -122,38 +123,28 @@ export function TimePunchInput({ id, label, value, format, onChange, disabled }:
           ))}
         </select>
         <div className="flex gap-1" role="group" aria-label={`${label} AM or PM`}>
-          <button
-            type="button"
+          <SegmentedToggle
+            className="min-w-11 px-2"
             disabled={disabled || empty}
-            className={`min-h-11 min-w-11 rounded-lg border px-2 text-sm font-semibold outline-none focus-visible:ring-2 focus-visible:ring-accent ${
-              !empty && !isPm
-                ? "border-accent bg-accent/15 text-foreground"
-                : "border-border bg-surface text-muted"
-            }`}
-            aria-pressed={!empty && !isPm}
+            pressed={!empty && !isPm}
             onClick={() => {
               if (empty) return;
               onChange({ minutes: from12h(hour12, minute, false) });
             }}
           >
             AM
-          </button>
-          <button
-            type="button"
+          </SegmentedToggle>
+          <SegmentedToggle
+            className="min-w-11 px-2"
             disabled={disabled || empty}
-            className={`min-h-11 min-w-11 rounded-lg border px-2 text-sm font-semibold outline-none focus-visible:ring-2 focus-visible:ring-accent ${
-              !empty && isPm
-                ? "border-accent bg-accent/15 text-foreground"
-                : "border-border bg-surface text-muted"
-            }`}
-            aria-pressed={!empty && isPm}
+            pressed={!empty && isPm}
             onClick={() => {
               if (empty) return;
               onChange({ minutes: from12h(hour12, minute, true) });
             }}
           >
             PM
-          </button>
+          </SegmentedToggle>
         </div>
       </div>
     </div>

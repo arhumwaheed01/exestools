@@ -86,6 +86,10 @@ export default function PrivacyPolicyPage() {
             on their device. When you open a bingo link, its contents are kept in that tab&apos;s
             session storage so a refresh still works.
           </p>
+          <p className="mt-2">
+            Timesheet entries and timesheet settings for the time card calculator are also saved in
+            local storage on your device so you can resume a card in that browser.
+          </p>
         </section>
 
         <section>
