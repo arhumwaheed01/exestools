@@ -40,7 +40,7 @@ export default function ContactPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
       />
       <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">Contact ExesTools</h1>
-      <p className="mt-2 text-sm text-muted">Last updated: October 19, 2026</p>
+      <p className="mt-2 text-sm text-muted">Last updated: November 17, 2026</p>
       <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
         ExesTools is built and run by one person,{" "}
         <Link href="/about#arhum" className="font-semibold text-accent hover:underline">

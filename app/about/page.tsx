@@ -97,10 +97,10 @@ export default function AboutPage() {
       <div className="mt-6 space-y-8 text-sm leading-relaxed text-muted sm:text-base">
         <section>
           <p>
-            ExesTools is a small set of free tools for the moments when a group needs a fair
-            decision: who answers next, who wins the prize, which team you&apos;re on, who buys a
-            gift for whom. There are ten of them, and each one is built for a specific job rather
-            than being one general wheel stretched to cover everything.
+            Some decisions go better when nobody in the room gets to make them: who takes the next
+            question, whose name comes out of the prize draw, which team you land on, who shops for
+            whom. ExesTools has ten free tools for those moments, and each was built around one of
+            those jobs instead of asking a single wheel to handle all of them.
           </p>
           <p className="mt-3">
             Everything runs in your browser. There&apos;s no account to create, nothing to install,
