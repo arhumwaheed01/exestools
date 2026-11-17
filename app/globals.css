@@ -122,8 +122,8 @@ body {
     color: #111;
   }
 
-  /* Time card: print the compact sheet only */
-  body:has(.timecard-tool-wrap) main > div > *:not(.timecard-tool-wrap) {
+  /* Time card: hide siblings of the wrap (wrap sits under main > div > div.mx-auto) */
+  body:has(.timecard-tool-wrap) main > div > div > :not(.timecard-tool-wrap) {
     display: none !important;
   }
   body:has(.timecard-tool-wrap) .timecard-interactive {
