@@ -360,58 +360,81 @@ export function TimeCardTool() {
           </div>
         ) : null}
 
-        {/* Sticky summary */}
-        <div className="sticky bottom-2 z-20 rounded-2xl border border-border bg-surface/95 p-4 shadow-lg backdrop-blur">
-          <div className="flex flex-wrap items-end justify-between gap-3">
+        {/* Sticky summary — compact on mobile when daily OT + rate add extra rows */}
+        <div className="sticky bottom-2 z-20 rounded-2xl border border-border bg-surface/95 p-3 shadow-lg backdrop-blur sm:p-4">
+          <p className="text-[0.65rem] font-semibold uppercase tracking-wide text-muted sm:text-xs">
+            Summary
+          </p>
+          <dl
+            className={`mt-1.5 grid gap-x-3 gap-y-1 text-xs sm:mt-2 sm:gap-x-6 sm:text-sm ${
+              state.settings.dailyOvertime
+                ? "grid-cols-3 sm:grid-cols-4"
+                : "grid-cols-3 sm:grid-cols-4"
+            }`}
+          >
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted">Summary</p>
-              <dl className="mt-2 grid grid-cols-2 gap-x-6 gap-y-1 text-sm sm:grid-cols-4">
-                <div>
-                  <dt className="text-muted">Regular</dt>
-                  <dd className="font-semibold text-foreground">
-                    {formatHhMm(period.period.regularMinutes)} (
-                    {period.period.regularDecimal.toFixed(2)})
-                  </dd>
-                </div>
-                {state.settings.dailyOvertime ? (
-                  <>
-                    <div>
-                      <dt className="text-muted">Daily overtime</dt>
-                      <dd className="font-semibold text-foreground">
-                        {formatHhMm(period.period.dailyOvertimeMinutes)}
-                      </dd>
-                    </div>
-                    <div>
-                      <dt className="text-muted">Weekly overtime</dt>
-                      <dd className="font-semibold text-foreground">
-                        {formatHhMm(period.period.weeklyOvertimeMinutes)}
-                      </dd>
-                    </div>
-                  </>
-                ) : (
-                  <div>
-                    <dt className="text-muted">Overtime</dt>
-                    <dd className="font-semibold text-foreground">
-                      {formatHhMm(period.period.overtimeMinutes)} (
-                      {period.period.overtimeDecimal.toFixed(2)})
-                    </dd>
-                  </div>
-                )}
-                <div>
-                  <dt className="text-muted">Total</dt>
-                  <dd className="font-semibold text-foreground">
-                    {formatHhMm(period.period.totalMinutes)} ({period.period.totalDecimal.toFixed(2)})
-                  </dd>
-                </div>
-                {period.grossPay != null ? (
-                  <div>
-                    <dt className="text-muted">Estimated gross pay (no tax)</dt>
-                    <dd className="font-semibold text-foreground">${period.grossPay.toFixed(2)}</dd>
-                  </div>
-                ) : null}
-              </dl>
+              <dt className="text-muted">Regular</dt>
+              <dd className="font-semibold text-foreground">
+                {formatHhMm(period.period.regularMinutes)}
+                <span className="hidden sm:inline">
+                  {" "}
+                  ({period.period.regularDecimal.toFixed(2)})
+                </span>
+              </dd>
             </div>
-          </div>
+            {state.settings.dailyOvertime ? (
+              <>
+                <div>
+                  <dt className="text-muted">
+                    <span className="sm:hidden">Daily OT</span>
+                    <span className="hidden sm:inline">Daily overtime</span>
+                  </dt>
+                  <dd className="font-semibold text-foreground">
+                    {formatHhMm(period.period.dailyOvertimeMinutes)}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-muted">
+                    <span className="sm:hidden">Weekly OT</span>
+                    <span className="hidden sm:inline">Weekly overtime</span>
+                  </dt>
+                  <dd className="font-semibold text-foreground">
+                    {formatHhMm(period.period.weeklyOvertimeMinutes)}
+                  </dd>
+                </div>
+              </>
+            ) : (
+              <div>
+                <dt className="text-muted">Overtime</dt>
+                <dd className="font-semibold text-foreground">
+                  {formatHhMm(period.period.overtimeMinutes)}
+                  <span className="hidden sm:inline">
+                    {" "}
+                    ({period.period.overtimeDecimal.toFixed(2)})
+                  </span>
+                </dd>
+              </div>
+            )}
+            <div>
+              <dt className="text-muted">Total</dt>
+              <dd className="font-semibold text-foreground">
+                {formatHhMm(period.period.totalMinutes)}
+                <span className="hidden sm:inline">
+                  {" "}
+                  ({period.period.totalDecimal.toFixed(2)})
+                </span>
+              </dd>
+            </div>
+            {period.grossPay != null ? (
+              <div>
+                <dt className="text-muted">
+                  <span className="sm:hidden">Gross (no tax)</span>
+                  <span className="hidden sm:inline">Estimated gross pay (no tax)</span>
+                </dt>
+                <dd className="font-semibold text-foreground">${period.grossPay.toFixed(2)}</dd>
+              </div>
+            ) : null}
+          </dl>
         </div>
         {period.grossPay != null ? (
           <p className="text-xs text-muted">
