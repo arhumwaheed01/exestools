@@ -4,7 +4,7 @@ import PageMeta from "@/components/PageMeta";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { aboutPageGraphLd, toolOpenGraph } from "@/lib/seo/jsonld";
 
-const ABOUT_TITLE = "About ExesTools | Who Builds It and How Picks Work";
+const ABOUT_TITLE = "About ExesTools | Who Builds It and How the Tools Work";
 const ABOUT_DESC =
   "ExesTools: free tools by Arhum Waheed, including pickers and calculators. How tools work, how guides are written, what we will not do, and how the site is funded.";
 
