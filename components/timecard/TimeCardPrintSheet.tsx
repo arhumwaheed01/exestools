@@ -7,6 +7,7 @@ import {
   weekdayLabel,
   type DayRow,
   type TimeCardSettings,
+  type WeekTotals,
 } from "@/lib/timecard";
 
 function roundingLabel(mode: TimeCardSettings["rounding"]): string {
@@ -39,6 +40,52 @@ function dateRangeLabel(days: DayRow[]): string | null {
   return first === last ? first : `${first} – ${last}`;
 }
 
+type DayPrintRow = {
+  key: string;
+  label: string;
+  date: string;
+  start: string;
+  end: string;
+  breaks: string;
+  net: string;
+  decimal: string;
+  note: string;
+};
+
+function buildDayRow(day: DayRow, index: number, settings: TimeCardSettings): DayPrintRow | null {
+  const t = dayTotals(day, settings);
+  if (t.status.kind === "empty") return null;
+  const label = weekdayLabel(settings.weekStart, index % 7);
+  if (t.status.kind !== "ok") {
+    return {
+      key: day.id,
+      label,
+      date: day.date ?? "",
+      start: "",
+      end: "",
+      breaks: "",
+      net: t.status.message,
+      decimal: "",
+      note: day.note,
+    };
+  }
+  return {
+    key: day.id,
+    label,
+    date: day.date ?? "",
+    start: formatPunch(t.status.roundedStart, settings.clockFormat),
+    end: formatPunch(t.status.roundedEnd, settings.clockFormat),
+    breaks: String(t.status.breakMinutes),
+    net: formatHhMm(t.netMinutes),
+    decimal: t.netDecimal.toFixed(2),
+    note: day.note,
+  };
+}
+
+function weekSubtotalText(w: WeekTotals): string {
+  return `${formatHhMm(w.totalMinutes)} (${w.totalDecimal.toFixed(2)}h) · regular ${w.regularDecimal.toFixed(2)} · OT ${w.overtimeDecimal.toFixed(2)}`;
+}
+
 type Props = {
   days: DayRow[];
   settings: TimeCardSettings;
@@ -48,39 +95,23 @@ type Props = {
 export function TimeCardPrintSheet({ days, settings }: Props) {
   const period = computePeriod(days, settings);
   const range = dateRangeLabel(days);
-  const rows = days
-    .map((day, i) => {
-      const t = dayTotals(day, settings);
-      if (t.status.kind === "empty") return null;
-      const label = weekdayLabel(settings.weekStart, i % 7);
-      if (t.status.kind !== "ok") {
-        return {
-          key: day.id,
-          label,
-          date: day.date ?? "",
-          start: "",
-          end: "",
-          breaks: "",
-          net: t.status.message,
-          decimal: "",
-          note: day.note,
-        };
-      }
-      return {
-        key: day.id,
-        label,
-        date: day.date ?? "",
-        start: formatPunch(t.status.roundedStart, settings.clockFormat),
-        end: formatPunch(t.status.roundedEnd, settings.clockFormat),
-        breaks: String(t.status.breakMinutes),
-        net: formatHhMm(t.netMinutes),
-        decimal: t.netDecimal.toFixed(2),
-        note: day.note,
-      };
-    })
-    .filter(Boolean);
+  const biweekly = settings.period === "biweekly";
+  const colSpan = 7;
 
-  const showNote = rows.some((r) => r && r.note.trim());
+  const weekSections = biweekly
+    ? [
+        { title: "Week 1", slice: days.slice(0, 7), offset: 0, totals: period.weeks[0]! },
+        { title: "Week 2", slice: days.slice(7, 14), offset: 7, totals: period.weeks[1]! },
+      ]
+    : [{ title: null as string | null, slice: days, offset: 0, totals: null as WeekTotals | null }];
+
+  const allRows = weekSections.flatMap((section) =>
+    section.slice
+      .map((day, i) => buildDayRow(day, section.offset + i, settings))
+      .filter((r): r is DayPrintRow => r != null),
+  );
+  const showNote = allRows.some((r) => r.note.trim());
+  const noteCols = showNote ? 1 : 0;
 
   return (
     <div className="timecard-print-sheet hidden print:block text-black">
@@ -104,22 +135,22 @@ export function TimeCardPrintSheet({ days, settings }: Props) {
           </tr>
         </thead>
         <tbody>
-          {rows.map((r) =>
-            r ? (
-              <tr key={r.key}>
-                <td className="border border-neutral-400 px-2 py-1">{r.label}</td>
-                <td className="border border-neutral-400 px-2 py-1">{r.date}</td>
-                <td className="border border-neutral-400 px-2 py-1">{r.start}</td>
-                <td className="border border-neutral-400 px-2 py-1">{r.end}</td>
-                <td className="border border-neutral-400 px-2 py-1">{r.breaks}</td>
-                <td className="border border-neutral-400 px-2 py-1">{r.net}</td>
-                <td className="border border-neutral-400 px-2 py-1">{r.decimal}</td>
-                {showNote ? (
-                  <td className="border border-neutral-400 px-2 py-1">{r.note}</td>
-                ) : null}
-              </tr>
-            ) : null,
-          )}
+          {weekSections.map((section) => {
+            const rows = section.slice
+              .map((day, i) => buildDayRow(day, section.offset + i, settings))
+              .filter((r): r is DayPrintRow => r != null);
+            if (rows.length === 0 && !section.title) return null;
+            return (
+              <WeekSectionRows
+                key={section.title ?? "week"}
+                title={section.title}
+                rows={rows}
+                showNote={showNote}
+                colSpan={colSpan + noteCols}
+                subtotal={section.totals ? weekSubtotalText(section.totals) : null}
+              />
+            );
+          })}
         </tbody>
       </table>
 
@@ -167,5 +198,59 @@ export function TimeCardPrintSheet({ days, settings }: Props) {
         ) : null}
       </dl>
     </div>
+  );
+}
+
+function WeekSectionRows({
+  title,
+  rows,
+  showNote,
+  colSpan,
+  subtotal,
+}: {
+  title: string | null;
+  rows: DayPrintRow[];
+  showNote: boolean;
+  colSpan: number;
+  subtotal: string | null;
+}) {
+  if (rows.length === 0) return null;
+  return (
+    <>
+      {title ? (
+        <tr>
+          <td
+            colSpan={colSpan}
+            className="border border-neutral-400 bg-neutral-100 px-2 py-1 font-semibold"
+          >
+            {title}
+          </td>
+        </tr>
+      ) : null}
+      {rows.map((r) => (
+        <tr key={r.key}>
+          <td className="border border-neutral-400 px-2 py-1">{r.label}</td>
+          <td className="border border-neutral-400 px-2 py-1">{r.date}</td>
+          <td className="border border-neutral-400 px-2 py-1">{r.start}</td>
+          <td className="border border-neutral-400 px-2 py-1">{r.end}</td>
+          <td className="border border-neutral-400 px-2 py-1">{r.breaks}</td>
+          <td className="border border-neutral-400 px-2 py-1">{r.net}</td>
+          <td className="border border-neutral-400 px-2 py-1">{r.decimal}</td>
+          {showNote ? (
+            <td className="border border-neutral-400 px-2 py-1">{r.note}</td>
+          ) : null}
+        </tr>
+      ))}
+      {subtotal ? (
+        <tr>
+          <td
+            colSpan={colSpan}
+            className="border border-neutral-400 px-2 py-1 text-sm italic"
+          >
+            {title} subtotal: {subtotal}
+          </td>
+        </tr>
+      ) : null}
+    </>
   );
 }

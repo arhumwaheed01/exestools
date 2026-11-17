@@ -365,13 +365,7 @@ export function TimeCardTool() {
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wide text-muted">Summary</p>
-              <dl
-                className={`mt-2 grid gap-x-6 gap-y-1 text-sm ${
-                  state.settings.dailyOvertime
-                    ? "grid-cols-2 sm:grid-cols-4"
-                    : "grid-cols-2 sm:grid-cols-4"
-                }`}
-              >
+              <dl className="mt-2 grid grid-cols-2 gap-x-6 gap-y-1 text-sm sm:grid-cols-4">
                 <div>
                   <dt className="text-muted">Regular</dt>
                   <dd className="font-semibold text-foreground">
@@ -416,15 +410,15 @@ export function TimeCardTool() {
                   </div>
                 ) : null}
               </dl>
-              {period.grossPay != null ? (
-                <p className="mt-2 text-xs text-muted">
-                  This is hours times your rate only. It does not take out tax, benefits, or other
-                  deductions, and it is not a paycheck.
-                </p>
-              ) : null}
             </div>
           </div>
         </div>
+        {period.grossPay != null ? (
+          <p className="text-xs text-muted">
+            This is hours times your rate only. It does not take out tax, benefits, or other
+            deductions, and it is not a paycheck.
+          </p>
+        ) : null}
       </div>
 
       <TimeCardPrintSheet days={state.days} settings={state.settings} />
