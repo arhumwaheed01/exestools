@@ -244,9 +244,10 @@ export default function PrivacyPolicyPage() {
           </p>
           <h3 className="mt-4 text-base font-bold text-foreground">What we never share with advertisers</h3>
           <p className="mt-2">
-            The names, options, prizes, notes and lists you type into ExesTools tools are never sent
-            to Google or any ad provider, and they&apos;re never used to choose ads. They stay in
-            your browser unless you send someone a share link yourself. We don&apos;t sell lists, and
+            The names, options, prizes, notes, lists and timesheet entries you type into ExesTools
+            tools are never sent to Google or any ad provider, and they&apos;re never used to choose
+            ads. They stay in your browser unless you send someone a share link or export a card
+            yourself. We don&apos;t sell lists, and
             we don&apos;t have accounts, email addresses or profiles to share.
           </p>
         </section>

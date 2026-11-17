@@ -61,6 +61,7 @@ type Props = {
     | "secret-santa-generator"
     | "raffle-generator"
     | "bingo-card-generator"
+    | "time-card-calculator"
   >;
   title: string;
   intro: ReactNode;

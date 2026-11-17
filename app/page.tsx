@@ -382,8 +382,9 @@ export default function HomePage() {
             Which ExesTools tool should I use?
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
-            All ten tools pick at random with the same secure generator, but each one is set up for a
-            different job. Pick the one that matches what you&apos;re doing:
+            The picker tools all use the same secure generator, but each one is set up for a
+            different job. The time card calculator adds hours instead of picking a result. Pick the
+            one that matches what you&apos;re doing:
           </p>
           <div className="mt-4 overflow-x-auto">
             <table className="w-full min-w-[18rem] border-collapse text-left text-sm leading-relaxed">
@@ -488,7 +489,7 @@ export default function HomePage() {
                     Numbered tickets, several winners, alternates and a draw record to copy or print
                   </td>
                 </tr>
-                <tr className="align-top">
+                <tr className="border-b border-border/60 align-top">
                   <td className="py-2.5 pr-3">Make printable bingo cards or play on phones</td>
                   <td className="py-2.5 pr-3 font-semibold text-foreground">
                     <Link href="/bingo-card-generator" className="text-accent hover:underline">
@@ -498,6 +499,18 @@ export default function HomePage() {
                   <td className="py-2.5">
                     Your own words or 1–75 numbers, up to 100 different cards, print or share a set
                     link
+                  </td>
+                </tr>
+                <tr className="align-top">
+                  <td className="py-2.5 pr-3">Add up shift hours, lunch, and overtime</td>
+                  <td className="py-2.5 pr-3 font-semibold text-foreground">
+                    <Link href="/time-card-calculator" className="text-accent hover:underline">
+                      Time card calculator
+                    </Link>
+                  </td>
+                  <td className="py-2.5">
+                    Weekly or biweekly timesheet, unpaid breaks, overtime hours, print or CSV;
+                    nothing is stored on a server
                   </td>
                 </tr>
               </tbody>
