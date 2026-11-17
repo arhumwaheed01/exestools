@@ -33,6 +33,21 @@ const nextConfig: NextConfig = {
         destination: "/guides/white-elephant-rules-and-variations",
         permanent: true,
       },
+      {
+        source: "/hours-calculator",
+        destination: "/time-card-calculator",
+        permanent: true,
+      },
+      {
+        source: "/work-hours-calculator",
+        destination: "/time-card-calculator",
+        permanent: true,
+      },
+      {
+        source: "/timesheet-calculator",
+        destination: "/time-card-calculator",
+        permanent: true,
+      },
     ];
   },
   async headers() {

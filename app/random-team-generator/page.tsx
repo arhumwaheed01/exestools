@@ -266,6 +266,16 @@ export default function RandomTeamGeneratorPage() {
               </Link>
               .
             </li>
+            <li>
+              If you need to add up shift hours after you set the roster, use the{" "}
+              <Link
+                href="/time-card-calculator"
+                className="font-semibold text-accent hover:underline"
+              >
+                time card calculator
+              </Link>
+              .
+            </li>
           </ul>
           <p className="mt-3">
             For odd counts, how often pure random goes lopsided, and a tiered method for mixing skill

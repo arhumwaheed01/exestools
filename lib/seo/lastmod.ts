@@ -8,21 +8,22 @@
  */
 export const LASTMOD: Record<string, string> = {
   // Homepage JSON-LD merged into one @graph (2026-10-20)
-  "/": "2026-10-21",
+  "/": "2026-11-17",
   "/random-name-picker": "2026-10-25",
   "/classroom-spinner": "2026-10-23",
   "/prize-wheel": "2026-10-21",
   "/yes-no-wheel": "2026-10-19",
-  "/random-team-generator": "2026-10-25",
+  "/random-team-generator": "2026-11-17",
   "/secret-santa-generator": "2026-10-25",
   "/random-number-wheel": "2026-10-19",
   "/raffle-generator": "2026-10-25",
   "/bingo-card-generator": "2026-10-25",
+  "/time-card-calculator": "2026-11-17",
   "/wheel-gallery": "2026-10-25",
   // Trust / legal
-  "/about": "2026-10-25",
+  "/about": "2026-11-17",
   "/contact": "2026-10-19",
-  "/privacy-policy": "2026-10-22",
+  "/privacy-policy": "2026-11-17",
   "/terms": "2026-10-19",
   "/dmca": "2026-10-12",
   // Guides hub

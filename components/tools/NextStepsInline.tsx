@@ -62,6 +62,11 @@ const RELATED: Record<ToolId, { href: string; label: string }[]> = {
     { href: "/classroom-spinner", label: "Classroom spinner" },
     { href: "/", label: "Free spinner wheel" },
   ],
+  "time-card-calculator": [
+    { href: "/random-team-generator", label: "Random team generator" },
+    { href: "/random-name-picker", label: "Random name picker" },
+    { href: "/raffle-generator", label: "Raffle generator" },
+  ],
 };
 
 type Props = {

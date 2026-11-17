@@ -79,6 +79,11 @@ const TOOL_SUMMARIES: { href: string; label: string; text: string }[] = [
     label: "Bingo card generator",
     text: "up to 100 different printable cards from your own words or numbers, with a link per player for phone play.",
   },
+  {
+    href: "/time-card-calculator",
+    label: "Time card calculator",
+    text: "weekly or biweekly timesheets with unpaid breaks, overtime hours, and print or CSV export — hours stay in your browser unless you export them.",
+  },
 ];
 
 export default function AboutPage() {
@@ -99,8 +104,9 @@ export default function AboutPage() {
           <p>
             Some decisions go better when nobody in the room gets to make them: who takes the next
             question, whose name comes out of the prize draw, which team you land on, who shops for
-            whom. ExesTools has ten free tools for those moments, and each was built around one of
-            those jobs instead of asking a single wheel to handle all of them.
+            whom — or when you need to add up a week of shift hours. ExesTools has eleven free tools
+            for those moments, and each was built around one of those jobs instead of asking a single
+            wheel to handle all of them.
           </p>
           <p className="mt-3">
             Everything runs in your browser. There&apos;s no account to create, nothing to install,

@@ -6,7 +6,7 @@ placement: Above the tool grid / "Which ExesTools tool should I use?" section, b
 
 ## What ExesTools is
 
-ExesTools is a small set of free tools for the moments when a group needs a decision nobody can argue with: who answers next, who wins the prize, which team you're on, who buys for whom. There are ten of them, from this spinner wheel to a Secret Santa generator, a raffle generator and a printable bingo card maker. Each one is set up for a specific job, with presets you can load and edit, so you're not forcing a general wheel to do something it wasn't built for.
+ExesTools is a small set of free tools for the moments when a group needs a decision nobody can argue with: who answers next, who wins the prize, which team you're on, who buys for whom — plus a time card calculator for adding up shift hours. There are eleven of them, from this spinner wheel to a Secret Santa generator, a raffle generator, a printable bingo card maker and the timesheet tool. Each one is set up for a specific job, so you're not forcing a general wheel to do something it wasn't built for.
 
 ## Who it's for
 
@@ -14,7 +14,7 @@ Teachers use the classroom spinner and team generator to call on students and fo
 
 ## Your list, your browser
 
-There's no account to create. Whatever you type is kept in your own browser, and it only leaves your device if you send someone a share link, which carries the list inside it.
+There's no account to create. Whatever you type is kept in your own browser, and it only leaves your device if you send someone a share link or export a timesheet yourself.
 
 ## How it stays free
 

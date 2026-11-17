@@ -121,6 +121,15 @@ body {
     display: block !important;
     color: #111;
   }
+
+  /* Time card: print the timesheet tool only */
+  body:has(.timecard-tool-wrap) .timecard-tool {
+    color: #111;
+  }
+  body:has(.timecard-tool-wrap) .sticky {
+    position: static !important;
+    box-shadow: none !important;
+  }
 }
 
 .confetti-piece {
