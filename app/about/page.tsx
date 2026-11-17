@@ -156,8 +156,8 @@ export default function AboutPage() {
           <p className="mt-2">
             The idea behind the site is simple: a fair pick should be easy to run in front of other
             people, and it should be obvious that nobody&apos;s steering it. That&apos;s why every
-            tool shows the full list before you pick, lets you remove winners so everyone gets a
-            turn, and lets you share a link to the exact list you used.
+            picker tool shows the full list before you pick, lets you remove winners so everyone gets
+            a turn, and lets you share a link to the exact list you used.
           </p>
           <ul className="mt-3 list-disc space-y-1 pl-5">
             <li>
@@ -233,7 +233,8 @@ export default function AboutPage() {
             </li>
           </ul>
           <p className="mt-3">
-            ExesTools is a free random picker. For the long version, with worked examples, read{" "}
+            ExesTools is a set of free tools; the pickers use a secure random generator. For the long
+            version, with worked examples, read{" "}
             <Link href="/guides/how-random-is-a-spinner-wheel" className={linkCls}>
               How random is a spinner wheel?
             </Link>
@@ -366,6 +367,13 @@ export default function AboutPage() {
           </h2>
           <p className="mt-2">Major changes to the site, newest first.</p>
           <ul className="mt-3 list-disc space-y-2 pl-5">
+            <li>
+              <strong className="text-foreground">2026-11-17:</strong> Published the{" "}
+              <Link href="/time-card-calculator" className={linkCls}>
+                time card calculator
+              </Link>
+              .
+            </li>
             <li>
               <strong className="text-foreground">2026-11-07:</strong> Published{" "}
               <Link href="/guides/how-to-run-a-holiday-party-raffle" className={linkCls}>
