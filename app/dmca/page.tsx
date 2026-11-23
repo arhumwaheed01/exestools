@@ -44,7 +44,7 @@ export default function DmcaPage() {
         DMCA / Copyright
       </h1>
       <p className="mt-2 text-sm text-muted">Last updated: October 12, 2026</p>
-      <div className="mt-6 space-y-5 text-sm leading-relaxed text-muted sm:text-base">
+      <div className="mt-6 space-y-8 text-sm leading-relaxed text-muted sm:text-base">
         <p>
           {siteConfig.name} respects intellectual property rights. The site design, code, and
           branding are our original work. Text that users type into the tools (names, lists, bingo

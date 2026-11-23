@@ -3,16 +3,17 @@ import type { ToolId } from "@/lib/tools";
 
 const RELATED: Record<ToolId, { href: string; label: string }[]> = {
   home: [
-    { href: "/random-name-picker", label: "Random Name Picker" },
+    { href: "/random-name-picker", label: "Random name picker" },
     { href: "/classroom-spinner", label: "Classroom spinner" },
     { href: "/prize-wheel", label: "Prize wheel" },
     { href: "/yes-no-wheel", label: "Yes or no wheel" },
-    { href: "/random-team-generator", label: "Random Team Generator" },
+    { href: "/random-team-generator", label: "Random team generator" },
     { href: "/secret-santa-generator", label: "Secret Santa generator" },
     { href: "/random-number-wheel", label: "Random number wheel" },
-    { href: "/raffle-generator", label: "Raffle Generator" },
+    { href: "/raffle-generator", label: "Raffle generator" },
     { href: "/bingo-card-generator", label: "Bingo card generator" },
     { href: "/time-card-calculator", label: "Time card calculator" },
+    { href: "/overtime-calculator", label: "Overtime calculator" },
   ],
   "random-name-picker": [
     { href: "/classroom-spinner", label: "Classroom / student spinner" },
@@ -81,11 +82,19 @@ const RELATED: Record<ToolId, { href: string; label: string }[]> = {
     { href: "/bingo-card-generator", label: "Bingo card generator" },
   ],
   "time-card-calculator": [
+    { href: "/overtime-calculator", label: "Overtime calculator" },
     { href: "/random-team-generator", label: "Random team generator" },
     { href: "/random-name-picker", label: "Random name picker" },
     { href: "/raffle-generator", label: "Raffle generator" },
     { href: "/secret-santa-generator", label: "Secret Santa generator" },
     { href: "/prize-wheel", label: "Prize wheel" },
+  ],
+  "overtime-calculator": [
+    { href: "/time-card-calculator", label: "Time card calculator" },
+    { href: "/random-team-generator", label: "Random team generator" },
+    { href: "/random-name-picker", label: "Random name picker" },
+    { href: "/raffle-generator", label: "Raffle generator" },
+    { href: "/secret-santa-generator", label: "Secret Santa generator" },
   ],
   "bingo-card-generator": [
     { href: "/random-number-wheel", label: "Random number wheel (1–75 bingo caller)" },
@@ -117,7 +126,7 @@ export function RelatedTools({
         className={
           compact
             ? "text-base font-bold tracking-tight text-foreground"
-            : "text-xl font-bold tracking-tight text-foreground"
+            : "text-xl font-bold tracking-tight text-foreground sm:text-2xl"
         }
       >
         {heading}

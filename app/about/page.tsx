@@ -84,6 +84,11 @@ const TOOL_SUMMARIES: { href: string; label: string; text: string }[] = [
     label: "Time card calculator",
     text: "weekly or biweekly timesheets with unpaid breaks, overtime hours, and print or CSV export — hours stay in your browser unless you export them.",
   },
+  {
+    href: "/overtime-calculator",
+    label: "Overtime calculator",
+    text: "time and a half, double time, California's seventh-day rule and bonuses, with a pay breakdown you can copy or print. Nothing is saved.",
+  },
 ];
 
 export default function AboutPage() {
@@ -104,8 +109,8 @@ export default function AboutPage() {
           <p>
             Some decisions go better when nobody in the room has to make them: who answers next,
             whose name comes out of the prize draw, which team you&apos;re on, who buys for whom.
-            ExesTools has ten free tools for moments like these, plus a time card calculator for
-            the hours side of running a team.
+            ExesTools has ten free tools for moments like these, plus a time card calculator and an
+            overtime calculator for the hours and pay side of running a team.
           </p>
           <p className="mt-3">
             Everything runs in your browser. There&apos;s no account to create, nothing to install,
@@ -363,6 +368,13 @@ export default function AboutPage() {
           </h2>
           <p className="mt-2">Major changes to the site, newest first.</p>
           <ul className="mt-3 list-disc space-y-2 pl-5">
+            <li>
+              <strong className="text-foreground">2026-11-24:</strong> Published the{" "}
+              <Link href="/overtime-calculator" className={linkCls}>
+                overtime calculator
+              </Link>
+              .
+            </li>
             <li>
               <strong className="text-foreground">2026-11-17:</strong> Published the{" "}
               <Link href="/time-card-calculator" className={linkCls}>

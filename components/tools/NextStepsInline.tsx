@@ -6,11 +6,11 @@ import type { ToolId } from "@/lib/tools";
 
 const RELATED: Record<ToolId, { href: string; label: string }[]> = {
   home: [
-    { href: "/random-name-picker", label: "Random Name Picker" },
+    { href: "/random-name-picker", label: "Random name picker" },
     { href: "/classroom-spinner", label: "Classroom spinner" },
     { href: "/prize-wheel", label: "Prize wheel" },
     { href: "/yes-no-wheel", label: "Yes or no wheel" },
-    { href: "/random-team-generator", label: "Random Team Generator" },
+    { href: "/random-team-generator", label: "Random team generator" },
     { href: "/secret-santa-generator", label: "Secret Santa generator" },
   ],
   "random-name-picker": [
@@ -66,6 +66,11 @@ const RELATED: Record<ToolId, { href: string; label: string }[]> = {
     { href: "/random-team-generator", label: "Random team generator" },
     { href: "/random-name-picker", label: "Random name picker" },
     { href: "/raffle-generator", label: "Raffle generator" },
+  ],
+  "overtime-calculator": [
+    { href: "/time-card-calculator", label: "Time card calculator" },
+    { href: "/random-team-generator", label: "Random team generator" },
+    { href: "/random-name-picker", label: "Random name picker" },
   ],
 };
 

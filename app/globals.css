@@ -133,6 +133,18 @@ body {
     display: block !important;
     color: #111;
   }
+
+  /* Overtime: hide page copy; show interactive settings + print sheet */
+  body:has(.overtime-tool-wrap) main > div > div > :not(.overtime-tool-wrap) {
+    display: none !important;
+  }
+  body:has(.overtime-tool-wrap) .overtime-tool > .grid {
+    display: none !important;
+  }
+  body:has(.overtime-tool-wrap) .overtime-print-sheet {
+    display: block !important;
+    color: #111;
+  }
 }
 
 .confetti-piece {

@@ -6,7 +6,7 @@ placement: Above the tool grid / "Which ExesTools tool should I use?" section, b
 
 ## What ExesTools is
 
-ExesTools is a small set of free tools for the moments when a group needs a decision that isn't open to dispute: who answers next, who wins the prize, which team you're on, who buys for whom — plus a time card calculator for adding up shift hours. There are eleven of them, from this spinner wheel to a Secret Santa generator, a raffle generator, a printable bingo card maker and the timesheet tool. Each one is set up for a specific job, so you're not forcing a general wheel to do something it wasn't built for.
+ExesTools is a small set of free tools for the moments when a group needs a decision that isn't open to dispute: who answers next, who wins the prize, which team you're on, who buys for whom — plus two calculators for shift hours and overtime pay. There are twelve of them, from this spinner wheel to a Secret Santa generator, a raffle generator, a printable bingo card maker, the timesheet tool and the overtime calculator. Each one is set up for a specific job, so you're not forcing a general wheel to do something it wasn't built for.
 
 ## Who it's for
 

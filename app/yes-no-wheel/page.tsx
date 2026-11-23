@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { GuideMarkdown } from "@/components/guides/GuideMarkdown";
+import { ToolPageShot } from "@/components/tools/ToolPageShot";
 import { GuideSection, UseCaseToolPage } from "@/components/UseCaseToolPage";
 import { loadToolPageMarkdown } from "@/lib/toolPageMarkdown";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
@@ -208,6 +209,10 @@ export default function YesNoWheelPage() {
           won&apos;t always get exactly 5 Yes and 5 No, because short runs are normal. Use the
           counter under the wheel to see your own split.
         </p>
+        <ToolPageShot
+          src="/tools/yes-no-wheel/1.webp"
+          alt="The yes or no wheel landed on Yes, with a running tally of three Yes and two No spins above it."
+        />
       </GuideSection>
       <GuideSection title="How to ask a good yes-or-no question">
         <p>

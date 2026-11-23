@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ToolPageShot } from "@/components/tools/ToolPageShot";
 import { GuideSection, UseCaseToolPage } from "@/components/UseCaseToolPage";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph } from "@/lib/seo/jsonld";
@@ -128,6 +129,10 @@ export default function PrizeWheelPage() {
           equal slice while it&apos;s in stock, and each win uses up one. At 0, the prize leaves the
           wheel on its own.
         </p>
+        <ToolPageShot
+          src="/tools/prize-wheel/1.webp"
+          alt="Prize wheel with stock counts for tote bags and sticker sheets, the grand prize already won and gone from the wheel, and a winners log of each spin."
+        />
         <p>
           Example: 3 tote bags, 10 stickers and 1 grand prize. Add Tote bag, Sticker and Grand
           prize, then set Quantity to 3, 10 and 1. Each slice has a 1 in 3 chance. The first time

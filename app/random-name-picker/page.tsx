@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { NamePickerTool } from "@/components/name-picker/NamePickerTool";
+import { ToolPageShot } from "@/components/tools/ToolPageShot";
 import { GuideSection, UseCaseToolPage } from "@/components/UseCaseToolPage";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph } from "@/lib/seo/jsonld";
@@ -198,6 +199,10 @@ export default function RandomNamePickerPage() {
           A workshop has 14 attendees and time for three short presentations. Paste the 14 names,
           set How many names? to 3, and press the draw button.
         </p>
+        <ToolPageShot
+          src="/tools/random-name-picker/1.webp"
+          alt="Random name picker in Draw a list mode, showing three presenters drawn in order from a list of fourteen names."
+        />
         <ul className="list-disc space-y-2 pl-5">
           <li>The first name drawn had a 1 in 14 chance.</li>
           <li>The second is drawn from the 13 left, so 1 in 13 for each of them.</li>

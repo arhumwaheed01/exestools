@@ -7,6 +7,7 @@ import PageMeta from "@/components/PageMeta";
 import { GuideMarkdown } from "@/components/guides/GuideMarkdown";
 import { RelatedTools } from "@/components/RelatedTools";
 import { QueryHydratedSpinner } from "@/components/QueryHydratedMounts";
+import { ToolPageShot } from "@/components/tools/ToolPageShot";
 import { preprocessGuideBody } from "@/lib/guideBody";
 import { getPublishedGuides } from "@/lib/guides";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
@@ -151,7 +152,7 @@ export default function HomePage() {
       />
 
       <header className="mb-1.5 max-w-3xl">
-        <h1 className="text-lg font-extrabold tracking-tight text-foreground sm:text-xl">
+        <h1 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
           Free spinner wheel online
         </h1>
         <PageMeta updated="2026-11-24" />
@@ -263,6 +264,10 @@ export default function HomePage() {
             same chance. Then it animates the wheel so it stops on that option. That&apos;s why a long spin,
             a short spin or a second press of the button can&apos;t nudge the result.
           </p>
+          <ToolPageShot
+            src="/tools/home/1.webp"
+            alt="The ExesTools spinner wheel stopped on Ramen after a spin, with six dinner choices on its slices."
+          />
           <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
             Each line in your list becomes one equal slice. Blank lines are ignored, and a line that repeats
             an earlier one is skipped, with capital letters not counting as a difference. So
@@ -383,8 +388,8 @@ export default function HomePage() {
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
             The picker tools all use the same secure generator, but each one is set up for a
-            different job. The time card calculator adds hours instead of picking a result. Pick the
-            one that matches what you&apos;re doing:
+            different job. The time card and overtime calculators do arithmetic instead of picking a
+            result. Pick the one that matches what you&apos;re doing:
           </p>
           <div className="mt-4 overflow-x-auto">
             <table className="w-full min-w-[18rem] border-collapse text-left text-sm leading-relaxed">
@@ -414,7 +419,7 @@ export default function HomePage() {
                   </td>
                   <td className="py-2.5 pr-3 font-semibold text-foreground">
                     <Link href="/random-name-picker" className="text-accent hover:underline">
-                      Random Name Picker
+                      Random name picker
                     </Link>
                   </td>
                   <td className="py-2.5">Name-focused presets and a &quot;no repeats&quot; round</td>
@@ -462,7 +467,7 @@ export default function HomePage() {
                   <td className="py-2.5 pr-3">Split a list into teams, groups or pairs</td>
                   <td className="py-2.5 pr-3 font-semibold text-foreground">
                     <Link href="/random-team-generator" className="text-accent hover:underline">
-                      Random Team Generator
+                      Random team generator
                     </Link>
                   </td>
                   <td className="py-2.5">Set team count or team size, then print or share</td>
@@ -482,7 +487,7 @@ export default function HomePage() {
                   <td className="py-2.5 pr-3">Draw raffle winners from tickets</td>
                   <td className="py-2.5 pr-3 font-semibold text-foreground">
                     <Link href="/raffle-generator" className="text-accent hover:underline">
-                      Raffle Generator
+                      Raffle generator
                     </Link>
                   </td>
                   <td className="py-2.5">
@@ -513,6 +518,20 @@ export default function HomePage() {
                     nothing is stored on a server
                   </td>
                 </tr>
+                <tr className="align-top">
+                  <td className="py-2.5 pr-3">
+                    Work out overtime pay, double time or a bonus
+                  </td>
+                  <td className="py-2.5 pr-3 font-semibold text-foreground">
+                    <Link href="/overtime-calculator" className="text-accent hover:underline">
+                      Overtime calculator
+                    </Link>
+                  </td>
+                  <td className="py-2.5">
+                    Federal, daily or California rules, editable multipliers, a pay breakdown to copy
+                    or print; nothing is saved
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -532,17 +551,15 @@ export default function HomePage() {
             {HOME_FAQS.map((item) => (
               <details
                 key={item.q}
-                className="group rounded-2xl border border-border bg-surface px-4 py-3 open:border-accent/40"
+                className="group rounded-2xl border border-border bg-surface open:border-accent/40"
               >
-                <summary className="cursor-pointer list-none text-sm font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent rounded marker:content-none [&::-webkit-details-marker]:hidden">
-                  <span className="flex items-center justify-between gap-3">
-                    {item.q}
-                    <span className="text-muted transition group-open:rotate-45" aria-hidden>
-                      +
-                    </span>
+                <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent rounded marker:content-none [&::-webkit-details-marker]:hidden">
+                  <span>{item.q}</span>
+                  <span className="text-muted transition group-open:rotate-45" aria-hidden>
+                    +
                   </span>
                 </summary>
-                <p className="mt-2 text-sm leading-relaxed text-muted">
+                <p className="px-4 pb-4 text-sm leading-relaxed text-muted">
                   <FaqAnswer text={item.a} />
                 </p>
               </details>

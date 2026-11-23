@@ -19,6 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       path.includes("secret-santa") ||
       path.includes("raffle") ||
       path.includes("bingo") ||
+      path.includes("overtime") ||
       path.includes("time-card");
     const date = LASTMOD[path] ?? "2026-09-26";
     return {

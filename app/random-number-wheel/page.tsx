@@ -152,7 +152,7 @@ export default function RandomNumberWheelPage() {
       <nav className="mb-2 text-xs text-muted" aria-label="Breadcrumb">
         <ol className="flex flex-wrap items-center gap-1">
           <li>
-            <Link href="/" className="hover:text-accent hover:underline">
+            <Link href="/" className="inline-flex min-h-11 items-center hover:text-accent hover:underline">
               Home
             </Link>
           </li>
@@ -162,7 +162,7 @@ export default function RandomNumberWheelPage() {
       </nav>
 
       <header className="mb-3 max-w-3xl">
-        <h1 className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl lg:text-3xl">
+        <h1 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
           Random number wheel
         </h1>
         <PageMeta updated="2026-11-24" />
@@ -355,17 +355,15 @@ export default function RandomNumberWheelPage() {
             {ALL_FAQS.map((item) => (
               <details
                 key={item.q}
-                className="group rounded-2xl border border-border bg-surface px-4 py-3 open:border-accent/40"
+                className="group rounded-2xl border border-border bg-surface open:border-accent/40"
               >
-                <summary className="cursor-pointer list-none text-sm font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent rounded marker:content-none [&::-webkit-details-marker]:hidden">
-                  <span className="flex items-center justify-between gap-3">
-                    {item.q}
-                    <span className="text-muted transition group-open:rotate-45" aria-hidden>
-                      +
-                    </span>
+                <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent rounded marker:content-none [&::-webkit-details-marker]:hidden">
+                  <span>{item.q}</span>
+                  <span className="text-muted transition group-open:rotate-45" aria-hidden>
+                    +
                   </span>
                 </summary>
-                <p className="mt-2 text-sm leading-relaxed text-muted">
+                <p className="px-4 pb-4 text-sm leading-relaxed text-muted">
                   <FaqAnswer text={item.a} />
                 </p>
               </details>

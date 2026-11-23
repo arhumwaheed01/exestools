@@ -61,6 +61,7 @@ type Props = {
     | "raffle-generator"
     | "bingo-card-generator"
     | "time-card-calculator"
+    | "overtime-calculator"
   >;
   title: string;
   intro: ReactNode;
@@ -151,7 +152,7 @@ export function UseCaseToolPage({
           <li>
             <Link
               href="/"
-              className="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
+              className="inline-flex min-h-11 items-center text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
             >
               Home
             </Link>
@@ -167,11 +168,7 @@ export function UseCaseToolPage({
 
       <header className={`max-w-3xl ${wheelFirst ? "mb-0.5" : "mb-3"}`}>
         <h1
-          className={
-            wheelFirst
-              ? "text-base font-extrabold leading-tight tracking-tight text-foreground sm:text-lg xl:text-xl"
-              : "text-xl font-extrabold tracking-tight text-foreground sm:text-2xl lg:text-3xl"
-          }
+          className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl"
         >
           {title}
         </h1>
@@ -203,7 +200,7 @@ export function UseCaseToolPage({
       {toolSlot ?? <QueryHydratedSpinner toolId={toolId} />}
 
       <div className="mt-12 space-y-10 border-t border-border pt-10">
-        <div className="max-w-3xl space-y-8 text-sm leading-relaxed text-muted sm:text-base">
+        <div className="max-w-3xl space-y-10 text-sm leading-relaxed text-muted sm:text-base">
           {children}
         </div>
 
@@ -217,17 +214,15 @@ export function UseCaseToolPage({
             {faqs.map((item) => (
               <details
                 key={item.q}
-                className="group rounded-2xl border border-border bg-surface px-4 py-3 open:border-accent/40"
+                className="group rounded-2xl border border-border bg-surface open:border-accent/40"
               >
-                <summary className="cursor-pointer list-none text-sm font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent rounded marker:content-none [&::-webkit-details-marker]:hidden">
-                  <span className="flex items-center justify-between gap-3">
-                    {item.q}
-                    <span className="text-muted transition group-open:rotate-45" aria-hidden>
-                      +
-                    </span>
+                <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent rounded marker:content-none [&::-webkit-details-marker]:hidden">
+                  <span>{item.q}</span>
+                  <span className="text-muted transition group-open:rotate-45" aria-hidden>
+                    +
                   </span>
                 </summary>
-                <p className="mt-2 text-sm leading-relaxed text-muted">
+                <p className="px-4 pb-4 text-sm leading-relaxed text-muted">
                   <FaqAnswer text={item.a} />
                 </p>
               </details>
@@ -242,7 +237,7 @@ export function UseCaseToolPage({
 export function GuideSection({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section>
-      <h2 className="text-xl font-bold tracking-tight text-foreground">{title}</h2>
+      <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">{title}</h2>
       <div className="mt-3 space-y-3">{children}</div>
     </section>
   );

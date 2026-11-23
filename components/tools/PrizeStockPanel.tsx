@@ -20,7 +20,7 @@ function escapeHtml(s: string): string {
 }
 
 const BTN =
-  "inline-flex min-h-10 items-center rounded-lg border border-border bg-surface-2 px-3 text-xs font-bold text-foreground outline-none hover:bg-border focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50";
+  "inline-flex min-h-11 items-center rounded-lg border border-border bg-surface-2 px-3 text-xs font-bold text-foreground outline-none hover:bg-border focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50";
 
 /** Prize wheel only: quantity per prize (finite stock) + winners log with copy/print. */
 export function PrizeStockPanel({
