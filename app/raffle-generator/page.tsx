@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import PageMeta from "@/components/PageMeta";
 import { RelatedLinks } from "@/components/RelatedLinks";
-import { RelatedTools } from "@/components/RelatedTools";
 import { RaffleMount } from "@/components/raffle/RaffleMount";
+import { ToolResultShot } from "@/components/tools/ToolResultShot";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
 
@@ -41,7 +41,7 @@ const FAQ_LINK_HREFS: Record<string, string> = {
 const FAQ = [
   {
     q: "How does an online raffle generator work?",
-    a: "You add entries or a ticket range, choose how many winners, and the tool picks at random in your browser. Nobody wins twice unless you allow it.",
+    a: "You add entries or a ticket range, choose how many winners, and the tool picks at random in your browser. A person wins only once unless you allow repeats.",
   },
   {
     q: "Can I draw several prizes at once?",
@@ -92,6 +92,7 @@ export default function RaffleGeneratorPage() {
     path: "/raffle-generator",
     name: "Raffle Generator",
     description: DESCRIPTION,
+    dateModified: "2026-11-24",
   });
 
   const breadcrumbJsonLd = {
@@ -140,7 +141,7 @@ export default function RaffleGeneratorPage() {
         <h1 className="mt-4 max-w-3xl text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
           Online Raffle Generator: Draw Winners and Alternates
         </h1>
-        <PageMeta updated="2026-10-21" />
+        <PageMeta updated="2026-11-24" />
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           Paste your entrants or type a ticket range like 1–300, say how many prizes you&apos;re
           giving away, and press Draw. You get the winners, backup alternates for anyone who
@@ -150,6 +151,7 @@ export default function RaffleGeneratorPage() {
 
         <div className="raffle-tool-wrap mt-6 min-w-0">
           <RaffleMount />
+          <ToolResultShot toolId="raffle-generator" />
         </div>
 
         <section className="mt-12 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
@@ -287,7 +289,7 @@ export default function RaffleGeneratorPage() {
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Worked example: 5 prizes, 3 alternates, 300 tickets
+            Five prizes, three alternates, 300 tickets
           </h2>
           <p className="mt-3">
             A youth soccer club sold 300 numbered tickets for five prizes. They paste the sold numbers, one
@@ -381,10 +383,6 @@ export default function RaffleGeneratorPage() {
             ))}
           </div>
         </section>
-
-        <div className="mt-10">
-          <RelatedTools toolId="raffle-generator" />
-        </div>
       </div>
 
       <script

@@ -110,7 +110,7 @@ export default function YesNoWheelPage() {
         "Copy share link",
         "No signup",
       ]}
-      pageUpdated="2026-11-17"
+      pageUpdated="2026-11-24"
     >
       <GuideSection title="How to spin Yes or No">
         <ol className="list-decimal space-y-2 pl-5">
@@ -221,7 +221,7 @@ export default function YesNoWheelPage() {
           SPIN.
         </p>
       </GuideSection>
-      <GuideSection title="Worked example: a probability lesson in ten minutes">
+      <GuideSection title="A ten-minute probability lesson">
         <p>
           Ask the class to predict how many Yeses you&apos;ll get in 20 spins. Most will say 10. Spin 20
           times and use the counter under the wheel to keep the tally.
@@ -243,7 +243,7 @@ export default function YesNoWheelPage() {
         <ul className="list-disc space-y-2 pl-5">
           <li>
             <span className="font-semibold text-foreground">Say what Yes means out loud</span>{" "}
-            before a group spin, so nobody reinterprets it afterwards.
+            before a group spin, so it can't be reinterpreted afterwards.
           </li>
           <li>
             <span className="font-semibold text-foreground">Make Yes the change</span>{" "}

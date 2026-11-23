@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PageMeta from "@/components/PageMeta";
-import { AuthorBox } from "@/components/guides/AuthorBox";
 import { GuideMarkdown } from "@/components/guides/GuideMarkdown";
 import {
   getGuideBySlug,
@@ -81,7 +80,7 @@ export default async function GuidePage({ params }: Props) {
   const guide = getGuideBySlug(slug);
   if (!guide || !isGuidePublished(slug)) notFound();
 
-  const { published, updated, meta_description } = guide.frontmatter;
+  const { published, updated, meta_description, testedNote } = guide.frontmatter;
   const article = articleLd({
     headline: guide.title,
     path: slug,
@@ -143,13 +142,13 @@ export default async function GuidePage({ params }: Props) {
           {guide.title}
         </h1>
         <PageMeta published={published} updated={updated} />
+        {testedNote ? <p className="mt-1 text-sm italic text-muted">{testedNote}</p> : null}
       </header>
 
       <div className="mt-8">
         <GuideMarkdown content={guide.content} />
       </div>
 
-      <AuthorBox />
       <RelatedToolsBox guide={guide} />
     </article>
   );

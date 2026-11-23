@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BingoMount } from "@/components/bingo/BingoMount";
+import { ToolResultShot } from "@/components/tools/ToolResultShot";
 import PageMeta from "@/components/PageMeta";
 import { RelatedLinks } from "@/components/RelatedLinks";
-import { RelatedTools } from "@/components/RelatedTools";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
 import "../styles/bingo-themes.css";
@@ -158,6 +158,7 @@ export default function BingoCardGeneratorPage() {
     name: "Bingo Card Generator",
     description: DESCRIPTION,
     featureList: FEATURE_LIST,
+    dateModified: "2026-11-24",
   });
 
   const breadcrumbJsonLd = {
@@ -206,7 +207,7 @@ export default function BingoCardGeneratorPage() {
         <h1 className="mt-4 max-w-3xl text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
           Bingo card generator
         </h1>
-        <PageMeta updated="2026-10-19" />
+        <PageMeta updated="2026-11-24" />
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           Make printable bingo cards from your own word list or classic 1–75 numbers. Choose a 3×3,
           4×4 or 5×5 grid, add a FREE center square, and make up to 100 different cards in one set.
@@ -217,6 +218,7 @@ export default function BingoCardGeneratorPage() {
 
         <div className="mt-6 min-w-0">
           <BingoMount />
+          <ToolResultShot toolId="bingo-card-generator" />
         </div>
 
         <section className="mt-12 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
@@ -344,7 +346,7 @@ export default function BingoCardGeneratorPage() {
             pattern. The checker compares the card with the called list and says whether it wins, and
             which line it found. The FREE square always counts as marked. It also shows the card with
             every called square highlighted, so if a player marked a square too early, you can both
-            see which one, and honest mix-ups are settled quickly.
+            see which one, and mix-ups are settled quickly.
           </p>
         </section>
 
@@ -415,12 +417,12 @@ export default function BingoCardGeneratorPage() {
             that shows only their card on a phone, where tapping a square marks it.
           </p>
           <p className="mt-3">
-            Everything happens in your browser. It&apos;s free, and nobody needs an account.
+            Everything happens in your browser. It&apos;s free, with no account to create.
           </p>
         </section>
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Worked example: a vocabulary game for 28 students
+            Vocabulary bingo for 28 students
           </h2>
           <p className="mt-3">
             A teacher wants a quick review of 30 words before a test.
@@ -510,10 +512,6 @@ export default function BingoCardGeneratorPage() {
             ))}
           </div>
         </section>
-
-        <div className="mt-10">
-          <RelatedTools toolId="bingo-card-generator" />
-        </div>
 
         <p className="mt-6 max-w-3xl text-sm text-muted">
           For fun at home, in class and at parties. Not for real-money games.

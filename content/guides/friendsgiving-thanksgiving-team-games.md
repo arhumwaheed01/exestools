@@ -4,6 +4,7 @@ meta_title: "Friendsgiving and Thanksgiving Team Games | ExesTools"
 meta_description: "Team games for Friendsgiving and Thanksgiving: fair splits for trivia, cooking and charades, plus bingo, turn order and gift-exchange options."
 author: Arhum Waheed
 author_url: /about#arhum
+testedNote: "Tested with an 11-guest roster split into three teams."
 published: "2026-11-05"
 updated: "2026-11-17"
 related_tools: [/random-team-generator, /random-name-picker, /bingo-card-generator, /secret-santa-generator, /]
@@ -37,7 +38,7 @@ Both tools keep the list in the browser on that device. Fullscreen the page when
 
 ## How to split without leaving anyone out
 
-Use the team generator and pick either **Number of teams** or **People per team**. Sizes stay within one person of each other. With 11 guests and 3 teams you get 4, 4, 3. With **Pairs**, an odd roster makes one trio so nobody sits alone.
+Use the team generator and pick either **Number of teams** or **People per team**. Sizes stay within one person of each other. With 11 guests and 3 teams you get 4, 4, 3. With **Pairs**, an odd roster makes one trio, so everyone has company.
 
 Agree the rule out loud before the first deal:
 
@@ -127,11 +128,7 @@ You don't need every block. One structured game plus one free-form stretch is en
 
 Above about 24, split into rooms or rounds so half the house isn't waiting for a turn.
 
-## Frequently asked questions
-
-### How do I stop couples always ending up on the same team?
-
-Say beforehand that you'll allow one reshuffle if a couple lands together when you wanted mixed tables. Or put each couple in a "tier" the same size as the number of teams so they can't share a team—see the [balanced teams guide](/guides/how-to-make-balanced-random-teams).
+## Questions hosts ask
 
 ### What if someone arrives late?
 

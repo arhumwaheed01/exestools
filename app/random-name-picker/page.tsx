@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { NamePickerTool } from "@/components/name-picker/NamePickerTool";
 import { GuideSection, UseCaseToolPage } from "@/components/UseCaseToolPage";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph } from "@/lib/seo/jsonld";
 
 const TITLE = "Random Name Picker Wheel – Free, Remove Winner | ExesTools";
 const META =
-  "Paste up to 60 names and spin the wheel to pick one at random. Remove each winner, share the wheel by link, and keep the list in your browser. Free.";
+  "Draw several names from a list at once, put a whole list in random order, or spin the wheel for one. Up to 60 names, copy or print the result. Free.";
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -29,24 +30,28 @@ export const metadata: Metadata = {
 
 const FAQS = [
   {
-    q: "How do I pick a random name?",
-    a: "Paste names one per line, press Spin (or Space), and the wheel lands on one at random.",
+    q: "How do I pick several random names at once?",
+    a: "Choose Draw a list, type how many names you want, and press the draw button. You get a numbered list of that many names with no repeats.",
   },
   {
-    q: "Can I stop the same name being picked twice?",
-    a: "Yes. Turn on Remove winner after spin in the toolbar.",
+    q: "How do I get a full speaking order?",
+    a: "Press Put the whole list in random order. Every name appears once, numbered from 1, ready to copy or print.",
+  },
+  {
+    q: "Can the same name come up twice in one draw?",
+    a: "No. Each draw takes names without replacement, so a name that is drawn is not drawn again in that list. Draw again to get a fresh list from all names.",
+  },
+  {
+    q: "How do I pick just one name?",
+    a: "Switch to Spin one, press Spin (or Space), and the wheel lands on one name. Turn on Remove winner after spin to keep names from coming up twice.",
   },
   {
     q: "How many names can I add?",
-    a: "Up to 60.",
+    a: "Up to 60. The same list feeds both Draw a list and Spin one.",
   },
   {
-    q: "Can I share my wheel?",
-    a: "Yes. Press Share to copy a link that opens the same list on another device.",
-  },
-  {
-    q: "How do I bring back removed names?",
-    a: "Re-paste your list to restore names. Start fresh loads the starter sample again.",
+    q: "Can I share my list?",
+    a: "Yes. In Spin one, press Share to copy a link that opens the same list on another device. In Draw a list, use Copy list to paste the result into chat or email.",
   },
   {
     q: "Is it free? Is my list saved?",
@@ -60,38 +65,60 @@ export default function RandomNamePickerPage() {
       toolId="random-name-picker"
       breadcrumbLabel="Random name picker"
       title="Random Name Picker Wheel"
-      intro="Paste a list of up to 60 names and spin. Turn on Remove winner, and nobody gets picked twice, which suits cold-calling a class or setting stand-up order. Copy the share link, and your co-teacher opens the exact same wheel. It's free with no account."
+      intro="Pick several names at once, or put the whole list in a random speaking order in one click. Paste up to 60 names, say how many you need, and get a numbered list you can copy or print. Prefer drama? Switch to Spin one and let the wheel choose a single name. Free, with no account."
       faqs={FAQS}
       schemaName="Random Name Picker Wheel"
       schemaDescription={META}
-      pageUpdated="2026-10-25"
+      pageUpdated="2026-11-24"
+      toolSlot={<NamePickerTool />}
     >
-      <GuideSection title="How to pick a name">
+      <GuideSection title="How to draw a list of names">
         <ol className="list-decimal space-y-2 pl-5">
           <li>
-            Replace the sample names with your own list, or try the Meeting order or Party /
-            icebreakers example. Paste a column from a spreadsheet if that is easier.
+            Choose <span className="font-semibold text-foreground">Draw a list</span> and replace
+            the sample names with your own. Paste a column from a spreadsheet if that is easier.
           </li>
           <li>
-            Press SPIN. The name under the pointer is the pick. With remove-winner on (the default
-            here), that name leaves the wheel so it cannot come up again until you restore the list.
+            Set <span className="font-semibold text-foreground">How many names?</span> to the number
+            you need, from 1 up to the length of your list, then press the draw button. The default
+            is 3.
           </li>
           <li>
-            Press Spin again for the next person. Keep Remove winner after spin on in the toolbar so
-            each pick leaves the wheel. Sound and spin length are in the ⋮ menu on the wheel.
+            Need everyone in order instead? Press{" "}
+            <span className="font-semibold text-foreground">
+              Put the whole list in random order
+            </span>
+            . Each name appears once, numbered 1., 2., 3. and so on.
           </li>
           <li>
-            Use Share to copy a link to the same list, or New / Open to start fresh or reload a saved
-            wheel. Shuffle only reorders the slices; it does not change the odds.
+            Use <span className="font-semibold text-foreground">Copy list</span> to paste the
+            numbered result into chat, or <span className="font-semibold text-foreground">Print</span>{" "}
+            to put it on paper. Press the draw button again for a fresh draw from the full list.
           </li>
         </ol>
       </GuideSection>
 
+      <GuideSection title="Draw a list or spin one">
+        <p>
+          <span className="font-semibold text-foreground">Draw a list</span> is for getting several
+          answers in one go: three presenters, a full running order, or the first five people to
+          answer. <span className="font-semibold text-foreground">Spin one</span> is for a single
+          name with a bit of suspense, and it keeps the wheel, share link and remove-winner options.
+          Both modes use the same list, so edit it once and switch freely.
+        </p>
+        <p>
+          If you only ever need one choice from a mixed set of options, the{" "}
+          <Link href="/" className="font-semibold text-accent hover:underline">
+            main spinner wheel
+          </Link>{" "}
+          is built for that.
+        </p>
+      </GuideSection>
+
       <GuideSection title="Name picker vs classroom spinner">
         <p>
-          Both tools spin a wheel over a list and can remove winners after each pick. The difference
-          is the setup, not the math. This random name picker opens as a general list tool: sample
-          names, meeting and party examples, and no classroom framing. The{" "}
+          Both tools work from a list of names. This random name picker opens as a general list
+          tool: sample names, meeting and party examples, and no classroom framing. The{" "}
           <Link href="/classroom-spinner" className="font-semibold text-accent hover:underline">
             classroom spinner
           </Link>{" "}
@@ -99,19 +126,26 @@ export default function RandomNamePickerPage() {
           and copy written for cold calling and projectors.
         </p>
         <p className="mt-3">
-          Use this page for standups, workshops, raffles by name, icebreakers, and &quot;who goes
-          first&quot; at a party. Use the classroom page when the list is a class and you want the
-          teacher-oriented examples and wording. Teachers who only need a plain roster can still use
-          either tool—the remove-winner behavior is the same idea on both.
+          Use this page when you want a drawn list: standups, workshops, raffles by name,
+          icebreakers, and &quot;who goes first&quot; at a party. Use the classroom page when the
+          list is a class and you want the teacher-oriented examples and wording.
         </p>
       </GuideSection>
 
-      <GuideSection title="Where it earns its keep">
+      <GuideSection title="Where drawing a list earns its keep">
         <ul className="list-disc space-y-3 pl-5">
           <li>
-            <span className="font-semibold text-foreground">Cold-calling in class.</span> 28 names,
-            Remove winner on. By Friday everyone has answered once, and no one can say you always
-            pick the front row. See{" "}
+            <span className="font-semibold text-foreground">Full speaking order.</span> Paste the
+            team, press Put the whole list in random order, and paste the numbered result into the
+            chat before anyone speaks. Same trick for stand-ups, round-robin reviews and demo days.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Three presenters from fourteen.</span>{" "}
+            Set How many names? to 3 and press draw. One click, no repeats.
+          </li>
+          <li>
+            <span className="font-semibold text-foreground">Cold-calling in class.</span> Draw the
+            next five students to be asked, and do another draw tomorrow. See{" "}
             <Link
               href="/guides/cold-calling-students-fairly"
               className="font-semibold text-accent hover:underline"
@@ -121,14 +155,9 @@ export default function RandomNamePickerPage() {
             .
           </li>
           <li>
-            <span className="font-semibold text-foreground">Monday stand-up.</span> Spin for who
-            goes first, keep Remove winner on, and spin until the wheel is empty. That&apos;s your
-            order.
-          </li>
-          <li>
-            <span className="font-semibold text-foreground">White elephant turn order.</span> Same
-            trick for a gift exchange: spin until the wheel is empty and play in that order. Steal
-            limits and freeze rules are in{" "}
+            <span className="font-semibold text-foreground">White elephant turn order.</span>{" "}
+            Put the whole list in random order and play in that order. Steal limits and freeze rules
+            are in{" "}
             <Link
               href="/guides/white-elephant-rules-and-variations"
               className="font-semibold text-accent hover:underline"
@@ -138,12 +167,8 @@ export default function RandomNamePickerPage() {
             .
           </li>
           <li>
-            <span className="font-semibold text-foreground">Three presenters from fourteen.</span>{" "}
-            Spin three times with Remove winner on. Done in under a minute.
-          </li>
-          <li>
             <span className="font-semibold text-foreground">Small giveaway.</span> For 1–3 winners
-            from a short comment list the wheel is fine. For ticket books or alternates, use the{" "}
+            from a short comment list, draw that many names. For ticket books or alternates, use the{" "}
             <Link href="/raffle-generator" className="font-semibold text-accent hover:underline">
               raffle generator
             </Link>
@@ -152,73 +177,63 @@ export default function RandomNamePickerPage() {
         </ul>
       </GuideSection>
 
-      <GuideSection title="Using the name picker for stand-ups and meeting order">
+      <GuideSection title="How a list draw works">
         <p>
-          Paste the team once and it&apos;s there tomorrow. Spin the whole order before anyone speaks
-          and paste it in the chat.
+          Each line in your list is one name. When you press a draw button, the whole list is put in
+          a random order and the first names are taken from the top. A name that is drawn cannot be
+          drawn again in the same list. Asking for all names gives you the full list in random
+          order, with the last name going last.
+        </p>
+        <p>
+          The order comes from your browser&apos;s secure random number generator using a
+          Fisher–Yates shuffle, so every possible order is equally likely and a name&apos;s position
+          in your list does not matter. The list holds up to 60 names. If two lines are the same
+          (capital letters do not count as different), the repeat is skipped, so add an initial when
+          two people share a name.
         </p>
       </GuideSection>
 
-      <GuideSection title="How the name picker decides">
+      <GuideSection title="Three presenters from fourteen">
         <p>
-          Each line in your list is one name and one equal slice. When you press SPIN, the page picks one
-          of the names still on the wheel at random, and then the wheel turns to stop on it. On this page{" "}
-          <span className="font-semibold text-foreground">remove winner</span>{" "}
-          is on by default, so the picked name leaves the wheel straight away. The next spin is only
-          between the people who haven&apos;t been picked yet.
-        </p>
-        <p>
-          That makes it a fair way to build an order, not just choose one person. Spin until one name is
-          left, and the order names came off is a complete random order, with the last name going last.
-          The wheel holds up to 60 names.
-        </p>
-        <p>
-          The pick comes from your browser&apos;s secure random number generator, and Shuffle only
-          moves names around the rim. The wheel needs two names to spin, so when one is left, that
-          person simply goes last. For icebreakers where the same person being picked twice is part
-          of the joke, switch remove winner off.
-        </p>
-      </GuideSection>
-      <GuideSection title="Worked example: three presenters from fourteen">
-        <p>
-          A workshop has 14 attendees and time for three short presentations. Paste the 14 names and leave
-          remove winner on.
+          A workshop has 14 attendees and time for three short presentations. Paste the 14 names,
+          set How many names? to 3, and press the draw button.
         </p>
         <ul className="list-disc space-y-2 pl-5">
-          <li>
-            First spin: each person has a 1 in 14 chance.
-          </li>
-          <li>
-            Second spin: one name is gone, so it&apos;s 1 in 13 for the rest.
-          </li>
-          <li>
-            Third spin: 1 in 12.
-          </li>
+          <li>The first name drawn had a 1 in 14 chance.</li>
+          <li>The second is drawn from the 13 left, so 1 in 13 for each of them.</li>
+          <li>The third is drawn from the 12 left, so 1 in 12.</li>
         </ul>
         <p>
-          Across the three spins, every attendee has the same overall chance of presenting: 3 in 14, or
-          about 21%. Nobody&apos;s position in the list makes any difference.
+          Across the draw, every attendee has the same overall chance of being picked: 3 in 14, or
+          about 21%. Not happy with the result? Draw again for a new list.
         </p>
         <p>
-          Before the first spin, press{" "}
-          <span className="font-semibold text-foreground">Copy</span>{" "}
-          so the full list is on your clipboard. When the session ends, paste it back and the wheel is
-          ready for the next group.
+          Press <span className="font-semibold text-foreground">Copy list</span> and the three names
+          are on your clipboard as 1., 2., 3., ready for the chat.
         </p>
       </GuideSection>
+
+      <GuideSection title="Spin one: when a single name is enough">
+        <p>
+          Switch to Spin one to get the wheel. Press SPIN, or Space, and the name under the pointer
+          is the pick. With Remove winner after spin on, the picked name leaves the wheel so it
+          cannot come up again until you restore the list. Sound and spin length are in the ⋮ menu
+          on the wheel, and Share copies a link that opens the same list on another device.
+        </p>
+      </GuideSection>
+
       <GuideSection title="Tips">
         <ul className="list-disc space-y-2 pl-5">
-          <li>Press Space to spin when the wheel is focused, which is handy when you&apos;re presenting.</li>
-          <li>Turn Sound on for a classroom and off for a meeting.</li>
+          <li>Copy the list before you draw so you can paste it back for the next session.</li>
           <li>
-            More than 60 names? Split them across two wheels, or use the{" "}
+            More than 60 names? Split them across two lists, or use the{" "}
             <Link href="/raffle-generator" className="font-semibold text-accent hover:underline">
               raffle generator
             </Link>
             .
           </li>
           <li>
-            Need the whole room in groups rather than one name?{" "}
+            Need the whole room in groups rather than one ordered list?{" "}
             <Link
               href="/random-team-generator"
               className="font-semibold text-accent hover:underline"
@@ -231,8 +246,9 @@ export default function RandomNamePickerPage() {
       </GuideSection>
       <GuideSection title="Compared with the big wheel sites">
         <p>
-          Bigger wheel sites offer themes, images and huge lists. ExesTools keeps it small: one
-          list, one wheel, remove-winner, a share link, and sister tools for{" "}
+          Bigger wheel sites offer themes, images and huge lists, and mostly give you one name per
+          spin. ExesTools keeps it small: one list, a draw-several mode, a wheel for single picks,
+          and sister tools for{" "}
           <Link href="/random-team-generator" className="font-semibold text-accent hover:underline">
             teams
           </Link>

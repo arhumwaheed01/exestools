@@ -4,6 +4,7 @@ meta_title: "How to Make Fair Random Teams: Odd Numbers, Pairs, Skill Mix"
 meta_description: "Split a class or group into fair teams: handling odd numbers and pairs, how often random teams go lopsided, captains vs random, and a skill-mix method."
 author: Arhum Waheed
 author_url: /about#arhum
+testedNote: "I ran 200,000 simulated deals to get the odds below."
 published: "2026-10-19"
 updated: "2026-10-21"
 related_tools: [/random-team-generator, /classroom-spinner, /random-name-picker]
@@ -19,7 +20,7 @@ images:
 
 By Arhum Waheed · Published 2026-10-19 · Updated 2026-10-21
 
-"Balanced" means different things to different people. A PE teacher wants teams that can actually compete, a workshop host wants each table to mix departments, and a parent at a birthday party just wants nobody picked last. A random split handles some of this well and some of it not at all. This guide shows which is which, with the numbers. It also covers a tiered method that gets you close to skill-balanced teams using the [random team generator](/random-team-generator).
+"Balanced" means different things to different people. A PE teacher wants teams that can actually compete, a workshop host wants each table to mix departments, and a parent at a birthday party just wants to avoid the picked-last moment. A random split handles some of this well and some of it not at all. This guide shows which is which, with the numbers. It also covers a tiered method that gets you close to skill-balanced teams using the [random team generator](/random-team-generator).
 
 ![A group of schoolchildren in matching blue sports shirts posing with their teacher in a school gym](/guides/how-to-make-balanced-random-teams/1.jpg)
 *Photo: Nasirun Khan on Pexels (Pexels License).*
@@ -42,7 +43,7 @@ The generator keeps team sizes within one person of each other. You choose eithe
 | 30 people | 3 per team | ten groups of 3 |
 | 17 students | Pairs | seven pairs and one group of 3 |
 
-With **Pairs** and an odd roster, one pair becomes a trio so nobody is left out. If you need strict pairs, say for a doubles match, switch on **Leave one person out**. The extra person sits out the round. To stop the same person sitting out every time, pick them with the [random name picker](/random-name-picker) and keep a note.
+With **Pairs** and an odd roster, one pair becomes a trio, so everyone is placed. If you need strict pairs, say for a doubles match, switch on **Leave one person out**. The extra person sits out the round. To stop the same person sitting out every time, pick them with the [random name picker](/random-name-picker) and keep a note.
 
 [SCREENSHOT: The random team generator showing 25 names split into 4 team cards with counts 7, 6, 6, 6.]
 
@@ -64,14 +65,14 @@ Use this when skill balance matters, such as a sports lesson or a quiz night wit
 
 **The rule that makes it work:** each tier must hold a whole multiple of the number of teams. For 4 teams, use tiers of 4, 8 or 12. Then every team gets exactly the same number from each tier.
 
-A worked example, with 24 students and 4 teams:
+Here is how it plays out with 24 students and 4 teams:
 
 1. **Sort privately into two tiers**, on paper rather than out loud. Tier A has the 8 most experienced players. Tier B has the other 16.
 2. **Run tier A.** Paste the 8 names, set **Number of teams** to 4, type **Optional team names** Red, Blue, Green and Yellow, and press **Generate teams**. Each team gets exactly 2 tier-A players. Those team names stay filled in with the rest of your settings.
 3. **Run tier B** with the same team names still showing. Each team gets 4.
 4. **Combine.** Red is Red from both runs, and so on. Every team has 6 players: 2 experienced and 4 others.
 
-Within each tier the placement is still random, so nobody can say you built the teams. For comparison, a single random deal of all 24 gives each team exactly 2 of the top 8 only about 7% of the time.
+Within each tier the placement is still random, so you can't be accused of building the teams. For comparison, a single random deal of all 24 gives each team exactly 2 of the top 8 only about 7% of the time.
 
 Press **Copy teams** after each run and paste both results into one document. That makes combining quick.
 
@@ -95,7 +96,7 @@ Captain picks are quick, but the same people get picked last, in public, every t
 
 - **Pick the captains at random**, not by volunteering.
 - **Use a snake draft:** A, B, B, A, A, B. The captain who picks second in one round picks first in the next, which offsets the first-pick advantage.
-- **Captains pick privately on paper**, and the teacher reads out the teams. Nobody hears their name called last.
+- **Captains pick privately on paper**, and the teacher reads out the teams. There is no last pick to wait for.
 
 ## Classroom groups
 
@@ -114,25 +115,3 @@ For breakout rooms, set **People per team** to the room size and paste the cards
 ## What I checked for this guide
 
 The table matches the rule and examples on the live team generator page (checked 2026-10-13). The 22% and 12% figures are exact fractions. The 14% and 7% figures come from simulating 200,000 random deals of 24 players into 4 teams of 6.
-
-## Frequently asked questions
-
-### How do I make random teams with an odd number of people?
-
-Choose the number of teams, and the generator keeps sizes within one person of each other. For example, 11 people in 3 teams gives 4, 4 and 3.
-
-### Can the team generator balance teams by skill?
-
-Not by itself. It deals names at random. To mix skill levels, sort people into tiers whose sizes are multiples of the number of teams, run the generator once per tier with the same team names, and combine.
-
-### What happens to the extra person in pairs?
-
-With 15 students in pairs you get six pairs and one group of three. If the activity really needs twos (a partner quiz, a doubles match), switch on Leave one person out and give the extra student a job, like scorekeeper, for that round.
-
-### Will reshuffling give everyone new partners?
-
-Each reshuffle is a fresh random deal, but the tool doesn't remember earlier rounds, so the same people can land together again.
-
-### How many people can I split at once?
-
-Up to 200 names. That's enough for a full year group split into 25 tables of 8, or a 120-person conference into breakout rooms of 6.

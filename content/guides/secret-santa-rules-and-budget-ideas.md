@@ -4,6 +4,7 @@ meta_title: "Secret Santa Rules: Budgets, Couples and Gift Ideas"
 meta_description: "Secret Santa rules worth writing down, why hat draws fail, handling couples and dropouts, budget starting points, and gift themes for offices and families."
 author: Arhum Waheed
 author_url: /about#arhum
+testedNote: "Checked against a twelve-person, four-household draw with 13 exclusions."
 published: "2026-10-19"
 updated: "2026-10-25"
 related_tools: [/secret-santa-generator, /random-name-picker, /bingo-card-generator]
@@ -19,7 +20,7 @@ images:
 
 By Arhum Waheed · Published 2026-10-19 · Updated 2026-10-25
 
-A Secret Santa goes wrong in predictable ways. Someone draws their own partner. Someone spends four times the budget. Someone in another city ships late. The organizer redraws, and half the group still has the old result. None of that is bad luck. It comes from rules nobody wrote down.
+A Secret Santa goes wrong in predictable ways. Someone draws their own partner. Someone spends four times the budget. Someone in another city ships late. The organizer redraws, and half the group still has the old result. None of that is bad luck. It comes from rules that never got written down.
 
 This guide covers the rules worth agreeing on, the math of why hat draws misfire, how to fix late joiners and dropouts, and budget and theme ideas. Where it mentions the [Secret Santa generator](/secret-santa-generator), it describes what the tool does today.
 
@@ -42,9 +43,9 @@ Send these before the draw, and put a short version in the event note so it appe
 
 ## Why the hat fails more often than you'd think
 
-The odds of a hat draw where *nobody* pulls their own name come out at about 37% for any group of five or more. (It's the well-known "derangement" result: the chance approaches 1 ÷ e.) So roughly **two hat draws in three** need a redraw, or a quiet swap. And a hat can't enforce "partners don't draw each other" at all.
+The odds of a hat draw where *every* person pulls someone else's name come out at about 37% for any group of five or more. (It's the well-known "derangement" result: the chance approaches 1 ÷ e.) So roughly **two hat draws in three** need a redraw, or a quiet swap. And a hat can't enforce "partners don't draw each other" at all.
 
-The generator draws so that nobody gets themselves and every exclusion is respected. It checks whether a valid draw exists before it starts.
+The generator never draws anyone themselves and respects every exclusion. It checks whether a valid draw exists before it starts.
 
 ## Exclusions: couples, households and last year
 
@@ -53,11 +54,11 @@ The generator draws so that nobody gets themselves and every exclusion is respec
 
 **A worked family example.** Twelve people live in four homes of 4, 3, 3 and 2. "Gifts cross households" means a two-way exclusion for every pair under one roof: 6 + 3 + 3 + 1 = **13 exclusions**. The most restricted people are in the home of four. Each has 3 people blocked, so 8 of their 11 options are still open. That draw works easily.
 
-**When it can't work.** With three people where two are a couple, both partners could only draw the third person, and nobody can be drawn twice. If no valid draw exists, the generator names the people who are stuck, so you can drop an exclusion or add someone. A rough rule: if anyone has more than half the group blocked, expect trouble.
+**When it can't work.** With three people where two are a couple, both partners could only draw the third person, and a person can only be drawn once. If no valid draw exists, the generator names the people who are stuck, so you can drop an exclusion or add someone. A rough rule: if anyone has more than half the group blocked, expect trouble.
 
 ## Mutual pairs and the Single loop option
 
-Even a valid draw can pair two people who buy for each other. For example, Ava has Ben and Ben has Ava. In a purely random draw, where every arrangement with nobody drawing themselves is equally likely, at least one mutual pair turns up about **2 times in 5**, for any group size from six up.
+Even a valid draw can pair two people who buy for each other. For example, Ava has Ben and Ben has Ava. In a purely random draw, where every arrangement without a self-draw is equally likely, at least one mutual pair turns up about **2 times in 5**, for any group size from six up.
 
 If two people buying for each other would feel like a swap rather than a surprise, the generator's [Single loop option](/secret-santa-generator) chains the whole group instead. It narrows the options: six people in three couples, with each couple excluded, have 80 valid normal draws but only 32 that form a single chain. Add a few more exclusions and the chain can become impossible while a normal draw still works.
 
@@ -65,9 +66,9 @@ If two people buying for each other would feel like a swap rather than a surpris
 
 **Odd numbers are fine.** Secret Santa isn't pairs. Everyone gives one gift and gets one, with 5 people or 11. The generator needs at least 3 people and takes up to 50.
 
-**Someone joins after the draw.** You can redraw (see below), or the organizer can splice them in by hand. If the organizer (O) was buying for R, then O buys for the newcomer (N), and N buys for R. Nobody else's assignment changes. Check first that this doesn't break an exclusion, such as N being R's partner.
+**Someone joins after the draw.** You can redraw (see below), or the organizer can splice them in by hand. If the organizer (O) was buying for R, then O buys for the newcomer (N), and N buys for R. Every other assignment stays as it was. Check first that this doesn't break an exclusion, such as N being R's partner.
 
-**Someone drops out after the draw.** Call the dropout D. Whoever drew D (call them G) now has nobody, and D's recipient (R) has no Santa. The fix is for G to buy for R. To find G, the organizer has to switch on **Show all matches**, which spoils the draw for them, so ask a non-playing co-organizer if you can. Two cases need care:
+**Someone drops out after the draw.** Call the dropout D. Whoever drew D (call them G) now has no recipient, and D's recipient (R) has no Santa. The fix is for G to buy for R. To find G, the organizer has to switch on **Show all matches**, which spoils the draw for them, so ask a non-playing co-organizer if you can. Two cases need care:
 
 - **G and D were a mutual pair.** Then R is G, and G can't buy for themselves. Splice G into another pair instead: take any other giver X who buys for Y. Make X buy for G and G buy for Y.
 - **G buying for R breaks an exclusion.** Use the same splice with a different X.
@@ -114,28 +115,6 @@ ExesTools doesn't collect wish lists. Use the event note to ask people to send t
 
 ## Notes by group
 
-**Office:** paste names from a spreadsheet and send links as direct messages. Make taking part clearly optional, and nobody should have to explain why they opt out. **Classrooms:** no student accounts are needed. For younger students, switch on Show all matches and print slips, using first names or initials. **Remote teams:** set the ship-by date at least two weeks before a video-call reveal if anyone is posting internationally.
+**Office:** paste names from a spreadsheet and send links as direct messages. Make taking part clearly optional, so opting out needs no explanation. **Classrooms:** no student accounts are needed. For younger students, switch on Show all matches and print slips, using first names or initials. **Remote teams:** set the ship-by date at least two weeks before a video-call reveal if anyone is posting internationally.
 
-For the party itself, the [bingo card generator](/bingo-card-generator) has an editable Christmas list. For a White Elephant, nobody is assigned anyone: see [White Elephant rules](/guides/white-elephant-rules-and-variations), and use the [random name picker](/random-name-picker) with remove-winner on to set the turn order.
-
-## Frequently asked questions
-
-### Can Secret Santa work with an odd number of people?
-
-Yes. It's a chain of gifts, not pairs. With 7 people, Ana buys for Raj, Raj for Lena, and so on, and the last person buys for someone who's still waiting for a giver. Odd or even makes no difference.
-
-### How do I stop couples drawing each other?
-
-Add a two-way exclusion (Neither draws the other) for each couple. Use One-way for last year's matches.
-
-### Why not just draw names from a hat?
-
-For groups of five or more, about 63% of hat draws have at least one person pulling their own name, and a hat can't keep couples apart.
-
-### What if someone drops out after the draw?
-
-The person who drew them buys for the dropout's recipient. If those two were buying for each other, splice the giver into another pair instead.
-
-### What if I need to redraw?
-
-Send everyone their new link. Old links still show old matches, so ask everyone to check the draw code on their reveal.
+For the party itself, the [bingo card generator](/bingo-card-generator) has an editable Christmas list. For a White Elephant, gifts aren't assigned to anyone: see [White Elephant rules](/guides/white-elephant-rules-and-variations), and use the [random name picker](/random-name-picker) with remove-winner on to set the turn order.

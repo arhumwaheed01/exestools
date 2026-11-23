@@ -39,7 +39,7 @@ const CARD_SUMMARY: Record<string, string> = {
   "secret-santa-rules-and-budget-ideas":
     "For the organizer writing rules before the draw. Covers budgets, couples and dropouts, why hat draws fail, and gift themes for offices and families.",
   "how-random-is-a-spinner-wheel":
-    "For anyone who's been asked \"is this wheel rigged?\" Explains how ExesTools picks a result, why streaks look suspicious, and where the honest limits are.",
+    "For anyone who's been asked \"is this wheel rigged?\" Explains how ExesTools picks a result, why streaks look suspicious, and where the limits are.",
   "how-to-run-a-fair-online-giveaway":
     "For creators and small businesses running a comment or form giveaway. Covers the rules to publish first, which tool to use, and how to record a draw people can trust.",
   "office-secret-santa-planning-timeline":

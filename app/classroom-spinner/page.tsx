@@ -85,7 +85,7 @@ export default function ClassroomSpinnerPage() {
       title="Classroom spinner wheel"
       intro="Paste your class list, one name per line, and hit SPIN to call on a student at random. It's a random student picker built for fair turn-taking: remove winner is on by default, so every student gets a turn before anyone repeats. Free for teachers, no signup, and your roster stays in this browser."
       faqs={ALL_FAQS}
-      pageUpdated="2026-11-17"
+      pageUpdated="2026-11-24"
       schemaName="Classroom Spinner Wheel"
       schemaDescription={META}
       schemaCategory="EducationalApplication"

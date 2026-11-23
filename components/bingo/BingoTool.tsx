@@ -193,6 +193,7 @@ function settingsFingerprint(s: {
 }
 
 function takeIncomingHash(): string | null {
+  if (typeof window === "undefined") return null;
   const fromUrl = window.location.hash;
   if (/^#[bp]=v1\./.test(fromUrl)) {
     window.history.replaceState(
@@ -1291,15 +1292,6 @@ export function BingoTool() {
     mode === "words" ? listStatus(parsed, needed) : mode === "numbers"
       ? `Numbers 1 to ${max}. A card needs ${needed} squares.`
       : "75-ball cards use B 1–15 through O 61–75.";
-
-  if (!ready) {
-    return (
-      <div
-        className="min-h-[620px] animate-pulse rounded-3xl border border-border bg-surface p-5"
-        aria-hidden
-      />
-    );
-  }
 
   if (player) {
     return (

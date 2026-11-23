@@ -92,21 +92,20 @@ export default function AboutPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(aboutPageGraphLd({ dateModified: "2026-11-17" })),
+          __html: JSON.stringify(aboutPageGraphLd({ dateModified: "2026-11-24" })),
         }}
       />
       <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
         About ExesTools
       </h1>
-      <PageMeta updated="2026-11-17" />
+      <PageMeta updated="2026-11-24" />
       <div className="mt-6 space-y-8 text-sm leading-relaxed text-muted sm:text-base">
         <section>
           <p>
-            Some decisions go better when nobody in the room gets to make them: who takes the next
-            question, whose name comes out of the prize draw, which team you land on, who shops for
-            whom — or when you need to add up a week of shift hours. ExesTools has eleven free tools
-            for those moments, and each was built around one of those jobs instead of asking a single
-            wheel to handle all of them.
+            Some decisions go better when nobody in the room has to make them: who answers next,
+            whose name comes out of the prize draw, which team you&apos;re on, who buys for whom.
+            ExesTools has eleven free tools for moments like these, plus a time card calculator for
+            the hours side of running a team.
           </p>
           <p className="mt-3">
             Everything runs in your browser. There&apos;s no account to create, nothing to install,
@@ -134,9 +133,6 @@ export default function AboutPage() {
             section has longer, practical articles on the work around a fair pick: running giveaways,
             calling on students, making teams and more.
           </p>
-          <p className="mt-3">
-            ExesTools is not affiliated with the reverse-engineering forum that has a similar name.
-          </p>
         </section>
 
         <section>
@@ -155,7 +151,7 @@ export default function AboutPage() {
           </p>
           <p className="mt-2">
             The idea behind the site is simple: a fair pick should be easy to run in front of other
-            people, and it should be obvious that nobody&apos;s steering it. That&apos;s why every
+            people, and it should be obvious the result isn&apos;t being steered. That&apos;s why every
             picker tool shows the full list before you pick, lets you remove winners so everyone gets
             a turn, and lets you share a link to the exact list you used.
           </p>
@@ -219,7 +215,7 @@ export default function AboutPage() {
             <li>
               <strong className="text-foreground">Secret Santa generator:</strong> checks that a
               valid draw exists for your exclusions, then shuffles until everyone has someone
-              they&apos;re allowed to draw. Nobody can draw themselves.
+              they&apos;re allowed to draw. A person can never draw themselves.
             </li>
             <li>
               <strong className="text-foreground">Raffle generator:</strong> draws one ticket at a
@@ -282,7 +278,7 @@ export default function AboutPage() {
           <p className="mt-2">
             The site is actively developed. Changes are checked before release, and automated tests
             cover the important wheel and random-pick behavior, so what you see under the pointer
-            stays honest.
+            stays as written.
           </p>
           <p className="mt-2">
             Every tool page and guide shows an <strong className="text-foreground">Updated</strong>{" "}

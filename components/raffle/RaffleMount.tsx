@@ -1,17 +1,8 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { ToolSkeleton } from "@/components/tools/ToolSkeleton";
+import { RaffleTool } from "@/components/raffle/RaffleTool";
 
-const RaffleTool = dynamic(
-  () => import("@/components/raffle/RaffleTool").then((m) => m.RaffleTool),
-  {
-    ssr: false,
-    loading: () => <ToolSkeleton variant="raffle" />,
-  },
-);
-
-/** Client tool with fixed min-height to avoid CLS. */
+/** Client tool with fixed min-height to avoid CLS. SSR-renders the real form. */
 export function RaffleMount() {
   return (
     <div className="min-h-[620px] min-w-0">
