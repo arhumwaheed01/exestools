@@ -3,7 +3,6 @@ import Link from "next/link";
 import PageMeta from "@/components/PageMeta";
 import { GuideMarkdown } from "@/components/guides/GuideMarkdown";
 import { QueryHydratedNumbers } from "@/components/QueryHydratedMounts";
-import { ToolResultShot } from "@/components/tools/ToolResultShot";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { loadToolPageMarkdown } from "@/lib/toolPageMarkdown";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
@@ -176,7 +175,6 @@ export default function RandomNumberWheelPage() {
       </header>
 
       <QueryHydratedNumbers />
-      <ToolResultShot toolId="random-number-wheel" />
 
       <div className="mt-12 space-y-10 border-t border-border pt-10">
         <section className="max-w-3xl">

@@ -32,6 +32,7 @@ export default function TermsPage() {
     name: "Terms of Service | ExesTools",
     description: TERMS_META,
     path: "/terms",
+    dateModified: "2026-10-19",
   });
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">

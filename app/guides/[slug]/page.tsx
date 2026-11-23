@@ -55,13 +55,35 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+/** Unique H2 per guide so the same heading never appears on more than 12 pages. */
+const RELATED_TOOLS_HEADING: Record<string, string> = {
+  "bingo-games-for-classrooms-and-parties": "Print the bingo cards",
+  "chore-wheel-for-kids": "Spin the chore bundles",
+  "classroom-games-with-a-spinner-wheel": "Open a classroom spinner",
+  "cold-calling-students-fairly": "Call on students fairly",
+  "fair-ways-to-break-a-tie": "Break the tie on screen",
+  "friendsgiving-thanksgiving-team-games": "Run the party games",
+  "how-random-is-a-spinner-wheel": "Try a live spin",
+  "how-to-make-balanced-random-teams": "Build the teams",
+  "how-to-run-a-fair-online-giveaway": "Run the giveaway draw",
+  "how-to-run-a-holiday-party-raffle": "Run the party raffle",
+  "how-to-run-a-raffle-fundraiser": "Run the fundraiser draw",
+  "icebreaker-games-with-a-random-picker": "Pick the next speaker",
+  "office-secret-santa-planning-timeline": "Set up the office draw",
+  "prize-wheel-ideas-for-events-and-booths": "Stock the prize wheel",
+  "random-speaking-order-for-meetings": "Set the speaking order",
+  "secret-santa-rules-and-budget-ideas": "Run the gift draw",
+  "white-elephant-rules-and-variations": "Set the turn order",
+};
+
 function RelatedToolsBox({ guide }: { guide: Guide }) {
   const tools = guide.frontmatter.related_tools ?? [];
   if (!tools.length) return null;
+  const heading = RELATED_TOOLS_HEADING[guide.slug] ?? "Tools for this guide";
 
   return (
     <aside className="mt-12 max-w-3xl rounded-2xl border border-border bg-surface px-5 py-5">
-      <h2 className="text-lg font-bold text-foreground">Related tools</h2>
+      <h2 className="text-lg font-bold text-foreground">{heading}</h2>
       <ul className="mt-3 space-y-2 text-sm">
         {tools.map((href) => (
           <li key={href}>

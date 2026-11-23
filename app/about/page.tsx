@@ -104,7 +104,7 @@ export default function AboutPage() {
           <p>
             Some decisions go better when nobody in the room has to make them: who answers next,
             whose name comes out of the prize draw, which team you&apos;re on, who buys for whom.
-            ExesTools has eleven free tools for moments like these, plus a time card calculator for
+            ExesTools has ten free tools for moments like these, plus a time card calculator for
             the hours side of running a team.
           </p>
           <p className="mt-3">

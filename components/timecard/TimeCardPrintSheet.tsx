@@ -115,7 +115,7 @@ export function TimeCardPrintSheet({ days, settings }: Props) {
 
   return (
     <div className="timecard-print-sheet hidden print:block text-black">
-      <h1 className="text-xl font-bold">Time card calculator</h1>
+      <p className="text-xl font-bold">Time card calculator</p>
       {range ? <p className="mt-1 text-sm">Date range: {range}</p> : null}
       <p className="mt-2 text-sm">{settingsSummaryLine(settings)}</p>
 

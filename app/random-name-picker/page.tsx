@@ -43,7 +43,7 @@ const FAQS = [
   },
   {
     q: "How do I pick just one name?",
-    a: "Switch to Spin one, press Spin (or Space), and the wheel lands on one name. Turn on Remove winner after spin to keep names from coming up twice.",
+    a: "Open the Spin one tab, then tap Spin (Space works too). The pointer stops on a single name. Keep Remove winner after spin on if you do not want repeats.",
   },
   {
     q: "How many names can I add?",
@@ -215,10 +215,10 @@ export default function RandomNamePickerPage() {
 
       <GuideSection title="Spin one: when a single name is enough">
         <p>
-          Switch to Spin one to get the wheel. Press SPIN, or Space, and the name under the pointer
-          is the pick. With Remove winner after spin on, the picked name leaves the wheel so it
-          cannot come up again until you restore the list. Sound and spin length are in the ⋮ menu
-          on the wheel, and Share copies a link that opens the same list on another device.
+          Open the Spin one tab for the wheel view. Tap Spin (or hit Space) and the name under the
+          pointer is your pick. With Remove winner after spin on, that name leaves the rim until you
+          restore the list. Sound and spin length live in the ⋮ menu, and Share copies a link that
+          opens the same roster on another device.
         </p>
       </GuideSection>
 
