@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import PageMeta from "@/components/PageMeta";
 import { TimeCardMount } from "@/components/timecard/TimeCardMount";
-import { ToolResultShot } from "@/components/tools/ToolResultShot";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
 
@@ -166,7 +165,6 @@ export default function TimeCardCalculatorPage() {
 
         <div className="timecard-tool-wrap mt-6 min-w-0">
           <TimeCardMount />
-          <ToolResultShot toolId="time-card-calculator" />
         </div>
 
         <section className="mt-12 max-w-3xl text-sm leading-relaxed text-muted sm:text-base print:hidden">

@@ -177,6 +177,7 @@ export function webPageLd(opts: {
   name: string;
   description: string;
   path: string;
+  dateModified?: string;
 }) {
   const url =
     opts.path === "/" ? "https://www.exestools.com/" : `https://www.exestools.com${opts.path}`;
@@ -188,6 +189,7 @@ export function webPageLd(opts: {
     url,
     isPartOf: { "@id": "https://www.exestools.com/#website" },
     publisher: { "@id": "https://www.exestools.com/#organization" },
+    ...(opts.dateModified ? { dateModified: opts.dateModified } : {}),
   };
 }
 
@@ -213,6 +215,7 @@ export function guidesHubLd(opts: {
   name: string;
   description: string;
   items: { name: string; path: string }[];
+  dateModified?: string;
 }) {
   return {
     "@context": "https://schema.org",
@@ -226,6 +229,7 @@ export function guidesHubLd(opts: {
         isPartOf: { "@id": "https://www.exestools.com/#website" },
         publisher: { "@id": "https://www.exestools.com/#organization" },
         mainEntity: { "@id": "https://www.exestools.com/guides#itemlist" },
+        ...(opts.dateModified ? { dateModified: opts.dateModified } : {}),
       },
       {
         "@type": "ItemList",

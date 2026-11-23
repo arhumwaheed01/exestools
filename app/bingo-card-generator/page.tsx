@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BingoMount } from "@/components/bingo/BingoMount";
-import { ToolResultShot } from "@/components/tools/ToolResultShot";
 import PageMeta from "@/components/PageMeta";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
@@ -218,7 +217,6 @@ export default function BingoCardGeneratorPage() {
 
         <div className="mt-6 min-w-0">
           <BingoMount />
-          <ToolResultShot toolId="bingo-card-generator" />
         </div>
 
         <section className="mt-12 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">

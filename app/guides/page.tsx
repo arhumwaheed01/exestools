@@ -81,6 +81,7 @@ export default function GuidesHubPage() {
     name: hub.title,
     description: hub.description,
     items: guides.map((g) => ({ name: g.title, path: `/guides/${g.slug}` })),
+    dateModified: "2026-11-12",
   });
 
   return (

@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 import PageMeta from "@/components/PageMeta";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { QueryHydratedSpinner } from "@/components/QueryHydratedMounts";
-import { ToolResultShot } from "@/components/tools/ToolResultShot";
 import { absoluteUrl } from "@/lib/seo";
 import { webAppLd } from "@/lib/seo/jsonld";
 import type { ToolId } from "@/lib/tools";
@@ -202,7 +201,6 @@ export function UseCaseToolPage({
       </header>
 
       {toolSlot ?? <QueryHydratedSpinner toolId={toolId} />}
-      <ToolResultShot toolId={toolId} />
 
       <div className="mt-12 space-y-10 border-t border-border pt-10">
         <div className="max-w-3xl space-y-8 text-sm leading-relaxed text-muted sm:text-base">

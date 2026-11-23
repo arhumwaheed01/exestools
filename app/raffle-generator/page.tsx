@@ -3,7 +3,6 @@ import Link from "next/link";
 import PageMeta from "@/components/PageMeta";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { RaffleMount } from "@/components/raffle/RaffleMount";
-import { ToolResultShot } from "@/components/tools/ToolResultShot";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
 
@@ -151,7 +150,6 @@ export default function RaffleGeneratorPage() {
 
         <div className="raffle-tool-wrap mt-6 min-w-0">
           <RaffleMount />
-          <ToolResultShot toolId="raffle-generator" />
         </div>
 
         <section className="mt-12 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">

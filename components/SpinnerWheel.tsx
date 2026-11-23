@@ -156,7 +156,7 @@ function choicesEditorLabels(toolId: ToolId): { heading: string; helpText: strin
 function listSavedNote(toolId: ToolId): string {
   switch (toolId) {
     case "random-name-picker":
-      return "Your names are saved in this browser. Share links carry the list inside the link, so anyone with the link can see it.";
+      return "This browser keeps the roster on your device only. A share link embeds every name, so send it only to people who should see the list.";
     case "classroom-spinner":
       return "Your roster is saved in this browser. The share link holds your class list, so only send it to people who should see students' names.";
     case "prize-wheel":

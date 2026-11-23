@@ -32,6 +32,7 @@ export default function DmcaPage() {
     name: "DMCA / Copyright | ExesTools",
     description: DMCA_META,
     path: "/dmca",
+    dateModified: "2026-10-12",
   });
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">

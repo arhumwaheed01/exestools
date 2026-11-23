@@ -3,7 +3,6 @@ import Link from "next/link";
 import PageMeta from "@/components/PageMeta";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { TeamGeneratorMount } from "@/components/teams/TeamGeneratorMount";
-import { ToolResultShot } from "@/components/tools/ToolResultShot";
 import { isGuidePublished } from "@/lib/guides";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
@@ -170,7 +169,6 @@ export default async function RandomTeamGeneratorPage({
       </header>
 
       <TeamGeneratorMount initialPresetQuery={initialPresetQuery} />
-      <ToolResultShot toolId="random-team-generator" />
 
       <div className="mt-12 space-y-10 border-t border-border pt-10 print:hidden">
         <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">

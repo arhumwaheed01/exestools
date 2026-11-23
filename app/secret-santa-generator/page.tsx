@@ -3,7 +3,6 @@ import Link from "next/link";
 import PageMeta from "@/components/PageMeta";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { SecretSantaMount } from "@/components/secret-santa/SecretSantaMount";
-import { ToolResultShot } from "@/components/tools/ToolResultShot";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
 
@@ -248,7 +247,6 @@ export default function SecretSantaGeneratorPage() {
         </p>
         <div className="ss-tool-wrap mt-6 min-w-0">
           <SecretSantaMount />
-          <ToolResultShot toolId="secret-santa-generator" />
         </div>
 
         <section className="mt-12 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
