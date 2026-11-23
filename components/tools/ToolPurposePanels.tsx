@@ -47,7 +47,7 @@ export function ClassroomRosterPanel({
           return (
             <li key={key}>
               <label
-                className={`flex min-h-9 cursor-pointer items-center gap-2 rounded-lg border px-2 text-xs font-semibold ${
+                className={`flex min-h-11 cursor-pointer items-center gap-2 rounded-lg border px-2 text-xs font-semibold ${
                   isAbsent
                     ? "border-border/60 bg-surface-2/50 text-muted line-through"
                     : "border-border bg-surface-2 text-foreground"
@@ -58,7 +58,7 @@ export function ClassroomRosterPanel({
                   checked={isAbsent}
                   disabled={disabled}
                   onChange={() => onToggleAbsent(name)}
-                  className="h-3.5 w-3.5 accent-cyan-500"
+                  className="h-5 w-5 shrink-0 accent-cyan-500"
                   aria-label={`${name} absent`}
                 />
                 <span className="truncate">{name}</span>
@@ -93,7 +93,12 @@ export function PrizeOddsPanel({
       <div className="rounded-2xl border border-border bg-surface p-3 sm:p-4">
         <h2 className="text-sm font-extrabold tracking-tight text-foreground">Prizes and odds</h2>
         <p className="mt-1 text-xs text-muted">Shown for the prizes currently on the wheel.</p>
-        <div className="mt-3 max-h-44 overflow-y-auto">
+        <div
+          className="mt-3 max-h-44 overflow-y-auto rounded outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          tabIndex={0}
+          role="region"
+          aria-label="Prizes and odds"
+        >
           <table className="w-full text-left text-xs">
             <thead>
               <tr className="border-b border-border text-[10px] uppercase tracking-wide text-muted">
@@ -120,12 +125,17 @@ export function PrizeOddsPanel({
       <div className="rounded-2xl border border-border bg-surface p-3 sm:p-4">
         <h2 className="text-sm font-extrabold tracking-tight text-foreground">Rules to post</h2>
         <p className="mt-1 text-xs text-muted">Copy onto a booth sign or slide.</p>
-        <pre className="mt-3 max-h-44 overflow-y-auto whitespace-pre-wrap rounded-xl border border-border bg-surface-2 p-3 text-xs leading-relaxed text-foreground">
+        <pre
+          tabIndex={0}
+          role="region"
+          aria-label="Rules to post"
+          className="mt-3 max-h-44 overflow-y-auto whitespace-pre-wrap rounded-xl border border-border bg-surface-2 p-3 text-xs leading-relaxed text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        >
           {PRIZE_RULES}
         </pre>
         <button
           type="button"
-          className="mt-2 inline-flex min-h-9 items-center rounded-lg border border-border bg-surface-2 px-3 text-xs font-bold text-foreground hover:bg-border"
+          className="mt-2 inline-flex min-h-11 items-center rounded-lg border border-border bg-surface-2 px-3 text-xs font-bold text-foreground hover:bg-border"
           onClick={() => void navigator.clipboard.writeText(PRIZE_RULES)}
         >
           Copy rules
@@ -157,7 +167,7 @@ export function YesNoModeBar({
         <button
           type="button"
           onClick={onYesNo}
-          className={`inline-flex min-h-10 items-center rounded-xl px-3 text-xs font-bold outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+          className={`inline-flex min-h-11 items-center rounded-xl px-3 text-xs font-bold outline-none focus-visible:ring-2 focus-visible:ring-accent ${
             !isCoin
               ? "bg-accent-strong text-slate-950"
               : "border border-border bg-surface-2 text-foreground hover:bg-border"
@@ -168,7 +178,7 @@ export function YesNoModeBar({
         <button
           type="button"
           onClick={onCoinMode}
-          className={`inline-flex min-h-10 items-center rounded-xl px-3 text-xs font-bold outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+          className={`inline-flex min-h-11 items-center rounded-xl px-3 text-xs font-bold outline-none focus-visible:ring-2 focus-visible:ring-accent ${
             isCoin
               ? "bg-accent-strong text-slate-950"
               : "border border-border bg-surface-2 text-foreground hover:bg-border"
@@ -190,7 +200,7 @@ export function HomeGalleryStrip() {
         <h2 className="text-sm font-extrabold tracking-tight text-foreground">Preset gallery</h2>
         <Link
           href="/wheel-gallery"
-          className="text-xs font-bold text-accent hover:underline outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="inline-flex min-h-11 items-center text-xs font-bold text-accent hover:underline outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           Browse all wheels →
         </Link>

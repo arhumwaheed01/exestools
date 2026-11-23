@@ -238,10 +238,10 @@ function Switch({
   return (
     <div className="flex min-w-0 items-start justify-between gap-3 rounded-2xl border border-border p-3">
       <div className="min-w-0">
-        <label htmlFor={id} className="text-sm font-semibold text-foreground">
+        <label htmlFor={id} className="flex min-h-11 items-center text-sm font-semibold text-foreground">
           {label}
         </label>
-        {helper ? <p className="mt-1 text-xs text-muted">{helper}</p> : null}
+        {helper ? <p className="text-xs text-muted">{helper}</p> : null}
       </div>
       <button
         id={id}
@@ -251,15 +251,19 @@ function Switch({
         aria-checked={checked}
         disabled={disabled}
         onClick={() => onChange(!checked)}
-        className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50 ${
-          checked ? "bg-accent-strong" : "bg-border"
-        }`}
+        className="group inline-flex min-h-11 min-w-12 shrink-0 items-center justify-center rounded-full outline-none disabled:opacity-50"
       >
         <span
-          className={`inline-block h-5 w-5 rounded-full bg-white transition ${
-            checked ? "translate-x-6" : "translate-x-1"
+          className={`relative inline-flex h-7 w-12 items-center rounded-full group-focus-visible:ring-2 group-focus-visible:ring-accent ${
+            checked ? "bg-accent-strong" : "bg-border"
           }`}
-        />
+        >
+          <span
+            className={`inline-block h-5 w-5 rounded-full bg-white transition ${
+              checked ? "translate-x-6" : "translate-x-1"
+            }`}
+          />
+        </span>
       </button>
     </div>
   );

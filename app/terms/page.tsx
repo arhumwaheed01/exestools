@@ -44,7 +44,7 @@ export default function TermsPage() {
         Terms of Service
       </h1>
       <p className="mt-2 text-sm text-muted">Last updated: October 19, 2026</p>
-      <div className="mt-6 space-y-5 text-sm leading-relaxed text-muted sm:text-base">
+      <div className="mt-6 space-y-8 text-sm leading-relaxed text-muted sm:text-base">
         <p>
           These Terms govern your use of <strong className="text-foreground">{siteConfig.name}</strong>{" "}
           at {siteConfig.url} (the spinner wheel, team generator, Secret Santa, raffle, bingo, and

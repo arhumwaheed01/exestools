@@ -5,6 +5,9 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { Components } from "react-markdown";
 import { isGuidePublished, stripUnpublishedGuideLinks } from "@/lib/guides";
+import { imageSizeFor } from "@/lib/imageSizes";
+
+export { IMAGE_SIZES, imageSizeFor } from "@/lib/imageSizes";
 
 type Props = {
   content: string;
@@ -43,12 +46,12 @@ export function GuideMarkdown({ content, routineCardAside }: Props) {
   const components: Components = {
     // Never emit a second page H1 from markdown (hub intros, paste mistakes).
     h1: ({ children }) => (
-      <h2 className="mt-10 text-2xl font-bold tracking-tight text-foreground first:mt-0">
+      <h2 className="mt-10 text-xl font-bold tracking-tight text-foreground first:mt-0 sm:text-2xl">
         {children}
       </h2>
     ),
     h2: ({ children }) => (
-      <h2 className="mt-10 text-2xl font-bold tracking-tight text-foreground first:mt-0">
+      <h2 className="mt-10 text-xl font-bold tracking-tight text-foreground first:mt-0 sm:text-2xl">
         {children}
       </h2>
     ),
@@ -122,12 +125,13 @@ export function GuideMarkdown({ content, routineCardAside }: Props) {
           <img src={src} alt={alt ?? ""} className="my-6 h-auto w-full max-w-3xl rounded-xl border border-border" />
         );
       }
+      const { width, height } = imageSizeFor(src);
       return (
         <Image
           src={src}
           alt={alt ?? ""}
-          width={1280}
-          height={900}
+          width={width}
+          height={height}
           className="my-6 h-auto w-full max-w-3xl rounded-xl border border-border"
           sizes="(max-width: 768px) 100vw, 768px"
         />

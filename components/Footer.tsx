@@ -38,7 +38,7 @@ export function Footer() {
         </div>
         <nav
           aria-label="Footer"
-          className="flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-muted"
+          className="flex flex-wrap gap-x-5 gap-y-0 text-sm md:gap-y-2 font-medium text-muted"
         >
           {FOOTER_LINKS.map((l) =>
             "external" in l && l.external ? (
@@ -47,7 +47,7 @@ export function Footer() {
                 href={l.href}
                 target="_blank"
                 rel="noopener me"
-                className="hover:text-accent outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
+                className="inline-flex min-h-11 items-center hover:text-accent outline-none focus-visible:ring-2 focus-visible:ring-accent rounded md:min-h-0"
               >
                 {l.label}
               </a>
@@ -55,13 +55,13 @@ export function Footer() {
               <Link
                 key={l.href}
                 href={l.href}
-                className="hover:text-accent outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
+                className="inline-flex min-h-11 items-center hover:text-accent outline-none focus-visible:ring-2 focus-visible:ring-accent rounded md:min-h-0"
               >
                 {l.label}
               </Link>
             ),
           )}
-          <PrivacySettingsLink className="cursor-pointer bg-transparent p-0 font-medium text-inherit hover:text-accent outline-none focus-visible:ring-2 focus-visible:ring-accent rounded" />
+          <PrivacySettingsLink className="inline-flex min-h-11 items-center cursor-pointer bg-transparent p-0 font-medium text-inherit hover:text-accent outline-none focus-visible:ring-2 focus-visible:ring-accent rounded md:min-h-0" />
         </nav>
       </div>
     </footer>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import PageMeta from "@/components/PageMeta";
 import { TimeCardMount } from "@/components/timecard/TimeCardMount";
+import { ToolPageShot } from "@/components/tools/ToolPageShot";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
 
@@ -72,6 +73,7 @@ const FAQ = [
 ] as const;
 
 const RELATED = [
+  { href: "/overtime-calculator", label: "Overtime calculator" },
   { href: "/random-team-generator", label: "Random team generator" },
   { href: "/random-name-picker", label: "Random name picker" },
   { href: "/raffle-generator", label: "Raffle generator" },
@@ -140,7 +142,7 @@ export default function TimeCardCalculatorPage() {
         <nav aria-label="Breadcrumb" className="print:hidden text-sm text-muted">
           <ol className="flex flex-wrap items-center gap-1">
             <li>
-              <Link href="/" className={linkCls}>
+              <Link href="/" className={`${linkCls} inline-flex min-h-11 items-center`}>
                 Home
               </Link>
             </li>
@@ -151,7 +153,7 @@ export default function TimeCardCalculatorPage() {
           </ol>
         </nav>
 
-        <h1 className="mt-4 max-w-3xl text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+        <h1 className="mt-4 max-w-3xl text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
           Time card calculator
         </h1>
         <PageMeta updated="2026-11-24" />
@@ -168,7 +170,7 @@ export default function TimeCardCalculatorPage() {
         </div>
 
         <section className="mt-12 max-w-3xl text-sm leading-relaxed text-muted sm:text-base print:hidden">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             How to add up a work week
           </h2>
           <ol className="mt-3 list-decimal space-y-3 pl-5">
@@ -199,7 +201,7 @@ export default function TimeCardCalculatorPage() {
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base print:hidden">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             How overtime hours are counted
           </h2>
           <p className="mt-3">
@@ -234,12 +236,18 @@ export default function TimeCardCalculatorPage() {
             time-and-a-half for overtime hours. That figure is hours times the rate only. It does not
             withhold tax or anything else, and it is not legal, tax, or payroll advice. Your
             employer’s policy, a union contract, or a state rule can be stricter than the federal
-            baseline. When in doubt, read the Department of Labor pages linked above or ask payroll.
+            baseline. When in doubt, read the Department of Labor pages linked above or ask payroll.{" "}
+            If you already know your hours and want the pay side worked out, including double time,
+            a California seventh day or a bonus folded into the rate, use the{" "}
+            <Link href="/overtime-calculator" className={linkCls}>
+              overtime calculator
+            </Link>
+            .
           </p>
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base print:hidden">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Decimal hours, minutes, and rounding
           </h2>
           <p className="mt-3">
@@ -264,11 +272,15 @@ export default function TimeCardCalculatorPage() {
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base print:hidden">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">A 40.25-hour week with a Saturday night shift</h2>
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">A 40.25-hour week with a Saturday night shift</h2>
           <p className="mt-3">
             Say you worked Monday through Friday, 7:03 AM to 3:36 PM, with a 30-minute unpaid lunch,
             and the card is set to a Monday workweek with weekly overtime only and no rounding.
           </p>
+          <ToolPageShot
+            src="/tools/time-card-calculator/1.webp"
+            alt="Time card calculator with five weekday shifts and a Saturday overnight shift, totalling 48.25 hours with 8.25 hours of overtime."
+          />
           <p className="mt-3">
             Each day runs 8 hours and 33 minutes before lunch, then 8 hours and 3 minutes after lunch,
             which is 8.05 decimal hours. Five days come to 40 hours and 15 minutes, or 40.25. Regular
@@ -292,17 +304,17 @@ export default function TimeCardCalculatorPage() {
         >
           <h2
             id="timecard-faq-heading"
-            className="text-xl font-bold tracking-tight text-foreground"
+            className="text-xl font-bold tracking-tight text-foreground sm:text-2xl"
           >
             Frequently asked questions
           </h2>
           <div className="mt-4 divide-y divide-border rounded-2xl border border-border bg-surface">
             {FAQ.map((item) => (
-              <details key={item.q} className="group px-4 py-3">
-                <summary className="cursor-pointer list-none text-sm font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent rounded marker:content-none [&::-webkit-details-marker]:hidden">
+              <details key={item.q} className="group">
+                <summary className="flex min-h-11 cursor-pointer list-none items-center gap-3 px-4 py-3 text-sm font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent rounded marker:content-none [&::-webkit-details-marker]:hidden">
                   {item.q}
                 </summary>
-                <p className="mt-2 text-sm leading-relaxed text-muted">
+                <p className="px-4 pb-4 text-sm leading-relaxed text-muted">
                   {item.q === "How are overtime hours counted?" ? (
                     <>
                       By default, hours over 40 in a workweek are overtime, which is the usual federal
@@ -330,7 +342,7 @@ export default function TimeCardCalculatorPage() {
         </section>
 
         <section className="mt-10 max-w-3xl print:hidden">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Related ExesTools tools
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">

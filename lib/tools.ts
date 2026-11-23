@@ -9,7 +9,8 @@ export type ToolId =
   | "random-number-wheel"
   | "raffle-generator"
   | "bingo-card-generator"
-  | "time-card-calculator";
+  | "time-card-calculator"
+  | "overtime-calculator";
 
 export type ToolDef = {
   id: ToolId;
@@ -22,12 +23,12 @@ export type ToolDef = {
 
 /** Single source for nav / footer tool links (About & Contact stay separate). */
 export const TOOLS: ToolDef[] = [
-  { id: "home", path: "/", navLabel: "Spinner", footerLabel: "Spinner Wheel" },
+  { id: "home", path: "/", navLabel: "Spinner", footerLabel: "Spinner wheel" },
   {
     id: "random-name-picker",
     path: "/random-name-picker",
     navLabel: "Names",
-    footerLabel: "Name Picker",
+    footerLabel: "Name picker",
   },
   {
     id: "classroom-spinner",
@@ -39,19 +40,19 @@ export const TOOLS: ToolDef[] = [
     id: "prize-wheel",
     path: "/prize-wheel",
     navLabel: "Prize",
-    footerLabel: "Prize Wheel",
+    footerLabel: "Prize wheel",
   },
   {
     id: "yes-no-wheel",
     path: "/yes-no-wheel",
     navLabel: "Yes/No",
-    footerLabel: "Yes or No Wheel",
+    footerLabel: "Yes or no wheel",
   },
   {
     id: "random-team-generator",
     path: "/random-team-generator",
     navLabel: "Teams",
-    footerLabel: "Team Generator",
+    footerLabel: "Random team generator",
   },
   {
     id: "secret-santa-generator",
@@ -63,25 +64,32 @@ export const TOOLS: ToolDef[] = [
     id: "random-number-wheel",
     path: "/random-number-wheel",
     navLabel: "Numbers",
-    footerLabel: "Number Wheel",
+    footerLabel: "Number wheel",
   },
   {
     id: "raffle-generator",
     path: "/raffle-generator",
     navLabel: "Raffle",
-    footerLabel: "Raffle Generator",
+    footerLabel: "Raffle generator",
   },
   {
     id: "bingo-card-generator",
     path: "/bingo-card-generator",
     navLabel: "Bingo",
-    footerLabel: "Bingo Cards",
+    footerLabel: "Bingo cards",
   },
   {
     id: "time-card-calculator",
     path: "/time-card-calculator",
     navLabel: "Time card",
     footerLabel: "Time card calculator",
+    inHeaderNav: false,
+  },
+  {
+    id: "overtime-calculator",
+    path: "/overtime-calculator",
+    navLabel: "Overtime",
+    footerLabel: "Overtime calculator",
     inHeaderNav: false,
   },
 ];
@@ -103,6 +111,7 @@ export function isWheelTool(toolId: ToolId): boolean {
     toolId !== "secret-santa-generator" &&
     toolId !== "raffle-generator" &&
     toolId !== "bingo-card-generator" &&
-    toolId !== "time-card-calculator"
+    toolId !== "time-card-calculator" &&
+    toolId !== "overtime-calculator"
   );
 }

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { BingoMount } from "@/components/bingo/BingoMount";
 import PageMeta from "@/components/PageMeta";
 import { RelatedLinks } from "@/components/RelatedLinks";
+import { ToolPageShot } from "@/components/tools/ToolPageShot";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
 import "../styles/bingo-themes.css";
@@ -192,7 +193,7 @@ export default function BingoCardGeneratorPage() {
         <nav aria-label="Breadcrumb" className="print:hidden text-sm text-muted">
           <ol className="flex flex-wrap items-center gap-1">
             <li>
-              <Link href="/" className="font-semibold text-accent hover:underline">
+              <Link href="/" className="inline-flex min-h-11 items-center font-semibold text-accent hover:underline">
                 Home
               </Link>
             </li>
@@ -203,7 +204,7 @@ export default function BingoCardGeneratorPage() {
           </ol>
         </nav>
 
-        <h1 className="mt-4 max-w-3xl text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+        <h1 className="mt-4 max-w-3xl text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
           Bingo card generator
         </h1>
         <PageMeta updated="2026-11-24" />
@@ -220,7 +221,7 @@ export default function BingoCardGeneratorPage() {
         </div>
 
         <section className="mt-12 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             How to make bingo cards
           </h2>
           <ol className="mt-3 list-decimal space-y-3 pl-5">
@@ -253,7 +254,7 @@ export default function BingoCardGeneratorPage() {
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Print bingo cards at home
           </h2>
           <p className="mt-3">
@@ -273,7 +274,7 @@ export default function BingoCardGeneratorPage() {
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Play bingo online with player links
           </h2>
           <p className="mt-3">
@@ -291,7 +292,7 @@ export default function BingoCardGeneratorPage() {
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             How to call a bingo game
           </h2>
           <p className="mt-3">
@@ -320,7 +321,7 @@ export default function BingoCardGeneratorPage() {
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Winning patterns and checking a card
           </h2>
           <p className="mt-3">Agree on the pattern before the first call. The common ones are:</p>
@@ -349,7 +350,7 @@ export default function BingoCardGeneratorPage() {
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">Classroom bingo</h2>
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">Classroom bingo</h2>
           <p className="mt-3">
             Use the <strong className="font-semibold text-foreground">Sight words (K–1)</strong>{" "}
             theme or paste this week&apos;s vocabulary, and pick 4×4 for short rounds. Read a
@@ -366,7 +367,7 @@ export default function BingoCardGeneratorPage() {
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Party, shower and office bingo
           </h2>
           <p className="mt-3">
@@ -387,7 +388,7 @@ export default function BingoCardGeneratorPage() {
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             75-ball number bingo rules
           </h2>
           <p className="mt-3">
@@ -403,7 +404,7 @@ export default function BingoCardGeneratorPage() {
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             How a card set is made
           </h2>
           <p className="mt-3">
@@ -419,12 +420,16 @@ export default function BingoCardGeneratorPage() {
           </p>
         </section>
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Vocabulary bingo for 28 students
           </h2>
           <p className="mt-3">
             A teacher wants a quick review of 30 words before a test.
           </p>
+          <ToolPageShot
+            src="/tools/bingo-card-generator/1.webp"
+            alt="Bingo card generator preview of a 5 by 5 space vocabulary card with a free centre square, from a set of 28 cards."
+          />
           <ol className="mt-3 list-decimal space-y-3 pl-5">
             <li>
               Choose{" "}
@@ -459,7 +464,7 @@ export default function BingoCardGeneratorPage() {
           </p>
         </section>
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Tips
           </h2>
           <ul className="mt-3 list-disc space-y-3 pl-5">
@@ -493,17 +498,15 @@ export default function BingoCardGeneratorPage() {
             {FAQ.map((item) => (
               <details
                 key={item.q}
-                className="group rounded-2xl border border-border bg-surface px-4 py-3 open:border-accent/40"
+                className="group rounded-2xl border border-border bg-surface open:border-accent/40"
               >
-                <summary className="cursor-pointer list-none rounded text-sm font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent marker:content-none [&::-webkit-details-marker]:hidden">
-                  <span className="flex items-center justify-between gap-3">
-                    {item.q}
-                    <span className="text-muted transition group-open:rotate-45" aria-hidden>
-                      +
-                    </span>
+                <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent rounded marker:content-none [&::-webkit-details-marker]:hidden">
+                  <span>{item.q}</span>
+                  <span className="text-muted transition group-open:rotate-45" aria-hidden>
+                    +
                   </span>
                 </summary>
-                <p className="mt-2 text-sm leading-relaxed text-muted">
+                <p className="px-4 pb-4 text-sm leading-relaxed text-muted">
                   <FaqAnswer text={item.a} />
                 </p>
               </details>

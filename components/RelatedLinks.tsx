@@ -37,7 +37,7 @@ export function RelatedLinks({ toolId }: { toolId: ToolId }) {
 
   return (
     <nav className="max-w-3xl" aria-label="Related guides and tools">
-      <h2 className="text-xl font-bold tracking-tight text-foreground">Related guides and tools</h2>
+      <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">Related guides and tools</h2>
       <ul className="mt-3 flex flex-wrap gap-2">
         <li>
           <Link

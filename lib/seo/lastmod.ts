@@ -19,6 +19,7 @@ export const LASTMOD: Record<string, string> = {
   "/raffle-generator": "2026-11-24",
   "/bingo-card-generator": "2026-11-24",
   "/time-card-calculator": "2026-11-24",
+  "/overtime-calculator": "2026-11-24",
   // /wheel-gallery kept live but omitted from the sitemap (noindex)
   // Trust / legal
   "/about": "2026-11-24",

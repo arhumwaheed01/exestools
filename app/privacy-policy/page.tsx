@@ -41,7 +41,7 @@ export default function PrivacyPolicyPage() {
         Privacy Policy
       </h1>
       <p className="mt-2 text-sm text-muted">Last updated: October 26, 2026</p>
-      <div className="mt-6 space-y-5 text-sm leading-relaxed text-muted sm:text-base">
+      <div className="mt-6 space-y-8 text-sm leading-relaxed text-muted sm:text-base">
         <p>
           This Privacy Policy explains how ExesTools (https://www.exestools.com) handles information
           when you use the Spinner Wheel and related pages.

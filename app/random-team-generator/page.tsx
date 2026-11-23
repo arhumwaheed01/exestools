@@ -3,6 +3,7 @@ import Link from "next/link";
 import PageMeta from "@/components/PageMeta";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { TeamGeneratorMount } from "@/components/teams/TeamGeneratorMount";
+import { ToolPageShot } from "@/components/tools/ToolPageShot";
 import { isGuidePublished } from "@/lib/guides";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
@@ -147,7 +148,7 @@ export default async function RandomTeamGeneratorPage({
       <nav className="mb-2 text-xs font-semibold text-muted print:hidden" aria-label="Breadcrumb">
         <Link
           href="/"
-          className="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent"
+          className="inline-flex min-h-11 items-center text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent"
         >
           Home
         </Link>
@@ -156,7 +157,7 @@ export default async function RandomTeamGeneratorPage({
       </nav>
 
       <header className="mb-3 max-w-3xl print:hidden">
-        <h1 className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl lg:text-3xl">
+        <h1 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
           Random Team Generator: Split Names into Teams, Groups or Pairs
         </h1>
         <PageMeta updated="2026-11-24" />
@@ -172,7 +173,7 @@ export default async function RandomTeamGeneratorPage({
 
       <div className="mt-12 space-y-10 border-t border-border pt-10 print:hidden">
         <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             How to make random teams
           </h2>
           <ol className="mt-3 list-decimal space-y-2 pl-5">
@@ -202,13 +203,17 @@ export default async function RandomTeamGeneratorPage({
               <span className="font-semibold text-foreground">Copy share link</span>.
             </li>
           </ol>
+          <ToolPageShot
+            src="/tools/random-team-generator/1.webp"
+            alt="Random team generator splitting twelve names into three teams of four, each shown on its own card."
+          />
         </section>
 
         <section
           id="classroom"
           className="max-w-3xl scroll-mt-24 text-sm leading-relaxed text-muted sm:text-base"
         >
-          <h2 id="pairs" className="scroll-mt-24 text-xl font-bold tracking-tight text-foreground">
+          <h2 id="pairs" className="scroll-mt-24 text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Random group generator for classrooms and pairs
           </h2>
           <p className="mt-3">
@@ -227,7 +232,7 @@ export default async function RandomTeamGeneratorPage({
         </section>
 
         <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Where people actually use it
           </h2>
           <ul className="mt-3 list-disc space-y-3 pl-5">
@@ -256,7 +261,7 @@ export default async function RandomTeamGeneratorPage({
         </section>
 
         <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">Tips for fair teams</h2>
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">Tips for fair teams</h2>
           <ul className="mt-3 list-disc space-y-3 pl-5">
             <li>
               Odd number? Pick the number of teams, not the team size, and the extra people get
@@ -318,7 +323,7 @@ export default async function RandomTeamGeneratorPage({
         </section>
 
         <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">How it compares</h2>
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">How it compares</h2>
           <p className="mt-3">
             Some generators let you lock players to a team, balance by skill or import Excel files. If
             you need those, use them. ExesTools is the quick option: paste, split, print or share,
@@ -353,17 +358,15 @@ export default async function RandomTeamGeneratorPage({
             {FAQS.map((item) => (
               <details
                 key={item.q}
-                className="group rounded-2xl border border-border bg-surface px-4 py-3 open:border-accent/40"
+                className="group rounded-2xl border border-border bg-surface open:border-accent/40"
               >
-                <summary className="cursor-pointer list-none text-sm font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent rounded marker:content-none [&::-webkit-details-marker]:hidden">
-                  <span className="flex items-center justify-between gap-3">
-                    {item.q}
-                    <span className="text-muted transition group-open:rotate-45" aria-hidden>
-                      +
-                    </span>
+                <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent rounded marker:content-none [&::-webkit-details-marker]:hidden">
+                  <span>{item.q}</span>
+                  <span className="text-muted transition group-open:rotate-45" aria-hidden>
+                    +
                   </span>
                 </summary>
-                <p className="mt-2 text-sm leading-relaxed text-muted">
+                <p className="px-4 pb-4 text-sm leading-relaxed text-muted">
                   <FaqAnswer text={item.a} />
                 </p>
               </details>

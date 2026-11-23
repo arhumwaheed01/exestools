@@ -3,6 +3,7 @@ import Link from "next/link";
 import PageMeta from "@/components/PageMeta";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { RaffleMount } from "@/components/raffle/RaffleMount";
+import { ToolPageShot } from "@/components/tools/ToolPageShot";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
 
@@ -126,7 +127,7 @@ export default function RaffleGeneratorPage() {
         <nav aria-label="Breadcrumb" className="print:hidden text-sm text-muted">
           <ol className="flex flex-wrap items-center gap-1">
             <li>
-              <Link href="/" className="font-semibold text-accent hover:underline">
+              <Link href="/" className="inline-flex min-h-11 items-center font-semibold text-accent hover:underline">
                 Home
               </Link>
             </li>
@@ -137,7 +138,7 @@ export default function RaffleGeneratorPage() {
           </ol>
         </nav>
 
-        <h1 className="mt-4 max-w-3xl text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+        <h1 className="mt-4 max-w-3xl text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
           Online Raffle Generator: Draw Winners and Alternates
         </h1>
         <PageMeta updated="2026-11-24" />
@@ -153,7 +154,7 @@ export default function RaffleGeneratorPage() {
         </div>
 
         <section className="mt-12 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             How to run a raffle online
           </h2>
           <ol className="mt-3 list-decimal space-y-3 pl-5">
@@ -182,7 +183,7 @@ export default function RaffleGeneratorPage() {
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             One entry per name, or numbered tickets
           </h2>
           <p className="mt-3">
@@ -195,7 +196,7 @@ export default function RaffleGeneratorPage() {
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Drawing several winners and alternates
           </h2>
           <p className="mt-3">
@@ -213,7 +214,7 @@ export default function RaffleGeneratorPage() {
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Draw records and transparency
           </h2>
           <p className="mt-3">
@@ -250,7 +251,7 @@ export default function RaffleGeneratorPage() {
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">Real raffles</h2>
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">Real raffles</h2>
           <ul className="mt-3 list-disc space-y-3 pl-5">
             <li>
               <span className="font-semibold text-foreground">PTA spring fair.</span> Tickets 1–300
@@ -286,13 +287,17 @@ export default function RaffleGeneratorPage() {
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Five prizes, three alternates, 300 tickets
           </h2>
           <p className="mt-3">
             A youth soccer club sold 300 numbered tickets for five prizes. They paste the sold numbers, one
             per line, set 5 winners and 3 alternates, and type the prizes from smallest to largest.
           </p>
+          <ToolPageShot
+            src="/tools/raffle-generator/1.webp"
+            alt="Raffle generator results for tickets 1 to 300, with five winning numbers, three alternates and the draw record."
+          />
           <ul className="mt-3 list-disc space-y-3 pl-5">
             <li>
               <span className="font-semibold text-foreground">1st pick:</span>{" "}
@@ -318,7 +323,7 @@ export default function RaffleGeneratorPage() {
           </p>
         </section>
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">Tips</h2>
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">Tips</h2>
           <ul className="mt-3 list-disc space-y-3 pl-5">
             <li>
               Draw alternates at the same time as the winners. Redrawing later looks suspicious.
@@ -335,7 +340,7 @@ export default function RaffleGeneratorPage() {
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Raffle generator vs other raffle tools
           </h2>
           <p className="mt-3">
@@ -364,17 +369,15 @@ export default function RaffleGeneratorPage() {
             {FAQ.map((item) => (
               <details
                 key={item.q}
-                className="group rounded-2xl border border-border bg-surface px-4 py-3 open:border-accent/40"
+                className="group rounded-2xl border border-border bg-surface open:border-accent/40"
               >
-                <summary className="cursor-pointer list-none rounded text-sm font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent marker:content-none [&::-webkit-details-marker]:hidden">
-                  <span className="flex items-center justify-between gap-3">
-                    {item.q}
-                    <span className="text-muted transition group-open:rotate-45" aria-hidden>
-                      +
-                    </span>
+                <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent rounded marker:content-none [&::-webkit-details-marker]:hidden">
+                  <span>{item.q}</span>
+                  <span className="text-muted transition group-open:rotate-45" aria-hidden>
+                    +
                   </span>
                 </summary>
-                <p className="mt-2 text-sm leading-relaxed text-muted">
+                <p className="px-4 pb-4 text-sm leading-relaxed text-muted">
                   <FaqAnswer text={item.a} />
                 </p>
               </details>

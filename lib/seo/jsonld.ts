@@ -22,6 +22,8 @@ export function webAppLd({
   alternateName,
   featureList,
   dateModified,
+  datePublished,
+  authorName,
 }: {
   path: string;
   name: string;
@@ -30,6 +32,9 @@ export function webAppLd({
   alternateName?: string[];
   featureList?: string[];
   dateModified?: string;
+  datePublished?: string;
+  /** Optional Person author (e.g. "Arhum Waheed"). */
+  authorName?: string;
 }) {
   // Prefer apex without trailing slash (P2-3); path "/" → https://www.exestools.com
   const url = path === "/" ? "https://www.exestools.com" : `https://www.exestools.com${path}`;
@@ -47,7 +52,17 @@ export function webAppLd({
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     description,
     ...(featureList?.length ? { featureList } : {}),
+    ...(datePublished ? { datePublished } : {}),
     ...(dateModified ? { dateModified } : {}),
+    ...(authorName
+      ? {
+          author: {
+            "@type": "Person",
+            name: authorName,
+            url: "https://www.exestools.com/about#arhum",
+          },
+        }
+      : {}),
     publisher: { "@id": "https://www.exestools.com/#organization" },
   };
 }

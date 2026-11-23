@@ -3,6 +3,7 @@ import Link from "next/link";
 import PageMeta from "@/components/PageMeta";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { SecretSantaMount } from "@/components/secret-santa/SecretSantaMount";
+import { ToolPageShot } from "@/components/tools/ToolPageShot";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
 
@@ -202,7 +203,7 @@ export default function SecretSantaGeneratorPage() {
         <nav aria-label="Breadcrumb" className="print:hidden text-sm text-muted">
           <ol className="flex flex-wrap items-center gap-1">
             <li>
-              <Link href="/" className="font-semibold text-accent hover:underline">
+              <Link href="/" className="inline-flex min-h-11 items-center font-semibold text-accent hover:underline">
                 Home
               </Link>
             </li>
@@ -213,7 +214,7 @@ export default function SecretSantaGeneratorPage() {
           </ol>
         </nav>
 
-        <h1 className="mt-4 max-w-3xl text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+        <h1 className="mt-4 max-w-3xl text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
           Secret Santa generator with exclusions
         </h1>
         <PageMeta updated="2026-11-24" />
@@ -250,7 +251,7 @@ export default function SecretSantaGeneratorPage() {
         </div>
 
         <section className="mt-12 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             How to draw names for Secret Santa
           </h2>
           <ol className="mt-3 list-decimal space-y-3 pl-5">
@@ -290,7 +291,7 @@ export default function SecretSantaGeneratorPage() {
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">How exclusions work</h2>
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">How exclusions work</h2>
           <p className="mt-3">
             An exclusion stops one specific draw. Two-way (Neither draws the other) suits couples,
             housemates and anyone who already swaps gifts. One-way blocks a single direction: if Sam
@@ -324,7 +325,7 @@ export default function SecretSantaGeneratorPage() {
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Private reveal links, not emails
           </h2>
           <p className="mt-3">
@@ -334,6 +335,10 @@ export default function SecretSantaGeneratorPage() {
             that preview links only see the general Secret Santa page, never the name. When the page
             opens, it moves the match out of the address bar and keeps it in that browser tab.
           </p>
+          <ToolPageShot
+            src="/tools/secret-santa-generator/1.webp"
+            alt="Secret Santa generator after a six-person draw with one couple excluded, listing a private reveal link for each person."
+          />
           <p className="mt-3">
             The match inside a link is scrambled so it can&apos;t be read at a glance. That&apos;s
             obfuscation, not encryption: anyone who has the link can open it, and someone determined
@@ -357,7 +362,7 @@ export default function SecretSantaGeneratorPage() {
 
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Ways to use the Secret Santa generator
           </h2>
           <ul className="mt-3 list-disc space-y-3 pl-5">
@@ -425,7 +430,7 @@ export default function SecretSantaGeneratorPage() {
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Tips for a smoother gift exchange
           </h2>
           <ul className="mt-3 list-disc space-y-3 pl-5">
@@ -470,7 +475,7 @@ export default function SecretSantaGeneratorPage() {
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Nine relatives and four exclusions
           </h2>
           <p className="mt-3">
@@ -517,17 +522,15 @@ export default function SecretSantaGeneratorPage() {
             {FAQ.map((item) => (
               <details
                 key={item.q}
-                className="group rounded-2xl border border-border bg-surface px-4 py-3 open:border-accent/40"
+                className="group rounded-2xl border border-border bg-surface open:border-accent/40"
               >
-                <summary className="cursor-pointer list-none rounded text-sm font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent marker:content-none [&::-webkit-details-marker]:hidden">
-                  <span className="flex items-center justify-between gap-3">
-                    {item.q}
-                    <span className="text-muted transition group-open:rotate-45" aria-hidden>
-                      +
-                    </span>
+                <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent rounded marker:content-none [&::-webkit-details-marker]:hidden">
+                  <span>{item.q}</span>
+                  <span className="text-muted transition group-open:rotate-45" aria-hidden>
+                    +
                   </span>
                 </summary>
-                <p className="mt-2 text-sm leading-relaxed text-muted">
+                <p className="px-4 pb-4 text-sm leading-relaxed text-muted">
                   <FaqAnswer text={item.a} />
                 </p>
               </details>
