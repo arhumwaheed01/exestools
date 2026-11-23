@@ -3,8 +3,8 @@ import Link from "next/link";
 import PageMeta from "@/components/PageMeta";
 import { GuideMarkdown } from "@/components/guides/GuideMarkdown";
 import { QueryHydratedNumbers } from "@/components/QueryHydratedMounts";
+import { ToolResultShot } from "@/components/tools/ToolResultShot";
 import { RelatedLinks } from "@/components/RelatedLinks";
-import { RelatedTools } from "@/components/RelatedTools";
 import { loadToolPageMarkdown } from "@/lib/toolPageMarkdown";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { faqPageLd, toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
@@ -118,6 +118,7 @@ export default function RandomNumberWheelPage() {
     name: "Random Number Wheel",
     description: META,
     featureList: ["Up to 1,000 numbers", "No-repeat draws", "Bingo letters"],
+    dateModified: "2026-11-24",
   });
 
   const crumbLd = {
@@ -165,7 +166,7 @@ export default function RandomNumberWheelPage() {
         <h1 className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl lg:text-3xl">
           Random number wheel
         </h1>
-        <PageMeta updated="2026-10-19" />
+        <PageMeta updated="2026-11-24" />
         <p className="mt-1 text-sm leading-relaxed text-muted sm:text-base">
           Pick a range and press SPIN, and the wheel stops on a random whole number. Tap 1–10 or
           1–100, or type any Min and Max for up to 1,000 numbers. Every number has the same chance.
@@ -175,6 +176,7 @@ export default function RandomNumberWheelPage() {
       </header>
 
       <QueryHydratedNumbers />
+      <ToolResultShot toolId="random-number-wheel" />
 
       <div className="mt-12 space-y-10 border-t border-border pt-10">
         <section className="max-w-3xl">
@@ -380,8 +382,6 @@ export default function RandomNumberWheelPage() {
           </Link>
           .
         </p>
-
-        <RelatedTools toolId="random-number-wheel" />
       </div>
     </div>
   );

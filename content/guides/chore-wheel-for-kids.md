@@ -4,6 +4,7 @@ meta_title: "How to Set Up a Fair Chore Wheel | ExesTools"
 meta_description: "A parent's guide to a fair chore wheel: chores by age, equal-effort slices, weekly rotation, swap rules, and a worked week for three kids."
 author: Arhum Waheed
 author_url: /about#arhum
+testedNote: "Set up for three kids, four chore bundles and one weekend bathroom spin."
 published: 2026-11-07
 updated: 2026-11-07
 related_tools: [/, /random-name-picker]
@@ -35,7 +36,7 @@ A chore wheel moves the decision from you to the wheel. Kids still complain, bec
 
 Every slice on a spinner wheel has the same chance. That's good for fairness between kids. It's bad if the slices aren't equal work.
 
-Put "feed the cat" and "clean the bathroom" on the same wheel and a kid who lands the bathroom twice in a row is going to be furious, and honestly, they have a point. Two minutes versus forty minutes isn't a fair coin.
+Put "feed the cat" and "clean the bathroom" on the same wheel and a kid who lands the bathroom twice in a row is going to be furious, and the complaint is fair. Two minutes versus forty minutes isn't a fair coin.
 
 So the most important step happens before you spin anything: **make every slice roughly the same amount of effort.**
 
@@ -66,7 +67,7 @@ For a household with kids aged 7, 10 and 13, a weekly set might look like this:
 
 Four bundles, each maybe 15–20 minutes a day. Now a spin can't land anyone a job that's three times harder than their sibling's.
 
-Got a chore so unpopular that nobody wants it, like the bathroom? Make it its own bundle and pair it with a perk: "Bathroom + you pick Friday's movie."
+Got a chore everyone dodges, like the bathroom? Make it its own bundle and pair it with a perk: "Bathroom + you pick Friday's movie."
 
 ![Two children in a laundry room beside a washing machine and a wicker basket of clothes](/guides/chore-wheel-for-kids/2.jpg)
 *Photo: Pexels (Pexels License).*
@@ -79,11 +80,11 @@ There are two ways to run it, and they feel different to kids.
 
 Each child spins the [spinner wheel](/) once to see their bundle for the week. Type your bundles one per line, then switch on **Remove winner after spin** so each bundle can only be given out once. First child spins, gets "Kitchen crew," and that slice leaves the wheel. The next child spins from what's left.
 
-Kids love pressing the button themselves. It feels like a game, and nobody can claim you chose for them.
+Kids love pressing the button themselves. It feels like a game, and you can't be accused of choosing for them.
 
 ### Option B: Spin the kids
 
-Put the children's names on the [random name picker](/random-name-picker), keep remove winner on, and read out the bundles one at a time: "Kitchen crew is… Trash and recycling is…" Each name leaves the wheel once picked, so nobody gets two bundles.
+Put the children's names on the [random name picker](/random-name-picker), keep remove winner on, and read out the bundles one at a time: "Kitchen crew is… Trash and recycling is…" Each name leaves the wheel once picked, so each child ends up with one bundle.
 
 This version works when you have about as many bundles as kids (or fewer), because remove winner takes each name off once and then the wheel is empty. Use it when you want to control the order, for example reading out the least popular bundle first. If you have more bundles than kids, spin the chores instead (Option A) so every bundle can still be assigned.
 
@@ -126,26 +127,4 @@ Write the week on the fridge. The wheel doesn't keep a history, and a list on pa
 
 **Don't use the wheel for punishments.** "Spin to see your punishment" turns a fair tool into a scary one. Keep it for normal jobs.
 
-**Praise finishing, not just starting.** The wheel handles who does what. You still have to notice when they actually do it.
-
-## Frequently asked questions
-
-### How do I make a chore wheel fair for kids of different ages?
-
-Bundle chores so every slice is about the same effort for the child likely to get it. If ages are far apart, use separate wheels, or create bundles that mix one harder task with an easy one.
-
-### Can I make an online chore wheel for free?
-
-Yes. Type your chores or bundles one per line on the spinner wheel and spin. It's free, there's no account, and your list stays in your browser for next week.
-
-### How do I stop the same chore coming up twice?
-
-Switch on remove winner after spin. Each chore leaves the wheel once it's picked, so every child gets a different one. Paste the full list back in next week.
-
-### Should we spin chores every day or every week?
-
-Weekly is usually easier. Kids know their jobs for seven days, and you avoid a daily argument. Younger kids sometimes enjoy a daily spin for one small extra job.
-
-### What if my kids still argue about the result?
-
-Agree the rules before the spin: swaps only if both agree, and leftover bundles go to whoever you decided in advance. Arguments mostly happen when rules get made up after the result.
+**Praise finishing, not just starting.** The wheel handles who does what. You still have to notice when they do it.

@@ -44,7 +44,6 @@ import {
 import { ToolConfetti } from "@/components/tools/Confetti";
 import { MoreMenu } from "@/components/tools/MoreMenu";
 import { ThemeChips } from "@/components/tools/ThemeChips";
-import { ToolSkeleton } from "@/components/tools/ToolSkeleton";
 import { track } from "@/lib/track";
 import { useSound } from "@/lib/tools/sound";
 import {
@@ -70,6 +69,7 @@ type ConfirmKind = null | "clear-entries" | "try-sample" | "edit-entries" | "new
 type SharedView = null | { kind: "valid"; record: DrawRecord } | { kind: "invalid" };
 
 function takeIncoming(): string | null {
+  if (typeof window === "undefined") return null;
   const fromUrl = readResultHash(window.location.hash);
   if (fromUrl) {
     window.history.replaceState(
@@ -979,10 +979,6 @@ export function RaffleTool() {
     if (!drawComplete || listMismatch || alternates >= MAX_ALTERNATES) return false;
     return drawNext(holders, picks, "alternate", { allowRepeatWinners }).ok;
   }, [drawComplete, listMismatch, alternates, holders, picks, allowRepeatWinners]);
-
-  if (!ready) {
-    return <ToolSkeleton variant="raffle" />;
-  }
 
   const fpDisplay = fpUnavailable
     ? "unavailable on this connection"

@@ -4,6 +4,7 @@ meta_title: "White Elephant Rules: Steals, Dice, Big Groups | ExesTools"
 meta_description: "Clear White Elephant rules you can read out loud: turn order, steal limits, the dice version, rules for 25+ people, and how to avoid the usual arguments."
 author: Arhum Waheed
 author_url: /about#arhum
+testedNote: "Played through on paper: six players, a $20 limit, a three-steal cap."
 published: "2026-11-03"
 updated: "2026-11-12"
 related_tools: [/random-name-picker, /random-number-wheel, /secret-santa-generator, /bingo-card-generator]
@@ -13,7 +14,7 @@ related_tools: [/random-name-picker, /random-number-wheel, /secret-santa-generat
 
 By Arhum Waheed · Published 2026-11-03 · Updated 2026-11-12
 
-White Elephant (also called Yankee Swap or Dirty Santa) is the gift exchange where nobody knows what they will go home with. That is the fun of it, and also the source of every argument. Most White Elephant games that go wrong don't go wrong because of the gifts. They go wrong because three people learned three different versions of the rules, and nobody said which one counts before the first gift came off the pile.
+White Elephant (also called Yankee Swap or Dirty Santa) is the gift exchange where you don't know what you'll go home with until the game decides. That is the fun of it, and also where the trouble starts. Most White Elephant games that go wrong don't go wrong because of the gifts. They go wrong because three people learned three different versions of the rules, and the group never settled which one counts before the first gift came off the pile.
 
 This guide gives you a version you can read out loud in under a minute, the house rules worth deciding in advance, a dice variant for groups who hate stealing, and changes that keep a 30-person office game under an hour.
 
@@ -35,19 +36,19 @@ That's it. Everything else is a house rule, and the house rules are where you av
 
 ## Drawing the turn order fairly
 
-Turn order matters more than people expect. Going first is a disadvantage, since you open blind and have nothing to steal, which is why player 1 gets the final swap. Going last is the best seat in the house, because you can choose from every opened gift. People notice who gets that seat, so the draw should be one nobody can question.
+Turn order matters more than people expect. Going first is a disadvantage, since you open blind and have nothing to steal, which is why player 1 gets the final swap. Going last is the best seat in the house, because you can choose from every opened gift. People notice who gets that seat, so the draw should be beyond question.
 
 Three ways to do it:
 
 - **Paper slips in a bowl.** Fine for 8 people. Slow for 25, and someone always palms a slip or drops one.
-- **Random name picker, one name at a time.** Put every player's name into the [random name picker](/random-name-picker) and turn on remove-winner. Each spin takes the next turn. Because each name leaves the wheel after it's picked, nobody can be drawn twice, and the room watches every pick happen. Write the order on a whiteboard as you go.
+- **Random name picker, one name at a time.** Put every player's name into the [random name picker](/random-name-picker) and turn on remove-winner. Each spin takes the next turn. Each name leaves the wheel once picked, so a name can't come up twice, and the room watches every pick happen. Write the order on a whiteboard as you go.
 - **Number draw.** If people are already seated, set the [random number wheel](/random-number-wheel) to 1 through the number of players and draw without repeats. Go around the circle, and each person spins for their own number.
 
 If guests are arriving at different times, draw the order before the party and send it round in the group chat. A share link to your name list helps if someone else is running the spin on the day.
 
 ## House rules to decide before you start
 
-Settle these out loud. Each one is a common source of real arguments.
+Settle these out loud. Skip any of them and real fights start.
 
 ### How many steals before a gift freezes?
 
@@ -67,7 +68,7 @@ Usually yes, it just goes the same as any other gift. Some groups forbid it, but
 
 ### What about the gag gifts?
 
-Decide whether joke gifts are welcome. In a family game with kids, a rule like "something you'd actually use" saves disappointment. At a work party, joke gifts are part of the culture at some companies and a problem at others. If in doubt, say "no gag gifts" in the invite.
+Decide whether joke gifts are welcome. In a family game with kids, a rule like "something you'd use at home" saves disappointment. At a work party, joke gifts are part of the culture at some companies and a problem at others. If in doubt, say "no gag gifts" in the invite.
 
 ### No stealing until three gifts are open (good for kids)
 
@@ -92,7 +93,7 @@ A common rule sheet:
 | 5 | Everyone passes their gift one seat right |
 | 6 | Keep what you have |
 
-Two things make it work. First, **decide the number of rounds before the first roll**, because the dice game has no natural ending. Second, put the rule sheet where everyone can see it, so nobody has to ask what a 4 means.
+Two things make it work. First, **decide the number of rounds before the first roll**, because the dice game has no natural ending. Second, put the rule sheet where everyone can see it, so the rule for a 4 never needs asking about.
 
 No die in the house? Set the [random number wheel](/random-number-wheel) to 1–6 with repeats allowed and spin it on a phone in the middle of the table. Swap in your own actions if you like: "everyone passes two seats" or "swap with whoever's wearing the most red" both go down well.
 
@@ -123,7 +124,7 @@ Agree on shipping before the game. "The buyer pays to ship it" is the simplest r
 
 ## White Elephant vs Secret Santa
 
-They get mixed up, but they're different games. In **Secret Santa**, each person is privately assigned one specific person to buy for, so gifts can be personal. In **White Elephant**, nobody is assigned anyone; gifts are generic and the game decides who gets what.
+They get mixed up, but they're different games. In **Secret Santa**, each person is privately assigned one specific person to buy for, so gifts can be personal. In **White Elephant**, no one has an assigned person; gifts are generic and the game decides who gets what.
 
 Pick Secret Santa when people know each other well and want thoughtful gifts. Pick White Elephant when the group is mixed, or when the game is the point. If you go with Secret Santa, the [Secret Santa generator](/secret-santa-generator) handles exclusions for couples and gives everyone a private link. Our [Secret Santa rules and budget guide](/guides/secret-santa-rules-and-budget-ideas) covers the rest.
 
@@ -156,25 +157,3 @@ Sam opens the last gift: a hot sauce set.
 All gifts are open. Jo gets the final swap and trades the board game for Sam's hot sauce. Done. Six players, six turns, about 15 minutes, and the blanket finishes with Lee.
 
 Notice that Jo, who went first and lost the blanket immediately, still got to choose last. That's the final swap doing its job.
-
-## Frequently asked questions
-
-### How many people do you need for White Elephant?
-
-Six or more for the standard game, because with fewer players there's not much to steal. The dice version works from four.
-
-### How many times can a gift be stolen in White Elephant?
-
-Usually three, then the gift is frozen with whoever has it. For groups over 20, use two. Whatever you choose, announce it before the first gift is opened.
-
-### Does the first person get to steal at the end?
-
-In most versions, yes. Player 1 gets one final swap after the last gift is opened, because they started with no choice. Frozen gifts can't be taken.
-
-### How do you pick the order for White Elephant?
-
-Any fair random draw will do: slips from a bowl, or a name picker with remove-winner on, so each name is drawn only once and everyone sees each pick. For large groups, draw the order before the party.
-
-### How long does White Elephant take?
-
-Roughly 2 to 3 minutes per player with a three-steal limit. A group of 15 takes 30 to 45 minutes. For bigger groups, use two-steal limits and one steal per turn, or split into two circles.

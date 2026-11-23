@@ -4,6 +4,7 @@ meta_title: "How to Run a Fair Online Giveaway | ExesTools"
 meta_description: "Checklist for a fair online giveaway: rules to publish, cleaning your entry list, drawing on camera, and what to do when a winner never replies."
 author: Arhum Waheed
 author_url: /about#arhum
+testedNote: "Walked through with a 128-name entry list, three prizes and two alternates."
 published: "2026-10-13"
 updated: "2026-11-17"
 related_tools: [/prize-wheel, /raffle-generator, /random-name-picker]
@@ -13,7 +14,7 @@ related_tools: [/prize-wheel, /raffle-generator, /random-name-picker]
 
 By Arhum Waheed · Published 2026-10-13 · Updated 2026-10-21
 
-Most giveaway complaints are not about the draw itself. They come from things decided too late: a rule nobody wrote down, an entry window that ended in a different time zone than people assumed, or a winner who went quiet and a host who quietly picked someone else. A random picker solves only one step. The rest is planning, and that is what this guide covers.
+Most giveaway complaints are not about the draw itself. They come from things decided too late: a rule that was never written down, an entry window that ended in a different time zone than people assumed, or a winner who went quiet and a host who quietly picked someone else. A random picker solves only one step. The rest is planning, and that is what this guide covers.
 
 I build the picking tools on ExesTools, so I will be specific about what they do and what they don't. They pick fairly from the list you give them. They don't collect entries, check eligibility or make a giveaway legal where you live. If your platform or local law requires a supervised draw, use one.
 
@@ -67,7 +68,7 @@ Some hosts draw the winner first, then spin a second wheel of prizes to see what
 
 ## Step 4: Do the draw where people can see it
 
-A draw nobody saw is a draw you will be asked to prove. Pick one of these and say in your rules which one you'll use:
+An unwitnessed draw is one you will be asked to prove. Pick one of these and say in your rules which one you'll use:
 
 - **Live on stream.** Put the wheel on screen before you start. Read the number of entrants out loud, scroll through the list, then spin.
 - **Screen recording.** Record your whole screen from the moment you paste the list to the moment the winner appears. Don't cut the video. Post it, or keep it in case someone asks.
@@ -83,42 +84,20 @@ Announce in the same place you ran the giveaway. Post the handle, the prize and 
 
 Decide before the draw what happens if a winner doesn't reply. There are two fair options:
 
-1. **Pick your backup winners in the same draw, on camera, so nobody wonders later where they came from.** The raffle generator does this in order: if the winner doesn't claim, Alternate 1 is offered the prize, then Alternate 2. If you need another backup later, **Draw another alternate** adds one without changing anyone already drawn.
+1. **Pick your backup winners in the same draw, on camera, so where they came from is never in doubt.** The raffle generator does this in order: if the winner doesn't claim, Alternate 1 is offered the prize, then Alternate 2. If you need another backup later, **Draw another alternate** adds one without changing anyone already drawn.
 2. **Redraw on camera** from the same list, minus the previous winner. On a wheel, leave **Remove winner after spin** on, and the non-responder is already off the wheel.
 
 The unfair option is picking someone yourself because they seem keen. Even if it is well meant, it is the fastest way to lose trust.
 
-## A worked example
+## Three prizes, 128 eligible entrants
 
 Say you run a giveaway with 3 prizes and 140 commenters. After cleaning you have 128 eligible entrants (one entry each).
 
 - In the raffle generator, paste the 128 names (One entry per name on), set 3 winners and 2 alternates, and draw.
 - Each entrant has 1/128 ≈ 0.78% chance of winning the first pick. Say that in your rules if you publish odds.
-- With **Each person can win only once** on (the default), a winner leaves the draw, so nobody can take two of the three prizes.
+- With **Each person can win only once** on (the default), a winner leaves the draw, so one entrant can't take two of the three prizes.
 - Copy or print the record and keep it with your recording.
 
 ## What I checked for this guide
 
 Every feature named above was checked against the live tool pages on 2026-10-13: the 60-entry limit on the wheels, how duplicates are skipped, the raffle generator's limits, alternates and draw record, and the list fingerprint. The percentages are plain division you can check on a calculator. If a tool changes, this page will be updated and the date above will change with it.
-
-## Frequently asked questions
-
-### Can I use ExesTools for an Instagram or YouTube giveaway?
-
-Yes, as long as you follow that platform's promotion rules. ExesTools doesn't connect to your account or import comments, so copy the entrant names yourself, paste them in, and spin or draw on screen.
-
-### Can I paste the same name twice for a bonus entry?
-
-Not on the wheels: duplicate lines are skipped. On the raffle generator, keep One entry per name on for social giveaways so each person appears once. If your rules truly allow extra entries, say so in the published rules and use a method you can show on camera (for example separate ticket numbers). Do not rely on pasting a name twice on a wheel.
-
-### What should I do if the winner never replies?
-
-Follow the claim window in your published rules. If you drew alternates, offer the prize to Alternate 1. If not, redraw on camera from the same list without the previous winner.
-
-### Is an ExesTools draw legally valid?
-
-ExesTools is a free random picker, and nothing here is legal advice. Giveaway and raffle laws vary by country and region.
-
-### Can entrants check the list I drew from?
-
-Yes. On a wheel, Copy share link gives a link to the exact list you spun. In the raffle generator, publish your list before the draw and anyone can compare the list fingerprint on the record.

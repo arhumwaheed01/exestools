@@ -45,7 +45,7 @@ Replace the roster with your table names, such as "Table 1" to "Table 6," or the
 
 ### Seat or desk numbers
 
-If your desks are numbered, put the numbers on the wheel instead of names. It's quicker to set up on the first day, before you know everyone, and nobody's name has to be typed into a website at all. Once the class has settled into fixed seats, a number wheel doubles as a name wheel.
+If your desks are numbered, put the numbers on the wheel instead of names. It's quicker to set up on the first day, before you know everyone, and no names get typed into a website at all. Once the class has settled into fixed seats, a number wheel doubles as a name wheel.
 
 ### Two-step picks for groups
 
@@ -57,7 +57,7 @@ The **Classroom jobs** example wheel hands out line leader, door holder and othe
 
 **Spin the jobs for each student.** Load Classroom jobs, edit the list to match your room, and spin once per student who is due a job this week. With remove-winner on, each job is given out once. This works when you have fewer jobs than students and want the jobs to feel like a surprise.
 
-**Spin the students for each job.** Paste your roster, keep remove-winner on, and spin once per job: "Line leader is… Door holder is…" Nobody can get two jobs in the same week, because a picked student leaves the wheel. Next week, don't paste the full roster back in. Carry on from the names that are left, so everyone gets a job before anyone gets a second one. When the list runs out, start a fresh round.
+**Spin the students for each job.** Paste your roster, keep remove-winner on, and spin once per job: "Line leader is… Door holder is…" A picked student leaves the wheel, so no one holds two jobs in the same week. Next week, don't paste the full roster back in. Carry on from the names that are left, so everyone gets a job before anyone gets a second one. When the list runs out, start a fresh round.
 
 Either way, write the week's jobs on the board. The wheel doesn't keep a history, and a written list settles "but I was line leader last week" in seconds.
 
@@ -69,7 +69,7 @@ Either way, write the week's jobs on the board. The wheel doesn't keep a history
 - **PE:** which warm-up drill, which station a group starts at, who chooses the cool-down stretch.
 - **Languages:** spin vocabulary topics, then spin a student to start the conversation.
 
-## Worked example: one week with a class of 28
+## One week with a class of 28
 
 Say you call on students about eight times a lesson and teach the class every day.
 
@@ -78,7 +78,7 @@ Say you call on students about eight times a lesson and teach the class every da
 - **Wednesday:** eight more. Four left.
 - **Thursday:** the last four go first, then paste the full roster back in and start round two.
 
-By Thursday every student has been called on exactly once, and nobody had a second turn while someone else was still waiting. If a student is absent, delete their line for the day and add it back when they return. They keep their place in the round.
+By Thursday every student has been called on exactly once, with no second turns while anyone was still waiting. If a student is absent, delete their line for the day and add it back when they return. They keep their place in the round.
 
 ## When students are absent or away for a while
 
@@ -132,7 +132,7 @@ The spinner is most useful when students trust it, and a few habits protect that
 - **Don't use it for every question.** Mix spins with hands-up, mini-whiteboards and pair discussion. A spinner that is one tool among several stays fresh.
 - **Let a student press SPIN.** Handing over the Space key for the last few picks of a round is a small privilege that also shows the class the teacher isn't steering the result.
 - **Ask the question before you spin.** If you spin first, 27 students relax.
-- **Allow "phone a friend."** The picked student can bring in a classmate, so nobody is stuck on the spot.
+- **Allow "phone a friend."** The picked student can bring in a classmate, so the student isn't stuck on the spot.
 
 ## Frequently asked questions
 

@@ -13,15 +13,19 @@ function liveGuidesForTool(toolPath: string) {
   );
 }
 
+const MAX_LINKS = 6;
+
 /**
- * SEO box above FAQ: /guides hub + any live guide that lists this tool + 3 related tools.
+ * Single related-links block above FAQ (one H2, at most 6 links):
+ * /guides hub + up to 2 live guides that list this tool + related tools to fill the rest.
  */
 export function RelatedLinks({ toolId }: { toolId: ToolId }) {
   if (toolId === "home") return null;
 
   const toolPath = pathForToolId(toolId);
-  const guides = liveGuidesForTool(toolPath);
-  const tools = relatedLinksFor(toolId).slice(0, 3);
+  // One merged block, at most MAX_LINKS links: hub + up to 2 guides + related tools.
+  const guides = liveGuidesForTool(toolPath).slice(0, 2);
+  const tools = relatedLinksFor(toolId).slice(0, MAX_LINKS - 1 - guides.length);
 
   return (
     <nav className="max-w-3xl" aria-label="Related guides and tools">

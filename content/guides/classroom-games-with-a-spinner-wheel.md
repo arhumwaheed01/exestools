@@ -4,6 +4,7 @@ meta_title: "10 Classroom Games to Play With a Spinner Wheel"
 meta_description: "Ten low-prep classroom games for a spinner wheel: review, warm-ups, brain breaks and end-of-day fillers, with wheel setup, timing and tips for each."
 author: Arhum Waheed
 author_url: /about#arhum
+testedNote: "Tried the review block on a five-word water cycle set and eight students."
 published: 2026-10-23
 updated: "2026-11-17"
 related_tools: [/classroom-spinner, /random-number-wheel]
@@ -104,7 +105,7 @@ Take anything off the list that doesn't suit your space or your students. A brai
 ### 9. Mystery job
 
 **Setup:** Load **Classroom jobs** and edit it: chairs up, library books back, whiteboards wiped, line leader for dismissal.
-**Play:** Spin the roster for each job. With remove-winner on, nobody gets two jobs in one afternoon.
+**Play:** Spin the roster for each job. With remove-winner on, each student gets at most one job in an afternoon.
 **Time:** 2 minutes, and the room's tidy.
 
 Don't add "clean the sink" as a punishment slot. Once a spinner hands out consequences, kids start dreading it, and you lose all the good uses above.
@@ -120,7 +121,7 @@ Don't add "clean the sink" as a punishment slot. Once a spinner hands out conseq
 ![An empty classroom with rows of wooden desks and a chalkboard at the front](/guides/classroom-games-with-a-spinner-wheel/2.jpg)
 *Photo: Pexels (Pexels License).*
 
-## A worked example: one 12-minute review block
+## One 12-minute review block before a quiz
 
 Say it's Thursday and you have a science quiz tomorrow on the water cycle. Here's how three of these games fit together:
 
@@ -142,19 +143,11 @@ That's 12 minutes, three wheels, zero worksheets. If you want to keep these setu
 
 **Have a pass rule.** For anything where one student is in the spotlight, decide ahead of time whether they can say "come back to me." For more on calling on students without anxiety, see [fair ways to call on students](/guides/cold-calling-students-fairly).
 
-## Frequently asked questions
+## Questions teachers ask
 
 ### What's the best spinner game for a class that's just learning to read?
 
 Letter race (game 5) with a small set of letters you've taught, or a sight-word version of game 1 where the slices are "Say it," "Spell it" and "Find it in the book." Keep rounds short.
-
-### Can I save different wheels for different games?
-
-The page keeps one list in your browser at a time. To keep several, press Copy share link on each wheel and bookmark the links with clear names like "Question types" or "Brain breaks."
-
-### How do I stop the same student getting picked over and over?
-
-Leave remove-winner on. Each student leaves the wheel after they're picked, so everyone gets a turn before anyone goes twice. Paste the full roster back in to start a new round.
 
 ### Is it safe to put students' names in the spinner?
 

@@ -1,5 +1,10 @@
 /** Preprocess guide/tool markdown bodies before react-markdown. */
 
+/** FAQ section heading. Guides may use a topical variant instead of the generic one. */
+const FAQ_HEADING = "(?:Frequently asked questions|Questions (?:hosts|teachers) ask)";
+const FAQ_START_RE = new RegExp(`^## ${FAQ_HEADING}\\s*$`, "m");
+const FAQ_SECTION_RE = new RegExp(`^## ${FAQ_HEADING}\\s*\\n([\\s\\S]*)$`, "m");
+
 const BYLINE_RE = /^By Arhum Waheed ·[^\n]*\n+/m;
 const SCREENSHOT_LINE_RE = /^\[SCREENSHOT:[^\]]*\]\s*\n?/gm;
 const LEADING_H1_RE = /^#\s+.+\n+/;
@@ -17,7 +22,7 @@ export function preprocessGuideBody(raw: string): string {
 
 /** Strip FAQ section from body when FAQs are rendered separately (tool rewrites). */
 export function stripMarkdownFaqSection(body: string): string {
-  const idx = body.search(/^## Frequently asked questions\s*$/m);
+  const idx = body.search(FAQ_START_RE);
   if (idx === -1) return body;
   return body.slice(0, idx).trim();
 }
@@ -26,7 +31,7 @@ export type MarkdownFaq = { q: string; a: string };
 
 /** Parse ### questions under ## Frequently asked questions. */
 export function extractMarkdownFaqs(body: string): MarkdownFaq[] {
-  const faqMatch = body.match(/^## Frequently asked questions\s*\n([\s\S]*)$/m);
+  const faqMatch = body.match(FAQ_SECTION_RE);
   if (!faqMatch) return [];
 
   const section = faqMatch[1];

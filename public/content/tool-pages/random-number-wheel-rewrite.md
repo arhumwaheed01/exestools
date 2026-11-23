@@ -27,7 +27,7 @@ A worksheet has 40 problems and you want students to do 6 of them, different for
 
 Want only odd-numbered problems, because the answers are in the back of the book? Spin 1 to 20 instead and convert each result with *2n − 1*: a spin of 7 means problem 13, a spin of 20 means problem 39. Every odd problem from 1 to 39 is equally likely, because each one matches exactly one number on the wheel. For even problems, use *2n*.
 
-### 3. A dice replacement, with honest odds
+### 3. A dice replacement, with plain odds
 
 Tap **1–6** when a die goes missing. One spin gives the same odds as one fair die: each number has a 1 in 6 chance, about 16.7%.
 
@@ -74,7 +74,7 @@ Set Min 100 and Max 999, leave No repeats off, and spin five times. Say you get 
 | 199 | 200 | 200 |
 | 503 | 500 | 500 |
 
-Students write their answers on whiteboards before you reveal each row. The 650 row is the one that sparks discussion: it's already a multiple of 10, and it sits exactly halfway between 600 and 700, so the usual round-half-up rule sends it to 700. Using a fresh spin each time means nobody can memorize the answers from yesterday's worksheet.
+Students write their answers on whiteboards before you reveal each row. The 650 row is the one that sparks discussion: it's already a multiple of 10, and it sits exactly halfway between 600 and 700, so the usual round-half-up rule sends it to 700. Using a fresh spin each time means the answers can't be memorized from yesterday's worksheet.
 
 ![The ExesTools random number wheel with a result shown and range controls on the right.](/tools/random-number-wheel/1.png)
 
@@ -86,7 +86,7 @@ It's a quick game, but it hides a neat piece of math. If you always guess the mi
 
 Try it with a class: let students play a few rounds freely, count their guesses, then teach the halving strategy and play again. The drop in guesses is the lesson. It's an easy introduction to binary search for older students, and to number sense and place value for younger ones. Keep No repeats off between rounds, so a number can come up again just as it would in a fresh game.
 
-## A worked example: three winners from 250 tickets
+## Three winners from 250 tickets
 
 Say you sold 250 numbered tickets and you're drawing three prizes with No repeats on.
 

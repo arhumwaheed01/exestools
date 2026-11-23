@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import PageMeta from "@/components/PageMeta";
 import { RelatedLinks } from "@/components/RelatedLinks";
-import { RelatedTools } from "@/components/RelatedTools";
-import { QueryHydratedTeams } from "@/components/QueryHydratedMounts";
+import { TeamGeneratorMount } from "@/components/teams/TeamGeneratorMount";
+import { ToolResultShot } from "@/components/tools/ToolResultShot";
 import { isGuidePublished } from "@/lib/guides";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
@@ -89,38 +89,46 @@ const FAQS = [
   },
 ];
 
-export default function RandomTeamGeneratorPage() {
-  const appLd = webAppLd({
-    path: "/random-team-generator",
-    name: "Random Team Generator",
-    description: META,
-    featureList: ["Number of teams or team size", "Pairs", "Reshuffle", "Print"],
-    dateModified: "2026-11-17",
-  });
+const appLd = webAppLd({
+  path: "/random-team-generator",
+  name: "Random Team Generator",
+  description: META,
+  featureList: ["Number of teams or team size", "Pairs", "Reshuffle", "Print"],
+  dateModified: "2026-11-24",
+});
 
-  const faqLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: FAQS.map((item) => ({
-      "@type": "Question",
-      name: item.q,
-      acceptedAnswer: { "@type": "Answer", text: item.a.replace(/\[|\]/g, "") },
-    })),
-  };
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQS.map((item) => ({
+    "@type": "Question",
+    name: item.q,
+    acceptedAnswer: { "@type": "Answer", text: item.a.replace(/\[|\]/g, "") },
+  })),
+};
 
-  const crumbLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Random team generator",
-        item: absoluteUrl("/random-team-generator"),
-      },
-    ],
-  };
+const crumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Random team generator",
+      item: absoluteUrl("/random-team-generator"),
+    },
+  ],
+};
+
+export default async function RandomTeamGeneratorPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ preset?: string | string[] }>;
+}) {
+  const sp = await searchParams;
+  const raw = Array.isArray(sp.preset) ? sp.preset[0] : sp.preset;
+  const initialPresetQuery = raw === "pairs" ? "pairs" : null;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-3 sm:px-6 sm:py-4">
@@ -152,7 +160,7 @@ export default function RandomTeamGeneratorPage() {
         <h1 className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl lg:text-3xl">
           Random Team Generator: Split Names into Teams, Groups or Pairs
         </h1>
-        <PageMeta updated="2026-11-17" />
+        <PageMeta updated="2026-11-24" />
         <p className="mt-1 text-sm leading-relaxed text-muted sm:text-base">
           Paste your names, choose how many teams (or how many people per team), and hit Generate.
           Don&apos;t like the split? Reshuffle. Then print it, copy it into the group chat, or send a
@@ -161,7 +169,8 @@ export default function RandomTeamGeneratorPage() {
         </p>
       </header>
 
-      <QueryHydratedTeams />
+      <TeamGeneratorMount initialPresetQuery={initialPresetQuery} />
+      <ToolResultShot toolId="random-team-generator" />
 
       <div className="mt-12 space-y-10 border-t border-border pt-10 print:hidden">
         <section className="max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
@@ -375,8 +384,6 @@ export default function RandomTeamGeneratorPage() {
           </Link>
           .
         </p>
-
-        <RelatedTools toolId="random-team-generator" />
       </div>
     </div>
   );

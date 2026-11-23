@@ -7,6 +7,7 @@ import PageMeta from "@/components/PageMeta";
 import { GuideMarkdown } from "@/components/guides/GuideMarkdown";
 import { RelatedTools } from "@/components/RelatedTools";
 import { QueryHydratedSpinner } from "@/components/QueryHydratedMounts";
+import { ToolResultShot } from "@/components/tools/ToolResultShot";
 import { preprocessGuideBody } from "@/lib/guideBody";
 import { getPublishedGuides } from "@/lib/guides";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
@@ -140,7 +141,7 @@ export default function HomePage() {
     name: "ExesTools Spinner Wheel",
     description: HOME_META,
     faqs: [...HOME_FAQS],
-    dateModified: "2026-11-17",
+    dateModified: "2026-11-24",
   });
 
   return (
@@ -154,7 +155,7 @@ export default function HomePage() {
         <h1 className="text-lg font-extrabold tracking-tight text-foreground sm:text-xl">
           Free spinner wheel online
         </h1>
-        <PageMeta updated="2026-11-17" />
+        <PageMeta updated="2026-11-24" />
         <p className="mt-0.5 text-sm leading-snug text-muted">
           Add one option per line, hit SPIN, and land on a fair result. It works as a multi-option
           decision wheel when you have several choices, and there&apos;s no account to create. For
@@ -163,6 +164,7 @@ export default function HomePage() {
       </header>
 
       <QueryHydratedSpinner toolId="home" />
+      <ToolResultShot toolId="home" />
 
       <div className="mt-12 space-y-10 border-t border-border pt-10">
         <section id="how-to" className="max-w-3xl">
@@ -311,7 +313,7 @@ export default function HomePage() {
         </section>
         <section className="max-w-3xl">
           <h2 className="text-2xl font-bold tracking-tight text-foreground">
-            Worked example: planning a weekend
+            Seven ideas for one weekend
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
             You have seven ideas for Saturday: farmers market, hike, museum, beach, bike ride, movie, a new

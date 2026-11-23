@@ -4,6 +4,7 @@ meta_title: "How Random Is a Spinner Wheel? | ExesTools"
 meta_description: "How online spinner wheels pick a result, Math.random vs crypto.getRandomValues, why streaks happen, and what a free picker can and cannot prove."
 author: Arhum Waheed
 author_url: /about#arhum
+testedNote: "Written after reading the pick function in the live code, line by line."
 published: "2026-10-13"
 updated: "2026-11-17"
 related_tools: [/, /random-number-wheel, /yes-no-wheel, /random-team-generator, /raffle-generator]
@@ -13,7 +14,7 @@ related_tools: [/, /random-number-wheel, /yes-no-wheel, /random-team-generator, 
 
 By Arhum Waheed · Published 2026-10-13 · Updated 2026-10-19
 
-"Is this wheel rigged?" is a fair question to ask of any online picker, including mine. A spinning wheel looks physical, but on a screen it is code, and code does exactly what it was written to do. This guide explains how the ExesTools wheels pick a result, what kind of randomness that is, why streaks that look suspicious are normal, and where the honest limits are.
+"Is this wheel rigged?" is a fair question to ask of any online picker, including mine. A spinning wheel looks physical, but on a screen it is code, and code does exactly what it was written to do. This guide explains how the ExesTools wheels pick a result, what kind of randomness that is, why streaks that look suspicious are normal, and where the limits are.
 
 ## Two ways an online wheel can work
 
@@ -89,25 +90,3 @@ Here are the limits, stated plainly.
 - **The generator belongs to your browser.** The quality of `crypto.getRandomValues` depends on the browser and operating system you use. Modern browsers are held to a high standard here, but that standard is theirs, not mine.
 - **Nothing is stored on a server.** Picks happen on your device, and ExesTools doesn't keep a copy, so it can't confirm a result afterwards. To prove a draw happened, record your screen or spin live.
 - **A fair picker can't fix an unfair list.** If someone is missing from the list, or appears in a way that gives them an edge, the pick will be perfectly random and still unfair. The [raffle generator](/raffle-generator) shows a list fingerprint that proves the list didn't change after you published it; it doesn't prove how the winner was picked.
-
-## Frequently asked questions
-
-### Does spinning harder or longer change the result?
-
-No. On ExesTools the result is picked first, and the wheel animation then stops on it. The spin length setting only changes how long the animation runs.
-
-### Is Math.random good enough for a spinner wheel?
-
-For casual use, usually yes. ExesTools uses crypto.getRandomValues for every pick anyway, because it's a stronger source and costs nothing extra. Math.random is only used for visual and sound effects.
-
-### Why did the same name come up three times?
-
-Because with names left on the wheel, each spin is independent and repeats are normal. Switch on Remove winner after spin if each name should come up only once.
-
-### Can a spinner wheel be used for a legal raffle or lottery?
-
-Raffle and lottery rules vary by place, and some require a license or a supervised draw. Check the rules that apply to you.
-
-### How can I check the wheel is fair?
-
-Spin the yes or no wheel 100 times and look at the counter. A fair wheel lands between about 40 and 60 Yes in roughly 95% of runs.

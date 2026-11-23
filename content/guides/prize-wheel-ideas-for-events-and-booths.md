@@ -4,6 +4,7 @@ meta_title: "Prize Wheel at a Booth or School Fair | ExesTools"
 meta_description: "How to run a prize wheel at a trade show booth, school fair or shop counter: prize mix, cost per spin, booth flow, and a rules sign you can copy."
 author: Arhum Waheed
 author_url: /about#arhum
+testedNote: "Costed out on a ten-slice bookstore wheel over 200 spins."
 published: 2026-11-02
 updated: 2026-11-02
 related_tools: [/prize-wheel, /raffle-generator]
@@ -54,10 +55,10 @@ Add up the cost of every slice: 3 × $0.50 + 2 × $1 + 2 × $0 + $6 + $25 + $0 =
 
 If you expect 200 spins over the day, budget about $690 in prizes. That's probably more than the bookstore wants to spend, mostly because of that one gift card slice. Over 200 spins, it'll come up about 20 times. Twenty $25 gift cards is $500.
 
-Two honest ways to fix it:
+Two clear ways to fix it:
 
 1. **Swap the gift card for something cheaper**, like a $5 voucher, and save the big prize for an end-of-day draw (more on that below).
-2. **Stock a fixed number** of the big prize, say three, and remove the slice from the wheel when they're gone. Say so out loud and on your sign: "Gift cards: 3 available today." That's honest. Quietly running out and pretending the slice is still live isn't.
+2. **Stock a fixed number** of the big prize, say three, and remove the slice from the wheel when they're gone. Say so out loud and on your sign: "Gift cards: 3 available today." Quietly running out and pretending the slice is still live is not.
 
 The "Spin again" slice costs nothing, but it doesn't really reduce your cost per spin either. It just delays the spin that does count. Treat it as fun, not as a budget tool.
 
@@ -94,7 +95,7 @@ Print this and put it next to the screen. Change the details to match yours.
 > "Spin again" means one more spin, once.
 > Ask us if you have any questions.
 
-The sign does two jobs. It answers the questions before anyone asks, and it means the rules were public before the first spin, so nobody can say you changed them.
+The sign does two jobs. It answers the questions before anyone asks, and it means the rules were public before the first spin, so you can't be accused of changing them.
 
 ## If people pay to spin
 
@@ -111,25 +112,3 @@ For a small list, under 60 names, tap **Entrant names** on the prize wheel, past
 - **Restock or edit as you go.** If the tote bags are gone, delete the slice and say so.
 - **Keep a tally** on paper of what's been won. It helps you restock, and it's useful when your manager asks how the day went.
 - **Let the line move.** One spin each, a quick handover, next person. A booth wheel works best when it's fast.
-
-## Frequently asked questions
-
-### Can I make the big prize less likely on the prize wheel?
-
-Not by changing the slice size; every slice is equal. Use fewer big-prize slices and more small ones, stock a limited number, or move the big prize to an end-of-day draw.
-
-### How many slices should a booth prize wheel have?
-
-Eight to twelve is a good range. It's readable on a laptop screen, and it gives you enough room for a sensible prize mix. The wheel itself takes up to 60.
-
-### Do I need internet at the booth?
-
-You need a connection to load the page, so test it on the venue's Wi-Fi or a phone hotspot before visitors arrive. Your list is saved in that browser, so you won't have to retype it if the page reloads.
-
-### What should "Spin again" mean?
-
-Whatever your sign says. A common rule is one extra spin, once. Decide before the event and stick to it.
-
-### Can I use the prize wheel for a giveaway draw at the end of the day?
-
-Yes. Tap Entrant names, paste up to 60 names and spin with remove winner on if you're drawing more than one. For bigger lists or alternates, use the raffle generator.

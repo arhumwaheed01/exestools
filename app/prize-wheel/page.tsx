@@ -58,7 +58,7 @@ const FAQS = [
   },
   {
     q: "Can I spin for prizes or for entrant names?",
-    a: 'Both. Use the Prize rewards or Stream giveaway example to spin for a prize, or Entrant names to draw a winner from a list of people. To draw several winners, turn on "Remove winner after spin" so nobody wins twice. If some entrants have more than one ticket, use the [raffle generator with multiple entries].',
+    a: 'Both. Use the Prize rewards or Stream giveaway example to spin for a prize, or Entrant names to draw a winner from a list of people. To draw several winners, turn on "Remove winner after spin" so each person wins at most once. If some entrants have more than one ticket, use the [raffle generator with multiple entries].',
   },
   {
     q: "Can I use it for an Instagram, TikTok, or Facebook giveaway?",
@@ -100,7 +100,7 @@ export default function PrizeWheelPage() {
         "Sound on/off",
         "No signup",
       ]}
-      pageUpdated="2026-11-17"
+      pageUpdated="2026-11-24"
     >
       <GuideSection title="How to run a giveaway spin">
         <ol className="list-decimal space-y-2 pl-5">
@@ -121,6 +121,20 @@ export default function PrizeWheelPage() {
           </li>
           <li>Press Share so others can open the same wheel.</li>
         </ol>
+      </GuideSection>
+      <GuideSection title="How the prize stock works">
+        <p>
+          Give each prize a Quantity in the prize stock panel under the wheel. Every prize stays one
+          equal slice while it&apos;s in stock, and each win uses up one. At 0, the prize leaves the
+          wheel on its own.
+        </p>
+        <p>
+          Example: 3 tote bags, 10 stickers and 1 grand prize. Add Tote bag, Sticker and Grand
+          prize, then set Quantity to 3, 10 and 1. Each slice has a 1 in 3 chance. The first time
+          Grand prize wins it is gone. Tote bags go after their third win, stickers after their
+          tenth. The winners log records every spin number, prize and time, ready to copy or print.
+          The wheel needs two prizes to spin.
+        </p>
       </GuideSection>
       <GuideSection title="What to put on a prize wheel">
         <p>
@@ -282,7 +296,7 @@ export default function PrizeWheelPage() {
           .
         </p>
       </GuideSection>
-      <GuideSection title="Worked example: two wheels, three prizes, 40 entrants">
+      <GuideSection title="Two wheels, three prizes, 40 entrants">
         <p>
           You have 40 entrants and three prizes: a gift card, a book and a mug. Up to 60 names fit on one
           wheel, so:

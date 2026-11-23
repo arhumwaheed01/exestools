@@ -13,6 +13,7 @@ const META =
 export const metadata: Metadata = {
   title: TITLE,
   description: META,
+  robots: { index: false, follow: true },
   alternates: { canonical: absoluteUrl("/wheel-gallery") },
   openGraph: toolOpenGraph({
     title: TITLE,
@@ -207,7 +208,7 @@ export default function WheelGalleryPage() {
               Team Generator
             </Link>{" "}
             instead of a wheel. Every wheel caps at 60 entries, you can turn on Remove winner after
-            spin so nobody is picked twice, and you can share your wheel with a link.
+            spin so each name is picked once, and you can share your wheel with a link.
           </p>
         </section>
 

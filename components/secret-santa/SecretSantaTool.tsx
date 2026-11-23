@@ -35,7 +35,6 @@ import {
 } from "@/lib/secret-santa/storage";
 import { ToolConfetti } from "@/components/tools/Confetti";
 import { MoreMenu } from "@/components/tools/MoreMenu";
-import { ToolSkeleton } from "@/components/tools/ToolSkeleton";
 import { track } from "@/lib/track";
 import { useSound } from "@/lib/tools/sound";
 import { resolveToolTheme } from "@/lib/tools/theme";
@@ -57,6 +56,7 @@ type ConfirmKind =
   | "replace-setup";
 
 function takeIncoming(): { kind: "reveal" | "setup"; token: string } | null {
+  if (typeof window === "undefined") return null;
   const fromUrl = readHash(window.location.hash);
   if (fromUrl) {
     window.history.replaceState(
@@ -698,10 +698,6 @@ export function SecretSantaTool() {
     setListLocked(false);
     announce("Sample list loaded — add real names before you draw.");
   };
-
-  if (!ready) {
-    return <ToolSkeleton variant="santa" />;
-  }
 
   if (view === "reveal-bad") {
     return (

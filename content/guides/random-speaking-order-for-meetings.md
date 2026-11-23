@@ -1,9 +1,10 @@
 ---
 slug: /guides/random-speaking-order-for-meetings
 meta_title: "Random Speaking Order for Stand-ups and Meetings | ExesTools"
-meta_description: "When a random speaking order helps a meeting and when it doesn't, plus setups for stand-ups, retros and remote calls, with a worked example."
+meta_description: "When a random speaking order helps a meeting and when it doesn't, plus setups for stand-ups, retros and remote calls, with a nine-person example."
 author: Arhum Waheed
 author_url: /about#arhum
+testedNote: "Tried with a nine-person stand-up list on the name picker, remove winner on."
 published: 2026-10-30
 updated: "2026-11-17"
 related_tools: [/random-name-picker, /random-team-generator]
@@ -24,7 +25,7 @@ images:
 
 By Arhum Waheed · Published 2026-10-30 · Updated 2026-10-30
 
-Every team has a default speaking order, and nobody chose it. In a room, it's whoever sits nearest the person running the meeting. On a video call, it's whoever unmutes first, which is usually the same two people. The quiet ones go last, when everyone's half-thinking about their next call.
+Every team has a default speaking order, and it was never chosen on purpose. In a room, it's whoever sits nearest the person running the meeting. On a video call, it's whoever unmutes first, which is usually the same two people. The quiet ones go last, when everyone's half-thinking about their next call.
 
 Randomizing the order is a small fix. It won't make a bad meeting good. But it does stop the same voices setting the tone every day, and it ends the awkward "who wants to go next?" pause that eats a surprising chunk of a 15-minute stand-up.
 
@@ -73,7 +74,7 @@ With remove winner on, the saved list shrinks as names come off. So press **Copy
 
 For a daily stand-up, spinning before every person is slow. Spin the whole order up front instead.
 
-Spin until the wheel is down to its last name, writing names in the meeting chat as they come up: "Order today: Priya, Tom, Kenji, Maria, Sam, Lee." That takes about a minute for eight people. Then the meeting runs on its own, because everyone knows who's after them. The spinning part's quick enough that nobody minds.
+Spin until the wheel is down to its last name, writing names in the meeting chat as they come up: "Order today: Priya, Tom, Kenji, Maria, Sam, Lee." That takes about a minute for eight people. Then the meeting runs on its own, because everyone knows who's after them. The spinning part's quick enough not to drag.
 
 Some teams like to spin live before each update because it keeps people alert. That works for small teams. Past about eight people, the spin time adds up.
 
@@ -100,11 +101,11 @@ If someone else runs the meeting next week, press **Copy share link** and send i
 
 If you need groups rather than a single order, for example four breakout rooms of five people, the [random team generator](/random-team-generator) splits the whole list in one go instead of one name at a time. Use the name picker for "who talks next," and the team generator for "who works with whom."
 
-## A worked example
+## A nine-person stand-up, five mornings
 
 Picture a team of nine with a 15-minute stand-up every morning. Without anyone deciding it, the manager always goes first, the two most senior engineers go next, and the newest hire goes last almost every day.
 
-With a random order, each person has the same chance of any position. Over a working week of five stand-ups, the newest hire's chance of going last every single day is (1/9) to the fifth power, roughly 1 in 59,000. In practice they'll be somewhere in the middle most days, and so will everyone else. Nobody "owns" a slot.
+With a random order, each person has the same chance of any position. Over a working week of five stand-ups, the newest hire's chance of going last every single day is (1/9) to the fifth power, roughly 1 in 59,000. In practice they'll be somewhere in the middle most days, and so will everyone else. No slot belongs to anyone.
 
 What the team will likely notice first isn't the fairness. It's that the stand-up stops having a ten-second silence between each person while everyone waits to see who'll go.
 
@@ -114,25 +115,3 @@ What the team will likely notice first isn't the fairness. It's that the stand-u
 - **Let people pass once.** "Can you come back to me?" is fine. Come back at the end.
 - **Don't use the wheel to pick who gets the bad task.** The moment the picker is attached to chores, people start resenting it. Keep it for turns.
 - **Drop it when it's not helping.** If your team already shares airtime well, you don't need a picker. It's a tool, not a ritual.
-
-## Frequently asked questions
-
-### How do I randomize the speaking order for a stand-up?
-
-Paste your team into the random name picker with remove winner on and keep spinning. Each name that comes up speaks next, and whoever is left at the end closes the stand-up. Post the order in the chat so nobody loses track.
-
-### Does the list save for tomorrow's meeting?
-
-Yes, in the same browser on the same device. Because picked names leave the wheel, the saved list will be short after a meeting; paste the whole team back in before the next one.
-
-### Can a co-facilitator use the same list?
-
-Hit Copy share link and drop it in the meeting chat. The link opens the same wheel with the same names on their device.
-
-### What if someone joins the meeting late?
-
-Type their name in. They're included in the spins that are still to come, and nobody has to start over.
-
-### Should the facilitator be on the wheel?
-
-If they also give an update, yes. If they're only running the meeting, leave them off and let them speak at the end.

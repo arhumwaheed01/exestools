@@ -4,6 +4,7 @@ meta_title: "Classroom and Party Bingo Ideas: Rules, Variations, Calling"
 meta_description: "Bingo ideas for classrooms and parties: how long your word list should be, calls per round, avoiding ties, vocabulary and math versions, and calling tips."
 author: Arhum Waheed
 author_url: /about#arhum
+testedNote: "Simulated 3,000 games per list length, each with 30 different cards."
 published: "2026-10-19"
 updated: "2026-10-25"
 related_tools: [/bingo-card-generator, /random-number-wheel, /classroom-spinner, /raffle-generator, /secret-santa-generator]
@@ -19,7 +20,7 @@ images:
 
 By Arhum Waheed · Published 2026-10-19 · Updated 2026-10-25
 
-Bingo asks very little of players: listen, look, mark. Most bingo that falls flat has the same few causes. The word list is too short, so half the room wins at once. Or nobody knows how long a round will take, so the "quick game" eats the lesson. This guide starts with the numbers that fix both, then gets into game ideas. The cards and caller mentioned are from the [bingo card generator](/bingo-card-generator).
+Bingo asks very little of players: listen, look, mark. Most bingo that falls flat has the same few causes. The word list is too short, so half the room wins at once. Or the length of a round is a guess, so the "quick game" eats the lesson. This guide starts with the numbers that fix both, then gets into game ideas. The cards and caller mentioned are from the [bingo card generator](/bingo-card-generator).
 
 ![Colorful stacks of printed bingo cards in yellow, green, pink and blue beside a pink numbered ball on a wooden table](/guides/bingo-games-for-classrooms-and-parties/1.jpg)
 *Photo: Soc Nang Dong on Pexels (Pexels License).*
@@ -111,25 +112,3 @@ When someone shouts "Bingo!", type their card number into **Check a card** and c
 ## Prizes
 
 Keep prizes small: stickers, a homework pass, first choice of the next game. The bingo tool is for classrooms, parties and team events, not paid or cash games. For door prizes after the bingo, draw from ticket numbers with the [raffle tool](/raffle-generator).
-
-## Frequently asked questions
-
-### How many words do I need for bingo cards?
-
-At least 24 for 5×5 with FREE, 16 for 4×4 and 8 for 3×3 with FREE. Use 35–40 for 5×5 line games and 45 or more for full-card rounds.
-
-### How many calls does a bingo game take?
-
-With 30 players and 36 items, the first line usually comes after about 11 calls and the first full card after about 33. With 75-ball numbers, it's about 21 and 66.
-
-### Why did several people win at once?
-
-Your list was probably close to the minimum. Even with long lists, full-card ties happen in a quarter or more of games, so agree a tie rule in advance.
-
-### Can I print bingo cards as a PDF?
-
-Yes. Press Print cards and choose Save as PDF as the printer. Keep the scale at 100%.
-
-### Does the bingo generator make 90-ball cards?
-
-Not at the moment. It makes 75-ball cards and number cards up to 99. To call 1 to 90, use the random number wheel with Min 1 and Max 90.

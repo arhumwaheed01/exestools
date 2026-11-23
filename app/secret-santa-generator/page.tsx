@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import PageMeta from "@/components/PageMeta";
 import { RelatedLinks } from "@/components/RelatedLinks";
-import { RelatedTools } from "@/components/RelatedTools";
 import { SecretSantaMount } from "@/components/secret-santa/SecretSantaMount";
+import { ToolResultShot } from "@/components/tools/ToolResultShot";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
 
@@ -49,9 +49,9 @@ const FAQ = [
   },
   {
     q: "How do I stop couples from drawing each other?",
-    a: "Add an exclusion: pick both names and choose Neither draws the other. Do the same for each pair of housemates or siblings who live together, so nobody buys for someone in their own household. Use One-way if only one person should be blocked from drawing the other.",
+    a: "Add an exclusion: pick both names and choose Neither draws the other. Do the same for each pair of housemates or siblings who live together, so gifts cross households. Use One-way if only one person should be blocked from drawing the other.",
     aPlain:
-      "Add an exclusion: pick both names and choose Neither draws the other. Do the same for each pair of housemates or siblings who live together, so nobody buys for someone in their own household. Use One-way if only one person should be blocked from drawing the other.",
+      "Add an exclusion: pick both names and choose Neither draws the other. Do the same for each pair of housemates or siblings who live together, so gifts cross households. Use One-way if only one person should be blocked from drawing the other.",
   },
   {
     q: "How many people do I need for Secret Santa?",
@@ -102,9 +102,9 @@ const FAQ = [
   },
   {
     q: "Can I use it for White Elephant?",
-    a: "Not really. In White Elephant (also called a Yankee swap), nobody is assigned a person; players take turns picking or stealing gifts. For steals, freeze limits and turn order, see [white elephant gift exchange rules]. For a random turn order, use the [random name picker] with remove-winner on.",
+    a: "Not really. In White Elephant (also called a Yankee swap), no one is assigned a person to buy for. Players take turns picking or stealing gifts. For steals, freeze limits and turn order, see [white elephant gift exchange rules]. For a random turn order, use the [random name picker] with remove-winner on.",
     aPlain:
-      "Not really. In White Elephant (also called a Yankee swap), nobody is assigned a person; players take turns picking or stealing gifts. For steals, freeze limits and turn order, see white elephant gift exchange rules. For a random turn order, use the random name picker with remove-winner on.",
+      "Not really. In White Elephant (also called a Yankee swap), no one is assigned a person to buy for. Players take turns picking or stealing gifts. For steals, freeze limits and turn order, see white elephant gift exchange rules. For a random turn order, use the random name picker with remove-winner on.",
   },
   {
     q: "Can I stop people drawing the same person as last year?",
@@ -168,7 +168,7 @@ export default function SecretSantaGeneratorPage() {
       "No email needed",
       "Up to 50 names",
     ],
-    dateModified: "2026-11-17",
+    dateModified: "2026-11-24",
   });
 
   const breadcrumbJsonLd = {
@@ -217,12 +217,12 @@ export default function SecretSantaGeneratorPage() {
         <h1 className="mt-4 max-w-3xl text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
           Secret Santa generator with exclusions
         </h1>
-        <PageMeta updated="2026-11-17" />
+        <PageMeta updated="2026-11-24" />
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           Draw names online for Secret Santa—remotely or in the same room. Add everyone&apos;s name,
           mark any couples who shouldn&apos;t draw each other, and press Draw names. Each person gets
-          their own private link that shows only who they&apos;re buying for. It&apos;s free, nobody
-          needs an account or an email address, and the draw happens in your browser. For rules,
+          their own private link that shows only who they&apos;re buying for. It&apos;s free, needs no
+          account or email address, and the draw happens in your browser. For rules,
           budgets and dropouts, see{" "}
           <Link
             href="/guides/secret-santa-rules-and-budget-ideas"
@@ -248,6 +248,7 @@ export default function SecretSantaGeneratorPage() {
         </p>
         <div className="ss-tool-wrap mt-6 min-w-0">
           <SecretSantaMount />
+          <ToolResultShot toolId="secret-santa-generator" />
         </div>
 
         <section className="mt-12 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
@@ -274,7 +275,7 @@ export default function SecretSantaGeneratorPage() {
             </li>
             <li>
               <span className="font-semibold text-foreground">Press Draw names.</span> Everyone gets
-              exactly one person to buy for, nobody draws themselves, and every exclusion is
+              exactly one person to buy for, no one can draw themselves, and every exclusion is
               respected.
             </li>
             <li>
@@ -285,7 +286,7 @@ export default function SecretSantaGeneratorPage() {
             <li>
               <span className="font-semibold text-foreground">Open and reveal.</span> Each person
               opens their link and taps Reveal to see &quot;You&apos;re buying for…&quot;, plus the
-              budget, date and note. Nobody else&apos;s match is shown.
+              budget, date and note. Other matches stay hidden.
             </li>
           </ol>
         </section>
@@ -301,7 +302,7 @@ export default function SecretSantaGeneratorPage() {
           <p className="mt-3">
             Every exclusion removes options, and small groups run out fast. With three people, one
             couple makes the draw impossible: both partners could only draw the third person, and
-            nobody can be drawn twice. The generator checks whether any valid draw exists before it
+            one person can't be drawn by two Santas. The generator checks whether any valid draw exists before it
             starts. If none does, it names the people who are stuck so you can remove an exclusion or
             add someone. Learn more:{" "}
             <Link
@@ -314,7 +315,7 @@ export default function SecretSantaGeneratorPage() {
           </p>
           <p className="mt-3">
             Single loop is off by default. Turn it on to put everyone in one chain: Ava buys for Ben,
-            Ben buys for Cal, and so on until the last person buys for Ava. Nobody ends up in a pair
+            Ben buys for Cal, and so on until the last person buys for Ava. No two people end up
             buying for each other. It&apos;s stricter, so a long list of exclusions can make a single
             loop impossible even when a normal draw works. If that happens, switch it off.
           </p>
@@ -365,7 +366,7 @@ export default function SecretSantaGeneratorPage() {
             <li>
               <span className="font-semibold text-foreground">Office Secret Santa (or Kris Kringle).</span> Paste the
               team from a spreadsheet, set a budget and the party date, then message each colleague
-              their link. Nobody hands over an email address. For opt-ins, remotes and the five weeks
+              their link, with no email addresses collected. For opt-ins, remotes and the five weeks
               around the draw, see the{" "}
               <Link
                 href="/guides/office-secret-santa-planning-timeline"
@@ -384,7 +385,7 @@ export default function SecretSantaGeneratorPage() {
             </li>
             <li>
               <span className="font-semibold text-foreground">Family gift exchange.</span> Add a
-              two-way exclusion for each couple so nobody draws their partner. In bigger families,
+              two-way exclusion for each couple so partners can&apos;t draw each other. In bigger families,
               exclude people who live in the same house too, so gifts cross households.
             </li>
             <li>
@@ -472,7 +473,7 @@ export default function SecretSantaGeneratorPage() {
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Worked example: a family of nine
+            Nine relatives and four exclusions
           </h2>
           <p className="mt-3">
             Nine people: two couples, a parent, and four adult cousins, two of whom share an apartment.
@@ -535,10 +536,6 @@ export default function SecretSantaGeneratorPage() {
             ))}
           </div>
         </section>
-
-        <div className="mt-10">
-          <RelatedTools toolId="secret-santa-generator" />
-        </div>
       </div>
 
       <script

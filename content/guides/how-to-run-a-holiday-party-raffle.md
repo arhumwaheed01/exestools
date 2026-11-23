@@ -4,6 +4,7 @@ meta_title: "How to Run a Holiday Party Raffle at Work | ExesTools"
 meta_description: "How to run an office or holiday party raffle: prize budgets, fair ticket rules, remote staff, and how to draw winners and alternates in front of the room."
 author: Arhum Waheed
 author_url: /about#arhum
+testedNote: "Sketched around a 60-person staff list, 15 winners and a 1000-dollar budget."
 published: "2026-11-07"
 updated: "2026-11-07"
 related_tools: [/raffle-generator, /prize-wheel, /random-name-picker, /bingo-card-generator, /secret-santa-generator]
@@ -13,7 +14,7 @@ related_tools: [/raffle-generator, /prize-wheel, /random-name-picker, /bingo-car
 
 By Arhum Waheed · Published 2026-11-07 · Updated 2026-11-07
 
-Someone always gets handed the raffle. Usually it's a week before the party, with a budget, a list of names and no instructions. This guide is for that person. It covers how to pick prizes people actually want, how to decide who gets how many tickets, how to include remote staff, and how to run a draw that is quick, visible and impossible to argue with.
+Someone always gets handed the raffle. Usually it's a week before the party, with a budget, a list of names and no instructions. This guide is for that person. It covers how to pick prizes people want, how to decide who gets how many tickets, how to include remote staff, and how to run a draw that is quick, visible and impossible to argue with.
 
 It's written with free raffles in mind: the company or club buys the prizes, and everyone gets entered. If you plan to *sell* tickets, read the section on paid raffles first, because the rules change.
 
@@ -34,7 +35,7 @@ When office raffle organizers ask on Reddit what worked, the same answers keep c
 Two tips:
 
 - **A paid day off costs the budget nothing and often beats the headline prize.** Ask early, because someone has to approve it.
-- **Gift cards are boring, but nobody is disappointed by one.** Use them as the small prizes, and spend the imagination on the mid-level ones.
+- **Gift cards are boring, but few people are disappointed by one.** Use them as the small prizes, and spend the imagination on the mid-level ones.
 
 [SCREENSHOT: A prize table at an office party with numbered tags matching the draw order.]
 
@@ -44,7 +45,7 @@ This is the part people argue about later, so write it down and send it with the
 
 ### One ticket each (simplest)
 
-Everyone on the list gets one entry. Easy to explain, and nobody feels the game was tilted.
+Everyone on the list gets one entry. Easy to explain, and the game doesn't feel tilted.
 
 ### Extra tickets for something
 
@@ -52,7 +53,7 @@ Some offices give extra tickets for wearing a holiday sweater, turning up on tim
 
 ### Can one person win twice?
 
-Decide now. Most office raffles say **one prize per person**, so prizes spread around. If you draw names with the winner removed after each pick, nobody can win twice. If tickets are bought or earned and someone has ten of them, some groups let them win more than once. Either works if you announce it before the draw.
+Decide now. Most office raffles say **one prize per person**, so prizes spread around. If you draw names with the winner removed after each pick, a name can only win once. If tickets are bought or earned and someone has ten of them, some groups let them win more than once. Either works if you announce it before the draw.
 
 ### Who's eligible?
 
@@ -101,7 +102,7 @@ Read the name, say the prize, and wait for the person to wave before you move on
 
 Once people **pay** for a ticket and there's a prize, many US states treat it as gambling. Raffles are usually only allowed for qualifying nonprofits, often with a permit, and rules differ a lot from state to state. Before selling tickets for a school, PTA or charity raffle, check your state's charitable gaming rules or ask your organization's finance or legal contact.
 
-A free company raffle, where everyone is entered and nobody pays, is generally treated differently. But if your company has an HR policy on prizes or gift values (some count prizes as taxable income above a certain amount), follow it. This guide isn't legal advice.
+A free company raffle, where everyone is entered for free, is generally treated differently. But if your company has an HR policy on prizes or gift values (some count prizes as taxable income above a certain amount), follow it. This guide isn't legal advice.
 
 ## A simple timeline
 
@@ -117,25 +118,3 @@ A free company raffle, where everyone is entered and nobody pays, is generally t
 ## Other games for the same party
 
 A raffle takes 15 minutes. If you want something to fill the time before it, holiday bingo works for groups of any size: print cards from the [bingo card generator](/bingo-card-generator) with its Christmas list, or make office bingo squares ("someone says 'circle back'," "the projector fails"). If you're also running a gift exchange, draw names on the [Secret Santa generator](/secret-santa-generator); our [White Elephant rules](/guides/white-elephant-rules-and-variations) and [Secret Santa guide](/guides/secret-santa-rules-and-budget-ideas) cover both formats. For more on running a draw people trust, see [how to run a fair online giveaway](/guides/how-to-run-a-fair-online-giveaway).
-
-## Frequently asked questions
-
-### How many raffle prizes should a work party have?
-
-Aim for roughly one winner for every five or six attendees. With 60 people, 10 to 15 prizes, with one headline prize and the rest smaller, feels generous without stretching the budget.
-
-### What are good holiday party raffle prizes?
-
-Gift cards for local restaurants, groceries or gas, a paid day off, themed baskets, a good cooler or blanket, a speaker, or a cordless vacuum. Branded merch and gag gifts are usually the least popular.
-
-### Should winners have to be present?
-
-It raises tension in the room but shuts out remote and on-shift staff. "Present or on the call" is a fair middle ground. Whatever you choose, announce it before the draw.
-
-### How do I stop the same person winning twice?
-
-Remove each winner from the draw once they've been picked. With a name list and remove-winner on, nobody can be drawn twice.
-
-### Is it legal to sell raffle tickets at work?
-
-It depends on your state. Paid raffles are often limited to qualifying nonprofits and may need a permit. A free raffle where everyone is entered is usually treated differently. Check your state's rules and company policy first.

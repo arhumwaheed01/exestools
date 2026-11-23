@@ -30,7 +30,13 @@ import {
   PrizeOddsPanel,
   YesNoModeBar,
 } from "@/components/tools/ToolPurposePanels";
+import { PrizeStockPanel } from "@/components/tools/PrizeStockPanel";
 import { WheelOverflowMenu } from "@/components/tools/WheelOverflowMenu";
+import {
+  loadPrizeState,
+  savePrizeState,
+  type PrizeLogEntry,
+} from "@/lib/wheel-v2/prize-stock";
 import { AdvancedEntriesDialog } from "@/components/wheel-v2/AdvancedEntriesDialog";
 import { CustomizeDialog } from "@/components/wheel-v2/CustomizeDialog";
 import { WheelTopBar } from "@/components/wheel-v2/WheelTopBar";
@@ -77,6 +83,12 @@ import {
   saveSession,
 } from "@/lib/spinner-storage";
 import { randomInt, shuffle } from "@/lib/random";
+import {
+  NP_MODE_EVENT,
+  NP_NAMES_EVENT,
+  NP_SET_TEXT_EVENT,
+  emitNamePickerEvent,
+} from "@/lib/name-picker-bridge";
 import { track } from "@/lib/track";
 import { cleanPathFor, defaultAutoRemoveWinner, type ToolId } from "@/lib/tools";
 import { spinDurationMs, useSound, type SpinLength } from "@/lib/tools/sound";
@@ -221,6 +233,10 @@ export function SpinnerWheel({
   /** Per-entry weights keyed by lowercased name — never rewrite the text list. */
   const [entryWeights, setEntryWeights] = useState<Record<string, number>>({});
   const [hasSpunOnce, setHasSpunOnce] = useState(false);
+  /** Prize wheel only: remaining quantity per prize (lowercased key, default 1) + winners log (newest first). */
+  const [prizeStock, setPrizeStock] = useState<Record<string, number>>({});
+  const [prizeLog, setPrizeLog] = useState<PrizeLogEntry[]>([]);
+  const [prizeLoaded, setPrizeLoaded] = useState(false);
   /** Yes/No page only: spin result tallies (session state, not persisted). */
   const [tally, setTally] = useState<Record<string, { label: string; count: number }>>({});
   /** Classroom: names temporarily held off the wheel (absent). */
@@ -350,12 +366,14 @@ export function SpinnerWheel({
   const choicesRef = useRef(choices);
   const v2SettingsRef = useRef(v2Settings);
   const entryWeightsRef = useRef(entryWeights);
+  const prizeStockRef = useRef(prizeStock);
   const wheelTitleRef = useRef(wheelTitle);
   const autoRemoveRef = useRef(autoRemove);
   const autoRemoveTouchedRef = useRef(false);
   choicesRef.current = choices;
   v2SettingsRef.current = v2Settings;
   entryWeightsRef.current = entryWeights;
+  prizeStockRef.current = prizeStock;
   wheelTitleRef.current = wheelTitle;
   autoRemoveRef.current = autoRemove;
 
@@ -385,9 +403,13 @@ export function SpinnerWheel({
     });
   };
 
+  // Prize wheel: every in-stock prize is one equal slice (quantity is inventory, not odds).
   const choiceWeights = useMemo(
-    () => choices.map((c) => entryWeights[c.toLocaleLowerCase()] ?? 1),
-    [choices, entryWeights],
+    () =>
+      choices.map((c) =>
+        toolId === "prize-wheel" ? 1 : (entryWeights[c.toLocaleLowerCase()] ?? 1),
+      ),
+    [choices, entryWeights, toolId],
   );
 
   const weightsActive = useMemo(
@@ -572,6 +594,19 @@ export function SpinnerWheel({
   }, [entryWeights, toolId, hydrated]);
 
   useEffect(() => {
+    if (!hydrated || toolId !== "prize-wheel") return;
+    const saved = loadPrizeState();
+    setPrizeStock(saved.stock);
+    setPrizeLog(saved.log);
+    setPrizeLoaded(true);
+  }, [hydrated, toolId]);
+
+  useEffect(() => {
+    if (!prizeLoaded || toolId !== "prize-wheel") return;
+    savePrizeState(prizeStock, prizeLog);
+  }, [prizeStock, prizeLog, prizeLoaded, toolId]);
+
+  useEffect(() => {
     const onFs = () => setIsFullscreen(Boolean(document.fullscreenElement));
     document.addEventListener("fullscreenchange", onFs);
     return () => document.removeEventListener("fullscreenchange", onFs);
@@ -596,7 +631,9 @@ export function SpinnerWheel({
   const finishSpin = useCallback(
     (finalRotation: number) => {
       setRotation(finalRotation);
-      const weights = choices.map((c) => entryWeights[c.toLocaleLowerCase()] ?? 1);
+      const weights = choices.map((c) =>
+        toolId === "prize-wheel" ? 1 : (entryWeights[c.toLocaleLowerCase()] ?? 1),
+      );
       const idx = winnerIndexAt(finalRotation, choices.length, weights);
       const name = choices[idx] ?? null;
       setWinner(name);
@@ -630,7 +667,23 @@ export function SpinnerWheel({
         });
       }
 
-      if (autoRemove && name) {
+      let soldOut = false;
+      if (toolId === "prize-wheel" && name) {
+        const key = name.toLocaleLowerCase();
+        const remaining = (prizeStockRef.current[key] ?? 1) - 1;
+        soldOut = remaining <= 0;
+        const at = Date.now();
+        setPrizeStock((prev) => {
+          const next = { ...prev };
+          if (remaining <= 0) delete next[key];
+          else next[key] = remaining;
+          return next;
+        });
+        setPrizeLog((log) => [{ spin: (log[0]?.spin ?? 0) + 1, prize: name, at }, ...log].slice(0, 500));
+        if (soldOut) showToast(`${name} is out of stock and left the wheel.`);
+      }
+
+      if ((autoRemove || soldOut) && name) {
         const next = choices.filter((c) => c !== name);
         setText(choicesToText(next));
       } else if (v2Settings.autoRemoveAfterSec > 0 && name) {
@@ -648,11 +701,13 @@ export function SpinnerWheel({
         }, v2Settings.autoRemoveAfterSec * 1000);
       }
     },
-    [choices, entryWeights, autoRemove, toolId, showTally, sound, v2Settings],
+    [choices, entryWeights, autoRemove, toolId, showTally, sound, v2Settings, showToast],
   );
 
   const spin = useCallback(() => {
     if (spinningRef.current || choices.length < 2) return;
+    // Name picker "Draw a list" mode hides the wheel; Space / Ctrl+Enter must not spin it.
+    if (stageRef.current && stageRef.current.getClientRects().length === 0) return;
     sound.unlock();
     if (toolId === "prize-wheel" && !reduceMotion) sound.drumroll(1200);
     spinPoolCountRef.current = choices.length;
@@ -750,6 +805,23 @@ export function SpinnerWheel({
     setText(raw);
     track("entries_edited", { toolId });
   };
+
+  // Name picker: keep the server-rendered "Draw a list" panel and this wheel on one list.
+  useEffect(() => {
+    if (toolId !== "random-name-picker" || !hydrated) return;
+    emitNamePickerEvent(NP_NAMES_EVENT, choices);
+  }, [toolId, hydrated, choices]);
+
+  useEffect(() => {
+    if (toolId !== "random-name-picker") return;
+    const onSet = (e: Event) => {
+      const raw = (e as CustomEvent<string>).detail;
+      if (typeof raw !== "string" || spinningRef.current) return;
+      setText(raw);
+    };
+    window.addEventListener(NP_SET_TEXT_EVENT, onSet);
+    return () => window.removeEventListener(NP_SET_TEXT_EVENT, onSet);
+  }, [toolId]);
 
   const onShuffle = () => {
     if (spinningRef.current) return;
@@ -1245,11 +1317,18 @@ export function SpinnerWheel({
         {toolId === "random-name-picker" ? (
           <div className="w-full rounded-2xl border border-border bg-surface p-3 sm:p-4">
             <h2 className="text-sm font-extrabold tracking-tight text-foreground">
-              Meeting / stand-up order
+              Spinning one name at a time
             </h2>
             <p className="mt-1 text-xs text-muted">
-              Loaded with a stand-up roster and remove-winner on, so each person speaks once. Swap
-              the list for your team, then spin for who goes next.
+              Need several names, or everyone in a random order, in one click?{" "}
+              <button
+                type="button"
+                onClick={() => emitNamePickerEvent(NP_MODE_EVENT, "list")}
+                className="font-bold text-accent underline-offset-2 hover:underline outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
+              >
+                Switch to Draw a list
+              </button>
+              .
             </p>
           </div>
         ) : null}
@@ -1588,7 +1667,20 @@ export function SpinnerWheel({
         {/* Tall purpose panels below wheel + SPIN on every breakpoint (laptop + phone). */}
         {toolId === "home" ? <HomeGalleryStrip /> : null}
         {toolId === "prize-wheel" ? (
-          <PrizeOddsPanel prizes={choices} weights={entryWeights} />
+          <>
+            <PrizeStockPanel
+              prizes={choices}
+              stock={prizeStock}
+              log={prizeLog}
+              disabled={spinning}
+              onQty={(prize, qty) => {
+                const key = prize.toLocaleLowerCase();
+                setPrizeStock((prev) => ({ ...prev, [key]: qty }));
+              }}
+              onClearLog={() => setPrizeLog([])}
+            />
+            <PrizeOddsPanel prizes={choices} weights={{}} />
+          </>
         ) : null}
         {toolId === "classroom-spinner" ? (
           <ClassroomRosterPanel

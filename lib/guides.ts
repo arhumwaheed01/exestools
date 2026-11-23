@@ -18,6 +18,8 @@ export type GuideFrontmatter = {
   published: string;
   updated: string;
   related_tools?: string[];
+  /** One-line, guide-specific "how I tested this" note shown under the byline. */
+  testedNote?: string;
   author?: string;
   author_url?: string;
   /** When true, the guide stays unpublished even if published <= today. */

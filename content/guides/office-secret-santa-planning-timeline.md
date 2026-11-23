@@ -4,6 +4,7 @@ meta_title: "Office Secret Santa: A Week-by-Week Plan for the Organizer"
 meta_description: "A five-week plan for an office Secret Santa: the opt-in message, budget, exclusions, private links, remote shipping and the party itself."
 author: Arhum Waheed
 author_url: /about#arhum
+testedNote: "Followed start to finish for a twelve-name office list, links sent by DM."
 published: 2026-10-21
 updated: 2026-10-21
 related_tools: [/secret-santa-generator, /random-name-picker]
@@ -40,7 +41,7 @@ Here's a message you can copy:
 > **Secret Santa 2026, are you in?**
 > We're doing a gift exchange this year. Everyone who joins buys one gift for one coworker, up to $25. Gifts get swapped at the team lunch on Thursday, December 17. Reply to me directly (not in this thread) by Friday, November 20 if you want in. No reply means you're out, and that's completely fine.
 
-The budget is up front, so nobody joins and then finds out it's $50. Replies come to you privately, so opting out is invisible. And the deadline has a weekday attached, which people remember better than a bare date.
+The budget is up front, so people don't join and then find out it's $50. Replies come to you privately, so opting out is invisible. And the deadline has a weekday attached, which people remember better than a bare date.
 
 Should managers join? I think yes, with the same budget as everyone else. A manager who spends three times the limit makes everyone else's $25 gift look cheap. If your manager wants to be generous, suggest they pay for the lunch instead.
 
@@ -77,7 +78,7 @@ This is the step where offices spoil the surprise. Never paste the full set of l
 
 Send each link as a direct message. In Slack or Teams, that's a DM per person. For 12 people it takes about ten minutes. Put a short line with it:
 
-> Your Secret Santa link is below. Open it when nobody's looking over your shoulder. Budget $25, gifts at the lunch on the 17th. Questions? Ask me, not the group.
+> Your Secret Santa link is below. Open it somewhere private. Budget $25, gifts at the lunch on the 17th. Questions? Ask me, not the group.
 
 Keep the full list of links somewhere only you can see, in case someone loses theirs. "I deleted the message" will happen at least once.
 
@@ -92,7 +93,7 @@ Post one reminder in the team channel. Keep it general so it doesn't point at an
 
 Then check in privately with anyone who seems lost. New hires often don't know their Secret Santa person well. You can help without giving anything away: "She talks about her dog a lot" is a useful hint. Their name is not.
 
-A short wish-list round can help here. The generator doesn't collect wish lists, so if your team wants them, ask everyone to post one line in a shared doc: "Things I like: hot sauce, crime novels, anything for my desk plants." People shop for a name on the list, and nobody learns who drew them.
+A short wish-list round can help here. The generator doesn't collect wish lists, so if your team wants them, ask everyone to post one line in a shared doc: "Things I like: hot sauce, crime novels, anything for my desk plants." People shop for a name on the list, and the draw stays secret.
 
 ## The week of: dropouts and surprises
 
@@ -115,28 +116,6 @@ And when someone asks "who had me?", let the giver decide whether to say. Some p
 
 ## After: write three lines down
 
-Before you forget, jot down how many people joined, the budget, and what went wrong. "Shipping to the remote team took nine days" is the kind of thing nobody remembers in November.
+Before you forget, jot down how many people joined, the budget, and what went wrong. "Shipping to the remote team took nine days" is the kind of detail that's gone from memory by November.
 
 If people want to avoid drawing the same person again next year, keep this year's pairs somewhere private. The generator doesn't remember past years, but you can add a one-way exclusion per pair when you run the next draw.
-
-## Frequently asked questions
-
-### Can I take part in the Secret Santa I'm organizing?
-
-Yes. Leave "Show all matches" off when you draw, then open only your own link. You'll still be holding everyone's links, so the honor system matters: don't open any that aren't yours.
-
-### How do I run an office Secret Santa with remote employees?
-
-Draw names on the Secret Santa generator and send each private link by direct message. Put a shipping deadline in the event note, and tell people to ask their person for a delivery address or send a digital gift.
-
-### What if someone joins after the draw?
-
-Redrawing means new matches and new links for everyone, and links you already sent keep showing the old match. If it's only been a few hours and nobody has shopped, a redraw is fine. Send every new link and tell people to ignore the old one.
-
-### Should Secret Santa at work be optional?
-
-I'd always make it opt-in, with replies sent privately so nobody has to explain why they're sitting it out.
-
-### What's a sensible office Secret Santa budget?
-
-Pick a range most of the team can afford without thinking about it, and state it in the opt-in message. The [rules and budget guide](/guides/secret-santa-rules-and-budget-ideas) has starting points and theme ideas for small budgets.

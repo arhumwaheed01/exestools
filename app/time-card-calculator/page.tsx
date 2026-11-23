@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import PageMeta from "@/components/PageMeta";
 import { TimeCardMount } from "@/components/timecard/TimeCardMount";
+import { ToolResultShot } from "@/components/tools/ToolResultShot";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { toolOpenGraph, webAppLd } from "@/lib/seo/jsonld";
 
@@ -94,7 +95,7 @@ export default function TimeCardCalculatorPage() {
     path: "/time-card-calculator",
     name: "Time Card Calculator",
     description: DESCRIPTION,
-    dateModified: "2026-11-17",
+    dateModified: "2026-11-24",
   });
 
   const breadcrumbJsonLd = {
@@ -154,7 +155,7 @@ export default function TimeCardCalculatorPage() {
         <h1 className="mt-4 max-w-3xl text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
           Time card calculator
         </h1>
-        <PageMeta updated="2026-11-17" />
+        <PageMeta updated="2026-11-24" />
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           Time card calculator for a full work week: type each day’s start and end, take out unpaid
           lunch or other breaks, and read the total as hours and minutes or as decimal hours. You
@@ -165,6 +166,7 @@ export default function TimeCardCalculatorPage() {
 
         <div className="timecard-tool-wrap mt-6 min-w-0">
           <TimeCardMount />
+          <ToolResultShot toolId="time-card-calculator" />
         </div>
 
         <section className="mt-12 max-w-3xl text-sm leading-relaxed text-muted sm:text-base print:hidden">
@@ -264,7 +266,7 @@ export default function TimeCardCalculatorPage() {
         </section>
 
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base print:hidden">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">A worked example</h2>
+          <h2 className="text-xl font-bold tracking-tight text-foreground">A 40.25-hour week with a Saturday night shift</h2>
           <p className="mt-3">
             Say you worked Monday through Friday, 7:03 AM to 3:36 PM, with a 30-minute unpaid lunch,
             and the card is set to a Monday workweek with weekly overtime only and no rounding.

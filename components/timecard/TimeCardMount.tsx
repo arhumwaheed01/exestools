@@ -1,16 +1,8 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { ToolSkeleton } from "@/components/tools/ToolSkeleton";
+import { TimeCardTool } from "@/components/timecard/TimeCardTool";
 
-const TimeCardTool = dynamic(
-  () => import("@/components/timecard/TimeCardTool").then((m) => m.TimeCardTool),
-  {
-    ssr: false,
-    loading: () => <ToolSkeleton variant="raffle" />,
-  },
-);
-
+/** Client tool with fixed min-height to avoid CLS. SSR-renders the real form. */
 export function TimeCardMount() {
   return (
     <div className="min-h-[640px] min-w-0">

@@ -4,6 +4,7 @@ meta_title: "Cold Calling in the Classroom: Fair Ways to Call on Students"
 meta_description: "How to cold call students fairly: what wait-time research found, repeats vs no repeats, question scripts, and ways to support anxious students."
 author: Arhum Waheed
 author_url: /about#arhum
+testedNote: "Tested with a 28-name class list."
 published: "2026-10-19"
 updated: "2026-10-21"
 related_tools: [/classroom-spinner, /random-name-picker, /random-team-generator]
@@ -45,9 +46,9 @@ Both approaches have a cost:
 - **With repeats** (remove-winner off), nobody is ever safe, but coverage is patchy. Our guide on [how random a spinner wheel is](/guides/how-random-is-a-spinner-wheel) works through the odds: on a 30-name wheel spun 30 times, about a third of the class never comes up.
 - **Without repeats**, everyone gets a turn, but a student picked in the first minute knows they're off the hook.
 
-The fix I'd use is to keep remove-winner on and close the loophole with follow-up questions. After the spin, direct the next question to someone who has already answered: "Ava, do you agree with Noah? Why?" Wiliam calls this "basketball, not ping-pong." The ball moves between students instead of bouncing back to the teacher every time. Picked students stay involved, and the wheel still guarantees nobody is skipped.
+The fix I'd use is to keep remove-winner on and close the loophole with follow-up questions. After the spin, direct the next question to someone who has already answered: "Ava, do you agree with Noah? Why?" Wiliam calls this "basketball, not ping-pong." The ball moves between students instead of bouncing back to the teacher every time. Picked students stay involved, and the wheel still guarantees every name gets a turn.
 
-## A worked example: 28 students, two lessons
+## 28 students across two lessons
 
 Say a Year 8 class of 28 starts each lesson with a 15-minute review of 8 questions, with two spins per question.
 
@@ -88,25 +89,3 @@ The routine stays the same: **ask, wait, then spin.** If you spin first, 27 stud
 [SCREENSHOT: The roster box with one name being deleted for an absent student, with the wheel slices updating to match.]
 
 With **Remove winner** on, only the names still on the wheel are saved in this browser on this device — there is no full-roster backup — and names aren't sent anywhere when you spin. Keep a separate copy of the full class list so you can paste it back when a round ends. **Copy share link** puts the names inside the link, so follow your school's policy before sending it to a co-teacher. On a shared computer, press **Clear all** at the end of the day.
-
-## Frequently asked questions
-
-### Doesn't cold calling make anxious students more anxious?
-
-It can, if it's rare and comes without warning. In Dallimore and colleagues' study, comfort with taking part rose when cold calling was frequent and routine. Give think time, use pair talk first, allow "come back to me," and follow individual plans.
-
-### How long should I wait after asking a question?
-
-At least three seconds, which was the threshold in Mary Budd Rowe's research. Allow 5–10 seconds for recall questions and 20–30 seconds for questions that ask students to explain.
-
-### Should picked students be able to switch off?
-
-No. Keep remove-winner on so everyone gets a turn, and send follow-up questions to students who have already answered ("Do you agree with Noah?").
-
-### Should I spin before or after asking the question?
-
-After. If students know who is answering before they hear the question, everyone else stops thinking.
-
-### What happens when only one name is left?
-
-The wheel needs at least two slices to spin, so that student goes last. Paste your full roster back in to start a new round. Because only remaining names are saved with Remove winner on, you'll need the copy you kept (or **Copy** before the first spin of the round).

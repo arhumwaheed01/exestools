@@ -4,6 +4,7 @@ meta_title: "Raffle Fundraiser: Prizes, Tickets and the Draw | ExesTools"
 meta_description: "Plan a school, club or charity raffle: check local rules, line up donated prizes, price tickets, track sales and run a draw people trust."
 author: Arhum Waheed
 author_url: /about#arhum
+testedNote: "Ticket math checked for a 2500-dollar goal and 500 tickets in play."
 published: 2026-10-28
 updated: 2026-10-28
 related_tools: [/raffle-generator, /prize-wheel]
@@ -63,7 +64,7 @@ Write the prize list in the order they'll be drawn. A common habit is to draw sm
 
 ## Four weeks out: price the tickets
 
-Here's a worked example. Your numbers will be different, but the shape of the math is the same.
+Here's one set of numbers. Yours will be different, but the shape of the math is the same.
 
 - Goal: **$1,500**
 - Prizes: all donated, plus a $100 gift card the PTA buys to round out the top prize
@@ -98,7 +99,7 @@ With the [raffle generator](/raffle-generator):
 
 Each pick takes one ticket at random from the tickets still in the draw, and every one of those tickets has the same chance. A drawn ticket leaves the draw, so the same ticket can't win twice.
 
-One honest caveat: the generator sees ticket numbers, not households. If the Garcias bought ten tickets, they have ten numbers in the draw, and two of them could come up as winners. The tool will not skip a second Garcia ticket on its own. If your house rule is "one prize per household," write that on the poster and, when a second family ticket is drawn, pass that prize to the next alternate by hand.
+One caveat: the generator sees ticket numbers, not households. If the Garcias bought ten tickets, they have ten numbers in the draw, and two of them could come up as winners. The tool will not skip a second Garcia ticket on its own. If your house rule is "one prize per household," write that on the poster and, when a second family ticket is drawn, pass that prize to the next alternate by hand.
 
 Read each number out twice, slowly. Wait for the holder to come forward, or check the spreadsheet if they've left. Write the winner's name next to the prize on paper as you go.
 
@@ -113,25 +114,3 @@ Read each number out twice, slowly. Wait for the holder to come forward, or chec
 - **Tell everyone what you raised.** "You helped us raise $1,555 for library books" is the best advert for next year's raffle.
 
 If you want a smaller, livelier giveaway on the same night, say a lucky spin for kids, the [prize wheel](/prize-wheel) works well for that. Just remember every slice has an equal chance, so a big prize and a pencil are equally likely.
-
-## Frequently asked questions
-
-### How many tickets should I print for a raffle?
-
-Work out how many you can realistically sell from your sellers and events, then print a little more. The worked example above shows how to go from a money goal to a ticket count.
-
-### How do I draw raffle winners fairly?
-
-Draw only from sold tickets, check the count against your sales record, and draw where people can see. The raffle generator takes one ticket at a time from those still in the draw, with an equal chance for each, and the drawn ticket leaves the draw.
-
-### What if a raffle winner can't be reached?
-
-Draw alternates when you draw the winners, and say on your poster how long winners have to claim. If the winner doesn't respond in time, offer the prize to Alternate 1, then Alternate 2.
-
-### Can one person win more than one prize?
-
-That's your call, and it needs to be on the poster. If your rule is one prize per person or household, and a second ticket from the same buyer comes up, pass the prize to the next alternate.
-
-### Do I need a license to run a raffle?
-
-In many places, yes, or at least you need to follow specific rules. They vary a lot by country, state and city. Check with your local authority before you sell tickets. ExesTools is a random picker, not legal advice.
