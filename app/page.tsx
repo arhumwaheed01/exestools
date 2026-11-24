@@ -167,7 +167,7 @@ export default function HomePage() {
 
       <div className="mt-12 space-y-10 border-t border-border pt-10">
         <section id="how-to" className="max-w-3xl">
-          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             How to use the spinner wheel
           </h2>
           <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm leading-relaxed text-muted sm:text-base">
@@ -192,7 +192,7 @@ export default function HomePage() {
         </section>
 
         <section id="what-is" className="max-w-3xl">
-          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             What is a spinner wheel?
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
@@ -224,7 +224,7 @@ export default function HomePage() {
         </section>
 
         <section id="ways-to-use" className="max-w-3xl">
-          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Ways to use the spinner wheel
           </h2>
           <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted sm:text-base">
@@ -255,7 +255,7 @@ export default function HomePage() {
         </section>
 
         <section className="max-w-3xl">
-          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             What happens when you press SPIN
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
@@ -286,7 +286,7 @@ export default function HomePage() {
           </p>
         </section>
         <section className="max-w-3xl">
-          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Small jobs this wheel is good at
           </h2>
           <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted sm:text-base">
@@ -315,7 +315,7 @@ export default function HomePage() {
           </ul>
         </section>
         <section className="max-w-3xl">
-          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Seven ideas for one weekend
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
@@ -337,7 +337,7 @@ export default function HomePage() {
           </p>
         </section>
         <section className="max-w-3xl">
-          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Tips for a better wheel
           </h2>
           <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted sm:text-base">
@@ -383,7 +383,7 @@ export default function HomePage() {
         </section>
 
         <section id="which-tool" className="max-w-3xl scroll-mt-24">
-          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Which ExesTools tool should I use?
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
@@ -544,7 +544,7 @@ export default function HomePage() {
         <RelatedTools toolId="home" />
 
         <section id="faq" className="max-w-3xl scroll-mt-24" aria-labelledby="faq-heading">
-          <h2 id="faq-heading" className="text-2xl font-bold tracking-tight text-foreground">
+          <h2 id="faq-heading" className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Frequently asked questions
           </h2>
           <div className="mt-6 space-y-3">

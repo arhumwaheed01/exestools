@@ -515,7 +515,7 @@ export default function SecretSantaGeneratorPage() {
         </div>
 
         <section className="mt-10 max-w-3xl" aria-labelledby="ss-faq">
-          <h2 id="ss-faq" className="text-2xl font-bold tracking-tight text-foreground">
+          <h2 id="ss-faq" className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Frequently asked questions
           </h2>
           <div className="mt-6 space-y-3">

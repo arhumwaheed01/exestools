@@ -362,7 +362,7 @@ export default function RaffleGeneratorPage() {
         </div>
 
         <section className="mt-10 max-w-3xl" aria-labelledby="raffle-faq">
-          <h2 id="raffle-faq" className="text-2xl font-bold tracking-tight text-foreground">
+          <h2 id="raffle-faq" className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Frequently asked questions
           </h2>
           <div className="mt-6 space-y-3">

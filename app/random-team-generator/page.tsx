@@ -351,7 +351,7 @@ export default async function RandomTeamGeneratorPage({
         <RelatedLinks toolId="random-team-generator" />
 
         <section className="max-w-3xl" aria-labelledby="team-faq">
-          <h2 id="team-faq" className="text-2xl font-bold tracking-tight text-foreground">
+          <h2 id="team-faq" className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Frequently asked questions
           </h2>
           <div className="mt-6 space-y-3">
