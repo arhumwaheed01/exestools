@@ -428,7 +428,7 @@ export default function BingoCardGeneratorPage() {
           </p>
           <ToolPageShot
             src="/tools/bingo-card-generator/1.webp"
-            alt="Bingo card generator preview of a 5 by 5 space vocabulary card with a free centre square, from a set of 28 cards."
+            alt="Bingo card generator preview of a 5 by 5 space vocabulary card with a free centre square, from a set of 30 cards."
           />
           <ol className="mt-3 list-decimal space-y-3 pl-5">
             <li>
@@ -491,7 +491,7 @@ export default function BingoCardGeneratorPage() {
         </div>
 
         <section className="mt-10 max-w-3xl" aria-labelledby="bingo-faq">
-          <h2 id="bingo-faq" className="text-2xl font-bold tracking-tight text-foreground">
+          <h2 id="bingo-faq" className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Frequently asked questions
           </h2>
           <div className="mt-6 space-y-3">

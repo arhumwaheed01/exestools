@@ -110,7 +110,7 @@ export default function WheelGalleryPage() {
           </p>
 
           <div>
-            <h2 className="text-2xl font-bold tracking-tight text-foreground">
+            <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
               Everyday decisions
             </h2>
             <p className="mt-3">
@@ -121,7 +121,7 @@ export default function WheelGalleryPage() {
           </div>
 
           <div>
-            <h2 className="text-2xl font-bold tracking-tight text-foreground">
+            <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
               Classroom and meetings
             </h2>
             <p className="mt-3">
@@ -146,7 +146,7 @@ export default function WheelGalleryPage() {
           </div>
 
           <div>
-            <h2 className="text-2xl font-bold tracking-tight text-foreground">
+            <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
               Parties and giveaways
             </h2>
             <p className="mt-3">
@@ -180,7 +180,7 @@ export default function WheelGalleryPage() {
           </div>
 
           <div>
-            <h2 className="text-2xl font-bold tracking-tight text-foreground">Quick pickers</h2>
+            <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">Quick pickers</h2>
             <p className="mt-3">
               Yes or no, Yes, no, or maybe, Numbers 1–10 and Letters A–Z are the fast ones, great for
               word games, quick votes and tie-breakers. The{" "}
@@ -195,7 +195,7 @@ export default function WheelGalleryPage() {
         <section aria-labelledby="gallery-choose">
           <h2
             id="gallery-choose"
-            className="text-2xl font-bold tracking-tight text-foreground"
+            className="text-xl font-bold tracking-tight text-foreground sm:text-2xl"
           >
             How to choose a wheel
           </h2>
@@ -213,7 +213,7 @@ export default function WheelGalleryPage() {
         </section>
 
         <section id="faq" className="scroll-mt-24" aria-labelledby="gallery-faq">
-          <h2 id="gallery-faq" className="text-2xl font-bold tracking-tight text-foreground">
+          <h2 id="gallery-faq" className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Frequently asked questions
           </h2>
           <div className="mt-6 space-y-3">

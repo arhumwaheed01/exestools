@@ -178,7 +178,7 @@ export default function RandomNumberWheelPage() {
 
       <div className="mt-12 space-y-10 border-t border-border pt-10">
         <section className="max-w-3xl">
-          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             How to spin a random number
           </h2>
           <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm leading-relaxed text-muted sm:text-base">
@@ -202,7 +202,7 @@ export default function RandomNumberWheelPage() {
         </section>
 
         <section className="max-w-3xl">
-          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Ways to use a number wheel
           </h2>
           <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted sm:text-base">
@@ -253,7 +253,7 @@ export default function RandomNumberWheelPage() {
         </section>
 
         <section className="max-w-3xl">
-          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             How the number wheel picks, and what No repeats changes
           </h2>
           <div className="mt-3 space-y-3 text-sm leading-relaxed text-muted sm:text-base">
@@ -283,7 +283,7 @@ export default function RandomNumberWheelPage() {
         </section>
 
         <section className="max-w-3xl">
-          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Odds on a number wheel
           </h2>
           <div
@@ -348,7 +348,7 @@ export default function RandomNumberWheelPage() {
         <RelatedLinks toolId="random-number-wheel" />
 
         <section className="max-w-3xl" aria-labelledby="number-faq-heading">
-          <h2 id="number-faq-heading" className="text-2xl font-bold tracking-tight text-foreground">
+          <h2 id="number-faq-heading" className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Frequently asked questions
           </h2>
           <div className="mt-6 space-y-3">
