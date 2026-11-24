@@ -228,8 +228,8 @@ export default function TimeCardCalculatorPage() {
           </p>
           <p className="mt-3">
             Two weeks of pay is not the same thing as one 80-hour bucket. A biweekly timesheet still
-            has two workweeks. Forty hours of overtime math is applied to each week on its own, then
-            the two weeks are added for your period total.
+            has two workweeks. The 40-hour line is applied to each week on its own, then the two weeks
+            are added for your period total.
           </p>
           <p className="mt-3">
             If you type an hourly rate, the page can show estimated gross pay at regular time and at
@@ -258,10 +258,10 @@ export default function TimeCardCalculatorPage() {
           <p className="mt-3">
             Some workplaces also round each punch to a short increment, commonly 5, 6, or 15 minutes.
             A widely used 15-minute pattern is to leave a punch as-is when it is 1 to 7 minutes past
-            the increment, and to move it forward when it is 8 to 14 minutes past. The 6-minute
-            setting (a tenth of an hour) moves forward at 3 minutes past the increment; the 5-minute
-            setting moves forward at 3 minutes past. Rounding here is applied to clock-in and
-            clock-out times, not to a break you already entered as a length.
+            the increment, and to move it forward when it is 8 to 14 minutes past. The 5-minute and
+            6-minute settings both round forward from 3 minutes past the increment. With 6-minute
+            rounding (a tenth of an hour), 8:02 stays 8:00 and 8:03 becomes 8:06. Rounding here is
+            applied to clock-in and clock-out times, not to a break you already entered as a length.
           </p>
           <p className="mt-3">
             Whether a given rounding rule is allowed at your job is a policy question, not something

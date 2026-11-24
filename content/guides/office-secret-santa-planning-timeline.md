@@ -6,7 +6,7 @@ author: Arhum Waheed
 author_url: /about#arhum
 testedNote: "Followed start to finish for a twelve-name office list, links sent by DM."
 published: 2026-10-21
-updated: 2026-10-21
+updated: 2026-11-24
 related_tools: [/secret-santa-generator, /random-name-picker]
 images:
   - file: /guides/office-secret-santa-planning-timeline/1.jpg
@@ -17,13 +17,13 @@ images:
   - file: /guides/office-secret-santa-planning-timeline/2.jpg
     alt: "A roll of gold wrapping paper and a pair of scissors on a table, ready for gift wrapping"
     source: https://www.pexels.com/photo/a-gold-gift-wrap-near-the-scissors-6333144/
-    credit: Pexels
+    credit: Roman Odintsov on Pexels
     license: "Pexels License (free for commercial use, no attribution required)"
 ---
 
 # Office Secret Santa: a week-by-week plan for the organizer
 
-By Arhum Waheed · Published 2026-10-21 · Updated 2026-10-21
+By Arhum Waheed · Published 2026-10-21 · Updated 2026-11-24
 
 Somebody volunteered you. Maybe you said "I'll sort it" in a meeting and regretted it by lunchtime. Either way, you now own the office Secret Santa, and the hard part isn't the draw. The draw takes about a minute. The hard part is the five weeks of nudging, chasing and quietly fixing things that happen around it.
 
@@ -38,10 +38,12 @@ Send an opt-in message. Not an announcement, an invitation. Office gift exchange
 
 Here's a message you can copy:
 
-> **Secret Santa 2026, are you in?**
-> We're doing a gift exchange this year. Everyone who joins buys one gift for one coworker, up to $25. Gifts get swapped at the team lunch on Thursday, December 17. Reply to me directly (not in this thread) by Friday, November 20 if you want in. No reply means you're out, and that's completely fine.
+> **Secret Santa this year, are you in?**
+> We're doing a gift exchange. Everyone who joins buys one gift for one coworker, up to $25. Gifts get swapped at the team lunch on [Thursday, December 17]. Reply to me directly (not in this thread) by [Friday, November 20] if you want in. No reply means you're out, and that's completely fine.
 
-The budget is up front, so people don't join and then find out it's $50. Replies come to you privately, so opting out is invisible. And the deadline has a weekday attached, which people remember better than a bare date.
+Swap the bracketed dates for yours. Keep the weekday in, because people remember "Friday" better than a bare date.
+
+The budget is up front, so people don't join and then find out it's $50. Replies come to you privately, so opting out is invisible.
 
 Should managers join? I think yes, with the same budget as everyone else. A manager who spends three times the limit makes everyone else's $25 gift look cheap. If your manager wants to be generous, suggest they pay for the lunch instead.
 
@@ -83,7 +85,7 @@ Send each link as a direct message. In Slack or Teams, that's a DM per person. F
 Keep the full list of links somewhere only you can see, in case someone loses theirs. "I deleted the message" will happen at least once.
 
 ![A roll of gold wrapping paper and a pair of scissors on a table, ready for gift wrapping](/guides/office-secret-santa-planning-timeline/2.jpg)
-*Photo: Pexels (Pexels License).*
+*Photo: Roman Odintsov on Pexels (Pexels License).*
 
 ## Two weeks out: the gentle chase
 
@@ -109,7 +111,7 @@ On the day:
 
 - Put a box or a table by the door for gifts, labeled with recipients' names.
 - Decide whether gifts are opened one at a time with everyone watching, or all at once. One at a time is fun with 8 people and tedious with 30.
-- If you're doing one at a time, use the [random name picker](/random-name-picker) to set the order. Paste the list, leave remove-winner on, and spin. The order names come off the wheel is the order people open.
+- If you're doing one at a time, use the [random name picker](/random-name-picker) to set the order. Paste the list and press Put the whole list in random order, then read the numbered list out. That's who opens first, second and so on.
 - For remote people, schedule the video call so they open theirs while everyone's watching.
 
 And when someone asks "who had me?", let the giver decide whether to say. Some people love the reveal. Some would rather stay anonymous forever.

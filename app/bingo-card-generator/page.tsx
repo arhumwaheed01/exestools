@@ -415,9 +415,6 @@ export default function BingoCardGeneratorPage() {
             <span className="font-semibold text-foreground">player link</span>{" "}
             that shows only their card on a phone, where tapping a square marks it.
           </p>
-          <p className="mt-3">
-            Everything happens in your browser. It&apos;s free, with no account to create.
-          </p>
         </section>
         <section className="mt-10 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
@@ -514,9 +511,6 @@ export default function BingoCardGeneratorPage() {
           </div>
         </section>
 
-        <p className="mt-6 max-w-3xl text-sm text-muted">
-          For fun at home, in class and at parties. Not for real-money games.
-        </p>
       </div>
 
       <script

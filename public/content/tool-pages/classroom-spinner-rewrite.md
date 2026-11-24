@@ -3,26 +3,26 @@ route: /classroom-spinner
 type: tool-page rewrite (new sections to add below the existing tool UI)
 author: Arhum Waheed
 author_url: /about#arhum
-updated: 2026-10-13
+updated: 2026-11-24
 placement: Insert these sections after the existing "A 5-minute cold-call routine that stays fair" section and before "Privacy for schools". Append the 4 new FAQs to the top of the existing FAQ list. Keep existing sections; remove nothing.
 ---
 
-By Arhum Waheed · Updated 2026-10-13
+By Arhum Waheed · Updated 2026-11-24
 
 ## A printable routine for your desk
 
-Some teachers like a reminder card taped next to the keyboard, especially in the first weeks of using a spinner or when a cover teacher is in. Copy this into a document, adjust it, and print it.
+Some teachers like a reminder card taped next to the keyboard, especially in the first weeks of using a spinner or when a cover teacher is in.
 
 > **Spinner routine — [class name]**
 >
 > **Before the lesson**
 > - Open the classroom spinner. Check the roster matches today's register.
-> - Delete the lines for anyone absent.
-> - Press **Copy** so the full list is on the clipboard.
+> - Mark anyone absent as OUT in the Class roster.
+> - Copy the whole list (Ctrl+A, Ctrl+C) so the full roster is on the clipboard.
 > - Check **Remove winner after spin** is on.
 >
 > **Each question**
-> - Ask the question. Say: "Think time — I'll spin in 20 seconds."
+> - Ask the question. Say: "Think time. I'll spin in ten seconds."
 > - Press **SPIN** (or Space).
 > - If the student needs more time: "I'll come back to you." Spin again, then return.
 >
@@ -73,20 +73,20 @@ Either way, write the week's jobs on the board. The wheel doesn't keep a history
 
 Say you call on students about eight times a lesson and teach the class every day.
 
-- **Monday:** paste the roster and press **Copy** before the first spin. Eight names come off. Twenty are left.
+- **Monday:** paste the roster and copy it somewhere safe before the first spin. Eight names come off. Twenty are left.
 - **Tuesday:** don't paste the roster back. Carry on with the 20 who are left. Eight more. Twelve left.
 - **Wednesday:** eight more. Four left.
 - **Thursday:** the last four go first, then paste the full roster back in and start round two.
 
-By Thursday every student has been called on exactly once, with no second turns while anyone was still waiting. If a student is absent, delete their line for the day and add it back when they return. They keep their place in the round.
+By Thursday every student has been called on exactly once, with no second turns while anyone was still waiting. If a student is absent, mark them OUT for the day. As long as they weren't picked yet, they're still owed a turn this round.
 
 ## When students are absent or away for a while
 
-Most days, absence is simple: delete the student's line before you start the round. A few situations need more thought.
+Most days, absence is simple: mark the student OUT in the Class roster before you start the round. A few situations need more thought.
 
-- **A student is away for a week or more.** Keep a separate full roster in your own notes. Each day, paste the full list and delete the absent names, so returning students reappear without you having to remember them.
+- **A student is away for a week or more.** Keep a separate full roster in your own notes. Each day, paste the full list and mark the absent names OUT, so returning students reappear without you having to remember them.
 - **A student comes back mid-round.** Add their name as a new line. They're in the draw for the rest of the round, and they won't have missed a turn they were owed, because their name was never picked.
-- **A student is out of the room for part of the lesson.** Temporarily delete the line, then add it back when they return. Spinning and skipping them when they're not there works too, but it tells the room who is missing.
+- **A student is out of the room for part of the lesson.** Mark them OUT, then untick it when they walk back in. Spinning and skipping them when they're not there works too, but it tells the room who is missing.
 - **A student shouldn't be cold-called at all** because of an individual plan. Leave their name off the wheel and include them in other ways. A wheel that covers everyone else is still fair to everyone on it.
 
 ## Accessibility and comfort
@@ -94,10 +94,10 @@ Most days, absence is simple: delete the student's line before you start the rou
 A wheel on a projector is a visual thing, so a few adjustments help everyone follow along.
 
 - **Read the result aloud.** Don't rely on students reading a name from the back of the room. Say it, then pause.
-- **Choose a theme that reads clearly on your projector.** The page has several color themes. Test from the back row in your real lighting; a theme that looks good on a laptop can wash out on a whiteboard.
+- **Test the wheel from the back row in your real lighting.** Colors that look fine on a laptop can wash out on a whiteboard, so dim the lights nearest the screen if names are hard to read.
 - **Zoom the browser** if the wheel is too small. ExesTools doesn't have a separate presentation mode, so browser zoom is the way to make it bigger.
 - **Turn Sound off** if the spin sound is distracting, or if a student is sensitive to sudden noise.
-- **Use the Short spin length** if waiting builds anxiety. A short spin gets to the result quickly; it doesn't change who gets picked.
+- **Speed the spin up in the ⋮ menu (Spin speed)** if waiting builds anxiety. A quicker spin gets to the result sooner; it doesn't change who gets picked.
 - **Keep names short and distinct.** "Maya R." reads better than a full name in small text, and initials help when two students share a first name.
 
 Fairness and comfort are not in conflict. A student who knows the pick is genuinely random, and that everyone gets one turn before anyone repeats, has less reason to worry about being singled out.
@@ -106,7 +106,7 @@ Fairness and comfort are not in conflict. A student who knows the pick is genuin
 
 The page saves one list in this browser. If you teach several classes, you don't have to retype rosters each lesson:
 
-1. Paste the roster for your first class. Optionally, type the class name in **Wheel title**.
+1. Paste the roster for your first class.
 2. Press **Share** and save the link as a bookmark named after the class, such as "Period 3 Year 8."
 3. Repeat for each class.
 
@@ -118,7 +118,7 @@ A cover teacher doesn't know who is who, which is exactly when a random pick is 
 
 - **The share link** for each class they will teach, in your cover notes or by your school's usual internal messaging.
 - **The routine card above**, so the procedure is the same as with you.
-- **One instruction about absences:** "Delete the names of anyone absent before spinning."
+- **One instruction about absences:** "Mark anyone absent as OUT before spinning."
 
 Ask them to press **Clear** at the end of the day if they're using a shared computer, so the next teacher doesn't open the page to find your class list.
 
@@ -142,7 +142,7 @@ The page keeps one list in this browser at a time. For several classes, make a s
 
 ### How do I make sure every student gets a turn?
 
-Keep "Remove winner after spin (no repeats)" on. Each picked student leaves the wheel, so every name comes up once before any repeats. When one name is left, that student goes last; paste the full roster back in to start the next round. With Remove winner on, the list saved in your browser is only the names still left. Paste your full roster again to start a new round.
+Keep "Remove winner after spin (no repeats)" on. Each picked student leaves the wheel, so every name comes up once before any repeats. When one name is left, that student goes last; paste the full roster back in to start the next round.
 
 ### Is it safe to type student names?
 

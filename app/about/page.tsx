@@ -37,12 +37,12 @@ const TOOL_SUMMARIES: { href: string; label: string; text: string }[] = [
   {
     href: "/random-name-picker",
     label: "Random name picker",
-    text: "one name at a time, with remove-winner on by default, for meeting order, volunteers and simple draws.",
+    text: "draws several names at once, or puts a whole list in random order in one click, with a wheel for single picks.",
   },
   {
     href: "/classroom-spinner",
     label: "Classroom spinner",
-    text: "the same idea set up for teachers, with classroom example wheels and a roster that stays in your browser between lessons.",
+    text: "the wheel set up for teachers, with classroom example wheels, a roster that stays in your browser, and an IN/OUT list for absent students.",
   },
   {
     href: "/prize-wheel",
@@ -52,7 +52,7 @@ const TOOL_SUMMARIES: { href: string; label: string; text: string }[] = [
   {
     href: "/yes-no-wheel",
     label: "Yes or no wheel",
-    text: "a two-way spin, with a Yes / No / Maybe option and a Heads / Tails coin-toss mode.",
+    text: "a two-way spin with a running Yes/No tally and a coin-flip mode.",
   },
   {
     href: "/random-number-wheel",
@@ -234,8 +234,7 @@ export default function AboutPage() {
             </li>
           </ul>
           <p className="mt-3">
-            ExesTools is a set of free tools; the pickers use a secure random generator. For the long
-            version, with worked examples, read{" "}
+            For the long version, with worked examples, read{" "}
             <Link href="/guides/how-random-is-a-spinner-wheel" className={linkCls}>
               How random is a spinner wheel?
             </Link>
@@ -368,6 +367,12 @@ export default function AboutPage() {
           </h2>
           <p className="mt-2">Major changes to the site, newest first.</p>
           <ul className="mt-3 list-disc space-y-2 pl-5">
+            <li>
+              <strong className="text-foreground">2026-11-24:</strong> Tool pages and four guides
+              revised to match recent tool updates: the name picker&apos;s Draw a list mode, the
+              classroom spinner&apos;s absent list, the prize wheel&apos;s winners log and the
+              simpler yes/no wheel.
+            </li>
             <li>
               <strong className="text-foreground">2026-11-24:</strong> Published the{" "}
               <Link href="/overtime-calculator" className={linkCls}>

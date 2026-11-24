@@ -11,7 +11,7 @@ const YES_NO_DECISION = loadToolPageMarkdown("yes-no-wheel-decision-section.md")
 
 const TITLE = "Yes or No Wheel – Spin to Decide (Free Yes/No Spinner)";
 const META =
-  "Can't decide? Spin the yes or no wheel for a 50/50 answer, add Maybe for three options, and count results. Free, no account.";
+  "Can't decide? Spin the yes or no wheel for a 50/50 answer, flip a coin, or type Maybe as a third option, and watch the tally. Free, no account.";
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -43,15 +43,15 @@ const FAQS = [
   },
   {
     q: "What does Maybe mean on the yes no wheel?",
-    a: 'Whatever you decide before spinning. A common rule is "Maybe means ask again later" or "spin once more with just Yes and No".',
+    a: 'Whatever you decide before spinning. Add Maybe as a third line first. A common rule is "Maybe means ask again later" or "spin once more with just Yes and No".',
   },
   {
-    q: "What is Quick decide?",
-    a: "An example wheel with four actions instead of answers: do it, wait, ask someone, or skip. Use it when you know what to do but not whether to do it now.",
+    q: "Can I spin for an action instead of an answer?",
+    a: "Yes. Replace the lines under Your choices with something like Do it, Wait, Ask someone and Skip. Each gets a 1 in 4 chance. It helps when you know what to do but not whether to do it now.",
   },
   {
     q: "Can I change the answers?",
-    a: 'Yes. Edit the list under Your choices, for example "Do it" and "Don\'t", or try the Quick decide example (Do it, Wait, Ask someone, Skip).',
+    a: 'Yes. Edit the lines under Your choices, for example "Do it" and "Don\'t". Up to 60 lines fit, and every line gets an equal slice.',
   },
   {
     q: "What if I have more than two options?",
@@ -59,11 +59,11 @@ const FAQS = [
   },
   {
     q: "Can I use this as a coin flip?",
-    a: 'Yes. Open Examples in the toolbar, tap Heads / Tails, and press SPIN. It\'s the same 50/50 spin as Yes / No, just with different labels. Call your side before you spin.',
+    a: "Yes. Tap Coin flip (Heads / Tails) above the wheel and press SPIN. It's the same 50/50 spin as Yes / No with different labels. Call your side before you spin.",
   },
   {
     q: "Can I share my yes or no wheel?",
-    a: "Yes. Press Copy share link. The link carries your list of answers, so anyone you send it to sees the same wheel.",
+    a: "Yes. Open the ⋮ menu on the wheel and press Share. The link carries your list of answers, so anyone you send it to sees the same wheel.",
   },
   {
     q: "Is spinning the wheel as fair as flipping a real coin?",
@@ -79,7 +79,7 @@ const FAQS = [
   },
   {
     q: "How do I settle who goes first on a video call?",
-    a: "Tap Heads / Tails, let each person call a side out loud, share your screen and spin once.",
+    a: "Tap Coin flip (Heads / Tails), let each person call a side out loud, share your screen and spin once.",
   },
 ];
 
@@ -91,8 +91,9 @@ export default function YesNoWheelPage() {
       title="Yes or no wheel"
       intro={
         <>
-          Ask a yes-or-no question and hit SPIN. Switch to Yes / No / Maybe, or Heads / Tails for a
-          coin flip. For more than two options, use the{" "}
+          Ask a yes-or-no question and hit SPIN. Tap Coin flip (Heads / Tails) if you&apos;d rather
+          call a side, and the Yes and No tally above the wheel keeps score as you go. Want a Maybe?
+          Type it as a third line under Your choices. For a longer list of options, use the{" "}
           <Link href="/" className="font-semibold text-accent hover:underline">
             multi-option decision wheel
           </Link>
@@ -104,11 +105,10 @@ export default function YesNoWheelPage() {
       schemaDescription={META}
       schemaAlternateName={["Yes No Spinner", "Yes or No Spinner", "Yes No Maybe Wheel"]}
       schemaFeatureList={[
-        "Yes / No / Maybe modes",
-        "Quick decide",
-        "Heads / Tails coin toss",
-        "Results counter",
-        "Copy share link",
+        "Yes / No and Coin flip modes",
+        "Running Yes / No tally",
+        "Custom answers under Your choices",
+        "Share from the wheel menu",
         "No signup",
       ]}
       pageUpdated="2026-11-24"
@@ -117,16 +117,19 @@ export default function YesNoWheelPage() {
         <ol className="list-decimal space-y-2 pl-5">
           <li>Think of a yes-or-no question.</li>
           <li>Press SPIN. The wheel lands on Yes or No.</li>
-          <li>Spin again as often as you like — both answers stay on the wheel.</li>
           <li>
-            Want a Maybe? Choose Yes / No / Maybe. For a coin toss, choose Heads / Tails. Press Start
-            fresh to go back to plain Yes and No.
+            Spin again as often as you like. Both answers stay on the wheel, and the tally counts
+            every spin until you press Reset counts.
+          </li>
+          <li>
+            Want a Maybe? Add a line that says Maybe under Your choices. For a coin toss, tap Coin
+            flip (Heads / Tails), and tap Yes / No to switch back.
           </li>
         </ol>
         <p className="mt-3">
           With only Yes and No on the wheel, each answer has a 1 in 2 (50%) chance on every spin.
-          Spins don&apos;t affect the next odds—a long streak of Yes answers is unlikely but normal
-          with real randomness.
+          Spins don&apos;t affect the next odds. A long streak of Yes answers is unlikely, but
+          it&apos;s normal with real randomness.
         </p>
         <p>
           It&apos;s free, there&apos;s no account, and the answers you set up are saved in your browser.
@@ -134,10 +137,10 @@ export default function YesNoWheelPage() {
       </GuideSection>
       <GuideSection title="Flip a coin with the wheel">
         <p>
-          Tap Heads / Tails and press SPIN for the same 50/50 spin with different labels—useful for
-          who goes first, who picks the movie, or a shared result on a video call. Call your side
-          before you spin, or run best of three. For two custom options, type them in place of Heads
-          and Tails under Your choices.
+          Tap Coin flip (Heads / Tails) and press SPIN. It&apos;s the same 50/50 spin with different
+          labels, handy for who goes first, who picks the movie, or a shared result on a video call.
+          Call your side before you spin, or run best of three. For two custom options, type them in
+          place of Heads and Tails under Your choices.
         </p>
       </GuideSection>
       <GuideSection title="When a yes-or-no spin helps">
@@ -161,21 +164,18 @@ export default function YesNoWheelPage() {
           </li>
           <li>
             <span className="font-semibold text-foreground">Who goes first on a video call.</span>{" "}
-            Tap Heads / Tails, share your screen, spin once.
+            Tap Coin flip (Heads / Tails), share your screen, spin once.
           </li>
         </ul>
       </GuideSection>
       <GuideMarkdown content={YES_NO_DECISION.content} />
       <GuideSection title="Yes, No or Maybe?">
         <p>
-          Tap <span className="font-semibold text-foreground">Yes / No / Maybe</span> to add a third
-          slice (one-in-three odds each). Decide what Maybe means before you spin—for example
-          &quot;ask again tomorrow&quot; or &quot;spin Yes / No once more&quot;. For actions instead
-          of answers, try{" "}
-          <span className="font-semibold text-foreground">Quick decide</span> (do it, wait, ask
-          someone, or skip). Edit any slice under Your choices, and press{" "}
-          <span className="font-semibold text-foreground">Start fresh</span> to return to plain Yes
-          and No.
+          Type Maybe as a third line under Your choices, and each answer gets a 1 in 3 chance. Decide
+          what Maybe means before you spin, for example &quot;ask again tomorrow&quot; or &quot;spin
+          Yes / No once more&quot;. If you&apos;d rather spin for an action than an answer, swap the
+          lines for Do it, Wait, Ask someone and Skip. Delete the extra lines to get back to plain
+          Yes and No.
         </p>
       </GuideSection>
       <GuideSection title="Yes or no odds">
@@ -193,7 +193,7 @@ export default function YesNoWheelPage() {
                 <td className="py-2">1 in 2 (50%)</td>
               </tr>
               <tr className="border-b border-border/60">
-                <td className="py-2 pr-4 text-foreground">Yes / No / Maybe</td>
+                <td className="py-2 pr-4 text-foreground">Yes / No / Maybe (typed in)</td>
                 <td className="py-2">1 in 3 (about 33.3%)</td>
               </tr>
               <tr>
@@ -206,8 +206,8 @@ export default function YesNoWheelPage() {
         <p>
           Every slice is the same size, so each answer has the same chance on every spin. Spins are
           independent. After three Nos in a row, the next spin is still 50/50. Over 10 spins you
-          won&apos;t always get exactly 5 Yes and 5 No, because short runs are normal. Use the
-          counter under the wheel to see your own split.
+          won&apos;t always get exactly 5 Yes and 5 No, because short runs are normal. Watch the
+          tally above the wheel to see your own split.
         </p>
         <ToolPageShot
           src="/tools/yes-no-wheel/1.webp"
@@ -229,7 +229,7 @@ export default function YesNoWheelPage() {
       <GuideSection title="A ten-minute probability lesson">
         <p>
           Ask the class to predict how many Yeses you&apos;ll get in 20 spins. Most will say 10. Spin 20
-          times and use the counter under the wheel to keep the tally.
+          times and let the tally above the wheel keep count.
         </p>
         <p>
           Then show the math. The chance of getting{" "}

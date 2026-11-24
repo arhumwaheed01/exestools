@@ -10,7 +10,7 @@ const CLASSROOM_REWRITE = loadToolPageMarkdown("classroom-spinner-rewrite.md");
 
 const TITLE = "Classroom Spinner Wheel — Random Student Picker";
 const META =
-  "Free classroom spinner and random student picker. Paste your roster, spin fairly, and remove students once picked. Lists stay in your browser, no account.";
+  "Free classroom spinner and random student picker. Paste your roster, mark absences IN/OUT, spin fairly, and remove students once picked. Lists stay in your browser, no account.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -102,12 +102,14 @@ export default function ClassroomSpinnerPage() {
             Each picked student comes off the wheel, so everyone gets one turn per round.
           </li>
           <li>
-            With Remove winner on, the list saved in this browser is only the names still left. Paste
-            your full roster again to start a new round.
+            Someone off today? Tick their name in the Class roster list so it shows OUT. They come
+            off the wheel for now, and unticking puts them back.
           </li>
           <li>
-            When the round is over, paste your full roster back in. Tip: click Copy before your first
-            spin so the whole list is on your clipboard. New restores the sample roster.
+            With Remove winner on, picked names leave the list and Round progress shows how far
+            through the class you are. The saved list only keeps the names still left, so copy your
+            full roster before the first spin (Ctrl+A, then Ctrl+C) and paste it back when the round
+            ends. Start fresh brings back the sample roster.
           </li>
         </ol>
       </GuideSection>
@@ -183,8 +185,8 @@ export default function ClassroomSpinnerPage() {
       <GuideSection title="A cold-call routine that stays fair">
         <p>
           Ask the question, give 5–10 seconds of think time, then spin, so all 28 students prepare and
-          not just the one who gets picked. Absent students come off the list before the first spin,
-          not after. The printable card below has the full routine. For the research on wait time,
+          not just the one who gets picked. Mark absent students OUT in the Class roster before the
+          first spin, not after. The printable card below has the full routine. For the research on wait time,
           question scripts and anxious students, read{" "}
           <Link
             href="/guides/cold-calling-students-fairly"

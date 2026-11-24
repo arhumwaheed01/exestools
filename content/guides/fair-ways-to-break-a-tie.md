@@ -91,7 +91,7 @@ Whatever you choose, use the same method every time your group plays. Consistenc
 
 Fantasy leagues, pickup basketball captains, a family deciding who chooses the holiday destination this year. These are really about **order**, not winners. Randomize the whole order at once, in front of everyone, instead of breaking ties one at a time.
 
-Paste every name into the name picker, keep remove winner on, and spin until one name is left. Write the order down as names come off. Post it in the group chat before anyone has time to suggest a different method.
+Paste every name into the name picker and press Put the whole list in random order. The numbered list is your order. Post it in the group chat before anyone has time to suggest a different method.
 
 ## Ties in votes
 

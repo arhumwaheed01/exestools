@@ -29,7 +29,7 @@ Want only odd-numbered problems, because the answers are in the back of the book
 
 ### 3. A dice replacement, with plain odds
 
-Tap **1–6** when a die goes missing. One spin gives the same odds as one fair die: each number has a 1 in 6 chance, about 16.7%.
+One spin of 1–6 gives the same odds as one fair die: each number has a 1 in 6 chance, about 16.7%.
 
 Two dice are different, and this trips people up. A game that rolls two dice and adds them doesn't give every total the same chance. Spinning **1–12** once is *not* a replacement for two dice. Spin 1–6 twice and add the results instead. Here is why it matters:
 

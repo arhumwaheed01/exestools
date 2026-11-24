@@ -57,7 +57,7 @@ const FAQ = [
   },
   {
     q: "How do I prove the draw was fair?",
-    a: "Copy or print the draw record, or share the result link with entrants.",
+    a: "Post your entry list before the draw, then draw where people can watch, or record your screen. Afterwards, share the draw record. Its list fingerprint lets anyone paste the published list into this page and confirm it's the same list you drew from. That proves the list didn't change. The live draw is what shows nobody steered the result.",
   },
   {
     q: "Is this raffle tool free?",
@@ -260,9 +260,9 @@ export default function RaffleGeneratorPage() {
             </li>
             <li>
               <span className="font-semibold text-foreground">Office charity raffle.</span> 48 staff
-              and 120 tickets across names. Paste one line per ticket (repeat a name per ticket
-              bought) so the odds match what people paid. Running a named gift exchange at the same
-              party? Draw matches on the{" "}
+              bought 120 tickets between them. Choose Multiple tickets per person and type each name
+              with a count, like &quot;Priya x5&quot;, so the odds match what people paid. Running a
+              named gift exchange at the same party? Draw matches on the{" "}
               <Link
                 href="/secret-santa-generator"
                 className="font-semibold text-accent hover:underline"
@@ -328,7 +328,10 @@ export default function RaffleGeneratorPage() {
             <li>
               Draw alternates at the same time as the winners. Redrawing later looks suspicious.
             </li>
-            <li>Remove duplicate lines first if the rule is one entry per person.</li>
+            <li>
+              Leave One entry per name on if the rule is one entry per person. Repeats are ignored
+              for you.
+            </li>
             <li>
               A single prize, drawn live on a big screen? The{" "}
               <Link href="/prize-wheel" className="font-semibold text-accent hover:underline">
@@ -344,8 +347,8 @@ export default function RaffleGeneratorPage() {
             Raffle generator vs other raffle tools
           </h2>
           <p className="mt-3">
-            Some raffle tools add weighted entries or animated replays. ExesTools is the better fit
-            when you have several prizes and need{" "}
+            Some raffle tools collect entries for you or add animated replays. ExesTools is the better
+            fit when you have several prizes and need{" "}
             <span className="font-semibold text-foreground">backups you can trust</span>: up to 20
             alternates drawn alongside the winners, an extra alternate on demand that never
             reshuffles earlier results, and a printable record with the date and time. To pick

@@ -83,7 +83,7 @@ Be careful with "No prize" slices. Some events use them to stretch stock, and th
 - **Load the Prize rewards example** and edit it, or type your own list one per line. The wheel holds up to 60 slices, but 8 to 12 reads much better on a small screen.
 - **Zoom the browser** if the wheel looks small from where visitors stand.
 - **Plug in the charger.** A day of spins drains a laptop.
-- **Your list stays in that browser.** If the laptop restarts, the list is still there. If you set the wheel up the night before on a different machine, press Copy share link and open the link on the booth laptop.
+- **Your list stays in that browser.** If the laptop restarts, the list is still there. If you set the wheel up the night before on a different machine, press Share and open the link on the booth laptop.
 
 ## A rules sign you can copy
 
