@@ -6,7 +6,7 @@ author: Arhum Waheed
 author_url: /about#arhum
 testedNote: "Tested with a 28-name class list."
 published: "2026-10-19"
-updated: "2026-10-21"
+updated: "2026-11-24"
 related_tools: [/classroom-spinner, /random-name-picker, /random-team-generator]
 images:
   - file: /guides/cold-calling-students-fairly/1.jpg
@@ -18,7 +18,7 @@ images:
 
 # Fair ways to call on students
 
-By Arhum Waheed · Published 2026-10-19 · Updated 2026-10-21
+By Arhum Waheed · Published 2026-10-19 · Updated 2026-11-24
 
 With hands-up questioning, the same five students answer everything and the rest learn they can switch off. Random calling solves that, but done badly it creates a new problem: a student frozen in front of the class, facing a question they had no time to think about.
 
@@ -53,7 +53,7 @@ The fix I'd use is to keep remove-winner on and close the loophole with follow-u
 Say a Year 8 class of 28 starts each lesson with a 15-minute review of 8 questions, with two spins per question.
 
 - That's 16 picks per lesson, so the round finishes partway through the second lesson. With **Remove winner** on, the spinner saves only the remaining names in your browser — there is no full-roster backup — so the remaining 12 names are waiting next lesson on the same computer.
-- **Tip:** keep a copy of the full roster. Press **Copy** before the first spin of a new round (or keep the list in a note). Your full roster is then on the clipboard, ready to paste back in when the round ends.
+- **Tip:** keep a copy of the full roster. Before the first spin of a new round, select the whole list and copy it (Ctrl+A, Ctrl+C), or keep the roster in a note, ready to paste back in when the round ends.
 - When one name is left, SPIN switches off. That student answers last, and you paste the roster back in.
 
 Two picks per question also follows the BBC compromise: the second student builds on the first, and you can open the floor after that.
@@ -84,8 +84,8 @@ The routine stays the same: **ask, wait, then spin.** If you spin first, 27 stud
 
 ## Absences, late arrivals and privacy
 
-**Absent:** delete the line before the round starts. Spinning and skipping the name tells the room who is missing. **Late:** add the name as a new line, and they join the current round. **Two students share a name:** write "Maya R." and "Maya T." Identical lines are merged into one slice.
+**Absent:** tick the student OUT in the Class roster list before the round starts. Spinning and skipping the name tells the room who is missing. **Late:** add the name as a new line, and they join the current round. **Two students share a name:** write "Maya R." and "Maya T." Identical lines are merged into one slice.
 
 [SCREENSHOT: The roster box with one name being deleted for an absent student, with the wheel slices updating to match.]
 
-With **Remove winner** on, only the names still on the wheel are saved in this browser on this device — there is no full-roster backup — and names aren't sent anywhere when you spin. Keep a separate copy of the full class list so you can paste it back when a round ends. **Copy share link** puts the names inside the link, so follow your school's policy before sending it to a co-teacher. On a shared computer, press **Clear all** at the end of the day.
+With **Remove winner** on, only the names still on the wheel are saved in this browser on this device — there is no full-roster backup — and names aren't sent anywhere when you spin. Keep a separate copy of the full class list so you can paste it back when a round ends. **Share** puts the names inside the link, so follow your school's policy before sending it to a co-teacher. On a shared computer, press **Clear** at the end of the day.

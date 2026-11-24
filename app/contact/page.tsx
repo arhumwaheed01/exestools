@@ -71,8 +71,8 @@ export default function ContactPage() {
               Unfortunately not. Your lists are saved only in your own browser, on your own device.
               They&apos;re never uploaded to ExesTools, so there&apos;s no copy to restore. If you
               cleared your browser data or switched devices, the list is gone. Next time, press{" "}
-              <span className="font-semibold text-foreground">Copy share link</span> and save the
-              link: it carries the list inside it.
+              <span className="font-semibold text-foreground">Share</span> and save the link: it
+              carries the list inside it.
             </p>
           </div>
           <div>

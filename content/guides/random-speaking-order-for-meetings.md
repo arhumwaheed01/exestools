@@ -4,9 +4,9 @@ meta_title: "Random Speaking Order for Stand-ups and Meetings | ExesTools"
 meta_description: "When a random speaking order helps a meeting and when it doesn't, plus setups for stand-ups, retros and remote calls, with a nine-person example."
 author: Arhum Waheed
 author_url: /about#arhum
-testedNote: "Tried with a nine-person stand-up list on the name picker, remove winner on."
+testedNote: "Tried with a nine-person stand-up list on the name picker, both as a one-click order and spun one name at a time."
 published: 2026-10-30
-updated: "2026-11-17"
+updated: "2026-11-24"
 related_tools: [/random-name-picker, /random-team-generator]
 images:
   - file: /guides/random-speaking-order-for-meetings/1.jpg
@@ -23,7 +23,7 @@ images:
 
 # Random speaking order for stand-ups and meetings
 
-By Arhum Waheed · Published 2026-10-30 · Updated 2026-10-30
+By Arhum Waheed · Published 2026-10-30 · Updated 2026-11-24
 
 Every team has a default speaking order, and it was never chosen on purpose. In a room, it's whoever sits nearest the person running the meeting. On a video call, it's whoever unmutes first, which is usually the same two people. The quiet ones go last, when everyone's half-thinking about their next call.
 
@@ -58,7 +58,9 @@ Here's when it's worth doing, how to set it up for different kinds of meetings, 
 
 Open the [random name picker](/random-name-picker) and replace the sample names with your team, one name per line. There's a **Meeting order** example you can load and edit if you'd rather start from that.
 
-Leave **remove winner** on. It's on by default on this page. Each name leaves the wheel once it's picked, so you spin until one name is left, and the order names come off is your speaking order. The last name on the wheel goes last.
+The quickest way is one click. Press **Put the whole list in random order** and you get a numbered list, 1 to 9, with everyone on it once. Press **Copy list** and paste it into the meeting chat before anyone speaks.
+
+If you'd rather reveal the order one name at a time, open the **Spin one** tab. Remove winner is on by default there. Each name leaves the wheel once it's picked, so you spin until one name is left, and the order names come off is your speaking order. The last name on the wheel goes last.
 
 A few small things save hassle:
 
@@ -68,13 +70,13 @@ A few small things save hassle:
 - **Absences**: delete the line before you start, rather than spinning and skipping. Skipping announces to the call who isn't there.
 - **The wheel holds up to 60 names**, which is plenty for any meeting where people take turns talking.
 
-With remove winner on, the saved list shrinks as names come off. So press **Copy** before the first spin. Then you can paste the whole team back in for the next meeting in one go.
+In Spin one, the saved list shrinks as names come off, so copy the full list first (Ctrl+A, Ctrl+C) and paste the team back in next time. Draw a list never removes anyone, so it doesn't have this problem.
 
 ## Stand-up: the 90-second version
 
 For a daily stand-up, spinning before every person is slow. Spin the whole order up front instead.
 
-Spin until the wheel is down to its last name, writing names in the meeting chat as they come up: "Order today: Priya, Tom, Kenji, Maria, Sam, Lee." That takes about a minute for eight people. Then the meeting runs on its own, because everyone knows who's after them. The spinning part's quick enough not to drag.
+Press **Put the whole list in random order**, then **Copy list**, and paste it into the meeting chat: "Order today: Priya, Tom, Kenji, Maria, Sam, Lee." That takes about ten seconds. Then the meeting runs on its own, because everyone knows who's after them.
 
 Some teams like to spin live before each update because it keeps people alert. That works for small teams. Past about eight people, the spin time adds up.
 
@@ -95,7 +97,7 @@ Silent writing does most of the work here. The random order just stops the loude
 
 On a video call, share your screen when you spin so people can see the wheel isn't being steered. Paste the resulting order into the chat right away. People lose track of a spoken list after the third name.
 
-If someone else runs the meeting next week, press **Copy share link** and send it to them. The link opens the same list on their device. Anyone with the link can see the names on it, which is fine for a team list but worth knowing.
+If someone else runs the meeting next week, open **Spin one**, press **Share** and send them the link. The link opens the same list on their device. Anyone with the link can see the names on it, which is fine for a team list but worth knowing.
 
 ## Breakouts and pairs
 

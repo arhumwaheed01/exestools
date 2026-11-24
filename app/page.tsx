@@ -108,10 +108,6 @@ const HOME_FAQS = [
     a: 'Yes. Open Examples in the toolbar, then tap Letters A–Z to load all 26 letters, or Word game letters for a 20-letter set without Q, U, V, X, Y and Z. Every letter on the wheel has the same chance. Switch on "Remove winner after spin" if you don\'t want the same letter twice in one game.',
   },
   {
-    q: "Can I remove the winner after each spin?",
-    a: 'Yes. Switch on "Remove winner after spin" in the toolbar before you spin. The picked option leaves the wheel, so it can\'t come up again until you add it back.',
-  },
-  {
     q: "Can I put an option on the wheel twice to make it more likely?",
     a: "No. Duplicate lines are skipped, so each option appears once and every slice has the same chance. If you want an option to come up more often, add a different label for it, such as \"Pizza\" and \"Pizza night.\"",
   },
@@ -177,16 +173,16 @@ export default function HomePage() {
             </li>
             <li>
               Press SPIN (or click the wheel). The option under the pointer when it stops is your
-              result. Sound and spin length live in the ⋮ menu on the wheel.
+              result. Sound and spin speed live in the ⋮ menu on the wheel.
             </li>
             <li>
               When the wheel stops, choose Spin again or Remove (if shown). Turn on Remove winner
               after spin in the toolbar to drop each winner automatically.
             </li>
             <li>
-              Use the toolbar tools (Shuffle, Copy, Defaults, Clear) to manage your list. Share
-              copies a link to this wheel. New clears the wheel and settings; Start fresh resets the
-              list to the page default; Open and Save keep named wheels on this device.
+              Use Shuffle, Sort, Copy and Clear in the toolbar to manage your list. Share copies a
+              link to this wheel. New clears the wheel and settings; Start fresh resets the list to
+              the page default; Open and Save keep named wheels on this device.
             </li>
           </ol>
         </section>

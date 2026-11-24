@@ -76,7 +76,7 @@ If repeats are a problem for what you're doing, the fix isn't a "more random" wh
 
 ## Check it yourself
 
-You don't have to take my word for any of this. The yes or no wheel has a counter under it. Spin it 100 times and look at the split.
+You don't have to take my word for any of this. The yes or no wheel has a tally above it. Spin it 100 times and look at the split.
 
 With a fair 50/50 wheel, the expected result is 50 Yes. The standard deviation for 100 spins is √(100 × 0.5 × 0.5) = 5. So about 95% of the time you'll see between 40 and 60 Yes. A result of 55–45 is completely ordinary. A result of 75–25 would be a real warning sign (the odds of that from a fair wheel are well under 1 in 100,000).
 

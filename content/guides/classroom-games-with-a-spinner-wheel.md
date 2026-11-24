@@ -129,7 +129,7 @@ Say it's Thursday and you have a science quiz tomorrow on the water cycle. Here'
 2. **Minutes 2–8:** Spin the question type (game 1) over five words: *evaporation, condensation, precipitation, runoff, collection.* That's five spins, one word each. Whiteboards up after every round.
 3. **Minutes 8–12:** Who answers, who checks (game 3). Four questions, eight students, nobody repeats because remove-winner is on.
 
-That's 12 minutes, three wheels, zero worksheets. If you want to keep these setups for next time, press **Copy share link** for each wheel and save the links as bookmarks. Opening a bookmark loads that exact wheel again.
+That's 12 minutes, three wheels, zero worksheets. If you want to keep these setups for next time, press **Share** for each wheel and save the links as bookmarks. Opening a bookmark loads that exact wheel again.
 
 ## A few things that make spinner games work
 

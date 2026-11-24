@@ -6,7 +6,7 @@ author: Arhum Waheed
 author_url: /about#arhum
 testedNote: "Tested with an 11-guest roster split into three teams."
 published: "2026-11-05"
-updated: "2026-11-17"
+updated: "2026-11-24"
 related_tools: [/random-team-generator, /random-name-picker, /bingo-card-generator, /secret-santa-generator, /]
 images:
   - file: /guides/friendsgiving-thanksgiving-team-games/1.jpg
@@ -18,7 +18,7 @@ images:
 
 # Friendsgiving and Thanksgiving team games (without the awkward picks)
 
-By Arhum Waheed · Published 2026-11-05 · Updated 2026-11-05
+By Arhum Waheed · Published 2026-11-05 · Updated 2026-11-24
 
 Friendsgiving and Thanksgiving both have the same soft problem: a mixed room of people who know some faces and not others, a stretch of time before or after the meal, and someone who says "should we play a game?" Captain picks and "you two go over there" leave the same people standing alone. A fair random split fixes that in about thirty seconds, then the game itself can be as competitive or as silly as the room wants.
 
@@ -31,7 +31,7 @@ This guide is for hosts with roughly 8 to 24 guests. It covers how to split team
 
 Set these up the night before so you're not typing names while gravy reduces.
 
-1. **A people list** in the [random team generator](/random-team-generator) or the [random name picker](/random-name-picker)—same names, one per line. First names are fine; add an initial if you have two Sams.
+1. **A people list** in the [random team generator](/random-team-generator) or the [random name picker](/random-name-picker). Same names, one per line. First names are fine; add an initial if you have two Sams.
 2. **Optional: a question or challenge list** on the [spinner wheel](/) for icebreakers, charades prompts or "who does the dishes" duties.
 
 Both tools keep the list in the browser on that device. Fullscreen the page when you start so guests see the spin, not your tabs.
@@ -65,7 +65,7 @@ Split into stations: salad, sides, table setting, kids' activity table. Paste na
 
 Deal teams, then ask rounds: food science, holiday films, "who brought what," local geography. Keep scores on paper. Use the name picker with remove-winner on to choose which team answers first each round, so the same captain doesn't always shout first.
 
-If the group is mostly strangers, write questions anyone can guess (pie flavors, Thanksgiving year myths) rather than inside jokes from one friend circle.
+If the group is mostly strangers, write questions anyone can guess (pie flavors, famous holiday film lines) rather than inside jokes from one friend circle.
 
 ### 3. Charades or Pictionary (2 teams)
 
@@ -83,7 +83,7 @@ Print cards from the [bingo card generator](/bingo-card-generator) with the **Th
 
 **Time:** 2 minutes. **Ask:** very low.
 
-Put chores on a wheel: carve, pour drinks, clear plates, wrap leftovers, walk the dog. Spin the people wheel (remove-winner on) so duties rotate. Guests who hate a chore get one pass—spin again. It's lighter than asking for volunteers and fairer than always asking the same helpful person.
+Put chores on a wheel: carve, pour drinks, clear plates, wrap leftovers, walk the dog. Spin the people wheel (remove-winner on) so duties rotate. Guests who hate a chore get one pass, and you spin again. It's lighter than asking for volunteers and fairer than always asking the same helpful person.
 
 ### 6. Leftover scavenger or photo bingo (kids and mixed ages)
 
@@ -95,7 +95,7 @@ Edit a bingo card with rooms and objects ("candles," "orange napkin," "someone i
 
 **Time:** 20–45 minutes. **Ask:** depends on the format.
 
-- **Named gifts with couple exclusions:** [Secret Santa generator](/secret-santa-generator)—draw once, send private links or print slips.
+- **Named gifts with couple exclusions:** [Secret Santa generator](/secret-santa-generator). Draw once, then send private links or print slips.
 - **Steal pile (Yankee swap / white elephant):** follow [White Elephant rules](/guides/white-elephant-rules-and-variations) and use the name picker with remove-winner on for turn order.
 
 Pick one format. Running both the same night usually means one of them feels rushed.

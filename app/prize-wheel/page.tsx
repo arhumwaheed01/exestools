@@ -343,16 +343,14 @@ export default function PrizeWheelPage() {
             People trust what they&apos;ve seen.
           </li>
           <li>
-            <span className="font-semibold text-foreground">Edit between spins</span>{" "}
-            if a prize runs out, and say so out loud.
-          </li>
-          <li>
             <span className="font-semibold text-foreground">Keep prize labels short</span>{" "}
             so they&apos;re readable from across a room.
           </li>
           <li>
-            <span className="font-semibold text-foreground">Write results on paper as you go.</span>{" "}
-            The wheel shows the current spin, not a history.
+            <span className="font-semibold text-foreground">
+              Copy or print the winners log when you finish.
+            </span>{" "}
+            It lists every spin with its prize and time, and it&apos;s gone once you press Clear log.
           </li>
         </ul>
       </GuideSection>

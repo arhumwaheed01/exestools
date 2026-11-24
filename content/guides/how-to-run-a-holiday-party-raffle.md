@@ -24,7 +24,7 @@ Decide the total budget before you shop, then split it. A shape that works for m
 
 - **One headline prize**, about 30–40% of the budget. This is what people talk about in the run-up.
 - **Three to five mid-level prizes**, about 40% together.
-- **A batch of small prizes** with the rest, enough that roughly one person in five or six wins something.
+- **A batch of small prizes** with the rest, enough that roughly one person in four to six wins something.
 
 With $1,000 and 60 staff, that might be one $350 prize, four at $100 and ten at $25. Fifteen winners out of 60 feels generous. One big prize for 60 people mostly creates 59 people who didn't win.
 

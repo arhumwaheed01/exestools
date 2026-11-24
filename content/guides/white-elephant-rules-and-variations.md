@@ -41,7 +41,7 @@ Turn order matters more than people expect. Going first is a disadvantage, since
 Three ways to do it:
 
 - **Paper slips in a bowl.** Fine for 8 people. Slow for 25, and someone always palms a slip or drops one.
-- **Random name picker, one name at a time.** Put every player's name into the [random name picker](/random-name-picker) and turn on remove-winner. Each spin takes the next turn. Each name leaves the wheel once picked, so a name can't come up twice, and the room watches every pick happen. Write the order on a whiteboard as you go.
+- **Random name picker, one name at a time.** Put every player's name into the [random name picker](/random-name-picker) and turn on remove-winner. Each spin takes the next turn. Each name leaves the wheel once picked, so a name can't come up twice, and the room watches every pick happen. Write the order on a whiteboard as you go. Or press Put the whole list in random order for the full turn order in one click.
 - **Number draw.** If people are already seated, set the [random number wheel](/random-number-wheel) to 1 through the number of players and draw without repeats. Go around the circle, and each person spins for their own number.
 
 If guests are arriving at different times, draw the order before the party and send it round in the group chat. A share link to your name list helps if someone else is running the spin on the day.

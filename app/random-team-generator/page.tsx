@@ -278,16 +278,6 @@ export default async function RandomTeamGeneratorPage({
               </Link>
               .
             </li>
-            <li>
-              If you need to add up shift hours after you set the roster, use the{" "}
-              <Link
-                href="/time-card-calculator"
-                className="font-semibold text-accent hover:underline"
-              >
-                time card calculator
-              </Link>
-              .
-            </li>
           </ul>
           <p className="mt-3">
             For odd counts, how often pure random goes lopsided, and a tiered method for mixing skill
@@ -301,24 +291,10 @@ export default async function RandomTeamGeneratorPage({
             .
           </p>
           <p className="mt-3">
-            Show the full name list on a screen before you generate, so everyone can see who is in
-            the draw. Generate once where the group can watch, then reshuffle only if you agreed
-            beforehand that one re-roll is allowed (for example when two people who must stay apart
-            land together). Write the teams down or press Print before anyone starts moving chairs —
-            arguing about a second reshuffle is how a fair split stops feeling fair. Keep the same
-            rule for the whole session so late arrivals join the next round instead of forcing a
-            redo.
-          </p>
-          <p className="mt-3">
-            For PE or quiz nights where skill matters more than pure chance, split the strongest
-            players into a small first pass (one per team), then deal everyone else at random. The{" "}
-            <Link
-              href="/guides/how-to-make-balanced-random-teams"
-              className="font-semibold text-accent hover:underline"
-            >
-              balanced teams guide
-            </Link>{" "}
-            walks through that tiered method without turning the tool into a spreadsheet.
+            Agree the re-roll rule before anyone presses Generate. One reshuffle is fine when two
+            people who must be apart land together. A third reshuffle is somebody fishing for a
+            better team. Print or post the teams before a single chair moves, and latecomers join the
+            next round, not this one.
           </p>
         </section>
 

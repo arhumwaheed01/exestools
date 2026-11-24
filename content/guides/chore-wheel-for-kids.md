@@ -12,12 +12,12 @@ images:
   - file: /guides/chore-wheel-for-kids/1.jpg
     alt: "A young boy in yellow rubber gloves washing dishes at a kitchen sink"
     source: https://www.pexels.com/photo/diligent-young-boy-cleaning-the-dishes-3867611/
-    credit: Pexels
+    credit: Gustavo Fring on Pexels
     license: "Pexels License (free for commercial use, no attribution required)"
   - file: /guides/chore-wheel-for-kids/2.jpg
     alt: "Two children in a laundry room beside a washing machine and a wicker basket of clothes"
     source: https://www.pexels.com/photo/content-black-siblings-in-laundry-room-4546161/
-    credit: Pexels
+    credit: Ketut Subiyanto on Pexels
     license: "Pexels License (free for commercial use, no attribution required)"
 ---
 
@@ -30,7 +30,7 @@ If you have more than one child, you already know the problem with chores isn't 
 A chore wheel moves the decision from you to the wheel. Kids still complain, because they're kids. But they complain at the wheel, which is a big improvement. And with a couple of tweaks, it can be genuinely fair, not just look fair.
 
 ![A young boy in yellow rubber gloves washing dishes at a kitchen sink](/guides/chore-wheel-for-kids/1.jpg)
-*Photo: Pexels (Pexels License).*
+*Photo: Gustavo Fring on Pexels (Pexels License).*
 
 ## The catch with chore wheels
 
@@ -70,7 +70,7 @@ Four bundles, each maybe 15–20 minutes a day. Now a spin can't land anyone a j
 Got a chore everyone dodges, like the bathroom? Make it its own bundle and pair it with a perk: "Bathroom + you pick Friday's movie."
 
 ![Two children in a laundry room beside a washing machine and a wicker basket of clothes](/guides/chore-wheel-for-kids/2.jpg)
-*Photo: Pexels (Pexels License).*
+*Photo: Ketut Subiyanto on Pexels (Pexels License).*
 
 ## Step 3: Decide how you'll spin
 
@@ -123,7 +123,7 @@ Write the week on the fridge. The wheel doesn't keep a history, and a list on pa
 
 **Spin together.** Sunday evening, everyone at the table, everyone watching. Spinning on your own and announcing results brings the suspicion right back.
 
-**Keep the wheel's list on one device.** Your list stays in the browser, so it's there next Sunday. If both parents want it, press Copy share link and send it to the other one.
+**Keep the wheel's list on one device.** Your list stays in the browser, so it's there next Sunday. If both parents want it, press Share and send it to the other one.
 
 **Don't use the wheel for punishments.** "Spin to see your punishment" turns a fair tool into a scary one. Keep it for normal jobs.
 
